@@ -1,0 +1,4 @@
+// Copy to Config/Local.xcconfig (gitignored) and set your team to sign with
+// iCloud, HealthKit and App Groups on device and on the Mac.
+DEVELOPMENT_TEAM = YOURTEAMID
+TRANSMUTE_MAC_ENTITLEMENTS = Apps/TransmuteMac/TransmuteMac.entitlements

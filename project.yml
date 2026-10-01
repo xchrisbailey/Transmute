@@ -1,0 +1,147 @@
+name: Transmute
+options:
+  bundleIdPrefix: computer.srcery.transmute
+  deploymentTarget:
+    iOS: "27.0"
+    watchOS: "27.0"
+    macOS: "27.0"
+  developmentLanguage: en
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+configFiles:
+  Debug: Config/Base.xcconfig
+  Release: Config/Base.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+    ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    GENERATE_INFOPLIST_FILE: YES
+    INFOPLIST_KEY_CFBundleDisplayName: Transmute
+    PRODUCT_NAME: Transmute
+    ALWAYS_SEARCH_USER_PATHS: NO
+    CLANG_ENABLE_MODULES: YES
+    ENABLE_PREVIEWS: YES
+  configs:
+    Debug:
+      ONLY_ACTIVE_ARCH: YES
+      ENABLE_TESTABILITY: YES
+      DEBUG_INFORMATION_FORMAT: dwarf
+      SWIFT_OPTIMIZATION_LEVEL: -Onone
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: DEBUG
+      GCC_OPTIMIZATION_LEVEL: 0
+    Release:
+      SWIFT_COMPILATION_MODE: wholemodule
+      DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+      VALIDATE_PRODUCT: YES
+
+packages:
+  TransmuteCore:
+    path: Packages/TransmuteCore
+  TransmuteIntelligence:
+    path: Packages/TransmuteIntelligence
+  TransmuteUI:
+    path: Packages/TransmuteUI
+
+targets:
+  TransmuteiOS:
+    type: application
+    platform: iOS
+    sources:
+      - Apps/TransmuteiOS
+      - Apps/Shared
+    dependencies:
+      - package: TransmuteCore
+      - package: TransmuteIntelligence
+      - package: TransmuteUI
+      - target: TransmuteWatch
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: computer.srcery.transmute
+        SDKROOT: iphoneos
+        SUPPORTED_PLATFORMS: iphoneos iphonesimulator
+        SUPPORTS_MACCATALYST: NO
+        LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_ENTITLEMENTS: Apps/TransmuteiOS/TransmuteiOS.entitlements
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_NSHealthShareUsageDescription: Transmute reads heart rate and bodyweight from Health to adjust your plan.
+        INFOPLIST_KEY_NSHealthUpdateUsageDescription: Transmute saves your workouts to Health.
+    info:
+      path: Apps/TransmuteiOS/Info.plist
+      properties:
+        UIBackgroundModes: [remote-notification]
+
+  TransmuteWatch:
+    type: application
+    platform: watchOS
+    sources:
+      - Apps/TransmuteWatch
+      - Apps/Shared
+    dependencies:
+      - package: TransmuteCore
+      - package: TransmuteUI
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: computer.srcery.transmute.watchkitapp
+        SDKROOT: watchos
+        SUPPORTED_PLATFORMS: watchos watchsimulator
+        TARGETED_DEVICE_FAMILY: "4"
+        LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
+        CODE_SIGN_ENTITLEMENTS: Apps/TransmuteWatch/TransmuteWatch.entitlements
+        INFOPLIST_KEY_WKCompanionAppBundleIdentifier: computer.srcery.transmute
+        INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp: NO
+        INFOPLIST_KEY_NSHealthShareUsageDescription: Transmute reads heart rate from Health during a workout.
+        INFOPLIST_KEY_NSHealthUpdateUsageDescription: Transmute saves your workouts to Health.
+        SKIP_INSTALL: YES
+    info:
+      path: Apps/TransmuteWatch/Info.plist
+      properties:
+        WKApplication: true
+        WKBackgroundModes: [workout-processing]
+
+  TransmuteMac:
+    type: application
+    platform: macOS
+    sources:
+      - Apps/TransmuteMac
+      - Apps/Shared
+    dependencies:
+      - package: TransmuteCore
+      - package: TransmuteIntelligence
+      - package: TransmuteUI
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: computer.srcery.transmute.mac
+        SDKROOT: macosx
+        SUPPORTED_PLATFORMS: macosx
+        COMBINE_HIDPI_IMAGES: YES
+        LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/../Frameworks
+        CODE_SIGN_ENTITLEMENTS: $(TRANSMUTE_MAC_ENTITLEMENTS)
+        ENABLE_HARDENED_RUNTIME: YES
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.healthcare-fitness
+
+schemes:
+  TransmuteiOS:
+    build:
+      targets:
+        TransmuteiOS: all
+    run:
+      config: Debug
+  TransmuteWatch:
+    build:
+      targets:
+        TransmuteWatch: all
+  TransmuteMac:
+    build:
+      targets:
+        TransmuteMac: all

@@ -1,0 +1,25 @@
+included:
+  - Apps
+  - Packages
+excluded:
+  - "**/.build"
+  - build
+
+# swift-format owns layout; SwiftLint checks the rest.
+disabled_rules:
+  - trailing_comma
+  - opening_brace
+  - line_length
+
+opt_in_rules:
+  - empty_count
+  - first_where
+  - contains_over_first_not_nil
+  - fatal_error_message
+  - sorted_imports
+
+identifier_name:
+  excluded: [id, x, y, kg, lb, cm, m, s, to]
+
+nesting:
+  type_level: 2
