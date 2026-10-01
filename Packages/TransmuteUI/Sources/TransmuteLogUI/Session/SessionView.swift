@@ -1,0 +1,198 @@
+import SwiftData
+import SwiftUI
+import TransmuteCore
+import TransmuteUI
+
+/// The workout in progress (#11): exercise by exercise, a set table prefilled from the plan,
+/// and one big button at the bottom that logs the current set or shows the rest timer. Built
+/// to be run with one thumb: the button sits where the thumb is, and the list follows along.
+public struct SessionView: View {
+    @Bindable var workout: Workout
+    let profile: Profile?
+    /// Closes the screen. The workout keeps running and Today offers to resume it.
+    let onHide: () -> Void
+
+    @Environment(\.modelContext) var context
+    @Query(sort: \CustomExercise.name) private var customExercises: [CustomExercise]
+    @State var editing: PersistentIdentifier?
+    @State var picker: PickerPurpose?
+    @State var noteFor: NoteTarget?
+    @State var confirmsFinish = false
+    @State var confirmsDiscard = false
+    @State var summary: WorkoutSummary?
+    @State var restEnded = 0
+    @State var activity = SessionActivity()
+
+    public init(workout: Workout, profile: Profile?, onHide: @escaping () -> Void) {
+        self.workout = workout
+        self.profile = profile
+        self.onHide = onHide
+    }
+
+    var library: ExerciseLibrary {
+        ExerciseLibrary.bundled.adding(customExercises.map(LibraryExercise.init))
+    }
+
+    var units: Units {
+        Units(system: profile?.unitSystem)
+    }
+
+    var current: LoggedSet? {
+        WorkoutSession.currentSet(of: workout)
+    }
+
+    public var body: some View {
+        NavigationStack {
+            ScrollViewReader { scroller in
+                List {
+                    ForEach(workout.orderedExercises) { exercise in
+                        exerciseSection(exercise)
+                    }
+                    Section {
+                        Button {
+                            picker = .add
+                        } label: {
+                            Label {
+                                Text(LogCopy.addExercise)
+                            } icon: {
+                                Image(systemName: "plus")
+                            }
+                        }
+                        Button {
+                            noteFor = .workout
+                        } label: {
+                            Label {
+                                Text(LogCopy.workoutNotes)
+                            } icon: {
+                                Image(systemName: "note.text")
+                            }
+                        }
+                        if !workout.notes.isEmpty {
+                            Text(verbatim: workout.notes)
+                                .brandFont(.body)
+                                .foregroundStyle(Color.brandText(\.subtext))
+                        }
+                    }
+                }
+                .scrollContentBackground(.hidden)
+                .background(Color.brand(\.base))
+                .onChange(of: current?.persistentModelID, initial: true) { _, id in
+                    editing = id
+                    if let id {
+                        withAnimation { scroller.scrollTo(id, anchor: .center) }
+                    }
+                }
+            }
+            .safeAreaInset(edge: .bottom) {
+                SessionBar(
+                    workout: workout, current: current, exerciseName: current.map(name(of:)),
+                    onLog: logCurrent, onFinish: { finish(confirming: current != nil) })
+            }
+            .navigationTitle(Text(verbatim: workout.title))
+            #if os(iOS)
+                .navigationBarTitleDisplayMode(.inline)
+            #endif
+            .toolbar { toolbar }
+            .sheet(item: $picker) { purpose in
+                pickerSheet(purpose)
+            }
+            .sheet(item: $noteFor) { target in
+                NoteEditor(title: target.title, text: noteBinding(target))
+            }
+            .confirmationDialog(
+                Text(LogCopy.finishConfirm), isPresented: $confirmsFinish, titleVisibility: .visible
+            ) {
+                Button {
+                    finish(confirming: false)
+                } label: {
+                    Text(LogCopy.finish)
+                }
+                Button(role: .cancel) {
+                } label: {
+                    Text(LogCopy.keepGoing)
+                }
+            }
+            .confirmationDialog(
+                Text(LogCopy.discardConfirm), isPresented: $confirmsDiscard, titleVisibility: .visible
+            ) {
+                Button(role: .destructive) {
+                    activity.end()
+                    RestAlerts.cancel()
+                    WorkoutSession.discard(workout, in: context)
+                    onHide()
+                } label: {
+                    Text(LogCopy.discard)
+                }
+            }
+            .navigationDestination(item: $summary) { summary in
+                FinishView(workout: workout, summary: summary, units: units, onSave: onHide)
+            }
+        }
+        .task(id: workout.restEndsAt) {
+            await waitForRest()
+        }
+        .onChange(of: activityState, initial: true) { _, state in
+            guard workout.endedAt == nil else { return }
+            activity.update(title: workout.title, state: state)
+            RestAlerts.schedule(
+                at: workout.restEndsAt, next: current.map(name(of:)) ?? workout.title)
+        }
+        .sensoryFeedback(.success, trigger: restEnded)
+        .task {
+            await RestAlerts.requestPermission()
+        }
+    }
+
+    // MARK: Actions
+
+    private func logCurrent() {
+        guard let current else { return }
+        toggle(current)
+    }
+
+    func toggle(_ set: LoggedSet) {
+        if set.isCompleted {
+            WorkoutSession.reopen(set, in: workout)
+        } else {
+            WorkoutSession.complete(set, in: workout)
+        }
+    }
+
+    func finish(confirming: Bool) {
+        if confirming {
+            confirmsFinish = true
+            return
+        }
+        RestAlerts.cancel()
+        activity.end()
+        summary = WorkoutSession.finish(workout)
+    }
+
+    /// Sleeps until the rest ends, then buzzes, chimes and clears the timer. Runs again
+    /// whenever the end moves, so skipping or adding time just restarts the wait.
+    private func waitForRest() async {
+        guard let remaining = WorkoutSession.restRemaining(in: workout) else {
+            if workout.restEndsAt != nil { WorkoutSession.startRest(nil, in: workout) }
+            return
+        }
+        do {
+            try await Task.sleep(for: .seconds(remaining))
+        } catch {
+            return
+        }
+        RestAlerts.chime()
+        restEnded += 1
+        WorkoutSession.startRest(nil, in: workout)
+    }
+
+    private var activityState: SessionActivityAttributes.ContentState {
+        let exercise = current?.exercise
+        return SessionActivityAttributes.ContentState(
+            exercise: exercise.map(name(of:)) ?? workout.title,
+            setNumber: (current?.order ?? 0) + 1,
+            setCount: exercise?.orderedSets.count ?? 0,
+            restEndsAt: workout.restEndsAt,
+            restSeconds: workout.restSeconds)
+    }
+
+}

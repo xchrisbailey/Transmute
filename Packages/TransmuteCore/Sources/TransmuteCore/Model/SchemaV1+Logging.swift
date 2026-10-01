@@ -13,6 +13,10 @@ extension SchemaV1 {
         /// The workout Transmute saved to Health, once saved.
         public var healthKitWorkoutID: UUID?
         public var planDay: PlanDay?
+        /// When the running rest ends, so a relaunched app picks the timer back up (#11).
+        public var restEndsAt: Date?
+        /// How long that rest was set for, for the countdown ring.
+        public var restSeconds: Double?
 
         @Relationship(deleteRule: .cascade, inverse: \LoggedExercise.workout)
         public var exercises: [LoggedExercise]? = []
@@ -43,6 +47,10 @@ extension SchemaV1 {
         public var exerciseID = ""
         public var order = 0
         public var notes = ""
+        /// Passed over mid-session. Its sets stay unlogged.
+        public var isSkipped = false
+        /// The exercise this one stood in for, when it was substituted mid-session.
+        public var substitutedFromID: String?
         public var workout: Workout?
 
         @Relationship(deleteRule: .cascade, inverse: \LoggedSet.exercise)
@@ -69,6 +77,11 @@ extension SchemaV1 {
         public var isWarmUp = false
         public var isCompleted = false
         public var completedAt: Date?
+        public var notes = ""
+        /// The planned rest after this set, which the rest timer starts with.
+        public var restSeconds: Double?
+        /// For intervals: rest between rounds of `seconds` work.
+        public var intervalRestSeconds: Double?
         public var exercise: LoggedExercise?
 
         @Relationship(deleteRule: .nullify, inverse: \PersonalRecord.set)
