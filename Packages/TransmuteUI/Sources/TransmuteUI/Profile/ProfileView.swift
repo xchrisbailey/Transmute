@@ -28,6 +28,13 @@
                 ScheduleSection(draft: $draft)
                 EquipmentSection(draft: $draft, linksPlateSetup: true)
                 LimitationsSection(draft: $draft)
+                Section {
+                    NavigationLink {
+                        ProgressionSettingsView(profile: profile)
+                    } label: {
+                        Text(ProgressionCopy.title)
+                    }
+                }
                 bodyweightHistory
             }
             .navigationTitle(Text(ProfileCopy.profile))
