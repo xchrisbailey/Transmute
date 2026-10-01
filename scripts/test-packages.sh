@@ -3,7 +3,6 @@
 set -euo pipefail
 cd "$(dirname "$0")/../Packages"
 for package in */; do
-  echo "::group::Test ${package%/}"
+  echo "--- Test ${package%/}"
   (cd "$package" && swift test)
-  echo "::endgroup::"
 done
