@@ -44,6 +44,22 @@ struct WorkoutSessionTests {
         #expect(bike.orderedSets.first?.intervalRestSeconds == 10)
     }
 
+    @Test func withAProfileTargetsComeFromProgression() throws {
+        let (plan, day) = try monday()
+        let profile = try #require(try context.fetch(FetchDescriptor<Profile>()).first)
+        profile.plates = PlateInventory(.commercialGym, system: .imperial)
+        let workout = WorkoutSession.start(day, profile: profile, at: now, in: context)
+        let squat = try #require(workout.orderedExercises.first { $0.exerciseID == "back-squat" })
+        let planned = try #require(day.orderedExercises.first { $0.exerciseID == "back-squat" })
+        let history = try ProgressionEngine.history(of: "back-squat", in: context, excluding: workout)
+        let expected = ProgressionEngine.next(for: planned, history: history, profile: profile)
+
+        #expect(squat.orderedSets.map(\.targetLoadKg) == expected.targets.map(\.loadKg))
+        #expect(squat.orderedSets.map(\.weightKg) == expected.targets.map(\.loadKg))
+        #expect(squat.orderedSets.allSatisfy { $0.targetReps == 5 && $0.restSeconds == 150 })
+        #expect(plan.orderedDays.contains { $0 === day })
+    }
+
     @Test func openLoadsComeFromTheLastTimeTheExerciseWasDone() throws {
         let (_, day) = try monday()
         for set in day.orderedExercises.flatMap(\.orderedSets) {

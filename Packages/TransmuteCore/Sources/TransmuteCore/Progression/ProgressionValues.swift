@@ -115,11 +115,14 @@ public struct ProgressionContext: Sendable {
     public var settings: ProgressionSettings
     /// Lifts the person entered, used for percentage targets before there's any history.
     public var knownLifts: [KnownLift]
+    /// The person's bar and plates (#21). When set, loads round to what they can actually
+    /// load; otherwise to the usual step for the kit.
+    public var plates: PlateInventory?
 
     public init(
         exerciseID: String, exercise: LibraryExercise?, isDeload: Bool = false, equipment: Set<Equipment> = [],
         system: UnitSystem = .metric, settings: ProgressionSettings = ProgressionSettings(),
-        knownLifts: [KnownLift] = []
+        knownLifts: [KnownLift] = [], plates: PlateInventory? = nil
     ) {
         self.exerciseID = exerciseID
         self.exercise = exercise
@@ -128,6 +131,7 @@ public struct ProgressionContext: Sendable {
         self.system = system
         self.settings = settings
         self.knownLifts = knownLifts
+        self.plates = plates
     }
 
     var tracking: TrackingType { exercise?.tracking ?? .weightReps }

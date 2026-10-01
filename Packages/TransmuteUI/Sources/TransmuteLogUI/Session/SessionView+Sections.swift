@@ -76,6 +76,19 @@ extension SessionView {
                 Image(systemName: exercise.isSkipped ? "arrow.uturn.backward" : "forward")
             }
         }
+        if let profile {
+            let isHeld = profile.progression.isHeld(exercise.exerciseID)
+            Button {
+                profile.toggleProgressionHold(for: exercise.exerciseID)
+                try? context.save()
+            } label: {
+                Label {
+                    Text(isHeld ? ProgressionCopy.letItProgress : ProgressionCopy.holdWeight)
+                } icon: {
+                    Image(systemName: isHeld ? "arrow.up.right" : "pause")
+                }
+            }
+        }
     }
 
     @ToolbarContentBuilder var toolbar: some ToolbarContent {

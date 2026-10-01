@@ -30,6 +30,8 @@ struct ProgressionModelTests {
         plan.days = [day]
         profile.equipmentRaw = ["barbell", "rack"]
         profile.unitSystem = .metric
+        // Kilogram plates whatever the test machine's locale, so loads round in kilograms.
+        profile.plates = PlateInventory(.commercialGym, system: .metric)
         context.insert(profile)
         context.insert(plan)
     }
@@ -116,6 +118,7 @@ struct ProgressionModelTests {
 
     @Test func imperialProfilesRoundToPounds() throws {
         profile.unitSystem = .imperial
+        profile.plates = PlateInventory(.commercialGym, system: .imperial)
         log(daysAgo: 3, kg: Lift.pounds(225), reps: 5)
         try context.save()
         let history = try ProgressionEngine.history(of: "back-squat", in: context)

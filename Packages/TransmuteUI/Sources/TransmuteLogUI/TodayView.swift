@@ -110,6 +110,9 @@ public struct TodayView: View {
                         .foregroundStyle(Color.brandText(\.done))
                 }
             }
+            if !today.isDone {
+                reasonSection(day)
+            }
             Section {
                 ForEach(day.orderedExercises) { planned in
                     VStack(alignment: .leading, spacing: 2) {
@@ -204,9 +207,45 @@ public struct TodayView: View {
         .foregroundStyle(Color.brand(\.ink))
     }
 
+    @ViewBuilder private func reasonSection(_ day: PlanDay) -> some View {
+        if let line = fromYourPlan(day) {
+            Section {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(LogCopy.fromYourPlan)
+                        .brandFont(.label)
+                        .foregroundStyle(Color.brandText(\.magic))
+                    Text(line)
+                        .brandFont(.body)
+                        .foregroundStyle(Color.brand(\.ink))
+                }
+                .accessibilityElement(children: .combine)
+            }
+        }
+    }
+
+    /// The most telling reason today's numbers differ from last time, e.g. "Back squat goes
+    /// up 2.5 kg since every set moved well on Monday." Load changes first, then volume.
+    private func fromYourPlan(_ day: PlanDay) -> LocalizedStringResource? {
+        let ranked: [ProgressionReason.Kind] = [
+            .addLoad, .drop, .deload, .rpeUp, .rpeDown, .fromEstimate, .addReps, .addRound, .addTime,
+            .addDistance, .faster, .hold, .retry, .holdEffort, .calibrate,
+        ]
+        let reasons = day.orderedExercises.map { planned in
+            let history = (try? ProgressionEngine.history(of: planned.exerciseID, in: context)) ?? []
+            return (planned, ProgressionEngine.next(for: planned, history: history, profile: profile).reason)
+        }
+        for kind in ranked {
+            if let (planned, reason) = reasons.first(where: { $0.1.kind == kind }) {
+                let name = library.exercise(id: planned.exerciseID)?.name ?? planned.exerciseID
+                return ProgressionCopy.sentence(for: reason, exercise: name, units: units)
+            }
+        }
+        return nil
+    }
+
     private func begin(_ day: PlanDay?) {
         if let day {
-            session = WorkoutSession.start(day, in: context)
+            session = WorkoutSession.start(day, profile: profile, in: context)
         } else {
             session = WorkoutSession.startAdHoc(title: String(localized: LogCopy.adHocTitle), in: context)
         }

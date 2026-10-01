@@ -16,12 +16,12 @@ struct TransmuteApp: App {
             if ProcessInfo.processInfo.arguments.contains("-seedSample"),
                 (try? context.fetchCount(FetchDescriptor<Profile>())) == 0
             {
-                let (_, plan) = SampleData.insert(into: context)
+                let (profile, plan) = SampleData.insert(into: context)
                 // `-sampleSession` also starts this week's first session, to see the session screen.
                 if ProcessInfo.processInfo.arguments.contains("-sampleSession"),
                     let day = plan.orderedDays.first(where: { $0.week == PlanEditor.week(of: plan) })
                 {
-                    let workout = WorkoutSession.start(day, in: context)
+                    let workout = WorkoutSession.start(day, profile: profile, in: context)
                     if let first = WorkoutSession.currentSet(of: workout) {
                         WorkoutSession.complete(first, in: workout)
                     }

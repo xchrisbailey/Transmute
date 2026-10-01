@@ -13,18 +13,40 @@ public enum WorkoutSession {
         return try context.fetch(descriptor).first
     }
 
-    /// Starts a planned day: every exercise and set, prefilled with its targets so most sets
-    /// are one tap. Loads the plan leaves open come from the last time the exercise was done.
+    /// Starts a planned day: every exercise and set, prefilled so most sets are one tap.
+    ///
+    /// With a profile, targets come from the progression engine (#12): what was logged last
+    /// time decides today's numbers, and each set records the target it was logged against.
+    /// Without one, the plan's targets are used as written, and loads the plan leaves open come
+    /// from the last time the exercise was done.
     @discardableResult
-    public static func start(_ day: PlanDay, at date: Date = .now, in context: ModelContext) -> Workout {
+    public static func start(
+        _ day: PlanDay, profile: Profile? = nil, library: ExerciseLibrary = .bundled, at date: Date = .now,
+        in context: ModelContext
+    ) -> Workout {
         let workout = Workout(title: day.focus, startedAt: date, planDay: day)
         context.insert(workout)
         for planned in day.orderedExercises {
             let logged = LoggedExercise(exerciseID: planned.exerciseID, order: planned.order)
             workout.exercises?.append(logged)
-            let lastLoad = lastWorkingLoad(of: planned.exerciseID, before: date, in: context)
-            for target in planned.orderedSets {
-                logged.sets?.append(prefilled(from: target, fallbackLoad: lastLoad))
+            if let profile {
+                let history = (try? ProgressionEngine.history(of: planned.exerciseID, in: context, excluding: workout))
+                let result = ProgressionEngine.next(
+                    for: planned, history: history ?? [], profile: profile, library: library)
+                let plannedSets = planned.orderedSets
+                for (index, target) in result.targets.enumerated() {
+                    let set = LoggedSet(target: target)
+                    set.order = index
+                    let source = plannedSets.indices.contains(index) ? plannedSets[index] : plannedSets.last
+                    set.restSeconds = target.restSeconds ?? source?.restSeconds
+                    set.intervalRestSeconds = target.intervalRestSeconds ?? source?.intervalRestSeconds
+                    logged.sets?.append(set)
+                }
+            } else {
+                let lastLoad = lastWorkingLoad(of: planned.exerciseID, before: date, in: context)
+                for target in planned.orderedSets {
+                    logged.sets?.append(prefilled(from: target, fallbackLoad: lastLoad))
+                }
             }
         }
         save(context)
