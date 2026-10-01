@@ -13,6 +13,7 @@ struct FinishView: View {
     let onSave: () -> Void
 
     @Environment(\.health) private var health
+    @Query private var records: [PersonalRecord]
     @State private var healthStatus: HealthStatus = .idle
 
     enum HealthStatus {
@@ -34,6 +35,17 @@ struct FinishView: View {
                     figure(LogCopy.volume, units.formatWeight(kg: summary.volumeKg))
                 }
                 figure(LogCopy.duration, Units.clock(seconds: summary.duration))
+            }
+            if !gold.isEmpty {
+                Section {
+                    ForEach(gold, id: \.first?.persistentModelID) { group in
+                        if let record = group.first {
+                            GoldRow(record: record, units: units)
+                        }
+                    }
+                } header: {
+                    Text(LogCopy.turnedToGold)
+                }
             }
             switch healthStatus {
             case .saved:
@@ -66,6 +78,12 @@ struct FinishView: View {
             .disabled(healthStatus == .saving)
             .padding()
         }
+    }
+
+    /// Records this workout set, headline first per set.
+    private var gold: [[PersonalRecord]] {
+        let mine = records.filter { $0.set?.exercise?.workout === workout }
+        return RecordBoard.gold(mine, since: workout.startedAt)
     }
 
     private var headline: LocalizedStringResource {
@@ -103,5 +121,29 @@ struct FinishView: View {
         } catch {
             healthStatus = .failed
         }
+    }
+}
+
+/// One record from the finished workout, in gold: "Back squat · 5RM · 115 kg".
+private struct GoldRow: View {
+    let record: PersonalRecord
+    let units: Units
+
+    var body: some View {
+        let name = ExerciseLibrary.bundled.exercise(id: record.exerciseID)?.name ?? record.exerciseID
+        LabeledContent {
+            Text(verbatim: RecordFormat.value(record.mark, units: units))
+                .brandNumberFont(size: 17)
+                .foregroundStyle(Color.brandText(\.gold))
+        } label: {
+            Label {
+                Text(verbatim: "\(name) · \(String(localized: RecordFormat.label(record.mark, units: units)))")
+            } icon: {
+                Image(systemName: "medal.fill")
+                    .foregroundStyle(Color.brand(\.gold))
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(RecordFormat.gold(record.mark, exercise: name, units: units)))
     }
 }

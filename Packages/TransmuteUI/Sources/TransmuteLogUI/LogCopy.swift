@@ -286,4 +286,29 @@ public enum LogCopy {
             "voice.finish.workDoneNoLoad", defaultValue: "The work is done. \(sets) sets.", bundle: .main,
             comment: "voice. Workout finished with no weighted sets, so no volume to show.")
     }
+
+    // MARK: Records and plates
+
+    static let bigJump = LocalizedStringResource(
+        "plain.session.bigJump", defaultValue: "That's far beyond your best. Is it right?", bundle: .main,
+        comment: "plain. A logged set is suspiciously bigger than the previous record.")
+
+    static let itsRight = LocalizedStringResource(
+        "plain.session.itsRight", defaultValue: "Yes, it's right", bundle: .main,
+        comment: "plain. Confirm a suspiciously big set.")
+
+    static let fixIt = LocalizedStringResource(
+        "plain.session.fixIt", defaultValue: "Fix it", bundle: .main,
+        comment: "plain. Reopen a suspiciously big set to correct it.")
+
+    static let plates = LocalizedStringResource(
+        "plain.session.plates", defaultValue: "Plates", bundle: .main,
+        comment: "plain. Open the plate calculator for a set.")
+
+    static let records = LocalizedStringResource(
+        "plain.records.title", defaultValue: "Records", bundle: .main, comment: "plain. Records screen title.")
+
+    static let turnedToGold = LocalizedStringResource(
+        "voice.finish.gold", defaultValue: "Turned to gold", bundle: .main,
+        comment: "voice. Records set in the workout just finished.")
 }

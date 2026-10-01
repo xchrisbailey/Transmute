@@ -21,6 +21,8 @@ public struct SessionView: View {
     @State var confirmsDiscard = false
     @State var summary: WorkoutSummary?
     @State var restEnded = 0
+    @State var gold: GoldNotice?
+    @State var suspicious: LoggedSet?
     @State var activity = SessionActivity()
 
     public init(workout: Workout, profile: Profile?, onHide: @escaping () -> Void) {
@@ -137,6 +139,21 @@ public struct SessionView: View {
             RestAlerts.schedule(
                 at: workout.restEndsAt, next: current.map(name(of:)) ?? workout.title)
         }
+        .overlay(alignment: .top) {
+            goldToast
+        }
+        .confirmationDialog(Text(LogCopy.bigJump), isPresented: suspiciousBinding, titleVisibility: .visible) {
+            Button {
+                confirmSuspicious()
+            } label: {
+                Text(LogCopy.itsRight)
+            }
+            Button(role: .cancel) {
+                fixSuspicious()
+            } label: {
+                Text(LogCopy.fixIt)
+            }
+        }
         .sensoryFeedback(.success, trigger: restEnded)
         .task {
             await RestAlerts.requestPermission()
@@ -148,14 +165,6 @@ public struct SessionView: View {
     private func logCurrent() {
         guard let current else { return }
         toggle(current)
-    }
-
-    func toggle(_ set: LoggedSet) {
-        if set.isCompleted {
-            WorkoutSession.reopen(set, in: workout)
-        } else {
-            WorkoutSession.complete(set, in: workout)
-        }
     }
 
     func finish(confirming: Bool) {

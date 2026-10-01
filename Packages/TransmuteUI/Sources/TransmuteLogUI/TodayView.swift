@@ -66,6 +66,16 @@ public struct TodayView: View {
                     .frame(minHeight: 44)
                 }
                 .disabled(!running.isEmpty)
+                NavigationLink {
+                    RecordsView(since: plan?.startDate, units: units)
+                } label: {
+                    Label {
+                        Text(LogCopy.records)
+                    } icon: {
+                        Image(systemName: "medal")
+                    }
+                    .frame(minHeight: 44)
+                }
             }
         }
         .scrollContentBackground(.hidden)

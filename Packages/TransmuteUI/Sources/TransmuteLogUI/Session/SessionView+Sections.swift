@@ -16,7 +16,8 @@ extension SessionView {
                 ForEach(Array(exercise.orderedSets.enumerated()), id: \.element.persistentModelID) { index, set in
                     SetRow(
                         set: set, number: index + 1, total: exercise.orderedSets.count, tracking: tracking,
-                        equipment: equipment, units: units, isCurrent: set === current,
+                        equipment: equipment, units: units,
+                        plates: usesPlates(equipment) ? profile?.plates : nil, isCurrent: set === current,
                         isEditing: editing == set.persistentModelID,
                         onTap: { editing = editing == set.persistentModelID ? nil : set.persistentModelID },
                         onToggle: { toggle(set) },
@@ -172,5 +173,11 @@ extension SessionView {
                 set.notes = $0
             }
         }
+    }
+
+    /// Barbell and trap bar lifts get the plate calculator, when the person has one.
+    func usesPlates(_ equipment: Set<Equipment>) -> Bool {
+        let kit = Set(profile?.equipment ?? [])
+        return !equipment.isDisjoint(with: [.barbell, .trapBar]) && !kit.isDisjoint(with: [.barbell, .trapBar])
     }
 }

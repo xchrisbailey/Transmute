@@ -2989,6 +2989,18 @@
         }
       }
     },
+    "plain.session.bigJump": {
+      "comment": "plain. A logged set is suspiciously bigger than the previous record.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That's far beyond your best. Is it right?"
+          }
+        }
+      }
+    },
     "plain.session.current": {
       "comment": "plain. VoiceOver hint for the set to do next.",
       "extractionState": "manual",
@@ -3061,6 +3073,18 @@
         }
       }
     },
+    "plain.session.fixIt": {
+      "comment": "plain. Reopen a suspiciously big set to correct it.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fix it"
+          }
+        }
+      }
+    },
     "plain.session.intervalRest": {
       "comment": "plain. Interval phase.",
       "extractionState": "manual",
@@ -3069,6 +3093,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rest"
+          }
+        }
+      }
+    },
+    "plain.session.itsRight": {
+      "comment": "plain. Confirm a suspiciously big set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yes, it's right"
           }
         }
       }
@@ -3165,6 +3201,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notes"
+          }
+        }
+      }
+    },
+    "plain.session.plates": {
+      "comment": "plain. Open the plate calculator for a set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plates"
           }
         }
       }
@@ -4173,6 +4221,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "The crucible's empty. Brew a plan to begin."
+          }
+        }
+      }
+    },
+    "voice.finish.gold": {
+      "comment": "voice. Records set in the workout just finished.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turned to gold"
           }
         }
       }

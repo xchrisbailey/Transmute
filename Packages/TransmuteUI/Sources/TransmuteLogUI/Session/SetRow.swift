@@ -81,6 +81,8 @@ struct SetRow: View {
     let tracking: TrackingType
     let equipment: Set<Equipment>
     let units: Units
+    /// The bar and plates, for barbell work only.
+    let plates: PlateInventory?
     let isCurrent: Bool
     let isEditing: Bool
     let onTap: () -> Void
@@ -119,7 +121,9 @@ struct SetRow: View {
                     .foregroundStyle(Color.brandText(\.subtext))
             }
             if isEditing && !set.isCompleted {
-                SetEditor(set: set, tracking: tracking, equipment: equipment, units: units, onDone: onToggle)
+                SetEditor(
+                    set: set, tracking: tracking, equipment: equipment, units: units, plates: plates,
+                    onDone: onToggle)
                 HStack {
                     Button(action: onNote) {
                         Label {
@@ -189,13 +193,19 @@ struct SetEditor: View {
     let tracking: TrackingType
     let equipment: Set<Equipment>
     let units: Units
+    let plates: PlateInventory?
     let onDone: () -> Void
+
+    @State private var showsPlates = false
 
     var body: some View {
         VStack(spacing: 10) {
             switch tracking {
             case .weightReps:
                 weightField
+                if let plates, let kg = set.weightKg {
+                    platesButton(plates, kg: kg)
+                }
                 intField(LogCopy.reps, value: $set.reps, step: 1, range: 0...100)
             case .reps:
                 intField(LogCopy.reps, value: $set.reps, step: 1, range: 0...500)
@@ -227,6 +237,30 @@ struct SetEditor: View {
                 get: { set.weightKg.map { (units.displayWeight(kg: $0) * 2).rounded() / 2 } },
                 set: { set.weightKg = $0.map(units.kilograms(fromDisplay:)) }),
             step: units.displayWeight(kg: step).rounded(toPlaces: 2), range: 0...1_000)
+    }
+
+    /// "per side: 20 · 10 · 2.5", opening the drawn bar to change the weight.
+    private func platesButton(_ plates: PlateInventory, kg: Double) -> some View {
+        let bar: BarKind? = equipment.contains(.trapBar) && !equipment.contains(.barbell) ? .trap : nil
+        let loading = PlateCalculator(inventory: plates, bar: bar).solve(kg: kg).nearest
+        return Button {
+            showsPlates = true
+        } label: {
+            Label {
+                Text(verbatim: loading.map { PlateText.compact($0) } ?? String(localized: LogCopy.plates))
+                    .brandNumberFont(size: 15)
+            } icon: {
+                Image(systemName: "circle.grid.2x1")
+            }
+            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+        }
+        .buttonStyle(.borderless)
+        .accessibilityHint(Text(LogCopy.plates))
+        .sheet(isPresented: $showsPlates) {
+            PlateSheet(
+                targetKg: Binding(get: { set.weightKg ?? kg }, set: { set.weightKg = $0 }), inventory: plates,
+                units: units, bar: bar)
+        }
     }
 
     private var rpeField: some View {
