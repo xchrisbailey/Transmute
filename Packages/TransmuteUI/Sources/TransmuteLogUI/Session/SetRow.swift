@@ -194,6 +194,8 @@ struct SetEditor: View {
     let equipment: Set<Equipment>
     let units: Units
     let plates: PlateInventory?
+    /// Offers the countdown for timed sets and intervals; off when editing past sets.
+    var timers = true
     let onDone: () -> Void
 
     @State private var showsPlates = false
@@ -211,16 +213,20 @@ struct SetEditor: View {
                 intField(LogCopy.reps, value: $set.reps, step: 1, range: 0...500)
             case .time:
                 secondsField(LogCopy.seconds, value: $set.seconds)
-                TimedSet(set: set, rounds: 1, work: set.seconds ?? 30, rest: 0, onDone: onDone)
+                if timers {
+                    TimedSet(set: set, rounds: 1, work: set.seconds ?? 30, rest: 0, onDone: onDone)
+                }
             case .distanceTime:
                 doubleField(LogCopy.meters, value: $set.meters, step: 5, range: 0...100_000)
                 secondsField(LogCopy.seconds, value: $set.seconds)
             case .intervals:
                 intField(LogCopy.rounds, value: $set.rounds, step: 1, range: 1...50)
                 secondsField(LogCopy.seconds, value: $set.seconds)
-                TimedSet(
-                    set: set, rounds: set.rounds ?? 1, work: set.seconds ?? 20, rest: set.intervalRestSeconds ?? 0,
-                    onDone: onDone)
+                if timers {
+                    TimedSet(
+                        set: set, rounds: set.rounds ?? 1, work: set.seconds ?? 20,
+                        rest: set.intervalRestSeconds ?? 0, onDone: onDone)
+                }
             }
             if tracking == .weightReps || tracking == .reps {
                 rpeField

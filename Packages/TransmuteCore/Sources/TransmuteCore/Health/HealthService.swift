@@ -34,6 +34,10 @@ public protocol HealthService: Sendable {
 
     /// Saves a bodyweight entered in Transmute and returns the sample's id.
     func saveBodyweight(kg: Double, at date: Date) async throws -> UUID
+
+    /// Deletes a workout Transmute saved, when the person deletes it from their log (#14).
+    /// Workouts other apps wrote are never touched; a workout that's already gone is fine.
+    func deleteWorkout(id: UUID) async throws
 }
 
 /// The groups of data a feature asks for together, so prompts come one feature at a time.
@@ -124,6 +128,10 @@ public struct UnavailableHealthService: HealthService {
     }
 
     public func saveBodyweight(kg: Double, at date: Date) async throws -> UUID {
+        throw HealthServiceError.unavailable
+    }
+
+    public func deleteWorkout(id: UUID) async throws {
         throw HealthServiceError.unavailable
     }
 }
