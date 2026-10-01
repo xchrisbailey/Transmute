@@ -47,6 +47,8 @@ extension SchemaV1 {
         /// Short name, e.g. "Lower A" or "Speed and agility".
         public var focus = ""
         public var notes = ""
+        /// Set when the person changes the day by hand, so a rebrew leaves it alone (#10).
+        public var isEdited = false
         public var plan: Plan?
 
         @Relationship(deleteRule: .cascade, inverse: \PlannedExercise.day)

@@ -17,7 +17,7 @@ struct RootView: View {
             NavigationStack {
                 Group {
                     if let plan = plans.first {
-                        ActivePlanSummary(plan: plan)
+                        PlanView(plan: plan, profile: profile, service: service, device: device)
                     } else {
                         BrewPlanView(profile: profile, service: service, device: device)
                     }

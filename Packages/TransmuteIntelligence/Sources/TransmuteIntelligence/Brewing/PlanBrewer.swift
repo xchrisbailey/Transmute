@@ -88,7 +88,17 @@ public struct PlanBrewer: Sendable {
         report: (Progress) -> Void
     ) async throws -> TemplateDay {
         let offered = DayShortlist.candidates(for: spec.kind, brief: brief, library: library, excluding: used)
-        let request = dayRequest(brief, spec: spec, offered: offered)
+        return try await writeDay(
+            spec, brief: brief, assembler: assembler, request: dayRequest(brief, spec: spec, offered: offered),
+            report: report)
+    }
+
+    func writeDay(
+        _ spec: DaySpec, brief: TrainingBrief, assembler: PlanAssembler, request: IntelligenceRequest,
+        report: (Progress) -> Void
+    ) async throws -> TemplateDay {
+        let offered = ExerciseCandidates(
+            (request.allowedValues["exerciseID"] ?? []).compactMap(library.exercise(id:)))
         var best = TemplateDay(
             weekday: spec.weekday, focus: spec.outline.focus, why: "", kind: spec.kind, exercises: [])
         let enough = max(2, exerciseCount(brief, kind: spec.kind) - 2)

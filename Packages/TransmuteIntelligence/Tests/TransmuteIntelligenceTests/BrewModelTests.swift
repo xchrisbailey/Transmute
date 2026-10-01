@@ -36,3 +36,24 @@ struct BrewModelTests {
         #expect(elapsed < .seconds(240))
     }
 }
+
+extension BrewModelTests {
+    /// #10: "Rework this day" on the real model keeps to the note.
+    @Test func reworksADayAroundANote() async throws {
+        let brewer = PlanBrewer(service: FoundationModelsService(settings: IntelligenceSettings()))
+        let target = ReworkTarget(
+            focus: "Lower strength", weekday: 1,
+            currentIDs: ["back-squat", "romanian-deadlift", "bulgarian-split-squat", "pallof-press"],
+            phase: PlanPhase(name: "Build", focus: "Base strength", firstWeek: 1, lastWeek: 4), week: 1)
+        let day = try await brewer.rework(
+            target, note: "No barbell today and only 30 minutes", brief: .tennisPlayer, units: .imperial)
+        let names = day.exercises.map { ExerciseLibrary.bundled.exercise(id: $0.exerciseID)!.name }
+        print("REWORK \(names) \(Int(PlanAssembler.estimatedMinutes(day.exercises))) min")
+        #expect(day.exercises.count >= 2)
+        for exercise in day.exercises {
+            let found = try #require(ExerciseLibrary.bundled.exercise(id: exercise.exerciseID))
+            #expect(found.isDoable(with: TrainingBrief.tennisPlayer.equipment.subtracting([.barbell])), "\(found.id)")
+        }
+        #expect(PlanAssembler.estimatedMinutes(day.exercises) <= 33)
+    }
+}

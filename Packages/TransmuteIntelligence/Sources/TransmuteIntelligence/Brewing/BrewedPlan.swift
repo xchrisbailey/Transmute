@@ -88,13 +88,17 @@ extension BrewedPlan {
         return plan
     }
 
-    /// Replaces the plan from `week` on with this brew's days, keeping any day that already has
-    /// a logged workout so history stays attached.
+    /// Replaces the plan from `week` on with this brew's days. Days with a logged workout always
+    /// stay so history keeps its plan, and hand-edited days stay unless `keepEdits` is off.
     @MainActor
-    public func replaceWeeks(of plan: Plan, from week: Int, in context: ModelContext) throws {
-        let kept = (plan.days ?? []).filter { $0.week >= week && !($0.workouts ?? []).isEmpty }
+    public func replaceWeeks(of plan: Plan, from week: Int, keepEdits: Bool = true, in context: ModelContext) throws {
+        func stays(_ day: PlanDay) -> Bool {
+            !(day.workouts ?? []).isEmpty || (keepEdits && day.isEdited)
+        }
+        let kept = (plan.days ?? []).filter { $0.week >= week && stays($0) }
         let keptSlots = Set(kept.map { "\($0.week)-\($0.weekday)" })
-        for day in plan.days ?? [] where day.week >= week && (day.workouts ?? []).isEmpty {
+        for day in plan.days ?? [] where day.week >= week && !stays(day) {
+            plan.days?.removeAll { $0 === day }
             context.delete(day)
         }
         for day in days where day.week >= week && !keptSlots.contains("\(day.week)-\(day.weekday)") {
@@ -109,7 +113,14 @@ extension BrewedPlan {
 extension BrewedDay {
     func makePlanDay() -> PlanDay {
         let day = PlanDay(week: week, weekday: weekday, focus: focus, notes: why)
-        for (order, exercise) in exercises.enumerated() {
+        day.exercises = exercises.makePlannedExercises()
+        return day
+    }
+}
+
+extension [BrewedExercise] {
+    func makePlannedExercises() -> [PlannedExercise] {
+        enumerated().map { order, exercise in
             let planned = PlannedExercise(
                 exerciseID: exercise.exerciseID, order: order, supersetGroup: exercise.supersetGroup,
                 notes: exercise.note)
@@ -126,8 +137,30 @@ extension BrewedDay {
                 set.intervalRestSeconds = target.intervalRestSeconds
                 planned.sets?.append(set)
             }
-            day.exercises?.append(planned)
+            return planned
         }
-        return day
+    }
+}
+
+extension BrewedExercise {
+    /// A saved exercise as a value, e.g. to estimate a day's length.
+    public init(_ planned: PlannedExercise) {
+        self.init(
+            exerciseID: planned.exerciseID, supersetGroup: planned.supersetGroup, note: planned.notes,
+            sets: planned.orderedSets.map { set in
+                BrewedSet(
+                    reps: set.targetReps, seconds: set.targetSeconds, meters: set.targetMeters,
+                    loadKg: set.targetLoadKg,
+                    percentOneRepMax: set.targetPercentOneRepMax, rpe: set.targetRPE,
+                    restSeconds: set.restSeconds ?? 60,
+                    rounds: set.rounds, intervalRestSeconds: set.intervalRestSeconds)
+            })
+    }
+}
+
+extension PlanDay {
+    /// Rough minutes for the session, the same estimate brewing fits days to.
+    public var estimatedMinutes: Int {
+        Int(PlanAssembler.estimatedMinutes(orderedExercises.map(BrewedExercise.init)).rounded())
     }
 }

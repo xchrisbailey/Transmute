@@ -3,13 +3,16 @@ import TransmuteCore
 
 extension PlanAssembler {
     /// A template day as it falls in a given week of its phase. Week one is the template; each
-    /// week after adds 2.5% load, or half a point of effort, a rep or five seconds where there's
-    /// no load. A deload drops a set and eases off by 15%.
+    /// week after adds 2.5% load, or half a point of effort, a rep (not for power work) or five
+    /// seconds where there's no load. A deload drops a set and eases off by 15%.
     public func progressed(_ exercises: [BrewedExercise], weekInPhase: Int, isDeload: Bool) -> [BrewedExercise] {
         let step = Double(max(0, weekInPhase - 1))
         return exercises.map { exercise in
             var exercise = exercise
-            let equipment = library.exercise(id: exercise.exerciseID)?.allEquipment ?? []
+            let found = library.exercise(id: exercise.exerciseID)
+            let equipment = found?.allEquipment ?? []
+            // Power work progresses by quality, not volume: its reps stay put.
+            let isPower = found?.category == .power
             exercise.sets = exercise.sets.map { set in
                 var set = set
                 if isDeload {
@@ -20,7 +23,7 @@ extension PlanAssembler {
                     set.loadKg = LoadableWeight.round(load * (1 + 0.025 * step), for: equipment, system: units)
                 } else if let rpe = set.rpe {
                     set.rpe = min(9.5, rpe + 0.5 * step)
-                } else if let reps = set.reps {
+                } else if let reps = set.reps, !isPower {
                     set.reps = reps + min(3, Int(step))
                 } else if let seconds = set.seconds, set.rounds == nil {
                     set.seconds = seconds + min(30, 5 * step)
