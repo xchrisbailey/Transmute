@@ -8,6 +8,7 @@ import TransmuteUI
 @main
 struct TransmuteApp: App {
     let container = TransmuteStore.makeAppContainer()
+    let health = HealthKitService()
 
     var body: some Scene {
         WindowGroup {
@@ -29,5 +30,6 @@ struct TransmuteApp: App {
             }
         }
         .modelContainer(container)
+        .environment(\.health, health)
     }
 }
