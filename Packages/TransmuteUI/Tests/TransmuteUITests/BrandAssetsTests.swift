@@ -22,6 +22,8 @@ struct BrandAssetsTests {
         Copy.gold(exercise: "Squat", record: "5RM", value: "115 kg"), Copy.workDone(sets: 18, moved: "8,420 kg"),
         Copy.weekDistilled, Copy.streak(weeks: 3), Copy.emptyLog, Copy.deleteWorkout("Lower A", date: "Sep 28"),
         Copy.healthAccess, Copy.aiUnavailable, Copy.savePlanError, Copy.about(version: "1.0"),
+        Copy.aiNotReady, Copy.aiDeviceNotEligible, Copy.aiRefused, Copy.aiBusy, Copy.aiLanguage, Copy.aiFailed,
+        Copy.openSettings,
     ]
 
     @Test(arguments: resources)
