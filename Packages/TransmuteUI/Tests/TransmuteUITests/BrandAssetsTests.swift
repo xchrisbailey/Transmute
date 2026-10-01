@@ -66,3 +66,25 @@ struct BrandAssetsTests {
         }
     }
 }
+
+extension BrandAssetsTests {
+    /// Every `voice.` or `plain.` key written anywhere in the packages or apps is in the catalog,
+    /// so no screen falls back to an untranslated default.
+    @Test func everyKeyInTheSourceIsInTheCatalog() throws {
+        let pattern = /"((?:voice|plain)\.[A-Za-z0-9.]+)"/
+        var missing: [String] = []
+        for folder in ["Packages", "Apps"] {
+            let root = Self.repo.appending(path: folder)
+            let files = FileManager.default.enumerator(at: root, includingPropertiesForKeys: nil)
+            while let url = files?.nextObject() as? URL {
+                guard url.pathExtension == "swift", !url.path.contains("/.build/"), !url.path.contains("/Tests/")
+                else { continue }
+                let source = try String(contentsOf: url, encoding: .utf8)
+                for match in source.matches(of: pattern) where Self.catalog[String(match.1)] == nil {
+                    missing.append("\(url.lastPathComponent): \(match.1)")
+                }
+            }
+        }
+        #expect(missing.isEmpty, "\(missing)")
+    }
+}

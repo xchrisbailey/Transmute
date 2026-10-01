@@ -18,12 +18,22 @@ public struct TrainingBrief: Codable, Hashable, Sendable {
     public var equipment: Set<Equipment>
     /// Injuries and no-go movements in plain words.
     public var limitations: String
+    /// Body areas to protect, from the chips and from the words above.
+    public var limitationAreas: Set<BodyArea>
+    /// Lifts the person knows their numbers for.
+    public var knownLifts: [KnownLift]
+    /// Other training this week from Health, e.g. tennis, described for the prompt.
+    public var outsideLoad: String?
 
     public init(
         heightCm: Double? = nil, weightKg: Double? = nil, age: Int? = nil, sex: Sex? = nil,
         experience: ExperienceLevel = .beginner, goal: String = "", goalTags: [GoalTag] = [], sports: [String] = [],
-        schedule: Schedule = Schedule(), equipment: Set<Equipment> = [.bodyweight], limitations: String = ""
+        schedule: Schedule = Schedule(), equipment: Set<Equipment> = [.bodyweight], limitations: String = "",
+        limitationAreas: Set<BodyArea> = [], knownLifts: [KnownLift] = [], outsideLoad: String? = nil
     ) {
+        self.limitationAreas = limitationAreas.union(LimitationRules.areas(mentionedIn: limitations))
+        self.knownLifts = knownLifts
+        self.outsideLoad = outsideLoad
         self.heightCm = heightCm
         self.weightKg = weightKg
         self.age = age
@@ -64,7 +74,11 @@ public struct TrainingBrief: Codable, Hashable, Sendable {
         }
         let kit = equipment.subtracting([.bodyweight]).map(\.rawValue).sorted()
         lines.append("Equipment: \(kit.isEmpty ? "bodyweight only" : (kit + ["bodyweight"]).joined(separator: ", "))")
-        lines.append("Limitations: \(limitations.isEmpty ? "none" : limitations)")
+        var limits = limitations.isEmpty ? [] : [limitations]
+        let areas = limitationAreas.map(\.rawValue).sorted()
+        if !areas.isEmpty { limits.append("go easy on: \(areas.joined(separator: ", "))") }
+        lines.append("Limitations: \(limits.isEmpty ? "none" : limits.joined(separator: "; "))")
+        if let outsideLoad { lines.append("Other training: \(outsideLoad)") }
         return lines.joined(separator: "\n")
     }
 
@@ -79,6 +93,17 @@ public struct TrainingBrief: Codable, Hashable, Sendable {
     /// ISO weekday name: 1 is Monday.
     public static func weekdayName(_ weekday: Weekday) -> String {
         ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][(weekday - 1 + 7) % 7]
+    }
+
+    /// The brief for a saved profile.
+    public init(_ profile: Profile, outsideLoad: String? = nil, now: Date = .now) {
+        let year = Calendar(identifier: .gregorian).component(.year, from: now)
+        self.init(
+            heightCm: profile.heightCm, weightKg: profile.latestBodyweightKg, age: profile.birthYear.map { year - $0 },
+            sex: profile.sex, experience: profile.experience, goal: profile.goalText, goalTags: profile.goalTags,
+            sports: profile.sports, schedule: profile.schedule, equipment: Set(profile.equipment).union([.bodyweight]),
+            limitations: profile.limitations, limitationAreas: Set(profile.limitationAreas),
+            knownLifts: profile.knownLifts, outsideLoad: outsideLoad)
     }
 
     /// The library search every tool call starts from: what this person has and can do.

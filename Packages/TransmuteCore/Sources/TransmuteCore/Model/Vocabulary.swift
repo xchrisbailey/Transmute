@@ -71,6 +71,29 @@ public enum RecordKind: String, Codable, CaseIterable, Sendable {
     case longestDistance
 }
 
+/// Parts of the body a limitation can name. Plans treat a named area as a hard constraint (#9).
+public enum BodyArea: String, Codable, CaseIterable, Sendable {
+    case neck, shoulder, elbow, wrist, upperBack, lowerBack, hip, knee, ankle
+}
+
+/// A lift an experienced person already knows their numbers for, used for starting loads (#9).
+public struct KnownLift: Codable, Hashable, Sendable {
+    public var exerciseID: String
+    public var weightKg: Double
+    public var reps: Int
+
+    public init(exerciseID: String, weightKg: Double, reps: Int) {
+        self.exerciseID = exerciseID
+        self.weightKg = weightKg
+        self.reps = reps
+    }
+
+    /// Estimated one-rep max by the Epley formula; a single is taken as is.
+    public var estimatedOneRepMaxKg: Double {
+        reps <= 1 ? weightKg : weightKg * (1 + Double(reps) / 30)
+    }
+}
+
 /// ISO weekday: 1 is Monday, 7 is Sunday.
 public typealias Weekday = Int
 
@@ -108,5 +131,27 @@ public struct Schedule: Codable, Hashable, Sendable {
         self.sessionMinutes = sessionMinutes
         self.weeks = weeks
         self.commitments = commitments
+    }
+}
+
+/// A stretch of weeks with one emphasis, e.g. weeks 1–3 "Build".
+public struct PlanPhase: Codable, Hashable, Sendable {
+    public var name: String
+    public var focus: String
+    public var firstWeek: Int
+    public var lastWeek: Int
+    /// A lighter week or weeks to recover before the next block.
+    public var isDeload: Bool
+
+    public init(name: String, focus: String, firstWeek: Int, lastWeek: Int, isDeload: Bool = false) {
+        self.name = name
+        self.focus = focus
+        self.firstWeek = firstWeek
+        self.lastWeek = max(firstWeek, lastWeek)
+        self.isDeload = isDeload
+    }
+
+    public var weeks: ClosedRange<Int> {
+        firstWeek...lastWeek
     }
 }
