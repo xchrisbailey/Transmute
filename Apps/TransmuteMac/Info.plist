@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>ATSApplicationFontsPath</key>
+	<string>.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -18,26 +20,5 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Geist-Regular.otf</string>
-		<string>Geist-Medium.otf</string>
-		<string>Geist-SemiBold.otf</string>
-		<string>Geist-Bold.otf</string>
-		<string>Geist-ExtraBold.otf</string>
-		<string>GeistMono-Regular.otf</string>
-		<string>GeistMono-Medium.otf</string>
-		<string>GeistMono-SemiBold.otf</string>
-		<string>GeistMono-Bold.otf</string>
-	</array>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>remote-notification</string>
-	</array>
-	<key>UILaunchScreen</key>
-	<dict>
-		<key>UIColorName</key>
-		<string>BrandBase</string>
-	</dict>
 </dict>
 </plist>
