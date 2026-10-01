@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Builds every app target for its simulator (or the Mac) without signing.
-# Usage: scripts/ci-build.sh [scheme ...]
+# Usage: scripts/build-apps.sh [scheme ...]
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -16,7 +16,7 @@ for scheme in "${schemes[@]}"; do
     TransmuteMac) destination="platform=macOS" ;;
     *) echo "Unknown scheme $scheme" >&2; exit 1 ;;
   esac
-  echo "::group::Build $scheme"
+  echo "--- Build $scheme"
   xcodebuild build \
     -project Transmute.xcodeproj \
     -scheme "$scheme" \
@@ -25,5 +25,4 @@ for scheme in "${schemes[@]}"; do
     CODE_SIGNING_ALLOWED=NO \
     | tee "build/$scheme.log" | grep -E "error:|warning: .*\.swift|BUILD (SUCCEEDED|FAILED)" || true
   test "${PIPESTATUS[0]}" -eq 0
-  echo "::endgroup::"
 done
