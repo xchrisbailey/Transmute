@@ -23,6 +23,7 @@ public enum GoalTag: String, Codable, CaseIterable, Sendable {
 public enum Equipment: String, Codable, CaseIterable, Sendable {
     case barbell, dumbbell, kettlebell, machine, cable, bodyweight, band, bench, rack
     case pullUpBar, medicineBall, box, sled, ladder, cones, rower, bike, treadmill, jumpRope, trapBar, landmine
+    case plate, hurdle, sandbag, climbingRope, dipStation, slider, stabilityBall, foamRoller, abWheel, pool, flexBar
 }
 
 /// How a set is measured, which decides the fields a set row shows.

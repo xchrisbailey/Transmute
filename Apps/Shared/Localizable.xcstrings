@@ -13,6 +13,30 @@
         }
       }
     },
+    "plain.any": {
+      "comment": "plain. Exercise picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any"
+          }
+        }
+      }
+    },
+    "plain.category": {
+      "comment": "plain. Exercise picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Category"
+          }
+        }
+      }
+    },
     "plain.deleteWorkout": {
       "comment": "plain. Confirm deleting a workout, e.g. Delete Lower A from Sep 28?",
       "extractionState": "manual",
@@ -21,6 +45,498 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete %1$@ from %2$@? This can't be undone."
+          }
+        }
+      }
+    },
+    "plain.equipment": {
+      "comment": "plain. Exercise picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Equipment"
+          }
+        }
+      }
+    },
+    "plain.equipment.abWheel": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ab wheel"
+          }
+        }
+      }
+    },
+    "plain.equipment.band": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Band"
+          }
+        }
+      }
+    },
+    "plain.equipment.barbell": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barbell"
+          }
+        }
+      }
+    },
+    "plain.equipment.bench": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bench"
+          }
+        }
+      }
+    },
+    "plain.equipment.bike": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bike"
+          }
+        }
+      }
+    },
+    "plain.equipment.bodyweight": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bodyweight"
+          }
+        }
+      }
+    },
+    "plain.equipment.box": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Box"
+          }
+        }
+      }
+    },
+    "plain.equipment.cable": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cable"
+          }
+        }
+      }
+    },
+    "plain.equipment.climbingRope": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Climbing rope"
+          }
+        }
+      }
+    },
+    "plain.equipment.cones": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cones"
+          }
+        }
+      }
+    },
+    "plain.equipment.dipStation": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dip station"
+          }
+        }
+      }
+    },
+    "plain.equipment.dumbbell": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dumbbell"
+          }
+        }
+      }
+    },
+    "plain.equipment.flexBar": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flex bar"
+          }
+        }
+      }
+    },
+    "plain.equipment.foamRoller": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foam roller"
+          }
+        }
+      }
+    },
+    "plain.equipment.hurdle": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hurdle"
+          }
+        }
+      }
+    },
+    "plain.equipment.jumpRope": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jump rope"
+          }
+        }
+      }
+    },
+    "plain.equipment.kettlebell": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kettlebell"
+          }
+        }
+      }
+    },
+    "plain.equipment.ladder": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ladder"
+          }
+        }
+      }
+    },
+    "plain.equipment.landmine": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Landmine"
+          }
+        }
+      }
+    },
+    "plain.equipment.machine": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Machine"
+          }
+        }
+      }
+    },
+    "plain.equipment.medicineBall": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medicine ball"
+          }
+        }
+      }
+    },
+    "plain.equipment.plate": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight plate"
+          }
+        }
+      }
+    },
+    "plain.equipment.pool": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pool"
+          }
+        }
+      }
+    },
+    "plain.equipment.pullUpBar": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pull-up bar"
+          }
+        }
+      }
+    },
+    "plain.equipment.rack": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rack"
+          }
+        }
+      }
+    },
+    "plain.equipment.rower": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rowing machine"
+          }
+        }
+      }
+    },
+    "plain.equipment.sandbag": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sandbag"
+          }
+        }
+      }
+    },
+    "plain.equipment.sled": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sled"
+          }
+        }
+      }
+    },
+    "plain.equipment.slider": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sliders"
+          }
+        }
+      }
+    },
+    "plain.equipment.stabilityBall": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stability ball"
+          }
+        }
+      }
+    },
+    "plain.equipment.trapBar": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trap bar"
+          }
+        }
+      }
+    },
+    "plain.equipment.treadmill": {
+      "comment": "plain. Equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Treadmill"
+          }
+        }
+      }
+    },
+    "plain.exerciseCategory.conditioning": {
+      "comment": "plain. Exercise category.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conditioning"
+          }
+        }
+      }
+    },
+    "plain.exerciseCategory.mobility": {
+      "comment": "plain. Exercise category.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mobility and prehab"
+          }
+        }
+      }
+    },
+    "plain.exerciseCategory.power": {
+      "comment": "plain. Exercise category.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Power"
+          }
+        }
+      }
+    },
+    "plain.exerciseCategory.speedAgility": {
+      "comment": "plain. Exercise category.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speed and agility"
+          }
+        }
+      }
+    },
+    "plain.exerciseCategory.strength": {
+      "comment": "plain. Exercise category.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strength"
+          }
+        }
+      }
+    },
+    "plain.filters": {
+      "comment": "plain. Exercise picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filters"
+          }
+        }
+      }
+    },
+    "plain.filtersOff": {
+      "comment": "plain. Exercise picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        }
+      }
+    },
+    "plain.filtersOn": {
+      "comment": "plain. Exercise picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On"
           }
         }
       }
@@ -69,6 +585,90 @@
           "stringUnit": {
             "state": "translated",
             "value": "Couldn't save the plan. Your sets are still saved on this device."
+          }
+        }
+      }
+    },
+    "plain.searchExercises": {
+      "comment": "plain. Exercise picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search exercises"
+          }
+        }
+      }
+    },
+    "plain.sport": {
+      "comment": "plain. Exercise picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sport"
+          }
+        }
+      }
+    },
+    "plain.sport.climbing": {
+      "comment": "plain. Sport tag.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Climbing"
+          }
+        }
+      }
+    },
+    "plain.sport.general": {
+      "comment": "plain. Sport tag.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "General"
+          }
+        }
+      }
+    },
+    "plain.sport.running": {
+      "comment": "plain. Sport tag.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Running"
+          }
+        }
+      }
+    },
+    "plain.sport.soccer": {
+      "comment": "plain. Sport tag.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soccer"
+          }
+        }
+      }
+    },
+    "plain.sport.tennis": {
+      "comment": "plain. Sport tag.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tennis"
           }
         }
       }
