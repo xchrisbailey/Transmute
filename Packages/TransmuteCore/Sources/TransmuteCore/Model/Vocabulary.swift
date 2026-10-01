@@ -133,3 +133,25 @@ public struct Schedule: Codable, Hashable, Sendable {
         self.commitments = commitments
     }
 }
+
+/// A stretch of weeks with one emphasis, e.g. weeks 1–3 "Build".
+public struct PlanPhase: Codable, Hashable, Sendable {
+    public var name: String
+    public var focus: String
+    public var firstWeek: Int
+    public var lastWeek: Int
+    /// A lighter week or weeks to recover before the next block.
+    public var isDeload: Bool
+
+    public init(name: String, focus: String, firstWeek: Int, lastWeek: Int, isDeload: Bool = false) {
+        self.name = name
+        self.focus = focus
+        self.firstWeek = firstWeek
+        self.lastWeek = max(firstWeek, lastWeek)
+        self.isDeload = isDeload
+    }
+
+    public var weeks: ClosedRange<Int> {
+        firstWeek...lastWeek
+    }
+}

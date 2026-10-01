@@ -16,6 +16,8 @@ extension SchemaV1 {
         public var isActive = true
         /// Where it was brewed, e.g. "Apple Intelligence on iPhone".
         public var brewedBy: String?
+        /// The plan's phases in order, for the phase bar.
+        public var phases: [PlanPhase] = []
 
         @Relationship(deleteRule: .cascade, inverse: \PlanDay.plan)
         public var days: [PlanDay]? = []
@@ -25,6 +27,11 @@ extension SchemaV1 {
             self.goalSummary = goalSummary
             self.startDate = startDate
             self.weekCount = weekCount
+        }
+
+        /// The phase a week falls in.
+        public func phase(forWeek week: Int) -> PlanPhase? {
+            phases.first { $0.weeks.contains(week) }
         }
 
         /// Days in week order, then by weekday.
