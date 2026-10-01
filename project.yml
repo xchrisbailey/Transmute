@@ -63,6 +63,8 @@ targets:
       - package: TransmuteCore
       - package: TransmuteIntelligence
       - package: TransmuteUI
+      - package: TransmuteUI
+        product: TransmutePlanUI
       - target: TransmuteWatch
     settings:
       base:
@@ -134,6 +136,8 @@ targets:
       - package: TransmuteCore
       - package: TransmuteIntelligence
       - package: TransmuteUI
+      - package: TransmuteUI
+        product: TransmutePlanUI
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: computer.srcery.transmute.mac

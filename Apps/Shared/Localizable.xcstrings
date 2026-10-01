@@ -1,6 +1,78 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "plain.aiBusy": {
+      "comment": "plain. Rate limited.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence is busy. Try again in a minute."
+          }
+        }
+      }
+    },
+    "plain.aiDeviceNotEligible": {
+      "comment": "plain. This device can't run Apple Intelligence.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transmute needs a device with Apple Intelligence to make plans."
+          }
+        }
+      }
+    },
+    "plain.aiFailed": {
+      "comment": "plain. Generation failed for another reason.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Something went wrong with Apple Intelligence. Try again."
+          }
+        }
+      }
+    },
+    "plain.aiLanguage": {
+      "comment": "plain. Unsupported language or locale.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence doesn't support this device's language yet."
+          }
+        }
+      }
+    },
+    "plain.aiNotReady": {
+      "comment": "plain. The on-device model is still downloading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence is still getting ready on this device. Brewing starts as soon as it's done."
+          }
+        }
+      }
+    },
+    "plain.aiRefused": {
+      "comment": "plain. The model declined a request.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence couldn't help with that. Try rewording it, and keep it about training."
+          }
+        }
+      }
+    },
     "plain.aiUnavailable": {
       "comment": "plain. Apple Intelligence is turned off.",
       "extractionState": "manual",
@@ -561,6 +633,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Log set"
+          }
+        }
+      }
+    },
+    "plain.openSettings": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
           }
         }
       }

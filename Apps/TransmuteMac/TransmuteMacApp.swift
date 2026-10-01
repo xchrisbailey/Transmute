@@ -1,6 +1,8 @@
 import SwiftData
 import SwiftUI
 import TransmuteCore
+import TransmuteIntelligence
+import TransmutePlanUI
 import TransmuteUI
 
 @main
@@ -13,5 +15,14 @@ struct TransmuteMacApp: App {
                 .frame(minWidth: 480, minHeight: 320)
         }
         .modelContainer(container)
+
+        #if DEBUG
+            Window(Text(verbatim: "AI debug"), id: "ai-debug") {
+                NavigationStack {
+                    IntelligenceDebugView(service: FoundationModelsService())
+                }
+                .frame(minWidth: 420, minHeight: 480)
+            }
+        #endif
     }
 }

@@ -86,6 +86,35 @@ public enum Copy {
         defaultValue: "Plans need Apple Intelligence, which is off. Turn it on in Settings. Logging works without it.",
         bundle: .main, comment: "plain. Apple Intelligence is turned off.")
 
+    public static let aiNotReady = LocalizedStringResource(
+        "plain.aiNotReady",
+        defaultValue: "Apple Intelligence is still getting ready on this device. Brewing starts as soon as it's done.",
+        bundle: .main, comment: "plain. The on-device model is still downloading.")
+
+    public static let aiDeviceNotEligible = LocalizedStringResource(
+        "plain.aiDeviceNotEligible", defaultValue: "Transmute needs a device with Apple Intelligence to make plans.",
+        bundle: .main, comment: "plain. This device can't run Apple Intelligence.")
+
+    public static let aiRefused = LocalizedStringResource(
+        "plain.aiRefused",
+        defaultValue: "Apple Intelligence couldn't help with that. Try rewording it, and keep it about training.",
+        bundle: .main, comment: "plain. The model declined a request.")
+
+    public static let aiBusy = LocalizedStringResource(
+        "plain.aiBusy", defaultValue: "Apple Intelligence is busy. Try again in a minute.", bundle: .main,
+        comment: "plain. Rate limited.")
+
+    public static let aiLanguage = LocalizedStringResource(
+        "plain.aiLanguage", defaultValue: "Apple Intelligence doesn't support this device's language yet.",
+        bundle: .main, comment: "plain. Unsupported language or locale.")
+
+    public static let aiFailed = LocalizedStringResource(
+        "plain.aiFailed", defaultValue: "Something went wrong with Apple Intelligence. Try again.", bundle: .main,
+        comment: "plain. Generation failed for another reason.")
+
+    public static let openSettings = LocalizedStringResource(
+        "plain.openSettings", defaultValue: "Open Settings", bundle: .main, comment: "plain. Button.")
+
     public static let savePlanError = LocalizedStringResource(
         "plain.savePlanError", defaultValue: "Couldn't save the plan. Your sets are still saved on this device.",
         bundle: .main, comment: "plain. Saving a plan failed.")
