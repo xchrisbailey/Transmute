@@ -8,7 +8,7 @@ By srcery.
 
 | Path | What lives there |
 |---|---|
-| `Packages/TransmuteCore` | Models, units, the exercise library, progression, PRs, brand tokens. Pure Swift, no UI. |
+| `Packages/TransmuteCore` | SwiftData models, units, the exercise library (`Resources/exercises.json`, see `CATALOG.md`), progression, PRs, brand tokens. No UI. |
 | `Packages/TransmuteIntelligence` | The plan-brewing boundary over Foundation Models. |
 | `Packages/TransmuteUI` | Shared SwiftUI components and brand fonts. |
 | `Apps/TransmuteiOS` | iPhone app. |
