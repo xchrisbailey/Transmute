@@ -93,14 +93,9 @@ struct RestTimer: View {
             restButton("plus", label: LogCopy.addRest) {
                 WorkoutSession.adjustRest(by: 15, in: workout)
             }
-            Button {
+            restButton("forward.end", label: LogCopy.skipRest) {
                 WorkoutSession.startRest(nil, in: workout)
-            } label: {
-                Text(LogCopy.skipRest)
-                    .brandFont(.label)
-                    .frame(minHeight: 44)
             }
-            .buttonStyle(.bordered)
         }
     }
 
