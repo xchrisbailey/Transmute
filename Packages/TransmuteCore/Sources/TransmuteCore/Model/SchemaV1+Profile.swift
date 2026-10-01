@@ -21,6 +21,8 @@ extension SchemaV1 {
         public var limitations = ""
         /// Body areas the limitations name, picked as chips.
         public var limitationAreasRaw: [String] = []
+        /// Load increments and held exercises for the progression engine (#12).
+        public var progression: ProgressionSettings = ProgressionSettings()
         /// Lifts an experienced person entered, for starting loads.
         public var knownLifts: [KnownLift] = []
         /// The barbell's weight, for the plate calculator (#21).

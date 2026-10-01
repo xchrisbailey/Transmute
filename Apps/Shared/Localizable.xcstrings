@@ -2029,6 +2029,462 @@
         }
       }
     },
+    "plain.progression.addDistance": {
+      "comment": "plain. From your plan; the second argument is a distance, e.g. 20 m.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ goes up %2$@ since every set was done %3$@."
+          }
+        }
+      }
+    },
+    "plain.progression.addLoad": {
+      "comment": "plain. From your plan, e.g. Back Squat goes up 2.5 kg since every set moved well on Thursday.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ goes up %2$@ since every set moved well %3$@."
+          }
+        }
+      }
+    },
+    "plain.progression.addReps": {
+      "comment": "plain. From your plan for reps-only work.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ goes up a rep since every set hit its target %2$@."
+          }
+        }
+      }
+    },
+    "plain.progression.addRound": {
+      "comment": "plain. From your plan for intervals.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ adds a round since you finished them all %2$@."
+          }
+        }
+      }
+    },
+    "plain.progression.addTime": {
+      "comment": "plain. From your plan for timed work; the second argument is seconds.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ goes up %2$@ s since every set was done %3$@."
+          }
+        }
+      }
+    },
+    "plain.progression.buildReps": {
+      "comment": "plain. From your plan when a rep range wasn't topped out.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ stays the same. Aim for the top of the range on every set."
+          }
+        }
+      }
+    },
+    "plain.progression.calibrate": {
+      "comment": "plain. From your plan when there's no history yet.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First time through: today's working sets of %@ set the baseline."
+          }
+        }
+      }
+    },
+    "plain.progression.deload": {
+      "comment": "plain. From your plan; arguments are the exercise, sets, load and a percentage.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deload week: %1$@ drops to %2$@ sets at %3$@, about %4$@ of the usual load."
+          }
+        }
+      }
+    },
+    "plain.progression.deloadNoLoad": {
+      "comment": "plain. From your plan; arguments are the exercise and the number of sets.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deload week: %1$@ drops to %2$@ sets so you recover."
+          }
+        }
+      }
+    },
+    "plain.progression.drop": {
+      "comment": "plain. From your plan; arguments are the exercise, the new load and the number of misses.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ comes down about 10%% to %2$@ after %3$@ misses in a row. Build back from there."
+          }
+        }
+      }
+    },
+    "plain.progression.dropNoLoad": {
+      "comment": "plain. From your plan; the second argument is the number of misses.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ eases back about 10%% after %2$@ misses in a row."
+          }
+        }
+      }
+    },
+    "plain.progression.faster": {
+      "comment": "plain. From your plan; the second argument is seconds.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ aims %2$@ s faster since you made the time %3$@."
+          }
+        }
+      }
+    },
+    "plain.progression.fromEstimate": {
+      "comment": "plain. From your plan; arguments are the exercise, the load and the estimated max.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ starts at %2$@ today, from your estimated max of %3$@."
+          }
+        }
+      }
+    },
+    "plain.progression.fromYourPlan": {
+      "comment": "plain. Label above the sentence explaining today's targets.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From your plan"
+          }
+        }
+      }
+    },
+    "plain.progression.heldLoad": {
+      "comment": "plain. From your plan for a held exercise; arguments are the name and load.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ stays at %2$@, as you asked."
+          }
+        }
+      }
+    },
+    "plain.progression.heldNoLoad": {
+      "comment": "plain. From your plan for a held exercise without a load.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ stays where it was, as you asked."
+          }
+        }
+      }
+    },
+    "plain.progression.heldNote": {
+      "comment": "plain. Under the held exercises.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These stay where they are until you let them progress."
+          }
+        }
+      }
+    },
+    "plain.progression.heldSection": {
+      "comment": "plain. Settings section listing held exercises.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Held weights"
+          }
+        }
+      }
+    },
+    "plain.progression.hold": {
+      "comment": "plain. From your plan after two misses in a row.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ holds steady after missing twice in a row. It goes up again once every set lands."
+          }
+        }
+      }
+    },
+    "plain.progression.holdEffort": {
+      "comment": "plain. From your plan when reps were hit above the target RPE.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ stays at %2$@ since the sets felt harder than planned %3$@."
+          }
+        }
+      }
+    },
+    "plain.progression.holdWeight": {
+      "comment": "plain. Session button that stops an exercise's targets going up.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold this weight"
+          }
+        }
+      }
+    },
+    "plain.progression.increments": {
+      "comment": "plain. Settings section.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight increments"
+          }
+        }
+      }
+    },
+    "plain.progression.incrementsNote": {
+      "comment": "plain. Under the increment pickers.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How much a lift goes up when every set moves well. Loads round to what your kit can make."
+          }
+        }
+      }
+    },
+    "plain.progression.lastTime": {
+      "comment": "plain. Ends a From your plan sentence when the session's date isn't known.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "last time"
+          }
+        }
+      }
+    },
+    "plain.progression.letItProgress": {
+      "comment": "plain. Button that releases a held exercise.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Let it progress"
+          }
+        }
+      }
+    },
+    "plain.progression.letNamedProgress": {
+      "comment": "plain. VoiceOver label for releasing a held exercise; the argument is its name.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Let %@ progress"
+          }
+        }
+      }
+    },
+    "plain.progression.lowerBody": {
+      "comment": "plain. Increment picker for squats, hinges and lunges.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lower body"
+          }
+        }
+      }
+    },
+    "plain.progression.noneHeld": {
+      "comment": "plain. Empty held exercises list.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing held. Choose Hold this weight during a workout to keep an exercise where it is."
+          }
+        }
+      }
+    },
+    "plain.progression.onDay": {
+      "comment": "plain. Ends a From your plan sentence; the argument is a weekday or a date.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "on %@"
+          }
+        }
+      }
+    },
+    "plain.progression.percentOfMax": {
+      "comment": "plain. From your plan; arguments are the exercise, a percentage, the estimated max and the load.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ is %2$@ of your estimated max of %3$@: %4$@."
+          }
+        }
+      }
+    },
+    "plain.progression.retry": {
+      "comment": "plain. From your plan after one miss.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ stays the same for another go after a missed set %2$@."
+          }
+        }
+      }
+    },
+    "plain.progression.rpeDown": {
+      "comment": "plain. From your plan; the last two arguments are the logged and target RPE.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ comes down %2$@ since the sets felt harder than planned %3$@: RPE %4$@ against %5$@."
+          }
+        }
+      }
+    },
+    "plain.progression.rpeOnTarget": {
+      "comment": "plain. From your plan when the logged RPE matched the target.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ stays at %2$@ since the effort was right on target %3$@."
+          }
+        }
+      }
+    },
+    "plain.progression.rpeUp": {
+      "comment": "plain. From your plan; the last two arguments are the logged and target RPE.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ goes up %2$@ since the sets felt easier than planned %3$@: RPE %4$@ against %5$@."
+          }
+        }
+      }
+    },
+    "plain.progression.shorterRest": {
+      "comment": "plain. From your plan for intervals; the second argument is seconds.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ gets %2$@ s less rest between rounds since you finished them all %3$@."
+          }
+        }
+      }
+    },
+    "plain.progression.steady": {
+      "comment": "plain. From your plan for speed, power and mobility work.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ stays the same. This work is about quality, not more volume."
+          }
+        }
+      }
+    },
+    "plain.progression.title": {
+      "comment": "plain. Progression settings screen title and Profile row.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progression"
+          }
+        }
+      }
+    },
+    "plain.progression.upperBody": {
+      "comment": "plain. Increment picker for pushes and pulls.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upper body"
+          }
+        }
+      }
+    },
     "plain.rebrew.from": {
       "comment": "plain. Rebrew week stepper.",
       "extractionState": "manual",
