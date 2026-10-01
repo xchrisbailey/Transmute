@@ -82,6 +82,9 @@ extension SchemaV1 {
         public var restSeconds: Double?
         /// For intervals: rest between rounds of `seconds` work.
         public var intervalRestSeconds: Double?
+        /// The person confirmed an unusually big jump is real, so record detection trusts it
+        /// rather than asking again (#13).
+        public var isRecordConfirmed = false
         public var exercise: LoggedExercise?
 
         @Relationship(deleteRule: .nullify, inverse: \PersonalRecord.set)

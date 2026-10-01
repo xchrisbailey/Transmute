@@ -69,6 +69,8 @@ public enum RecordKind: String, Codable, CaseIterable, Sendable {
     case longestTime
     /// Furthest distance in one set.
     case longestDistance
+    /// Most kilograms moved (load × reps) for one exercise in one session.
+    case sessionVolume
 }
 
 /// Parts of the body a limitation can name. Plans treat a named area as a hard constraint (#9).
