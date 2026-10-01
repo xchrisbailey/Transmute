@@ -9,8 +9,8 @@ By srcery.
 | Path | What lives there |
 |---|---|
 | `Packages/TransmuteCore` | SwiftData models, units, the exercise library (`Resources/exercises.json`, see `CATALOG.md`), progression, PRs, brand tokens. No UI. |
-| `Packages/TransmuteIntelligence` | The plan-brewing boundary over Foundation Models. |
-| `Packages/TransmuteUI` | Shared SwiftUI components and brand fonts. |
+| `Packages/TransmuteIntelligence` | `IntelligenceService` and its Foundation Models implementation: availability, guardrail instructions, context budgeting, the library tool and schema constraints that keep the AI to real exercises. |
+| `Packages/TransmuteUI` | Shared SwiftUI components and brand fonts (`TransmuteUI`), plus the iPhone and Mac screens that brew and edit plans (`TransmutePlanUI`). |
 | `Apps/TransmuteiOS` | iPhone app. |
 | `Apps/TransmuteWatch` | Apple Watch app, embedded in the iPhone app. |
 | `Apps/TransmuteMac` | Mac app. |
@@ -39,7 +39,10 @@ With no team set, the apps are signed to run locally: everything works in the si
 scripts/check.sh           # everything below, in order
 scripts/test-packages.sh   # swift test for every package
 scripts/build-apps.sh      # build all three apps, unsigned
+scripts/eval-intelligence.sh  # real-model tests and the planning evaluation set (not in check.sh)
 ```
+
+`eval-intelligence.sh` calls Apple Intelligence on this Mac, so it needs it turned on. The output varies run to run, so run it when prompts, schemas or the exercise library change rather than on every push.
 
 There's no hosted CI, because GitHub's macOS runners lag behind the Xcode and SDKs this project needs. Run `scripts/check.sh` before pushing.
 
