@@ -36,12 +36,12 @@ With no team set, the apps are signed to run locally: everything works in the si
 ## Checks
 
 ```bash
+scripts/check.sh           # everything below, in order
 scripts/test-packages.sh   # swift test for every package
-scripts/ci-build.sh        # build all three apps, unsigned
-swiftlint lint --strict
-swift format lint --strict --recursive Apps Packages
+scripts/build-apps.sh      # build all three apps, unsigned
 ```
+
+There's no hosted CI, because GitHub's macOS runners lag behind the Xcode and SDKs this project needs. Run `scripts/check.sh` before pushing.
 
 Brand strings live in `Apps/Shared/Localizable.xcstrings` and are read through `Copy` in TransmuteUI. Each key starts with `voice.` (alchemy verbs) or `plain.` (mid-set, watch, errors, deletes, Health).
 
-CI runs the same steps on GitHub's `xcode-27` runner.
