@@ -16,6 +16,8 @@ By srcery.
 | `Apps/TransmuteMac` | Mac app. |
 | `Apps/Shared` | Asset catalog and the `Localizable.xcstrings` String Catalog used by all three apps. |
 | `Config` | Shared build settings and local signing overrides. |
+| `Brand` | SVG masters of the mark and wordmark. See `Brand/README.md`. |
+| `Resources/Fonts` | Geist and Geist Mono (SIL OFL), bundled by every app. |
 
 Requires Xcode 27 and the iOS 27, watchOS 27 and macOS 27 SDKs.
 
@@ -40,3 +42,6 @@ scripts/build-apps.sh      # build all three apps, unsigned
 ```
 
 There's no hosted CI, because GitHub's macOS runners lag behind the Xcode and SDKs this project needs. Run `scripts/check.sh` before pushing.
+
+Brand strings live in `Apps/Shared/Localizable.xcstrings` and are read through `Copy` in TransmuteUI. Each key starts with `voice.` (alchemy verbs) or `plain.` (mid-set, watch, errors, deletes, Health).
+

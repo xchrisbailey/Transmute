@@ -1,1 +1,246 @@
-{"sourceLanguage":"en","strings":{},"version":"1.0"}
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "plain.aiUnavailable": {
+      "comment": "plain. Apple Intelligence is turned off.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plans need Apple Intelligence, which is off. Turn it on in Settings. Logging works without it."
+          }
+        }
+      }
+    },
+    "plain.deleteWorkout": {
+      "comment": "plain. Confirm deleting a workout, e.g. Delete Lower A from Sep 28?",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete %1$@ from %2$@? This can't be undone."
+          }
+        }
+      }
+    },
+    "plain.healthAccess": {
+      "comment": "plain. Explains Health access before the system prompt.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transmute reads heart rate and bodyweight from Health to adjust your plan."
+          }
+        }
+      }
+    },
+    "plain.logSet": {
+      "comment": "plain. Log a set, mid-workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log set"
+          }
+        }
+      }
+    },
+    "plain.rest": {
+      "comment": "plain. Rest timer; the argument is the time left, e.g. 1:48.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest %@"
+          }
+        }
+      }
+    },
+    "plain.savePlanError": {
+      "comment": "plain. Saving a plan failed.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't save the plan. Your sets are still saved on this device."
+          }
+        }
+      }
+    },
+    "voice.about": {
+      "comment": "voice. About screen; the argument is the app version.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transmute %@, forged at srcery.computer"
+          }
+        }
+      }
+    },
+    "voice.beginWork": {
+      "comment": "voice. Start a workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begin the work"
+          }
+        }
+      }
+    },
+    "voice.brewPlan": {
+      "comment": "voice. Generate a plan.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brew a plan"
+          }
+        }
+      }
+    },
+    "voice.brewedOn": {
+      "comment": "voice. Under a generated plan; the argument is iPhone or Mac.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brewed on this %@ with Apple Intelligence"
+          }
+        }
+      }
+    },
+    "voice.distilling": {
+      "comment": "voice. Shown while the AI generates a plan, one week at a time.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distilling week %lld…"
+          }
+        }
+      }
+    },
+    "voice.emptyLog": {
+      "comment": "voice. Empty workout log.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The crucible's empty. Brew a plan to begin."
+          }
+        }
+      }
+    },
+    "voice.gold": {
+      "comment": "voice. A new personal record, e.g. Gold. Squat 5RM, 115 kg.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gold. %1$@ %2$@, %3$@."
+          }
+        }
+      }
+    },
+    "voice.rebrew": {
+      "comment": "voice. Regenerate the whole plan.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rebrew"
+          }
+        }
+      }
+    },
+    "voice.reworkDay": {
+      "comment": "voice. Edit one day with AI.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rework this day"
+          }
+        }
+      }
+    },
+    "voice.streak": {
+      "comment": "voice. Training streak in weeks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "The fire's lit · %lld week"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "The fire's lit · %lld weeks"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "voice.weekDistilled": {
+      "comment": "voice. Title of the weekly summary.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week, distilled"
+          }
+        }
+      }
+    },
+    "voice.whyThisPlan": {
+      "comment": "voice. Plan rationale card; the argument is one sentence from the AI.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Why this plan: %@"
+          }
+        }
+      }
+    },
+    "voice.workDone": {
+      "comment": "voice. Workout finished; the second argument is total volume, e.g. 8,420 kg.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The work is done. %1$lld sets, %2$@ moved."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

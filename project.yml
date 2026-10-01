@@ -57,6 +57,8 @@ targets:
     sources:
       - Apps/TransmuteiOS
       - Apps/Shared
+      - path: Resources/Fonts
+        buildPhase: resources
     dependencies:
       - package: TransmuteCore
       - package: TransmuteIntelligence
@@ -71,15 +73,18 @@ targets:
         LD_RUNPATH_SEARCH_PATHS: $(inherited) @executable_path/Frameworks
         TARGETED_DEVICE_FAMILY: "1"
         CODE_SIGN_ENTITLEMENTS: Apps/TransmuteiOS/TransmuteiOS.entitlements
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        # Localized by Apps/TransmuteiOS/InfoPlist.xcstrings.
         INFOPLIST_KEY_NSHealthShareUsageDescription: Transmute reads heart rate and bodyweight from Health to adjust your plan.
         INFOPLIST_KEY_NSHealthUpdateUsageDescription: Transmute saves your workouts to Health.
     info:
       path: Apps/TransmuteiOS/Info.plist
       properties:
         UIBackgroundModes: [remote-notification]
+        UILaunchScreen:
+          UIColorName: BrandBase
+        UIAppFonts: [Geist-Regular.otf, Geist-Medium.otf, Geist-SemiBold.otf, Geist-Bold.otf, Geist-ExtraBold.otf, GeistMono-Regular.otf, GeistMono-Medium.otf, GeistMono-SemiBold.otf, GeistMono-Bold.otf]
 
   TransmuteWatch:
     type: application
@@ -87,6 +92,12 @@ targets:
     sources:
       - Apps/TransmuteWatch
       - Apps/Shared
+      - path: Resources/Fonts/GeistMono-SemiBold.otf
+        buildPhase: resources
+      - path: Resources/Fonts/GeistMono-Bold.otf
+        buildPhase: resources
+      - path: Resources/Fonts/OFL.txt
+        buildPhase: resources
     dependencies:
       - package: TransmuteCore
       - package: TransmuteUI
@@ -100,6 +111,7 @@ targets:
         CODE_SIGN_ENTITLEMENTS: Apps/TransmuteWatch/TransmuteWatch.entitlements
         INFOPLIST_KEY_WKCompanionAppBundleIdentifier: computer.srcery.transmute
         INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp: NO
+        # Localized by Apps/TransmuteWatch/InfoPlist.xcstrings.
         INFOPLIST_KEY_NSHealthShareUsageDescription: Transmute reads heart rate from Health during a workout.
         INFOPLIST_KEY_NSHealthUpdateUsageDescription: Transmute saves your workouts to Health.
         SKIP_INSTALL: YES
@@ -108,6 +120,7 @@ targets:
       properties:
         WKApplication: true
         WKBackgroundModes: [workout-processing]
+        UIAppFonts: [GeistMono-SemiBold.otf, GeistMono-Bold.otf]
 
   TransmuteMac:
     type: application
@@ -115,6 +128,8 @@ targets:
     sources:
       - Apps/TransmuteMac
       - Apps/Shared
+      - path: Resources/Fonts
+        buildPhase: resources
     dependencies:
       - package: TransmuteCore
       - package: TransmuteIntelligence
@@ -129,6 +144,10 @@ targets:
         CODE_SIGN_ENTITLEMENTS: $(TRANSMUTE_MAC_ENTITLEMENTS)
         ENABLE_HARDENED_RUNTIME: YES
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.healthcare-fitness
+    info:
+      path: Apps/TransmuteMac/Info.plist
+      properties:
+        ATSApplicationFontsPath: .
 
 schemes:
   TransmuteiOS:
