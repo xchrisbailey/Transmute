@@ -1,6 +1,30 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "plain.addCommitment": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a day"
+          }
+        }
+      }
+    },
+    "plain.addWeight": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add weight"
+          }
+        }
+      }
+    },
     "plain.aiUnavailable": {
       "comment": "plain. Apple Intelligence is turned off.",
       "extractionState": "manual",
@@ -25,6 +49,174 @@
         }
       }
     },
+    "plain.back": {
+      "comment": "plain. Onboarding back button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        }
+      }
+    },
+    "plain.barbellWeight": {
+      "comment": "plain. Field label, for the plate calculator.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barbell weight"
+          }
+        }
+      }
+    },
+    "plain.birthYear": {
+      "comment": "plain. Field label.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birth year"
+          }
+        }
+      }
+    },
+    "plain.bodyArea.ankle": {
+      "comment": "plain. Body area chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ankles"
+          }
+        }
+      }
+    },
+    "plain.bodyArea.elbow": {
+      "comment": "plain. Body area chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elbows"
+          }
+        }
+      }
+    },
+    "plain.bodyArea.hip": {
+      "comment": "plain. Body area chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hips"
+          }
+        }
+      }
+    },
+    "plain.bodyArea.knee": {
+      "comment": "plain. Body area chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Knees"
+          }
+        }
+      }
+    },
+    "plain.bodyArea.lowerBack": {
+      "comment": "plain. Body area chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lower back"
+          }
+        }
+      }
+    },
+    "plain.bodyArea.neck": {
+      "comment": "plain. Body area chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neck"
+          }
+        }
+      }
+    },
+    "plain.bodyArea.shoulder": {
+      "comment": "plain. Body area chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shoulders"
+          }
+        }
+      }
+    },
+    "plain.bodyArea.upperBack": {
+      "comment": "plain. Body area chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upper back"
+          }
+        }
+      }
+    },
+    "plain.bodyArea.wrist": {
+      "comment": "plain. Body area chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wrists"
+          }
+        }
+      }
+    },
+    "plain.bodyweight": {
+      "comment": "plain. Profile bodyweight history section.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bodyweight"
+          }
+        }
+      }
+    },
+    "plain.cancel": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
     "plain.category": {
       "comment": "plain. Exercise picker.",
       "extractionState": "manual",
@@ -33,6 +225,114 @@
           "stringUnit": {
             "state": "translated",
             "value": "Category"
+          }
+        }
+      }
+    },
+    "plain.commitmentLabel": {
+      "comment": "plain. Commitment name field, e.g. Match.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What"
+          }
+        }
+      }
+    },
+    "plain.commitments": {
+      "comment": "plain. Fixed commitments section.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matches and practice"
+          }
+        }
+      }
+    },
+    "plain.commitmentsNote": {
+      "comment": "plain. Under fixed commitments.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hard sessions stay off these days."
+          }
+        }
+      }
+    },
+    "plain.continue": {
+      "comment": "plain. Onboarding next button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        }
+      }
+    },
+    "plain.date": {
+      "comment": "plain. Field label.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date"
+          }
+        }
+      }
+    },
+    "plain.day": {
+      "comment": "plain. Weekday picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day"
+          }
+        }
+      }
+    },
+    "plain.daysPerWeek": {
+      "comment": "plain. Stepper.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Days a week: %lld"
+          }
+        }
+      }
+    },
+    "plain.defaultCommitment": {
+      "comment": "plain. Default commitment name.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Match"
+          }
+        }
+      }
+    },
+    "plain.deleteWeight": {
+      "comment": "plain. Swipe action on a bodyweight entry.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
           }
         }
       }
@@ -201,6 +501,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dumbbell"
+          }
+        }
+      }
+    },
+    "plain.equipment.everything": {
+      "comment": "plain. Disclosure listing every piece of equipment.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything"
           }
         }
       }
@@ -505,6 +817,102 @@
         }
       }
     },
+    "plain.experience": {
+      "comment": "plain. Profile section.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Experience"
+          }
+        }
+      }
+    },
+    "plain.experience.advanced": {
+      "comment": "plain. Experience level.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Experienced"
+          }
+        }
+      }
+    },
+    "plain.experience.advancedDetail": {
+      "comment": "plain. Experience level description.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I train regularly and know my numbers."
+          }
+        }
+      }
+    },
+    "plain.experience.beginner": {
+      "comment": "plain. Experience level.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New"
+          }
+        }
+      }
+    },
+    "plain.experience.beginnerDetail": {
+      "comment": "plain. Experience level description.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I've never lifted weights, or not for a long time."
+          }
+        }
+      }
+    },
+    "plain.experience.intermediate": {
+      "comment": "plain. Experience level.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some"
+          }
+        }
+      }
+    },
+    "plain.experience.intermediateDetail": {
+      "comment": "plain. Experience level description.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I train on and off."
+          }
+        }
+      }
+    },
+    "plain.feet": {
+      "comment": "plain. Height field, accessibility label.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feet"
+          }
+        }
+      }
+    },
     "plain.filters": {
       "comment": "plain. Exercise picker.",
       "extractionState": "manual",
@@ -541,6 +949,114 @@
         }
       }
     },
+    "plain.fromHealth": {
+      "comment": "plain. Badge on a bodyweight that came from Health.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From Health"
+          }
+        }
+      }
+    },
+    "plain.getStarted": {
+      "comment": "plain. Onboarding welcome button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get started"
+          }
+        }
+      }
+    },
+    "plain.goal": {
+      "comment": "plain. Profile section.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal"
+          }
+        }
+      }
+    },
+    "plain.goal.endurance": {
+      "comment": "plain. Goal chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fitness and endurance"
+          }
+        }
+      }
+    },
+    "plain.goal.hypertrophy": {
+      "comment": "plain. Goal chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Build muscle"
+          }
+        }
+      }
+    },
+    "plain.goal.mobility": {
+      "comment": "plain. Goal chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mobility"
+          }
+        }
+      }
+    },
+    "plain.goal.sportPerformance": {
+      "comment": "plain. Goal chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sport performance"
+          }
+        }
+      }
+    },
+    "plain.goal.strength": {
+      "comment": "plain. Goal chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get stronger"
+          }
+        }
+      }
+    },
+    "plain.goal.weightLoss": {
+      "comment": "plain. Goal chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lose weight"
+          }
+        }
+      }
+    },
     "plain.healthAccess": {
       "comment": "plain. Explains Health access before the system prompt.",
       "extractionState": "manual",
@@ -549,6 +1065,174 @@
           "stringUnit": {
             "state": "translated",
             "value": "Transmute reads heart rate and bodyweight from Health to adjust your plan."
+          }
+        }
+      }
+    },
+    "plain.healthEmpty": {
+      "comment": "plain. Health prefill found nothing, or access was denied.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health didn't have anything to fill in. Enter it below."
+          }
+        }
+      }
+    },
+    "plain.healthFilled": {
+      "comment": "plain. After a Health prefill.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filled in from Health. Check it over."
+          }
+        }
+      }
+    },
+    "plain.height": {
+      "comment": "plain. Field label.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Height"
+          }
+        }
+      }
+    },
+    "plain.importFromHealth": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import from Health"
+          }
+        }
+      }
+    },
+    "plain.inches": {
+      "comment": "plain. Height field, accessibility label.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inches"
+          }
+        }
+      }
+    },
+    "plain.intensity": {
+      "comment": "plain. Commitment intensity picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How hard"
+          }
+        }
+      }
+    },
+    "plain.intensity.hard": {
+      "comment": "plain. Intensity.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hard"
+          }
+        }
+      }
+    },
+    "plain.intensity.light": {
+      "comment": "plain. Intensity.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light"
+          }
+        }
+      }
+    },
+    "plain.intensity.moderate": {
+      "comment": "plain. Intensity.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moderate"
+          }
+        }
+      }
+    },
+    "plain.issue.birthYear": {
+      "comment": "plain. Validation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check the birth year. Transmute is for ages 13 and up."
+          }
+        }
+      }
+    },
+    "plain.issue.height": {
+      "comment": "plain. Validation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a height between 4 ft and 7 ft 6 in (120 to 230 cm)."
+          }
+        }
+      }
+    },
+    "plain.issue.pickDays": {
+      "comment": "plain. Validation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick %lld days, or clear them and Transmute will choose."
+          }
+        }
+      }
+    },
+    "plain.issue.weight": {
+      "comment": "plain. Validation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a weight between 66 and 660 lb (30 to 300 kg)."
+          }
+        }
+      }
+    },
+    "plain.later": {
+      "comment": "plain. Finish onboarding without brewing.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Later"
           }
         }
       }
@@ -565,6 +1249,330 @@
         }
       }
     },
+    "plain.noWeights": {
+      "comment": "plain. Empty bodyweight history.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No weights yet."
+          }
+        }
+      }
+    },
+    "plain.onboarding.areas": {
+      "comment": "plain. Above body area chips.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Areas to go easy on"
+          }
+        }
+      }
+    },
+    "plain.onboarding.bodyNote": {
+      "comment": "plain. Onboarding body step.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Height and weight help set safe starting loads. Everything else is optional."
+          }
+        }
+      }
+    },
+    "plain.onboarding.bodyTitle": {
+      "comment": "plain. Onboarding body step title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About you"
+          }
+        }
+      }
+    },
+    "plain.onboarding.equipmentTitle": {
+      "comment": "plain. Onboarding equipment step title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What can you train with?"
+          }
+        }
+      }
+    },
+    "plain.onboarding.experienceTitle": {
+      "comment": "plain. Onboarding experience step title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How much have you trained?"
+          }
+        }
+      }
+    },
+    "plain.onboarding.goalChips": {
+      "comment": "plain. Above the goal chips.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pick any that fit"
+          }
+        }
+      }
+    },
+    "plain.onboarding.goalPrompt": {
+      "comment": "plain. Goal text field placeholder.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In your own words, e.g. lose 20 lb before summer"
+          }
+        }
+      }
+    },
+    "plain.onboarding.goalsTitle": {
+      "comment": "plain. Onboarding goals step title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What do you want from training?"
+          }
+        }
+      }
+    },
+    "plain.onboarding.healthPrefill": {
+      "comment": "plain. Offer to prefill from Health.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transmute can fill in your height, weight, birth year and sex from Health. You can skip this."
+          }
+        }
+      }
+    },
+    "plain.onboarding.knownLifts": {
+      "comment": "plain. Section for known lifts, experienced only.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your numbers"
+          }
+        }
+      }
+    },
+    "plain.onboarding.knownLiftsNote": {
+      "comment": "plain. Under known lifts.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. A recent hard set of any of these helps set starting weights."
+          }
+        }
+      }
+    },
+    "plain.onboarding.limitationsNote": {
+      "comment": "plain. Under limitations.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plans leave out anything that loads these. Transmute isn't medical advice, so check with a professional about injuries."
+          }
+        }
+      }
+    },
+    "plain.onboarding.limitationsPrompt": {
+      "comment": "plain. Limitations field placeholder.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. sore left knee, no overhead pressing"
+          }
+        }
+      }
+    },
+    "plain.onboarding.limitationsTitle": {
+      "comment": "plain. Onboarding limitations step title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Injuries or limits"
+          }
+        }
+      }
+    },
+    "plain.onboarding.scheduleTitle": {
+      "comment": "plain. Onboarding schedule step title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your week"
+          }
+        }
+      }
+    },
+    "plain.onboarding.sportNote": {
+      "comment": "plain. Under the sport field.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. Plans work around it, but the sport itself isn't logged in Transmute."
+          }
+        }
+      }
+    },
+    "plain.onboarding.sportPrompt": {
+      "comment": "plain. Sport field placeholder.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. tennis, 4.0 NTRP, plays 3× a week"
+          }
+        }
+      }
+    },
+    "plain.onboarding.sportTitle": {
+      "comment": "plain. Onboarding sport step title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your sport"
+          }
+        }
+      }
+    },
+    "plain.onboarding.step": {
+      "comment": "plain. Onboarding progress for VoiceOver.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step %1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "plain.planLength": {
+      "comment": "plain. Stepper.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan length: %lld weeks"
+          }
+        }
+      }
+    },
+    "plain.preferNotToSay": {
+      "comment": "plain. Sex picker option.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prefer not to say"
+          }
+        }
+      }
+    },
+    "plain.preset.bodyweightOnly": {
+      "comment": "plain. Equipment preset.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bodyweight only"
+          }
+        }
+      }
+    },
+    "plain.preset.fullGym": {
+      "comment": "plain. Equipment preset.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full gym"
+          }
+        }
+      }
+    },
+    "plain.preset.homeDumbbells": {
+      "comment": "plain. Equipment preset.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home dumbbells"
+          }
+        }
+      }
+    },
+    "plain.profile": {
+      "comment": "plain. Screen title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profile"
+          }
+        }
+      }
+    },
+    "plain.reps": {
+      "comment": "plain. Field label.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reps"
+          }
+        }
+      }
+    },
     "plain.rest": {
       "comment": "plain. Rest timer; the argument is the time left, e.g. 1:48.",
       "extractionState": "manual",
@@ -573,6 +1581,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rest %@"
+          }
+        }
+      }
+    },
+    "plain.save": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
           }
         }
       }
@@ -589,6 +1609,18 @@
         }
       }
     },
+    "plain.schedule": {
+      "comment": "plain. Profile section.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schedule"
+          }
+        }
+      }
+    },
     "plain.searchExercises": {
       "comment": "plain. Exercise picker.",
       "extractionState": "manual",
@@ -597,6 +1629,102 @@
           "stringUnit": {
             "state": "translated",
             "value": "Search exercises"
+          }
+        }
+      }
+    },
+    "plain.selected": {
+      "comment": "plain. Accessibility value for a chosen chip.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selected"
+          }
+        }
+      }
+    },
+    "plain.sessionLength": {
+      "comment": "plain. Stepper.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session length: %lld min"
+          }
+        }
+      }
+    },
+    "plain.sex": {
+      "comment": "plain. Field label.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sex"
+          }
+        }
+      }
+    },
+    "plain.sex.female": {
+      "comment": "plain. Sex picker option.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Female"
+          }
+        }
+      }
+    },
+    "plain.sex.male": {
+      "comment": "plain. Sex picker option.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Male"
+          }
+        }
+      }
+    },
+    "plain.sex.other": {
+      "comment": "plain. Sex picker option.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        }
+      }
+    },
+    "plain.sexNote": {
+      "comment": "plain. Under the sex picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. Only used for estimates."
+          }
+        }
+      }
+    },
+    "plain.skip": {
+      "comment": "plain. Skip an optional onboarding step.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
           }
         }
       }
@@ -669,6 +1797,78 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tennis"
+          }
+        }
+      }
+    },
+    "plain.units": {
+      "comment": "plain. Unit system picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Units"
+          }
+        }
+      }
+    },
+    "plain.units.imperial": {
+      "comment": "plain. Unit system option.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lb and ft"
+          }
+        }
+      }
+    },
+    "plain.units.metric": {
+      "comment": "plain. Unit system option.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kg and cm"
+          }
+        }
+      }
+    },
+    "plain.useHealth": {
+      "comment": "plain. Button that asks for Health access and prefills.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fill in from Health"
+          }
+        }
+      }
+    },
+    "plain.weight": {
+      "comment": "plain. Field label.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight"
+          }
+        }
+      }
+    },
+    "plain.whichDays": {
+      "comment": "plain. Weekday picker title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Which days"
           }
         }
       }
@@ -753,6 +1953,42 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gold. %1$@ %2$@, %3$@."
+          }
+        }
+      }
+    },
+    "voice.onboarding.readyBody": {
+      "comment": "voice. Onboarding hand-off.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transmute has what it needs. Brew your first plan now; you can change any of this later in Profile."
+          }
+        }
+      }
+    },
+    "voice.onboarding.readyTitle": {
+      "comment": "voice. Onboarding hand-off title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready to brew"
+          }
+        }
+      }
+    },
+    "voice.onboarding.welcome": {
+      "comment": "voice. Onboarding welcome line under the mark.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tell Transmute about you and your goals, and it'll brew a training plan that fits."
           }
         }
       }

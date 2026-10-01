@@ -71,6 +71,29 @@ public enum RecordKind: String, Codable, CaseIterable, Sendable {
     case longestDistance
 }
 
+/// Parts of the body a limitation can name. Plans treat a named area as a hard constraint (#9).
+public enum BodyArea: String, Codable, CaseIterable, Sendable {
+    case neck, shoulder, elbow, wrist, upperBack, lowerBack, hip, knee, ankle
+}
+
+/// A lift an experienced person already knows their numbers for, used for starting loads (#9).
+public struct KnownLift: Codable, Hashable, Sendable {
+    public var exerciseID: String
+    public var weightKg: Double
+    public var reps: Int
+
+    public init(exerciseID: String, weightKg: Double, reps: Int) {
+        self.exerciseID = exerciseID
+        self.weightKg = weightKg
+        self.reps = reps
+    }
+
+    /// Estimated one-rep max by the Epley formula; a single is taken as is.
+    public var estimatedOneRepMaxKg: Double {
+        reps <= 1 ? weightKg : weightKg * (1 + Double(reps) / 30)
+    }
+}
+
 /// ISO weekday: 1 is Monday, 7 is Sunday.
 public typealias Weekday = Int
 

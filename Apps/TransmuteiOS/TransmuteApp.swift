@@ -10,7 +10,7 @@ struct TransmuteApp: App {
 
     var body: some Scene {
         WindowGroup {
-            PlaceholderRoot(platform: "iPhone")
+            RootView()
         }
         .modelContainer(container)
         .environment(\.health, health)

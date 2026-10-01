@@ -19,6 +19,12 @@ extension SchemaV1 {
         public var equipmentRaw: [String] = []
         /// Injuries and limitations in plain words; plans treat them as constraints.
         public var limitations = ""
+        /// Body areas the limitations name, picked as chips.
+        public var limitationAreasRaw: [String] = []
+        /// Lifts an experienced person entered, for starting loads.
+        public var knownLifts: [KnownLift] = []
+        /// The barbell's weight, for the plate calculator (#21).
+        public var barbellKg = 20.0
         /// `nil` follows the device locale.
         public var unitSystemRaw: String?
 
@@ -45,6 +51,11 @@ extension SchemaV1 {
         public var equipment: [Equipment] {
             get { equipmentRaw.compactMap(Equipment.init(rawValue:)) }
             set { equipmentRaw = newValue.map(\.rawValue) }
+        }
+
+        public var limitationAreas: [BodyArea] {
+            get { limitationAreasRaw.compactMap(BodyArea.init(rawValue:)) }
+            set { limitationAreasRaw = newValue.map(\.rawValue) }
         }
 
         public var unitSystem: UnitSystem? {

@@ -9,7 +9,7 @@ struct TransmuteMacApp: App {
 
     var body: some Scene {
         WindowGroup {
-            PlaceholderRoot(platform: "Mac")
+            RootView()
                 .frame(minWidth: 480, minHeight: 320)
         }
         .modelContainer(container)
