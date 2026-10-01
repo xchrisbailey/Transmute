@@ -23,8 +23,12 @@ extension SchemaV1 {
         public var limitationAreasRaw: [String] = []
         /// Lifts an experienced person entered, for starting loads.
         public var knownLifts: [KnownLift] = []
-        /// The barbell's weight, for the plate calculator (#21).
+        /// The chosen bar's weight. A copy of `plates.barKg`, written whenever the profile is
+        /// saved, for anything that only needs the bar; `plates` is the source of truth.
         public var barbellKg = 20.0
+        /// Bars, plates, dumbbells and machine steps, for the plate calculator and for rounding
+        /// loads (#21). Starts as the commercial-gym preset in the locale's unit.
+        public var plates = PlateInventory.standard()
         /// `nil` follows the device locale.
         public var unitSystemRaw: String?
 

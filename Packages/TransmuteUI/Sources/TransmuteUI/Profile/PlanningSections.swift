@@ -105,6 +105,9 @@
 
     struct EquipmentSection: View {
         @Binding var draft: ProfileDraft
+        /// On the Profile screen, a row to the full bar and plates setup (#21) stands in for the
+        /// bar weight; onboarding keeps just the bar weight.
+        var linksPlateSetup = false
         @State private var showsEverything = false
 
         var body: some View {
@@ -128,7 +131,17 @@
                     Text(ProfileCopy.everything)
                 }
             }
-            if draft.equipment.contains(.barbell) {
+            if linksPlateSetup {
+                Section {
+                    NavigationLink {
+                        PlateSetupView(inventory: $draft.plates)
+                    } label: {
+                        Text(PlateCopy.setup)
+                    }
+                } footer: {
+                    Text(PlateCopy.setupNote)
+                }
+            } else if draft.equipment.contains(.barbell) {
                 Section {
                     WeightField(
                         label: ProfileCopy.barbellWeight, kg: barbell, units: Units(system: draft.unitSystem))
