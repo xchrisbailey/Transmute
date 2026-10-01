@@ -359,11 +359,11 @@ extension ProfileCopy {
         "plain.profile", defaultValue: "Profile", bundle: .main,
         comment: "plain. Screen title.")
 
-    static let save = LocalizedStringResource(
+    public static let save = LocalizedStringResource(
         "plain.save", defaultValue: "Save", bundle: .main,
         comment: "plain. Button.")
 
-    static let cancel = LocalizedStringResource(
+    public static let cancel = LocalizedStringResource(
         "plain.cancel", defaultValue: "Cancel", bundle: .main,
         comment: "plain. Button.")
 

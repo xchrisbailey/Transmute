@@ -11,13 +11,17 @@ public struct IntelligenceRequest: Sendable {
     /// String fields the answer is held to, by property name, e.g. every `exerciseID` to the
     /// ids offered. Enforced while generating, not checked afterwards.
     public var allowedValues: [String: [String]]
+    /// Array fields that must have exactly this many items, by property name.
+    public var arrayCounts: [String: Int]
     public var temperature: Double?
     public var maximumResponseTokens: Int?
 
     public init(
         instructions: String, prompt: String, tools: @autoclosure @escaping @Sendable () -> [any Tool] = [],
-        allowedValues: [String: [String]] = [:], temperature: Double? = nil, maximumResponseTokens: Int? = nil
+        allowedValues: [String: [String]] = [:], arrayCounts: [String: Int] = [:], temperature: Double? = nil,
+        maximumResponseTokens: Int? = nil
     ) {
+        self.arrayCounts = arrayCounts
         self.instructions = instructions
         self.prompt = prompt
         self.makeTools = tools

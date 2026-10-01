@@ -1,17 +1,29 @@
 import SwiftData
 import SwiftUI
 import TransmuteCore
+import TransmuteIntelligence
+import TransmutePlanUI
 import TransmuteUI
 
-/// Onboarding until there's a profile, then the app.
+/// Onboarding until there's a profile, then brewing until there's a plan, then the plan.
 struct RootView: View {
     @Query(sort: \Profile.createdAt) private var profiles: [Profile]
+    @Query(filter: #Predicate<Plan> { $0.isActive }, sort: \Plan.createdAt, order: .reverse) private var plans: [Plan]
+    let service = FoundationModelsService()
+    let device = "iPhone"
 
     var body: some View {
         if let profile = profiles.first {
             NavigationStack {
-                PlaceholderRoot(platform: "iPhone")
-                    .toolbar {
+                Group {
+                    if let plan = plans.first {
+                        ActivePlanSummary(plan: plan)
+                    } else {
+                        BrewPlanView(profile: profile, service: service, device: device)
+                    }
+                }
+                .toolbar {
+                    ToolbarItem {
                         NavigationLink {
                             ProfileView(profile: profile)
                         } label: {
@@ -22,9 +34,26 @@ struct RootView: View {
                             }
                         }
                     }
+                    #if DEBUG
+                        ToolbarItem {
+                            NavigationLink {
+                                IntelligenceDebugView(service: service)
+                            } label: {
+                                Label {
+                                    Text(verbatim: "AI debug")
+                                } icon: {
+                                    Image(systemName: "ladybug")
+                                }
+                            }
+                        }
+                    #endif
+                }
             }
         } else {
-            OnboardingFlow { _, _ in }
+            OnboardingFlow {
+                LiveIntelligenceNotice(service: service)
+            } onFinish: { _, _ in
+            }
         }
     }
 }

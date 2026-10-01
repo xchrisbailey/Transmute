@@ -85,7 +85,8 @@ import OSLog
             let session = makeSession(request)
             let options = GenerationOptions(
                 temperature: request.temperature, maximumResponseTokens: request.maximumResponseTokens)
-            let schema = try SchemaConstraint.restrict(Content.generationSchema, allowedValues: request.allowedValues)
+            let schema = try SchemaConstraint.restrict(
+                Content.generationSchema, allowedValues: request.allowedValues, arrayCounts: request.arrayCounts)
             let stream = session.streamResponse(to: Prompt(request.prompt), schema: schema, options: options)
             for try await snapshot in stream {
                 // Rebuilt from the Sendable raw content so each partial is independent of the stream.

@@ -61,6 +61,20 @@ public struct IntelligenceNotice: View {
     }
 }
 
+/// `IntelligenceNotice` that keeps itself up to date, for screens without their own status.
+public struct LiveIntelligenceNotice: View {
+    @State private var status: IntelligenceStatus
+
+    public init(service: any IntelligenceService) {
+        _status = State(initialValue: IntelligenceStatus(service: service))
+    }
+
+    public var body: some View {
+        IntelligenceNotice(availability: status.availability)
+            .task { await status.watch() }
+    }
+}
+
 extension IntelligenceError {
     /// What to tell someone when a generation fails.
     public var message: LocalizedStringResource {
