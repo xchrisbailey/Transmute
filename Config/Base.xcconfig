@@ -1,0 +1,12 @@
+// Shared build settings for every Transmute app target.
+//
+// Signing: with no team set, builds are signed to run locally. The simulator ignores
+// iCloud and HealthKit entitlements, but macOS refuses to launch an ad-hoc signed app that
+// claims them, so the Mac app uses its local entitlements until a team is set.
+// To sign with your team, copy Config/Local.xcconfig.example to Config/Local.xcconfig.
+
+DEVELOPMENT_TEAM =
+CODE_SIGN_STYLE = Automatic
+TRANSMUTE_MAC_ENTITLEMENTS = Apps/TransmuteMac/TransmuteMac-Local.entitlements
+
+#include? "Local.xcconfig"
