@@ -271,3 +271,13 @@ struct PlanBrewerTests {
         }
     }
 }
+
+extension PlanAssemblerTests {
+    @Test func powerRepsDontClimb() {
+        let assembler = assembler()
+        let day = assembler.templateDay(
+            draft(["box-jump"], reps: 5), kind: .powerSpeed, offered: ExerciseCandidates([]))
+        let week4 = assembler.progressed(day.exercises, weekInPhase: 4, isDeload: false)
+        #expect(week4.first?.sets.first?.reps == day.exercises.first?.sets.first?.reps)
+    }
+}

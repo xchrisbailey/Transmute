@@ -25,6 +25,30 @@
         }
       }
     },
+    "plain.addExercise": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add exercise"
+          }
+        }
+      }
+    },
+    "plain.addSet": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add set"
+          }
+        }
+      }
+    },
     "plain.addWeight": {
       "comment": "plain. Button.",
       "extractionState": "manual",
@@ -129,6 +153,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Any"
+          }
+        }
+      }
+    },
+    "plain.applyToAll": {
+      "comment": "plain. Toggle when editing targets.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apply to every set"
           }
         }
       }
@@ -489,6 +525,54 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lighter week"
+          }
+        }
+      }
+    },
+    "plain.done": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "plain.edit": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
+          }
+        }
+      }
+    },
+    "plain.edited": {
+      "comment": "plain. Badge on a day changed by hand.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edited"
+          }
+        }
+      }
+    },
+    "plain.emptyDay": {
+      "comment": "plain. Empty plan day.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No exercises yet. Add one, or rework the day."
           }
         }
       }
@@ -1117,6 +1201,18 @@
         }
       }
     },
+    "plain.fromYourPlan": {
+      "comment": "plain. Label before the day's one-line reason.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From your plan"
+          }
+        }
+      }
+    },
     "plain.getStarted": {
       "comment": "plain. Onboarding welcome button.",
       "extractionState": "manual",
@@ -1125,6 +1221,90 @@
           "stringUnit": {
             "state": "translated",
             "value": "Get started"
+          }
+        }
+      }
+    },
+    "plain.glossary.deload": {
+      "comment": "plain. Glossary.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A deload is a lighter week so your body can recover and come back stronger."
+          }
+        }
+      }
+    },
+    "plain.glossary.deloadTerm": {
+      "comment": "plain. Glossary term.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deload"
+          }
+        }
+      }
+    },
+    "plain.glossary.oneRepMax": {
+      "comment": "plain. Glossary.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1RM is the most you could lift once. Plans can set weights as a percentage of it."
+          }
+        }
+      }
+    },
+    "plain.glossary.oneRepMaxTerm": {
+      "comment": "plain. Glossary term.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1RM"
+          }
+        }
+      }
+    },
+    "plain.glossary.rpe": {
+      "comment": "plain. Glossary.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RPE is how hard a set feels, from 1 to 10. At 8 you could do about two more reps with good form."
+          }
+        }
+      }
+    },
+    "plain.glossary.rpeTerm": {
+      "comment": "plain. Glossary term.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RPE"
+          }
+        }
+      }
+    },
+    "plain.glossary.superset": {
+      "comment": "plain. Glossary.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A superset pairs two exercises back to back, then you rest."
           }
         }
       }
@@ -1257,6 +1437,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Height"
+          }
+        }
+      }
+    },
+    "plain.howTo": {
+      "comment": "plain. Exercise cues heading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How to do it"
           }
         }
       }
@@ -1405,6 +1597,18 @@
         }
       }
     },
+    "plain.logged": {
+      "comment": "plain. A plan day that has a logged workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logged"
+          }
+        }
+      }
+    },
     "plain.minutesShort": {
       "comment": "plain. Estimated session length.",
       "extractionState": "manual",
@@ -1413,6 +1617,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "About %lld min"
+          }
+        }
+      }
+    },
+    "plain.moveDay": {
+      "comment": "plain. Picker to move a session to another weekday.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day of the week"
           }
         }
       }
@@ -1681,6 +1897,18 @@
         }
       }
     },
+    "plain.plan.thisWeek": {
+      "comment": "plain. Badge on the current week.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week"
+          }
+        }
+      }
+    },
     "plain.planLength": {
       "comment": "plain. Stepper.",
       "extractionState": "manual",
@@ -1689,6 +1917,54 @@
           "stringUnit": {
             "state": "translated",
             "value": "Plan length: %lld weeks"
+          }
+        }
+      }
+    },
+    "plain.plans": {
+      "comment": "plain. Plan history title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plans"
+          }
+        }
+      }
+    },
+    "plain.plans.active": {
+      "comment": "plain. Badge on the active plan.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
+          }
+        }
+      }
+    },
+    "plain.plans.earlier": {
+      "comment": "plain. Archived plans section.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Earlier plans"
+          }
+        }
+      }
+    },
+    "plain.plans.makeActive": {
+      "comment": "plain. Button on an archived plan.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make active"
           }
         }
       }
@@ -1753,6 +2029,78 @@
         }
       }
     },
+    "plain.rebrew.from": {
+      "comment": "plain. Rebrew week stepper.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From week %lld"
+          }
+        }
+      }
+    },
+    "plain.rebrew.keepEdits": {
+      "comment": "plain. Rebrew toggle.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep days I changed"
+          }
+        }
+      }
+    },
+    "plain.rebrew.note": {
+      "comment": "plain. Under the rebrew options.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Days you've already logged always stay, with their history."
+          }
+        }
+      }
+    },
+    "plain.redo": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Redo"
+          }
+        }
+      }
+    },
+    "plain.remove": {
+      "comment": "plain. Remove an exercise from a day.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove"
+          }
+        }
+      }
+    },
+    "plain.removeSet": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove last set"
+          }
+        }
+      }
+    },
     "plain.reps": {
       "comment": "plain. Field label.",
       "extractionState": "manual",
@@ -1773,6 +2121,90 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rest %@"
+          }
+        }
+      }
+    },
+    "plain.rework.accept": {
+      "comment": "plain. Accept a reworked day.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use this"
+          }
+        }
+      }
+    },
+    "plain.rework.added": {
+      "comment": "plain. Diff marker for a new exercise.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Added"
+          }
+        }
+      }
+    },
+    "plain.rework.after": {
+      "comment": "plain. Diff column.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After"
+          }
+        }
+      }
+    },
+    "plain.rework.before": {
+      "comment": "plain. Diff column.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before"
+          }
+        }
+      }
+    },
+    "plain.rework.discard": {
+      "comment": "plain. Discard a reworked day.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep the original"
+          }
+        }
+      }
+    },
+    "plain.rework.kept": {
+      "comment": "plain. Diff marker for an unchanged exercise.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kept"
+          }
+        }
+      }
+    },
+    "plain.rework.removed": {
+      "comment": "plain. Diff marker for a dropped exercise.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Removed"
           }
         }
       }
@@ -1813,6 +2245,18 @@
         }
       }
     },
+    "plain.searchAll": {
+      "comment": "plain. Open the full exercise picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search everything"
+          }
+        }
+      }
+    },
     "plain.searchExercises": {
       "comment": "plain. Exercise picker.",
       "extractionState": "manual",
@@ -1837,6 +2281,18 @@
         }
       }
     },
+    "plain.session": {
+      "comment": "plain. Day detail section.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session"
+          }
+        }
+      }
+    },
     "plain.sessionLength": {
       "comment": "plain. Stepper.",
       "extractionState": "manual",
@@ -1845,6 +2301,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Session length: %lld min"
+          }
+        }
+      }
+    },
+    "plain.setNumber": {
+      "comment": "plain. Set heading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set %lld"
           }
         }
       }
@@ -1905,6 +2373,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Optional. Only used for estimates."
+          }
+        }
+      }
+    },
+    "plain.similar": {
+      "comment": "plain. Section in the swap picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Similar exercises"
           }
         }
       }
@@ -1993,6 +2473,150 @@
         }
       }
     },
+    "plain.superset": {
+      "comment": "plain. Label on exercises done back to back.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Superset"
+          }
+        }
+      }
+    },
+    "plain.swap": {
+      "comment": "plain. Swap an exercise for a similar one.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swap"
+          }
+        }
+      }
+    },
+    "plain.swapTitle": {
+      "comment": "plain. Title of the swap picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swap %@"
+          }
+        }
+      }
+    },
+    "plain.target.load": {
+      "comment": "plain. Target field.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight"
+          }
+        }
+      }
+    },
+    "plain.target.meters": {
+      "comment": "plain. Target field.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metres"
+          }
+        }
+      }
+    },
+    "plain.target.reps": {
+      "comment": "plain. Target field.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reps"
+          }
+        }
+      }
+    },
+    "plain.target.rest": {
+      "comment": "plain. Target field.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest (seconds)"
+          }
+        }
+      }
+    },
+    "plain.target.rounds": {
+      "comment": "plain. Target field.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rounds"
+          }
+        }
+      }
+    },
+    "plain.target.rpe": {
+      "comment": "plain. Target field.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effort (RPE)"
+          }
+        }
+      }
+    },
+    "plain.target.seconds": {
+      "comment": "plain. Target field.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seconds"
+          }
+        }
+      }
+    },
+    "plain.targets": {
+      "comment": "plain. Section heading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Targets"
+          }
+        }
+      }
+    },
+    "plain.undo": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo"
+          }
+        }
+      }
+    },
     "plain.units": {
       "comment": "plain. Unit system picker.",
       "extractionState": "manual",
@@ -2041,6 +2665,18 @@
         }
       }
     },
+    "plain.watchFor": {
+      "comment": "plain. Common mistakes heading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch for"
+          }
+        }
+      }
+    },
     "plain.week": {
       "comment": "plain. Week heading.",
       "extractionState": "manual",
@@ -2073,6 +2709,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weight"
+          }
+        }
+      }
+    },
+    "plain.whatsThis": {
+      "comment": "plain. Opens a plain explanation of a term.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What's this?"
           }
         }
       }
@@ -2269,6 +2917,18 @@
         }
       }
     },
+    "voice.plans.new": {
+      "comment": "voice. Start a new plan from the history screen.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brew a new plan"
+          }
+        }
+      }
+    },
     "voice.rebrew": {
       "comment": "voice. Regenerate the whole plan.",
       "extractionState": "manual",
@@ -2277,6 +2937,54 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rebrew"
+          }
+        }
+      }
+    },
+    "voice.rebrew.working": {
+      "comment": "voice. Shown while rebrewing.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rebrewing from week %lld…"
+          }
+        }
+      }
+    },
+    "voice.rework.go": {
+      "comment": "voice. Button that starts a rework.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rework"
+          }
+        }
+      }
+    },
+    "voice.rework.prompt": {
+      "comment": "voice. Rework this day text field.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What should change? e.g. no barbell today, only 30 minutes, knee's sore"
+          }
+        }
+      }
+    },
+    "voice.rework.working": {
+      "comment": "voice. Shown while the AI reworks a day.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reworking the day…"
           }
         }
       }

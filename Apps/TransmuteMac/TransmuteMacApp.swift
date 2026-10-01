@@ -9,6 +9,11 @@ import TransmuteUI
 struct TransmuteMacApp: App {
     let container = TransmuteStore.makeAppContainer()
 
+    init() {
+        // Plan edits are undoable (#10).
+        container.mainContext.undoManager = UndoManager()
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()
