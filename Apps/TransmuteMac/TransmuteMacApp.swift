@@ -12,14 +12,28 @@ struct TransmuteMacApp: App {
     init() {
         // Plan edits are undoable (#10).
         container.mainContext.undoManager = UndoManager()
+        #if DEBUG
+            // `-seedSample` fills an empty store with the sample tennis player, plan and log.
+            let context = container.mainContext
+            if ProcessInfo.processInfo.arguments.contains("-seedSample"),
+                (try? context.fetchCount(FetchDescriptor<Profile>())) == 0
+            {
+                SampleData.insert(into: context)
+                try? context.save()
+            }
+        #endif
     }
 
     var body: some Scene {
         WindowGroup {
             RootView()
-                .frame(minWidth: 480, minHeight: 320)
+                .frame(minWidth: 900, idealWidth: 1180, minHeight: 600, idealHeight: 760)
         }
+        .defaultSize(width: 1180, height: 760)
         .modelContainer(container)
+        .commands {
+            TransmuteCommands()
+        }
 
         #if DEBUG
             Window(Text(verbatim: "AI debug"), id: "ai-debug") {

@@ -102,4 +102,47 @@ public enum HistoryCopy {
         "plain.history.estimatedMaxTrend", defaultValue: "Estimated 1RM", bundle: .main,
         comment: "plain. Chart title.")
 
+    // MARK: Mac table
+
+    static let columnDate = LocalizedStringResource(
+        "plain.mac.log.date", defaultValue: "Date", bundle: .main,
+        comment: "plain. Mac. Log table column: the day of the workout.")
+
+    static let columnWorkout = LocalizedStringResource(
+        "plain.mac.log.workout", defaultValue: "Workout", bundle: .main,
+        comment: "plain. Mac. Log table column: the workout's name.")
+
+    static let columnDuration = LocalizedStringResource(
+        "plain.mac.log.duration", defaultValue: "Duration", bundle: .main,
+        comment: "plain. Mac. Log table column: how long the workout took.")
+
+    static let columnSets = LocalizedStringResource(
+        "plain.mac.log.sets", defaultValue: "Sets", bundle: .main,
+        comment: "plain. Mac. Log table column: number of working sets.")
+
+    static let columnVolume = LocalizedStringResource(
+        "plain.mac.log.volume", defaultValue: "Volume", bundle: .main,
+        comment: "plain. Mac. Log table column: total weight lifted.")
+
+    static let columnRecords = LocalizedStringResource(
+        "plain.mac.log.records", defaultValue: "Records", bundle: .main,
+        comment: "plain. Mac. Log table column: personal records set in the workout.")
+
+    static func recordsCount(_ count: Int) -> LocalizedStringResource {
+        LocalizedStringResource(
+            "plain.mac.log.recordsCount", defaultValue: "\(count) records", bundle: .main,
+            comment: "plain. Mac. VoiceOver label for the records cell of a log row.")
+    }
+
+    static let noRecords = LocalizedStringResource(
+        "plain.mac.log.noRecords", defaultValue: "No records", bundle: .main,
+        comment: "plain. Mac. VoiceOver label for an empty records cell of a log row.")
+
+    static let noSelection = LocalizedStringResource(
+        "plain.mac.log.noSelection", defaultValue: "Select a workout to see its sets.", bundle: .main,
+        comment: "plain. Mac. Shown in the log's inspector when no workout is selected.")
+
+    static let details = LocalizedStringResource(
+        "plain.mac.log.details", defaultValue: "Details", bundle: .main,
+        comment: "plain. Mac. Toolbar button that shows or hides the selected workout's details.")
 }

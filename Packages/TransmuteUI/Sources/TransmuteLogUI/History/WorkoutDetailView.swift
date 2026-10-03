@@ -9,6 +9,9 @@ import TransmuteUI
 struct WorkoutDetailView: View {
     @Bindable var workout: Workout
     let profile: Profile
+    /// Set when whoever shows this view deletes the workout itself, as the Mac's log table
+    /// does: Delete workout asks them instead of confirming and dismissing here.
+    var onDelete: (() -> Void)?
 
     @Environment(\.modelContext) private var context
     @Environment(\.health) private var health
@@ -54,7 +57,11 @@ struct WorkoutDetailView: View {
             }
             Section {
                 Button(role: .destructive) {
-                    confirmsDelete = true
+                    if let onDelete {
+                        onDelete()
+                    } else {
+                        confirmsDelete = true
+                    }
                 } label: {
                     Text(HistoryCopy.delete)
                         .frame(minHeight: 44)
@@ -111,6 +118,14 @@ struct WorkoutDetailView: View {
                 }
                 .buttonStyle(.plain)
                 .swipeActions {
+                    Button(role: .destructive) {
+                        try? WorkoutLog.delete(set, in: context, library: library)
+                    } label: {
+                        Text(HistoryCopy.deleteSet)
+                    }
+                }
+                // The same delete without a swipe, for a mouse.
+                .contextMenu {
                     Button(role: .destructive) {
                         try? WorkoutLog.delete(set, in: context, library: library)
                     } label: {

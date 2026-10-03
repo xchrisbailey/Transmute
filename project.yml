@@ -213,6 +213,8 @@ targets:
       - package: TransmuteUI
       - package: TransmuteUI
         product: TransmutePlanUI
+      - package: TransmuteUI
+        product: TransmuteLogUI
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: computer.srcery.transmute.mac
