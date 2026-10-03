@@ -159,6 +159,67 @@ struct TodayGlanceTests {
         #expect(today.nextLift?.text == "Split-step reaction 3×0:10")
     }
 
+    // MARK: The streak and the week
+
+    @Test func theStreakAndTheWeekComeFromThePlan() throws {
+        let plan = try plan()
+        // Three weeks logged in full, and nothing yet in week 4.
+        var today = glance(plan)
+        #expect(today.streakWeeks == 3)
+        #expect(today.week == .init(done: 0, planned: 3))
+        #expect(!today.week.isHit)
+
+        // A running workout doesn't count until it's finished.
+        let monday = try #require(plan.orderedDays.first { $0.week == 4 && $0.weekday == 1 })
+        let workout = WorkoutSession.start(monday, at: date(weekday: 1), in: context)
+        today = glance(plan, workout: workout)
+        #expect(today.isRunning)
+        #expect(today.streakWeeks == 3)
+        #expect(today.week == .init(done: 0, planned: 3))
+
+        WorkoutSession.finish(workout, at: date(weekday: 1))
+        today = glance(plan, weekday: 2)
+        #expect(today.week == .init(done: 1, planned: 3))
+        #expect(today.streakWeeks == 3)
+
+        // The week's last session done: the week is hit and joins the streak.
+        for weekday in [3, 5] {
+            let day = try #require(plan.orderedDays.first { $0.week == 4 && $0.weekday == weekday })
+            WorkoutSession.finish(WorkoutSession.start(day, at: date(weekday: weekday), in: context))
+        }
+        today = glance(plan, weekday: 5)
+        #expect(today.week == .init(done: 3, planned: 3))
+        #expect(today.week.isHit)
+        #expect(today.streakWeeks == 4)
+        #expect(try TodayGlance.load(from: context, on: date(weekday: 5), calendar: calendar) == today)
+    }
+
+    @Test func aMissedWeekEndsTheStreak() throws {
+        let plan = try plan()
+        let missed = try #require(plan.orderedDays.first { $0.week == 3 && $0.weekday == 5 })
+        for workout in missed.workouts ?? [] {
+            context.delete(workout)
+        }
+        try context.save()
+        #expect(glance(plan).streakWeeks == 0)
+    }
+
+    @Test func outsideThePlanThereIsNoWeek() throws {
+        #expect(glance(nil).streakWeeks == 0)
+        #expect(glance(nil).week == .init())
+
+        let plan = try plan()
+        let later = calendar.date(byAdding: .weekOfYear, value: 3, to: now)!
+        let after = TodayGlance(plan: plan, units: metric, on: later, calendar: calendar)
+        #expect(after.week == .init())
+        // Week 4 went unlogged, so the streak ended with it.
+        #expect(after.streakWeeks == 0)
+
+        let before = TodayGlance(plan: plan, units: metric, on: plan.startDate.addingTimeInterval(-86_400 * 8))
+        #expect(before.week == .init())
+        #expect(before.streakWeeks == 0)
+    }
+
     // MARK: Formatting
 
     @Test func weightAndRepsReadSetsByRepsThenTheLoad() throws {

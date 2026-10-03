@@ -1,8 +1,9 @@
 import Foundation
 import SwiftData
 
-/// What a complication or widget shows at a glance (#15): today's session, whether it's done,
-/// and the next lift. A plain value, so a timeline can hold it after the store is closed.
+/// What a complication or widget shows at a glance (#15, #19): today's session, whether it's
+/// done, the next lift, the streak and this week's sessions. A plain value, so a timeline can
+/// hold it after the store is closed.
 ///
 /// Only exercise names, numbers and unit symbols are formatted here; words such as "Rest day"
 /// belong to whoever draws it.
@@ -20,6 +21,10 @@ public struct TodayGlance: Hashable, Sendable {
     /// The WidgetKit kind of the watch widget that shows this, for the app to reload after a
     /// set is logged or the plan changes.
     public static let watchWidgetKind = "\(Transmute.bundlePrefix).watch.today"
+    /// The kind of the watch's This week widget: the streak and the week's sessions.
+    public static let watchWeekWidgetKind = "\(Transmute.bundlePrefix).watch.week"
+    /// The kind of the Today widget on iPhone and Mac.
+    public static let widgetKind = "\(Transmute.bundlePrefix).today"
 
     public var day: Day
     /// Today's session already has a finished workout.
@@ -29,12 +34,38 @@ public struct TodayGlance: Hashable, Sendable {
     /// During a workout, the current set's exercise. Otherwise the first exercise of today's
     /// session, or of the next session on a rest day or once today's is done.
     public var nextLift: NextLift?
+    /// Weeks in a row with every planned session done. See `ProgressStats.streak(_:)`.
+    public var streakWeeks: Int
+    /// Planned sessions with a finished workout, and sessions planned, in this plan week.
+    public var week: Week
 
-    public init(day: Day = .nothingPlanned, isDone: Bool = false, isRunning: Bool = false, nextLift: NextLift? = nil) {
+    /// Sessions done of sessions planned in one plan week. Both are 0 without a plan, and
+    /// before it starts or after it ends.
+    public struct Week: Hashable, Sendable {
+        public var done: Int
+        public var planned: Int
+
+        public init(done: Int = 0, planned: Int = 0) {
+            self.done = done
+            self.planned = planned
+        }
+
+        /// Every planned session was done.
+        public var isHit: Bool {
+            planned > 0 && done >= planned
+        }
+    }
+
+    public init(
+        day: Day = .nothingPlanned, isDone: Bool = false, isRunning: Bool = false, nextLift: NextLift? = nil,
+        streakWeeks: Int = 0, week: Week = Week()
+    ) {
         self.day = day
         self.isDone = isDone
         self.isRunning = isRunning
         self.nextLift = nextLift
+        self.streakWeeks = streakWeeks
+        self.week = week
     }
 
     /// Today's session name, or `nil` on a rest day or without a plan.
@@ -106,6 +137,8 @@ extension TodayGlance {
             } else {
                 .nothingPlanned
             }
+        let streak = plan.map { ProgressStats.streak(ProgressStats.adherence(of: $0, now: date, calendar: calendar)) }
+        let week = plan.map { Week(plan: $0, on: date, calendar: calendar) } ?? Week()
 
         if let workout, workout.endedAt == nil {
             let lift = WorkoutSession.currentSet(of: workout).flatMap { set in
@@ -113,7 +146,7 @@ extension TodayGlance {
             }
             self.init(
                 day: workout.title.isEmpty ? planned : .session(workout.title), isDone: false, isRunning: true,
-                nextLift: lift)
+                nextLift: lift, streakWeeks: streak ?? 0, week: week)
             return
         }
 
@@ -121,7 +154,8 @@ extension TodayGlance {
         let lift = upcoming?.orderedExercises.first.map {
             NextLift(planned: $0, profile: profile, units: units, library: library, before: date)
         }
-        self.init(day: planned, isDone: done, isRunning: false, nextLift: lift)
+        self.init(
+            day: planned, isDone: done, isRunning: false, nextLift: lift, streakWeeks: streak ?? 0, week: week)
     }
 
     /// Reads the active plan, the running workout, the profile and custom exercises from a
@@ -139,6 +173,19 @@ extension TodayGlance {
             plan: plans.first, workout: try WorkoutSession.current(in: context), profile: profile,
             units: Units(profile, locale: locale),
             library: ExerciseLibrary.bundled.adding(custom.map(LibraryExercise.init)), on: date, calendar: calendar)
+    }
+}
+
+extension TodayGlance.Week {
+    /// The plan week a date falls in, as the Progress screen counts it.
+    init(plan: Plan, on date: Date, calendar: Calendar) {
+        let current = ProgressStats.planWeek(of: plan, on: date, calendar: calendar)
+        guard (1...max(plan.weekCount, 1)).contains(current) else {
+            self.init()
+            return
+        }
+        let entry = ProgressStats.adherence(of: plan, week: current, isCurrent: true, calendar: calendar)
+        self.init(done: entry.done, planned: entry.planned)
     }
 }
 
