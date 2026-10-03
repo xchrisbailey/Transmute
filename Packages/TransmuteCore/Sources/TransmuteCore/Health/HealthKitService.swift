@@ -166,6 +166,22 @@
             }
             return sample.uuid
         }
+
+        public func deleteWorkout(id: UUID) async throws {
+            guard isAvailable else { throw HealthServiceError.unavailable }
+            let predicate = HKQuery.predicateForObjects(with: [id])
+            let descriptor = HKSampleQueryDescriptor(
+                predicates: [.workout(predicate)], sortDescriptors: [], limit: 1)
+            do {
+                // Only Transmute's own workouts carry its id, so nothing from another app goes.
+                for workout in try await descriptor.result(for: store)
+                where workout.metadata?[HealthWorkoutRecord.workoutIDKey] != nil {
+                    try await store.delete(workout)
+                }
+            } catch let error as HKError where error.code == .errorAuthorizationDenied {
+                throw HealthServiceError.notAuthorized
+            }
+        }
     }
 
     extension HealthActivity {

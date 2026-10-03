@@ -1513,6 +1513,282 @@
         }
       }
     },
+    "plain.history.allPlans": {
+      "comment": "plain. Log filter.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All plans"
+          }
+        }
+      }
+    },
+    "plain.history.anyTime": {
+      "comment": "plain. Log date filter.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any time"
+          }
+        }
+      }
+    },
+    "plain.history.clearFilters": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear filters"
+          }
+        }
+      }
+    },
+    "plain.history.delete": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete workout"
+          }
+        }
+      }
+    },
+    "plain.history.deleteSet": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete set"
+          }
+        }
+      }
+    },
+    "plain.history.editSet": {
+      "comment": "plain. Title of the sheet that changes a past set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit set"
+          }
+        }
+      }
+    },
+    "plain.history.editTitle": {
+      "comment": "plain. Field for a workout's name.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "plain.history.estimatedMaxTrend": {
+      "comment": "plain. Chart title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimated 1RM"
+          }
+        }
+      }
+    },
+    "plain.history.exerciseHistory": {
+      "comment": "plain. Link to all logged sets for one exercise.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every set"
+          }
+        }
+      }
+    },
+    "plain.history.filters": {
+      "comment": "plain. Menu of log filters.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filters"
+          }
+        }
+      }
+    },
+    "plain.history.fromPlanDay": {
+      "comment": "plain. Which plan day a workout came from.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From your plan: week %1$lld, %2$@"
+          }
+        }
+      }
+    },
+    "plain.history.healthDeleteFailed": {
+      "comment": "plain. Deleting the matching Health workout failed.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The workout is deleted here, but Health still has it. Remove it in the Health app."
+          }
+        }
+      }
+    },
+    "plain.history.lastMonth": {
+      "comment": "plain. Log date filter.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last 4 weeks"
+          }
+        }
+      }
+    },
+    "plain.history.lastQuarter": {
+      "comment": "plain. Log date filter.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last 3 months"
+          }
+        }
+      }
+    },
+    "plain.history.lastYear": {
+      "comment": "plain. Log date filter.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last year"
+          }
+        }
+      }
+    },
+    "plain.history.noMatches": {
+      "comment": "plain. Log is empty because of filters.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No workouts match."
+          }
+        }
+      }
+    },
+    "plain.history.offPlan": {
+      "comment": "plain. A workout that wasn't from a plan day.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off the plan"
+          }
+        }
+      }
+    },
+    "plain.history.search": {
+      "comment": "plain. Search field in the log.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search workouts and exercises"
+          }
+        }
+      }
+    },
+    "plain.history.setsCount": {
+      "comment": "plain. Number of sets in a workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld sets"
+          }
+        }
+      }
+    },
+    "plain.history.started": {
+      "comment": "plain. Field for when a workout started.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Started"
+          }
+        }
+      }
+    },
+    "plain.history.thisPlan": {
+      "comment": "plain. Log filter: only the active plan.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This plan"
+          }
+        }
+      }
+    },
+    "plain.history.title": {
+      "comment": "plain. Tab and title of the workout history.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log"
+          }
+        }
+      }
+    },
+    "plain.history.weekOf": {
+      "comment": "plain. Section heading in the log, e.g. Week of Sep 21.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week of %@"
+          }
+        }
+      }
+    },
     "plain.howTo": {
       "comment": "plain. Exercise cues heading.",
       "extractionState": "manual",

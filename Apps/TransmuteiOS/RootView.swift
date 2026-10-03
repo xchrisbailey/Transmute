@@ -6,8 +6,8 @@ import TransmuteLogUI
 import TransmutePlanUI
 import TransmuteUI
 
-/// Onboarding until there's a profile. Then Today, where workouts are run (#11), and the
-/// plan, which is the brew screen until there is one.
+/// Onboarding until there's a profile. Then Today, where workouts are run (#11), the log
+/// of past workouts (#14), and the plan, which is the brew screen until there is one.
 struct RootView: View {
     @Query(sort: \Profile.createdAt) private var profiles: [Profile]
     @Query(filter: #Predicate<Plan> { $0.isActive }, sort: \Plan.createdAt, order: .reverse) private var plans: [Plan]
@@ -27,6 +27,18 @@ struct RootView: View {
                         Text(LogCopy.today)
                     } icon: {
                         Image(systemName: "flame")
+                    }
+                }
+                Tab {
+                    NavigationStack {
+                        HistoryView(profile: profile, plan: plans.first)
+                            .toolbar { profileItems(profile) }
+                    }
+                } label: {
+                    Label {
+                        Text(HistoryCopy.title)
+                    } icon: {
+                        Image(systemName: "list.bullet.rectangle")
                     }
                 }
                 Tab {
