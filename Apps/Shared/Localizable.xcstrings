@@ -4993,6 +4993,78 @@
         }
       }
     },
+    "plain.watch.widget.description": {
+      "comment": "plain. Describes the watch widget in the widget gallery.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's session and your next lift."
+          }
+        }
+      }
+    },
+    "plain.watch.widget.next": {
+      "comment": "plain. VoiceOver, the next exercise, e.g. Next: Bench press, 5 sets of 5 at 80 kilograms.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next: %@"
+          }
+        }
+      }
+    },
+    "plain.watch.widget.sets": {
+      "comment": "plain. VoiceOver, sets of reps, time or distance, e.g. 5 sets of 5, 3 sets of 45 seconds.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%1$lld set of %2$@"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%1$lld sets of %2$@"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "plain.watch.widget.setsAtLoad": {
+      "comment": "plain. VoiceOver, sets of reps at a load, e.g. 5 sets of 5 at 80 kilograms.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%1$lld set of %2$@ at %3$@"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%1$lld sets of %2$@ at %3$@"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "plain.watch.workoutDone": {
       "comment": "plain. Watch. Title of the summary after finishing.",
       "extractionState": "manual",
