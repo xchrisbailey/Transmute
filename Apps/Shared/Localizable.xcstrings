@@ -1981,6 +1981,294 @@
         }
       }
     },
+    "plain.muscle.abductors": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abductors"
+          }
+        }
+      }
+    },
+    "plain.muscle.abs": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abs"
+          }
+        }
+      }
+    },
+    "plain.muscle.adductors": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adductors"
+          }
+        }
+      }
+    },
+    "plain.muscle.biceps": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biceps"
+          }
+        }
+      }
+    },
+    "plain.muscle.calves": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calves"
+          }
+        }
+      }
+    },
+    "plain.muscle.cardio": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cardio"
+          }
+        }
+      }
+    },
+    "plain.muscle.chest": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chest"
+          }
+        }
+      }
+    },
+    "plain.muscle.forearms": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forearms"
+          }
+        }
+      }
+    },
+    "plain.muscle.frontDelts": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Front delts"
+          }
+        }
+      }
+    },
+    "plain.muscle.fullBody": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full body"
+          }
+        }
+      }
+    },
+    "plain.muscle.glutes": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glutes"
+          }
+        }
+      }
+    },
+    "plain.muscle.hamstrings": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hamstrings"
+          }
+        }
+      }
+    },
+    "plain.muscle.hipFlexors": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hip flexors"
+          }
+        }
+      }
+    },
+    "plain.muscle.lats": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lats"
+          }
+        }
+      }
+    },
+    "plain.muscle.lowerBack": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lower back"
+          }
+        }
+      }
+    },
+    "plain.muscle.neck": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neck"
+          }
+        }
+      }
+    },
+    "plain.muscle.obliques": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obliques"
+          }
+        }
+      }
+    },
+    "plain.muscle.quads": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quads"
+          }
+        }
+      }
+    },
+    "plain.muscle.rearDelts": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rear delts"
+          }
+        }
+      }
+    },
+    "plain.muscle.rotatorCuff": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotator cuff"
+          }
+        }
+      }
+    },
+    "plain.muscle.sideDelts": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Side delts"
+          }
+        }
+      }
+    },
+    "plain.muscle.traps": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Traps"
+          }
+        }
+      }
+    },
+    "plain.muscle.triceps": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Triceps"
+          }
+        }
+      }
+    },
+    "plain.muscle.upperBack": {
+      "comment": "plain. Muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upper back"
+          }
+        }
+      }
+    },
     "plain.noWeights": {
       "comment": "plain. Empty bodyweight history.",
       "extractionState": "manual",
@@ -2853,6 +3141,366 @@
           "stringUnit": {
             "state": "translated",
             "value": "Profile"
+          }
+        }
+      }
+    },
+    "plain.progress.adherence": {
+      "comment": "plain. Chart title: sessions planned and done per week.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planned and done"
+          }
+        }
+      }
+    },
+    "plain.progress.bodyweight": {
+      "comment": "plain. Figure and chart title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bodyweight"
+          }
+        }
+      }
+    },
+    "plain.progress.byCategory": {
+      "comment": "plain. Split the volume chart by kind of training.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By type"
+          }
+        }
+      }
+    },
+    "plain.progress.byMuscle": {
+      "comment": "plain. Split the volume chart by muscle group.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By muscle"
+          }
+        }
+      }
+    },
+    "plain.progress.conditioning": {
+      "comment": "plain. Chart section for intervals, sprints and holds.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conditioning"
+          }
+        }
+      }
+    },
+    "plain.progress.date": {
+      "comment": "plain. Chart axis.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date"
+          }
+        }
+      }
+    },
+    "plain.progress.done": {
+      "comment": "plain. Chart series: sessions done.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "plain.progress.empty": {
+      "comment": "plain. Progress has nothing to chart yet.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log a workout and your progress shows up here."
+          }
+        }
+      }
+    },
+    "plain.progress.estimatedMaxHelp": {
+      "comment": "plain. Explains estimated 1RM under its chart, for a beginner.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The most you could likely lift once, worked out from your sets. Gold points are records."
+          }
+        }
+      }
+    },
+    "plain.progress.lift": {
+      "comment": "plain. Label of the control that picks which lift's chart to show.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lift"
+          }
+        }
+      }
+    },
+    "plain.progress.longestTime": {
+      "comment": "plain. Conditioning measure: longest hold or effort.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Longest, in seconds"
+          }
+        }
+      }
+    },
+    "plain.progress.mostReps": {
+      "comment": "plain. Conditioning measure.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Most reps in a set"
+          }
+        }
+      }
+    },
+    "plain.progress.other": {
+      "comment": "plain. Volume chart legend: the smaller groups together.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        }
+      }
+    },
+    "plain.progress.pace": {
+      "comment": "plain. Conditioning measure: pace.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seconds per 100 m (lower is faster)"
+          }
+        }
+      }
+    },
+    "plain.progress.planWeek": {
+      "comment": "plain. A plan week on a chart axis, e.g. Week 3.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week %1$lld"
+          }
+        }
+      }
+    },
+    "plain.progress.planned": {
+      "comment": "plain. Chart series: sessions planned.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planned"
+          }
+        }
+      }
+    },
+    "plain.progress.rounds": {
+      "comment": "plain. Conditioning measure: rounds completed.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rounds"
+          }
+        }
+      }
+    },
+    "plain.progress.sessions": {
+      "comment": "plain. Figure: sessions done out of planned this week.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sessions"
+          }
+        }
+      }
+    },
+    "plain.progress.sessionsValue": {
+      "comment": "plain. Sessions done out of planned, e.g. 2 of 4.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "plain.progress.sincePlanStart": {
+      "comment": "plain. Change under a figure since the plan started, e.g. +2.5 kg this plan.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ this plan"
+          }
+        }
+      }
+    },
+    "plain.progress.split": {
+      "comment": "plain. Label of the control that picks how the volume chart is split.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split"
+          }
+        }
+      }
+    },
+    "plain.progress.streakHelp": {
+      "comment": "plain. Explains the streak.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weeks in a row with every planned session done. Lighter weeks count."
+          }
+        }
+      }
+    },
+    "plain.progress.thisWeek": {
+      "comment": "plain. Heading over this week's figures.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week"
+          }
+        }
+      }
+    },
+    "plain.progress.title": {
+      "comment": "plain. Tab and title of the Progress screen.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progress"
+          }
+        }
+      }
+    },
+    "plain.progress.trend": {
+      "comment": "plain. The smoothed line on the bodyweight chart.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7-day average"
+          }
+        }
+      }
+    },
+    "plain.progress.versusLastWeek": {
+      "comment": "plain. Change under a figure, e.g. +6% vs last week.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ vs last week"
+          }
+        }
+      }
+    },
+    "plain.progress.volume": {
+      "comment": "plain. Figure: total weight lifted this week.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volume"
+          }
+        }
+      }
+    },
+    "plain.progress.week": {
+      "comment": "plain. Chart axis.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week"
+          }
+        }
+      }
+    },
+    "plain.progress.weeklyVolume": {
+      "comment": "plain. Chart title: weight lifted per week.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly volume"
+          }
+        }
+      }
+    },
+    "plain.progress.writtenOnDevice": {
+      "comment": "plain. Under an AI-written weekly summary.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Written on this device by Apple Intelligence."
           }
         }
       }
@@ -5361,6 +6009,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Brew a new plan"
+          }
+        }
+      }
+    },
+    "voice.progress.reworkNextWeek": {
+      "comment": "voice. Under the weekly summary when lifts stalled: rework the next session with AI.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rework next week"
           }
         }
       }

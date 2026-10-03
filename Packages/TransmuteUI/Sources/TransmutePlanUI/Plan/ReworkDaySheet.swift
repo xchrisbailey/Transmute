@@ -6,7 +6,7 @@ import TransmuteUI
 
 /// "Rework this day" (#10): a short note in, a reworked day out, shown as a before and after to
 /// use or throw away. Nothing changes until "Use this".
-struct ReworkDaySheet: View {
+public struct ReworkDaySheet: View {
     let day: PlanDay
     let plan: Plan
     let profile: Profile
@@ -21,7 +21,7 @@ struct ReworkDaySheet: View {
     @State private var status: IntelligenceStatus
     let library = ExerciseLibrary.bundled
 
-    init(day: PlanDay, plan: Plan, profile: Profile, service: any IntelligenceService) {
+    public init(day: PlanDay, plan: Plan, profile: Profile, service: any IntelligenceService) {
         self.day = day
         self.plan = plan
         self.profile = profile
@@ -33,7 +33,7 @@ struct ReworkDaySheet: View {
         Units(system: profile.unitSystem)
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             Form {
                 Section {

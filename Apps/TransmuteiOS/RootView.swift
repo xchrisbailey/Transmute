@@ -13,11 +13,13 @@ struct RootView: View {
     @Query(filter: #Predicate<Plan> { $0.isActive }, sort: \Plan.createdAt, order: .reverse) private var plans: [Plan]
     let service = FoundationModelsService()
     let device = "iPhone"
+    /// The tab last shown, kept between launches.
+    @AppStorage("rootTab") private var tab = "today"
 
     var body: some View {
         if let profile = profiles.first {
-            TabView {
-                Tab {
+            TabView(selection: $tab) {
+                Tab(value: "today") {
                     NavigationStack {
                         TodayView(plan: plans.first, profile: profile)
                             .toolbar { profileItems(profile) }
@@ -29,7 +31,7 @@ struct RootView: View {
                         Image(systemName: "flame")
                     }
                 }
-                Tab {
+                Tab(value: "log") {
                     NavigationStack {
                         HistoryView(profile: profile, plan: plans.first)
                             .toolbar { profileItems(profile) }
@@ -41,7 +43,19 @@ struct RootView: View {
                         Image(systemName: "list.bullet.rectangle")
                     }
                 }
-                Tab {
+                Tab(value: "progress") {
+                    NavigationStack {
+                        ProgressScreen(plan: plans.first, profile: profile, service: service)
+                            .toolbar { profileItems(profile) }
+                    }
+                } label: {
+                    Label {
+                        Text(ProgressCopy.title)
+                    } icon: {
+                        Image(systemName: "chart.line.uptrend.xyaxis")
+                    }
+                }
+                Tab(value: "plan") {
                     NavigationStack {
                         Group {
                             if let plan = plans.first {
