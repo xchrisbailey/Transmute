@@ -66,6 +66,16 @@ extension SchemaV1 {
         public var meters: Double?
         public var rpe: Double?
         public var rounds: Int?
+        // The targets the set was logged against, so progression can tell a hit from a miss
+        // (#12). `nil` falls back to the plan day's set at the same order.
+        public var targetReps: Int?
+        public var targetRepsMax: Int?
+        public var targetLoadKg: Double?
+        public var targetRPE: Double?
+        public var targetSeconds: Double?
+        public var targetMeters: Double?
+        public var targetRounds: Int?
+        public var targetIntervalRestSeconds: Double?
         public var isWarmUp = false
         public var isCompleted = false
         public var completedAt: Date?
