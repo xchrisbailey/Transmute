@@ -7,18 +7,23 @@
 
     struct BodySection: View {
         @Binding var draft: ProfileDraft
+        /// Onboarding asks for the units here. Afterwards they're chosen in Settings (#18), so
+        /// the Profile screen leaves the picker out.
+        var showsUnits = true
 
         var body: some View {
             let units = draft.units
             Section {
-                Picker(selection: $draft.unitSystem) {
-                    ForEach(UnitSystem.allCases, id: \.self) { system in
-                        Text(system.label).tag(system)
+                if showsUnits {
+                    Picker(selection: $draft.unitSystem) {
+                        ForEach(UnitSystem.allCases, id: \.self) { system in
+                            Text(system.label).tag(system)
+                        }
+                    } label: {
+                        Text(ProfileCopy.units)
                     }
-                } label: {
-                    Text(ProfileCopy.units)
+                    .pickerStyle(.segmented)
                 }
-                .pickerStyle(.segmented)
                 HeightField(cm: $draft.heightCm, system: draft.units.height)
                 WeightField(label: ProfileCopy.weight, kg: $draft.weightKg, units: units)
                 LabeledContent {

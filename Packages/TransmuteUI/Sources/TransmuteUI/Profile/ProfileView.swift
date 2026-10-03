@@ -19,7 +19,7 @@
 
         public var body: some View {
             Form {
-                BodySection(draft: $draft)
+                BodySection(draft: $draft, showsUnits: false)
                 ExperienceSection(draft: $draft)
                 GoalSection(draft: $draft)
                 if draft.suggestsSport || !draft.sport.isEmpty {
@@ -38,6 +38,11 @@
                 bodyweightHistory
             }
             .navigationTitle(Text(ProfileCopy.profile))
+            // Units and kit can change in Settings while this screen is open (#18); saving
+            // here mustn't put the old ones back.
+            .onChange(of: SettingsOwned(profile)) { _, owned in
+                owned.apply(to: &draft)
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
@@ -132,6 +137,31 @@
             let since = Calendar.current.date(byAdding: .year, value: -1, to: .now) ?? .distantPast
             HealthImport.merge(await health.bodyweights(since: since), into: profile)
             try? context.save()
+        }
+    }
+
+    /// The parts of a profile that Settings edits directly, as the draft carries them.
+    private struct SettingsOwned: Equatable {
+        var unitSystem: UnitSystem?
+        var weightUnit: UnitSystem?
+        var heightUnit: UnitSystem?
+        var distanceUnit: UnitSystem?
+        var plates: PlateInventory
+
+        init(_ profile: Profile) {
+            unitSystem = profile.unitSystem
+            weightUnit = profile.weightUnit
+            heightUnit = profile.heightUnit
+            distanceUnit = profile.distanceUnit
+            plates = profile.plates
+        }
+
+        func apply(to draft: inout ProfileDraft) {
+            draft.unitSystem = unitSystem ?? .preferred()
+            draft.weightUnit = weightUnit
+            draft.heightUnit = heightUnit
+            draft.distanceUnit = distanceUnit
+            draft.plates = plates
         }
     }
 
