@@ -12,9 +12,15 @@ struct RootView: View {
     @Query(filter: #Predicate<Plan> { $0.isActive }, sort: \Plan.createdAt, order: .reverse) private var plans: [Plan]
     let service = FoundationModelsService()
 
+    /// Weeks in a row with every planned session done, for the sidebar. Hidden at zero.
+    private var streak: Int? {
+        let weeks = plans.first.map { ProgressStats.streak(ProgressStats.adherence(of: $0)) } ?? 0
+        return weeks > 0 ? weeks : nil
+    }
+
     var body: some View {
         if let profile = profiles.first {
-            MacShell(profile: profile, plan: plans.first, service: service, streakWeeks: nil)
+            MacShell(profile: profile, plan: plans.first, service: service, streakWeeks: streak)
                 .tint(Color.brand(\.magic))
         } else {
             OnboardingFlow {
@@ -91,7 +97,7 @@ struct MacShell: View {
         case .log:
             LogTableView(profile: profile, plan: plan, searchFocus: $searchIsFocused)
         case .progress:
-            ProgressPane()
+            ProgressPane(plan: plan, profile: profile, service: service)
         }
     }
 
