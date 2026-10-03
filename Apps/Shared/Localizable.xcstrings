@@ -1189,6 +1189,78 @@
         }
       }
     },
+    "plain.finish.duration": {
+      "comment": "plain. Summary figure.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time"
+          }
+        }
+      }
+    },
+    "plain.finish.healthFailed": {
+      "comment": "plain. Writing to Health failed.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't save to Health. The workout is saved in Transmute."
+          }
+        }
+      }
+    },
+    "plain.finish.save": {
+      "comment": "plain. Close the finished workout's summary.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
+    "plain.finish.savedToHealth": {
+      "comment": "plain. The workout was written to Health.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved to Health"
+          }
+        }
+      }
+    },
+    "plain.finish.sets": {
+      "comment": "plain. Summary figure.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sets"
+          }
+        }
+      }
+    },
+    "plain.finish.volume": {
+      "comment": "plain. Summary figure: total weight lifted.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volume"
+          }
+        }
+      }
+    },
     "plain.fromHealth": {
       "comment": "plain. Badge on a bodyweight that came from Health.",
       "extractionState": "manual",
@@ -3349,6 +3421,570 @@
         }
       }
     },
+    "plain.session.addRest": {
+      "comment": "plain. VoiceOver label for the +15 s button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "15 seconds more rest"
+          }
+        }
+      }
+    },
+    "plain.session.allLogged": {
+      "comment": "plain. Nothing left to do but finish.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every set is logged."
+          }
+        }
+      }
+    },
+    "plain.session.bigJump": {
+      "comment": "plain. A logged set is suspiciously bigger than the previous record.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That's far beyond your best. Is it right?"
+          }
+        }
+      }
+    },
+    "plain.session.current": {
+      "comment": "plain. VoiceOver hint for the set to do next.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current set"
+          }
+        }
+      }
+    },
+    "plain.session.discard": {
+      "comment": "plain. Throw away the workout in progress.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard workout"
+          }
+        }
+      }
+    },
+    "plain.session.discardConfirm": {
+      "comment": "plain. Confirm discarding a workout in progress.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard this workout? Nothing from it will be saved."
+          }
+        }
+      }
+    },
+    "plain.session.distance": {
+      "comment": "plain. Column heading in the set table.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distance"
+          }
+        }
+      }
+    },
+    "plain.session.finish": {
+      "comment": "plain. End the workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish"
+          }
+        }
+      }
+    },
+    "plain.session.finishConfirm": {
+      "comment": "plain. Confirm finishing with sets left.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish the workout? Sets you haven't logged won't be saved."
+          }
+        }
+      }
+    },
+    "plain.session.fixIt": {
+      "comment": "plain. Reopen a suspiciously big set to correct it.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fix it"
+          }
+        }
+      }
+    },
+    "plain.session.intervalRest": {
+      "comment": "plain. Interval phase.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest"
+          }
+        }
+      }
+    },
+    "plain.session.itsRight": {
+      "comment": "plain. Confirm a suspiciously big set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yes, it's right"
+          }
+        }
+      }
+    },
+    "plain.session.keepGoing": {
+      "comment": "plain. Cancel finishing or discarding.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep going"
+          }
+        }
+      }
+    },
+    "plain.session.lessRest": {
+      "comment": "plain. VoiceOver label for the −15 s button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "15 seconds less rest"
+          }
+        }
+      }
+    },
+    "plain.session.logged": {
+      "comment": "plain. VoiceOver value for a set that's checked off.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logged"
+          }
+        }
+      }
+    },
+    "plain.session.meters": {
+      "comment": "plain. Field label.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metres"
+          }
+        }
+      }
+    },
+    "plain.session.minimise": {
+      "comment": "plain. Close the session screen; the workout keeps running.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide workout"
+          }
+        }
+      }
+    },
+    "plain.session.more": {
+      "comment": "plain. Menu of exercise actions.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More"
+          }
+        }
+      }
+    },
+    "plain.session.notLogged": {
+      "comment": "plain. VoiceOver value for a set that isn't checked off.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not logged"
+          }
+        }
+      }
+    },
+    "plain.session.notes": {
+      "comment": "plain. Notes on an exercise or set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes"
+          }
+        }
+      }
+    },
+    "plain.session.plates": {
+      "comment": "plain. Open the plate calculator for a set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plates"
+          }
+        }
+      }
+    },
+    "plain.session.removeSet": {
+      "comment": "plain. Remove an unlogged set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove set"
+          }
+        }
+      }
+    },
+    "plain.session.reps": {
+      "comment": "plain. Column heading in the set table.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reps"
+          }
+        }
+      }
+    },
+    "plain.session.repsCount": {
+      "comment": "plain. VoiceOver, e.g. 5 reps.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld reps"
+          }
+        }
+      }
+    },
+    "plain.session.restOver": {
+      "comment": "plain. The rest timer finished.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest's up"
+          }
+        }
+      }
+    },
+    "plain.session.restOverNext": {
+      "comment": "plain. Notification when rest ends with the app in the background.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest's up. Next: %@."
+          }
+        }
+      }
+    },
+    "plain.session.round": {
+      "comment": "plain. Interval progress, e.g. Round 3 of 8.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Round %1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "plain.session.rounds": {
+      "comment": "plain. Column heading in the set table.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rounds"
+          }
+        }
+      }
+    },
+    "plain.session.rpe": {
+      "comment": "plain. Field label for how hard the set felt, 1 to 10.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RPE (optional)"
+          }
+        }
+      }
+    },
+    "plain.session.seconds": {
+      "comment": "plain. Field label.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seconds"
+          }
+        }
+      }
+    },
+    "plain.session.set": {
+      "comment": "plain. Column heading in the set table.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set"
+          }
+        }
+      }
+    },
+    "plain.session.setNote": {
+      "comment": "plain. Title of the note editor for one set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note for set %lld"
+          }
+        }
+      }
+    },
+    "plain.session.setOf": {
+      "comment": "plain. Which set this is, e.g. Set 2 of 4.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set %1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "plain.session.skip": {
+      "comment": "plain. Pass over an exercise mid-workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip exercise"
+          }
+        }
+      }
+    },
+    "plain.session.skipRest": {
+      "comment": "plain. End the rest timer early.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip rest"
+          }
+        }
+      }
+    },
+    "plain.session.skipped": {
+      "comment": "plain. Badge on a skipped exercise.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skipped"
+          }
+        }
+      }
+    },
+    "plain.session.startTimer": {
+      "comment": "plain. Start a timed set or intervals.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start timer"
+          }
+        }
+      }
+    },
+    "plain.session.stopTimer": {
+      "comment": "plain. Stop a timed set or intervals.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop timer"
+          }
+        }
+      }
+    },
+    "plain.session.substitute": {
+      "comment": "plain. Swap an exercise mid-workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Substitute"
+          }
+        }
+      }
+    },
+    "plain.session.substitutedFor": {
+      "comment": "plain. Under a substituted exercise, e.g. Instead of Back squat.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instead of %@"
+          }
+        }
+      }
+    },
+    "plain.session.time": {
+      "comment": "plain. Column heading in the set table.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time"
+          }
+        }
+      }
+    },
+    "plain.session.undoSet": {
+      "comment": "plain. Take back a logged set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo log"
+          }
+        }
+      }
+    },
+    "plain.session.unskip": {
+      "comment": "plain. Undo skipping an exercise.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bring back"
+          }
+        }
+      }
+    },
+    "plain.session.warmUp": {
+      "comment": "plain. Marks a warm-up set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm-up"
+          }
+        }
+      }
+    },
+    "plain.session.weight": {
+      "comment": "plain. Field label for a set's load.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight"
+          }
+        }
+      }
+    },
+    "plain.session.work": {
+      "comment": "plain. Interval phase.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Work"
+          }
+        }
+      }
+    },
+    "plain.session.workoutNotes": {
+      "comment": "plain. Notes on the whole workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout notes"
+          }
+        }
+      }
+    },
     "plain.sessionLength": {
       "comment": "plain. Stepper.",
       "extractionState": "manual",
@@ -3565,6 +4201,18 @@
         }
       }
     },
+    "plain.tab.plan": {
+      "comment": "plain. Tab for the plan.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan"
+          }
+        }
+      }
+    },
     "plain.target.load": {
       "comment": "plain. Target field.",
       "extractionState": "manual",
@@ -3657,6 +4305,114 @@
           "stringUnit": {
             "state": "translated",
             "value": "Targets"
+          }
+        }
+      }
+    },
+    "plain.today.adHocTitle": {
+      "comment": "plain. Default name of a workout logged off the plan.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout"
+          }
+        }
+      }
+    },
+    "plain.today.eyebrow": {
+      "comment": "plain. Above today's session name, e.g. WEEK 3 · DAY 1. Upper case.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WEEK %1$lld · DAY %2$lld"
+          }
+        }
+      }
+    },
+    "plain.today.fromYourPlan": {
+      "comment": "plain. Label before the reason targets changed.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From your plan"
+          }
+        }
+      }
+    },
+    "plain.today.logWorkout": {
+      "comment": "plain. Start a workout that isn't on the plan.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log a workout"
+          }
+        }
+      }
+    },
+    "plain.today.next": {
+      "comment": "plain. The next session, e.g. Next: Lower A on Thursday.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next: %1$@ on %2$@"
+          }
+        }
+      }
+    },
+    "plain.today.planEnded": {
+      "comment": "plain. Every planned day is in the past.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This plan has no more sessions. Brew a new one from Plan."
+          }
+        }
+      }
+    },
+    "plain.today.restDay": {
+      "comment": "plain. Today has no session.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest day"
+          }
+        }
+      }
+    },
+    "plain.today.resume": {
+      "comment": "plain. Go back to a workout in progress.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume workout"
+          }
+        }
+      }
+    },
+    "plain.today.title": {
+      "comment": "plain. Tab and title of the Today screen.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
           }
         }
       }
@@ -3925,6 +4681,30 @@
         }
       }
     },
+    "voice.finish.gold": {
+      "comment": "voice. Records set in the workout just finished.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turned to gold"
+          }
+        }
+      }
+    },
+    "voice.finish.workDoneNoLoad": {
+      "comment": "voice. Workout finished with no weighted sets, so no volume to show.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The work is done. %lld sets."
+          }
+        }
+      }
+    },
     "voice.gold": {
       "comment": "voice. A new personal record, e.g. Gold. Squat 5RM, 115 kg.",
       "extractionState": "manual",
@@ -4113,6 +4893,30 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "voice.today.done": {
+      "comment": "voice. Today's session is already logged.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's work is done."
+          }
+        }
+      }
+    },
+    "voice.today.restDay": {
+      "comment": "voice. Under the rest day title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing in the crucible today. Let the work settle."
           }
         }
       }

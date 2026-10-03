@@ -302,7 +302,10 @@ struct ProgressionRun {
     /// The nearest loadable weight. The one place rounding happens, so an inventory-aware
     /// rounding is a one-line swap.
     func loadable(_ kg: Double) -> Double {
-        LoadableWeight.round(kg, for: context.roundingEquipment, system: context.system)
+        if let plates = context.plates {
+            return LoadableWeight.round(kg, for: context.roundingEquipment, inventory: plates)
+        }
+        return LoadableWeight.round(kg, for: context.roundingEquipment, system: context.system)
     }
 
     /// The first loadable weight above `base`, stepping up by `amount` until rounding moves it.
