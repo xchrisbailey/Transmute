@@ -72,6 +72,7 @@ struct MacShell: View {
             section = .today
             beginsWorkout = link == .beginToday
         }
+        .trainingReminders(plan: plan) { section = .today }
         .sheet(isPresented: $showsProfile) {
             NavigationStack {
                 ProfileView(profile: profile)

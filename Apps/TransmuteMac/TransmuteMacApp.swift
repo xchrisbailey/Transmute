@@ -15,6 +15,8 @@ struct TransmuteMacApp: App {
     init() {
         // Plan edits are undoable (#10).
         container.mainContext.undoManager = UndoManager()
+        // From launch: a tapped reminder (#19) is delivered as the app opens.
+        ReminderTaps.shared.listen()
         #if DEBUG
             // `-seedSample` fills an empty store with the sample tennis player, plan and log.
             let context = container.mainContext

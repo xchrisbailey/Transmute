@@ -13,6 +13,8 @@ struct TransmuteApp: App {
         link = SessionLink(live: live, device: .phone)
         // Has to be listening from launch: the watch can start a workout at any time.
         live.listen()
+        // Also from launch: a tapped reminder (#19) is delivered as the app opens.
+        ReminderTaps.shared.listen()
         // Plan edits are undoable (#10).
         container.mainContext.undoManager = UndoManager()
         #if DEBUG
