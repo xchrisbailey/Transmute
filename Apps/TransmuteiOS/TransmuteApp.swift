@@ -40,10 +40,13 @@ struct TransmuteApp: App {
     /// in step (#15).
     let live: PhoneLiveWorkout
     let link: SessionLink
+    /// System, Mocha or Latte, chosen on this device (#18).
+    @AppStorage(Appearance.defaultsKey) private var appearance = Appearance.system
 
     var body: some Scene {
         WindowGroup {
             RootView()
+                .appearance(appearance)
                 .task { await link.run() }
                 .onChange(of: link.remoteHeartRate) { _, bpm in
                     live.update(heartRate: bpm, averageHeartRate: nil, activeEnergyKcal: nil)
