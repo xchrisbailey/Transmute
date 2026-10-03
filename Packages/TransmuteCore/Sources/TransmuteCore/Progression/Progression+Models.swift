@@ -96,7 +96,7 @@ extension ProgressionEngine {
         let context = ProgressionContext(
             exerciseID: planned.exerciseID, exercise: library.exercise(id: planned.exerciseID),
             isDeload: isDeload ?? Self.isDeload(planned.day), equipment: Set(profile?.equipment ?? []),
-            system: profile?.unitSystem ?? .preferred(), settings: profile?.progression ?? ProgressionSettings(),
+            system: Units(profile).weight, settings: profile?.progression ?? ProgressionSettings(),
             knownLifts: profile?.knownLifts ?? [], plates: profile?.plates)
         return next(
             planned: planned.orderedSets.map(SetTarget.init), history: history.compactMap(ExercisePerformance.init),

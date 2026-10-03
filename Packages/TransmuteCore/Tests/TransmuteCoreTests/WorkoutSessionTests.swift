@@ -54,9 +54,12 @@ struct WorkoutSessionTests {
         let history = try ProgressionEngine.history(of: "back-squat", in: context, excluding: workout)
         let expected = ProgressionEngine.next(for: planned, history: history, profile: profile)
 
-        #expect(squat.orderedSets.map(\.targetLoadKg) == expected.targets.map(\.loadKg))
-        #expect(squat.orderedSets.map(\.weightKg) == expected.targets.map(\.loadKg))
-        #expect(squat.orderedSets.allSatisfy { $0.targetReps == 5 && $0.restSeconds == 150 })
+        // The ramp of warm-ups comes first (#18); the working sets are the engine's.
+        let working = squat.orderedSets.filter { !$0.isWarmUp }
+        #expect(working.count < squat.orderedSets.count)
+        #expect(working.map(\.targetLoadKg) == expected.targets.map(\.loadKg))
+        #expect(working.map(\.weightKg) == expected.targets.map(\.loadKg))
+        #expect(working.allSatisfy { $0.targetReps == 5 && $0.restSeconds == 150 })
         #expect(plan.orderedDays.contains { $0 === day })
     }
 

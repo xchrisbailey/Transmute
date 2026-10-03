@@ -71,12 +71,15 @@ public struct SessionSnapshot: Codable, Equatable, Sendable {
     public var restEndsAt: Date?
     /// How long that rest was set for, for the countdown ring.
     public var restSeconds: Double?
+    /// Whether logging a set starts its rest (#18), so the mirroring device predicts what the
+    /// owner will do. `nil`, from an owner that doesn't say, means it does.
+    public var autoStartsRest: Bool?
     /// In order.
     public var exercises: [Exercise]
 
     public init(
         workoutID: UUID, title: String, startedAt: Date, endedAt: Date? = nil, restEndsAt: Date? = nil,
-        restSeconds: Double? = nil, exercises: [Exercise] = []
+        restSeconds: Double? = nil, autoStartsRest: Bool? = nil, exercises: [Exercise] = []
     ) {
         self.workoutID = workoutID
         self.title = title
@@ -84,6 +87,7 @@ public struct SessionSnapshot: Codable, Equatable, Sendable {
         self.endedAt = endedAt
         self.restEndsAt = restEndsAt
         self.restSeconds = restSeconds
+        self.autoStartsRest = autoStartsRest
         self.exercises = exercises
     }
 
@@ -92,6 +96,7 @@ public struct SessionSnapshot: Codable, Equatable, Sendable {
         self.init(
             workoutID: workout.id, title: workout.title, startedAt: workout.startedAt, endedAt: workout.endedAt,
             restEndsAt: workout.restEndsAt, restSeconds: workout.restSeconds,
+            autoStartsRest: WorkoutPreferences.stored(in: workout.modelContext).autoStartRest,
             exercises: workout.orderedExercises.map { Exercise($0, library: library) })
     }
 

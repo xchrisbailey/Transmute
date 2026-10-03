@@ -239,6 +239,8 @@ struct TodayGlanceTests {
     @Test func withAProfileTheNumbersAreTheOnesTheSessionStartsWith() throws {
         let plan = try plan()
         let profile = try #require(try context.fetch(FetchDescriptor<Profile>()).first)
+        // With warm-ups on, the running session would be on its first warm-up set instead.
+        profile.preferences.warmUpSets = false
         let monday = try #require(plan.orderedDays.first { $0.week == 4 && $0.weekday == 1 })
         // Put the squat first so the lift has a load for progression to move.
         for exercise in monday.orderedExercises {

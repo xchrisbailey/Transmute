@@ -41,7 +41,8 @@ extension SessionSnapshot {
         change(&exercises[exercise].sets[set])
     }
 
-    /// Checks a set off and starts its rest, unless it was the last set of the workout.
+    /// Checks a set off and starts its rest, unless it was the last set of the workout or
+    /// rest doesn't start by itself.
     private mutating func log(_ ref: SetRef, _ values: SetValues, at date: Date) {
         guard let set = set(at: ref), !set.isCompleted else { return }
         withSet(at: ref) { set in
@@ -49,7 +50,12 @@ extension SessionSnapshot {
             set.isCompleted = true
             set.completedAt = date
         }
-        let rest: Double? = if current != nil, let seconds = set.restSeconds, seconds > 0 { seconds } else { nil }
+        let rest: Double? =
+            if autoStartsRest != false, current != nil, let seconds = set.restSeconds, seconds > 0 {
+                seconds
+            } else {
+                nil
+            }
         startRest(rest, at: date)
     }
 

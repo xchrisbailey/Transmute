@@ -11,6 +11,11 @@ public struct ProfileDraft: Equatable, Sendable {
     public var birthYear: Int?
     public var sex: Sex?
     public var unitSystem: UnitSystem
+    /// Units chosen on their own in Settings (#18). The draft carries them so its screens show
+    /// the same units as the rest of the app; `nil` follows `unitSystem`.
+    public var weightUnit: UnitSystem?
+    public var heightUnit: UnitSystem?
+    public var distanceUnit: UnitSystem?
     public var experience: ExperienceLevel
     public var knownLifts: [KnownLift]
     public var goalText: String
@@ -49,6 +54,9 @@ public struct ProfileDraft: Equatable, Sendable {
         birthYear = profile.birthYear
         sex = profile.sex
         unitSystem = profile.unitSystem ?? .preferred(for: locale)
+        weightUnit = profile.weightUnit
+        heightUnit = profile.heightUnit
+        distanceUnit = profile.distanceUnit
         experience = profile.experience
         knownLifts = profile.knownLifts
         goalText = profile.goalText
@@ -59,6 +67,11 @@ public struct ProfileDraft: Equatable, Sendable {
         plates = profile.plates
         limitations = profile.limitations
         limitationAreas = Set(profile.limitationAreas)
+    }
+
+    /// The units the draft's screens show values in.
+    public var units: Units {
+        Units(system: unitSystem, weight: weightUnit, height: heightUnit, distance: distanceUnit)
     }
 
     /// The chosen bar's weight; setting it changes that bar in `plates`.
@@ -161,6 +174,9 @@ public struct ProfileDraft: Equatable, Sendable {
         profile.birthYear = birthYear
         profile.sex = sex
         profile.unitSystem = unitSystem
+        profile.weightUnit = weightUnit
+        profile.heightUnit = heightUnit
+        profile.distanceUnit = distanceUnit
         profile.experience = experience
         profile.knownLifts = experience == .beginner ? [] : knownLifts
         profile.goalText = goalText.trimmingCharacters(in: .whitespacesAndNewlines)
