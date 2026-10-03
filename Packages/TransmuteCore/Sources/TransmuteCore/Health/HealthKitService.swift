@@ -38,7 +38,8 @@
             case .workouts:
                 return (
                     [HKObjectType.workoutType(), HKQuantityType(.activeEnergyBurned), HKQuantityType(.heartRate)],
-                    [HKObjectType.workoutType(), HKQuantityType(.heartRate)]
+                    // The live workout only reports the heart rate and energy it's allowed to read.
+                    [HKObjectType.workoutType(), HKQuantityType(.activeEnergyBurned), HKQuantityType(.heartRate)]
                 )
             }
         }
@@ -142,10 +143,8 @@
                 if !samples.isEmpty {
                     try await builder.addSamples(samples)
                 }
-                try await builder.addMetadata([
-                    HealthWorkoutRecord.workoutIDKey: record.workoutID.uuidString,
-                    HKMetadataKeyWorkoutBrandName: record.title,
-                ])
+                try await builder.addMetadata(
+                    HealthWorkoutRecord.metadata(workoutID: record.workoutID, title: record.title))
                 try await builder.endCollection(at: record.end)
                 guard let workout = try await builder.finishWorkout() else { throw HealthServiceError.notAuthorized }
                 return workout.uuid
