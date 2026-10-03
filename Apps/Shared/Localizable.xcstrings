@@ -1957,6 +1957,174 @@
         }
       }
     },
+    "plain.mac.log.date": {
+      "comment": "plain. Mac. Log table column: the day of the workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date"
+          }
+        }
+      }
+    },
+    "plain.mac.log.details": {
+      "comment": "plain. Mac. Toolbar button that shows or hides the selected workout's details.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Details"
+          }
+        }
+      }
+    },
+    "plain.mac.log.duration": {
+      "comment": "plain. Mac. Log table column: how long the workout took.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duration"
+          }
+        }
+      }
+    },
+    "plain.mac.log.noRecords": {
+      "comment": "plain. Mac. VoiceOver label for an empty records cell of a log row.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No records"
+          }
+        }
+      }
+    },
+    "plain.mac.log.noSelection": {
+      "comment": "plain. Mac. Shown in the log's inspector when no workout is selected.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select a workout to see its sets."
+          }
+        }
+      }
+    },
+    "plain.mac.log.records": {
+      "comment": "plain. Mac. Log table column: personal records set in the workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Records"
+          }
+        }
+      }
+    },
+    "plain.mac.log.recordsCount": {
+      "comment": "plain. Mac. VoiceOver label for the records cell of a log row.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld records"
+          }
+        }
+      }
+    },
+    "plain.mac.log.sets": {
+      "comment": "plain. Mac. Log table column: number of working sets.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sets"
+          }
+        }
+      }
+    },
+    "plain.mac.log.volume": {
+      "comment": "plain. Mac. Log table column: total weight lifted.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volume"
+          }
+        }
+      }
+    },
+    "plain.mac.log.workout": {
+      "comment": "plain. Mac. Log table column: the workout's name.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout"
+          }
+        }
+      }
+    },
+    "plain.mac.menu.findInLog": {
+      "comment": "plain. Mac. Edit menu: put the cursor in the log's search field.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Find in Log"
+          }
+        }
+      }
+    },
+    "plain.mac.menu.newWorkout": {
+      "comment": "plain. Mac. File menu: start today's session, or a workout off the plan.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Workout"
+          }
+        }
+      }
+    },
+    "plain.mac.sidebar.daysPerWeek": {
+      "comment": "plain. Mac. Sidebar footer: how many days a week the person trains.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld days a week"
+          }
+        }
+      }
+    },
+    "plain.mac.sidebar.progress": {
+      "comment": "plain. Mac. Sidebar section and title of the progress charts.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progress"
+          }
+        }
+      }
+    },
     "plain.minutesShort": {
       "comment": "plain. Estimated session length.",
       "extractionState": "manual",

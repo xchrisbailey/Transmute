@@ -6,7 +6,7 @@ import TransmuteUI
 
 /// Rebrew (#10): regenerate the plan from a chosen week on. Logged days always stay; hand-edited
 /// days stay unless the person says otherwise.
-struct RebrewSheet: View {
+public struct RebrewSheet: View {
     let plan: Plan
     let profile: Profile
     let service: any IntelligenceService
@@ -21,7 +21,7 @@ struct RebrewSheet: View {
     @State private var status: IntelligenceStatus
     @State private var task: Task<Void, Never>?
 
-    init(plan: Plan, profile: Profile, service: any IntelligenceService, currentWeek: Int) {
+    public init(plan: Plan, profile: Profile, service: any IntelligenceService, currentWeek: Int) {
         self.plan = plan
         self.profile = profile
         self.service = service
@@ -29,7 +29,7 @@ struct RebrewSheet: View {
         _status = State(initialValue: IntelligenceStatus(service: service))
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             Form {
                 Section {

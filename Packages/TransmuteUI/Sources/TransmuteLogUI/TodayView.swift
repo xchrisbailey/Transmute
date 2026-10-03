@@ -20,11 +20,14 @@ public struct TodayView: View {
     private var running: [Workout]
     @State private var session: Workout?
     @State private var didResume = false
+    /// Set to true from outside to begin a workout, as the Mac's New Workout command does.
+    @Binding var beginsWorkout: Bool
     let library = ExerciseLibrary.bundled
 
-    public init(plan: Plan?, profile: Profile) {
+    public init(plan: Plan?, profile: Profile, beginsWorkout: Binding<Bool> = .constant(false)) {
         self.plan = plan
         self.profile = profile
+        _beginsWorkout = beginsWorkout
     }
 
     /// A workout is already going, here or on the watch.
@@ -119,6 +122,11 @@ public struct TodayView: View {
         }
         .onChange(of: link?.mirrored == nil) { _, isGone in
             if isGone { showsMirrored = false }
+        }
+        .onChange(of: beginsWorkout, initial: true) { _, isWanted in
+            guard isWanted else { return }
+            beginsWorkout = false
+            beginNext()
         }
         #if os(iOS)
             .fullScreenCover(item: $session) { workout in
@@ -278,6 +286,21 @@ public struct TodayView: View {
             }
         }
         return nil
+    }
+
+}
+
+extension TodayView {
+    /// Goes back into a running workout if there is one; otherwise begins today's session
+    /// when it's planned and not yet logged, or a workout off the plan.
+    private func beginNext() {
+        if let workout = running.first {
+            open(workout)
+            return
+        }
+        guard !isBusy else { return }
+        let today = plan.map { TodayPlan(plan: $0) }
+        begin(today.flatMap { $0.isDone ? nil : $0.day })
     }
 
     private func begin(_ day: PlanDay?) {

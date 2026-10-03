@@ -114,12 +114,21 @@ public struct HistoryView: View {
         .navigationTitle(Text(HistoryCopy.title))
         .toolbar {
             ToolbarItem {
-                filterMenu
+                LogFilterMenu(filter: $filter, range: $range, plan: plan)
             }
         }
     }
+}
 
-    private var filterMenu: some View {
+/// The log's filters: this plan or all of them, and how far back to look. The icon fills in
+/// when something is filtered, so it isn't told by colour.
+struct LogFilterMenu: View {
+    @Binding var filter: WorkoutLog.Filter
+    @Binding var range: HistoryView.DateRange
+    /// The active plan, for the "This plan" filter.
+    let plan: Plan?
+
+    var body: some View {
         Menu {
             if let plan {
                 Picker(selection: $filter.planID) {
@@ -130,7 +139,7 @@ public struct HistoryView: View {
                 }
             }
             Picker(selection: $range) {
-                ForEach(DateRange.allCases, id: \.self) { range in
+                ForEach(HistoryView.DateRange.allCases, id: \.self) { range in
                     Text(range.label).tag(range)
                 }
             } label: {
