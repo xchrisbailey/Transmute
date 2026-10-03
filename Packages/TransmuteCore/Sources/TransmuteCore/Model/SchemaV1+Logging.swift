@@ -17,6 +17,9 @@ extension SchemaV1 {
         public var restEndsAt: Date?
         /// How long that rest was set for, for the countdown ring.
         public var restSeconds: Double?
+        /// The device running this session, so the other one mirrors it rather than writing its
+        /// own copy (#15).
+        public var startedOnRaw: String?
 
         @Relationship(deleteRule: .cascade, inverse: \LoggedExercise.workout)
         public var exercises: [LoggedExercise]? = []
@@ -29,6 +32,11 @@ extension SchemaV1 {
 
         public var duration: TimeInterval? {
             endedAt.map { $0.timeIntervalSince(startedAt) }
+        }
+
+        public var startedOn: SessionDevice? {
+            get { startedOnRaw.flatMap(SessionDevice.init(rawValue:)) }
+            set { startedOnRaw = newValue?.rawValue }
         }
 
         public var orderedExercises: [LoggedExercise] {
