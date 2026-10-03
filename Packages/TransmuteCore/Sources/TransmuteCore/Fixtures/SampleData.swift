@@ -90,6 +90,10 @@ public enum SampleData {
         plan.rationale =
             "Heavy lifting sits on Monday, two days from your match, and speed work on Friday stays short so you're fresh for Saturday."
         plan.brewedBy = "Apple Intelligence on iPhone"
+        plan.phases = [
+            PlanPhase(name: "Build", focus: "Strength and power", firstWeek: 1, lastWeek: 3),
+            PlanPhase(name: "Deload", focus: "Recover", firstWeek: 4, lastWeek: 4, isDeload: true),
+        ]
         for week in 1...4 {
             let factor = week == 4 ? 0.85 : 1 + 0.025 * Double(week - 1)
             for template in days {
