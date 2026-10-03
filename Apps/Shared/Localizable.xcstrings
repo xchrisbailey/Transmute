@@ -7645,6 +7645,150 @@
         }
       }
     },
+    "plain.widget.inProgress": {
+      "comment": "plain. Widget, a workout is going right now.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In progress"
+          }
+        }
+      }
+    },
+    "plain.widget.nextUp": {
+      "comment": "plain. Widget, above the first exercise of the next session.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next up"
+          }
+        }
+      }
+    },
+    "plain.widget.noPlan": {
+      "comment": "plain. Widget, there's no plan to show.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Transmute to make a plan."
+          }
+        }
+      }
+    },
+    "plain.widget.nothingThisWeek": {
+      "comment": "plain. Widget, the plan has no sessions this week, or there's no plan.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No sessions planned"
+          }
+        }
+      }
+    },
+    "plain.widget.sessions": {
+      "comment": "plain. VoiceOver, sessions done out of planned, e.g. Sessions this week: 2 of 3.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sessions this week: %1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "plain.widget.streak": {
+      "comment": "plain. Widget, weeks in a row with every planned session done, e.g. 3 weeks in a row.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld week in a row"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld weeks in a row"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "plain.widget.streakShort": {
+      "comment": "plain. Widget, the streak in weeks where there's little room, e.g. 3 wk.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld wk"
+          }
+        }
+      }
+    },
+    "plain.widget.thisWeek": {
+      "comment": "plain. Widget, title of this week's sessions; also the name of the watch's week widget.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week"
+          }
+        }
+      }
+    },
+    "plain.widget.thisWeekSuffix": {
+      "comment": "plain. Widget, after the sessions figure, e.g. 2/3 this week.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "this week"
+          }
+        }
+      }
+    },
+    "plain.widget.today.description": {
+      "comment": "plain. Describes the Today widget in the iPhone and Mac widget gallery.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's session, your streak and this week's sessions."
+          }
+        }
+      }
+    },
+    "plain.widget.week.description": {
+      "comment": "plain. Describes the watch's This week widget in the widget gallery.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your streak and this week's sessions."
+          }
+        }
+      }
+    },
     "voice.about": {
       "comment": "voice. About screen; the argument is the app version.",
       "extractionState": "manual",

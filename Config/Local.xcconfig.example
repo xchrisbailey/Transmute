@@ -2,3 +2,4 @@
 // iCloud, HealthKit and App Groups on device and on the Mac.
 DEVELOPMENT_TEAM = YOURTEAMID
 TRANSMUTE_MAC_ENTITLEMENTS = Apps/TransmuteMac/TransmuteMac.entitlements
+TRANSMUTE_MAC_WIDGETS_ENTITLEMENTS = Apps/TransmuteMacWidgets/TransmuteMacWidgets.entitlements
