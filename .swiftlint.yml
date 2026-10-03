@@ -19,7 +19,7 @@ opt_in_rules:
   - sorted_imports
 
 identifier_name:
-  excluded: [id, x, y, kg, lb, cm, m, s, to]
+  excluded: [id, x, y, kg, lb, cm, m, s, to, at, by]
 
 nesting:
   type_level: 2

@@ -196,7 +196,9 @@ public struct TodayView: View {
             restDay(today, in: plan)
         }
     }
+}
 
+extension TodayView {
     private func restDay(_ today: TodayPlan, in plan: Plan) -> some View {
         Section {
             VStack(alignment: .leading, spacing: 6) {
