@@ -85,6 +85,7 @@ struct RootView: View {
                 tab = "today"
                 beginsWorkout = link == .beginToday
             }
+            .trainingReminders(plan: plans.first) { tab = "today" }
         } else {
             OnboardingFlow {
                 // After delete-all (#18), this is where the person lands.
