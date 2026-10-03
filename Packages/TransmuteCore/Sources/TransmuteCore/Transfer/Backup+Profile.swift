@@ -24,6 +24,10 @@ struct ProfileBackup: Codable, Equatable {
     var barbellKg: Double?
     var plates: PlateInventory?
     var unitSystem: String?
+    var weightUnit: String?
+    var heightUnit: String?
+    var distanceUnit: String?
+    var preferences: WorkoutPreferences?
     var bodyweights: [BodyweightBackup]?
 
     init(_ profile: Profile) {
@@ -45,6 +49,10 @@ struct ProfileBackup: Codable, Equatable {
         barbellKg = profile.barbellKg
         plates = profile.plates
         unitSystem = profile.unitSystemRaw
+        weightUnit = profile.weightUnitRaw
+        heightUnit = profile.heightUnitRaw
+        distanceUnit = profile.distanceUnitRaw
+        preferences = profile.preferences
         bodyweights = (profile.bodyweights ?? []).map(BodyweightBackup.init).sorted {
             ($0.date, $0.kg) < ($1.date, $1.kg)
         }
@@ -70,6 +78,10 @@ struct ProfileBackup: Codable, Equatable {
         assign(barbellKg, to: &profile.barbellKg)
         assign(plates, to: &profile.plates)
         profile.unitSystemRaw = unitSystem
+        profile.weightUnitRaw = weightUnit
+        profile.heightUnitRaw = heightUnit
+        profile.distanceUnitRaw = distanceUnit
+        assign(preferences, to: &profile.preferences)
     }
 
     /// Leaves the model's default in place when the backup has no value.

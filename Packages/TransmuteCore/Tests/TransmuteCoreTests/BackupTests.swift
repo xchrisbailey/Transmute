@@ -20,6 +20,9 @@ struct BackupTests {
         let (profile, plan) = SampleData.insert(into: context, now: now)
         profile.knownLifts = [KnownLift(exerciseID: "back-squat", weightKg: 100, reps: 3)]
         profile.limitationAreas = [.shoulder]
+        profile.heightUnit = .metric
+        profile.preferences.workingRestSeconds = 120
+        profile.preferences.showRPE = false
         profile.bodyweights?.append(BodyweightEntry(date: now, kg: 78.25, healthKitSampleID: UUID()))
 
         let custom = CustomExercise(
@@ -112,6 +115,9 @@ struct BackupTests {
         #expect(profile.schedule.commitments.count == 3)
         #expect(profile.unitSystem == .imperial)
         #expect(profile.knownLifts.first?.weightKg == 100)
+        #expect(profile.heightUnit == .metric)
+        #expect(profile.preferences.workingRestSeconds == 120)
+        #expect(profile.preferences.showRPE == false)
     }
 
     @Test func importingTwiceAddsNothing() throws {
