@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 import TransmuteCore
 import TransmuteUI
+import WidgetKit
 
 /// Today until a workout is running, then the workout. A workout left running, even by a
 /// relaunched app, opens straight back up.
@@ -55,6 +56,10 @@ struct WatchRootView: View {
         }
         .onChange(of: live.heartRate) { _, bpm in
             if let bpm { link.sendHeartRate(bpm) }
+        }
+        .onChange(of: session?.snapshot) {
+            // The complication shows the next lift: keep it current as sets are logged.
+            WidgetCenter.shared.reloadTimelines(ofKind: TodayGlance.watchWidgetKind)
         }
         .task { await link.run() }
     }
