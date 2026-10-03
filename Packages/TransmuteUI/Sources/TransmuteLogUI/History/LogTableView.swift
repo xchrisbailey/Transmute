@@ -49,6 +49,8 @@ struct LogTableRow: Identifiable {
         let plan: Plan?
         /// Focus for the search field, so a Find command can put the cursor there.
         let searchFocus: FocusState<Bool>.Binding?
+        /// Set from outside to the `Workout.id` to select, as Open workout and Spotlight do (#19).
+        @Binding var opening: UUID?
 
         @Environment(\.modelContext) private var context
         @Query(sort: \Workout.startedAt, order: .reverse) private var workouts: [Workout]
@@ -62,10 +64,14 @@ struct LogTableRow: Identifiable {
         @State private var deleting: Workout?
         @State private var healthKeepsCopy = false
 
-        public init(profile: Profile, plan: Plan?, searchFocus: FocusState<Bool>.Binding? = nil) {
+        public init(
+            profile: Profile, plan: Plan?, searchFocus: FocusState<Bool>.Binding? = nil,
+            opening: Binding<UUID?> = .constant(nil)
+        ) {
             self.profile = profile
             self.plan = plan
             self.searchFocus = searchFocus
+            _opening = opening
         }
 
         private var library: ExerciseLibrary {
@@ -130,6 +136,17 @@ struct LogTableRow: Identifiable {
                 }
             }
             .alert(Text(HistoryCopy.healthDeleteFailed), isPresented: $healthKeepsCopy) {}
+            .onChange(of: opening, initial: true) { _, id in
+                guard let id else { return }
+                opening = nil
+                // A workout that's since been deleted leaves the log as it is.
+                guard let workout = workouts.first(where: { $0.id == id && $0.endedAt != nil }) else { return }
+                // Filters could be hiding it.
+                filter = WorkoutLog.Filter()
+                range = .any
+                selection = workout.persistentModelID
+                showsInspector = true
+            }
         }
 
         /// The same plain question the iPhone asks before deleting a workout.

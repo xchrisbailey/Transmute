@@ -92,6 +92,7 @@ struct HealthTests {
         let health: any HealthService = UnavailableHealthService()
         #expect(!health.isAvailable)
         #expect(await health.accessStatus() == HealthAccessStatus())
+        #expect(!health.canSaveBodyweight)
         try await health.requestAccess(.profile)
         #expect(await health.bodyMetrics().isEmpty)
         #expect(await health.otherWorkouts(in: DateInterval(start: .now, duration: 60)).isEmpty)

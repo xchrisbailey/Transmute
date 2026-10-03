@@ -16,10 +16,14 @@ public struct HistoryView: View {
     @Query(sort: \CustomExercise.name) private var customExercises: [CustomExercise]
     @State private var filter = WorkoutLog.Filter()
     @State private var range: DateRange = .any
+    /// Set from outside to the `Workout.id` to show, as Open workout and Spotlight do (#19).
+    @Binding var opening: UUID?
+    @State private var opened: Workout?
 
-    public init(profile: Profile, plan: Plan?) {
+    public init(profile: Profile, plan: Plan?, opening: Binding<UUID?> = .constant(nil)) {
         self.profile = profile
         self.plan = plan
+        _opening = opening
     }
 
     enum DateRange: CaseIterable {
@@ -116,6 +120,15 @@ public struct HistoryView: View {
             ToolbarItem {
                 LogFilterMenu(filter: $filter, range: $range, plan: plan)
             }
+        }
+        .navigationDestination(item: $opened) { workout in
+            WorkoutDetailView(workout: workout, profile: profile)
+        }
+        .onChange(of: opening, initial: true) { _, id in
+            guard let id else { return }
+            opening = nil
+            // A workout that's since been deleted leaves the log as it is.
+            opened = workouts.first { $0.id == id && $0.endedAt != nil }
         }
     }
 }
