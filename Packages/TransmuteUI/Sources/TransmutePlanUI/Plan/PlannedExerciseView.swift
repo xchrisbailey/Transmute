@@ -122,6 +122,8 @@ struct SetTargetEditor: View {
     /// Applies a change, to this set or every set.
     let change: ((PlannedSet) -> Void) -> Void
 
+    @Environment(\.effortDisplay) private var effort
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             if let number {
@@ -182,7 +184,7 @@ struct SetTargetEditor: View {
     }
 
     @ViewBuilder private var rpeStepper: some View {
-        if let rpe = set.targetRPE {
+        if effort.showsRPE, let rpe = set.targetRPE {
             Stepper(
                 value: Binding(get: { rpe }, set: { value in change { $0.targetRPE = value } }), in: 5...10, step: 0.5
             ) {

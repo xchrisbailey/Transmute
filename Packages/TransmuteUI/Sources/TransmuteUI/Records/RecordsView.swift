@@ -5,7 +5,7 @@ import TransmuteCore
 /// Personal records (#13): what turned to gold since a date, such as the plan's start, and the
 /// current bests for every exercise. Gold marks records here and nowhere else.
 ///
-///     RecordsView(since: plan.startDate, units: Units(system: profile.unitSystem))
+///     RecordsView(since: plan.startDate, units: Units(profile))
 public struct RecordsView: View {
     let since: Date?
     let units: Units

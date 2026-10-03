@@ -22,6 +22,7 @@ struct RootView: View {
         if let profile = profiles.first {
             MacShell(profile: profile, plan: plans.first, service: service, streakWeeks: streak)
                 .tint(Color.brand(\.magic))
+                .workoutPreferences(of: profile)
         } else {
             OnboardingFlow {
                 LiveIntelligenceNotice(service: service)

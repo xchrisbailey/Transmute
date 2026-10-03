@@ -144,7 +144,7 @@
             } else if draft.equipment.contains(.barbell) {
                 Section {
                     WeightField(
-                        label: ProfileCopy.barbellWeight, kg: barbell, units: Units(system: draft.unitSystem))
+                        label: ProfileCopy.barbellWeight, kg: barbell, units: draft.units)
                 }
             }
         }

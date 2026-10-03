@@ -98,7 +98,7 @@ private struct ProfileFooter: View {
     }
 
     private var detail: String {
-        let units = Units(system: profile.unitSystem)
+        let units = Units(profile)
         let days = String(localized: MacCopy.daysPerWeek(profile.schedule.daysPerWeek))
         guard let kg = profile.latestBodyweightKg else { return days }
         return "\(units.formatWeight(kg: kg)) · \(days)"

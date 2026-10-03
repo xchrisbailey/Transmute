@@ -27,7 +27,7 @@ struct WorkoutDetailView: View {
     }
 
     private var units: Units {
-        Units(system: profile.unitSystem)
+        Units(profile)
     }
 
     var body: some View {
@@ -177,6 +177,8 @@ struct PastSetRow: View {
     let units: Units
     let gold: [RecordMark]
 
+    @Environment(\.effortDisplay) private var effort
+
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
@@ -194,7 +196,7 @@ struct PastSetRow: View {
                     .foregroundStyle(gold.isEmpty ? Color.brandText(\.subtext) : Color.brand(\.gold))
                     .frame(width: 44)
             }
-            if let rpe = set.rpe {
+            if effort.showsRPE, let rpe = set.rpe {
                 Text(verbatim: "RPE \(rpe.formatted(.number.precision(.fractionLength(0...1))))")
                     .brandFont(.label)
                     .foregroundStyle(Color.brandText(\.subtext))

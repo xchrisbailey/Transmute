@@ -15,7 +15,7 @@ struct ProgressPane: View {
         HSplitView {
             ProgressScreen(plan: plan, profile: profile, service: service)
                 .frame(minWidth: 420, maxWidth: .infinity, maxHeight: .infinity)
-            RecordsView(since: plan?.startDate, units: Units(system: profile.unitSystem))
+            RecordsView(since: plan?.startDate, units: Units(profile))
                 .frame(minWidth: 240, idealWidth: 300, maxWidth: 380, maxHeight: .infinity)
         }
         .navigationTitle(Text(MacCopy.progress))

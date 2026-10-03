@@ -97,7 +97,7 @@ public struct PlanGridView: View {
                     ForEach(1...max(1, plan.weekCount), id: \.self) { week in
                         PlanGridWeekRow(
                             plan: plan, week: week, isCurrent: week == currentWeek,
-                            units: Units(system: profile.unitSystem), columnWidth: column, gutterWidth: gutterWidth
+                            units: Units(profile), columnWidth: column, gutterWidth: gutterWidth
                         ) { day in
                             reworking = day
                         }

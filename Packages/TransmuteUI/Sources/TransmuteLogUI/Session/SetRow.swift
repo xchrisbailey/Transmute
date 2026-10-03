@@ -198,6 +198,7 @@ struct SetEditor: View {
     var timers = true
     let onDone: () -> Void
 
+    @Environment(\.effortDisplay) private var effort
     @State private var showsPlates = false
 
     var body: some View {
@@ -228,7 +229,7 @@ struct SetEditor: View {
                         rest: set.intervalRestSeconds ?? 0, onDone: onDone)
                 }
             }
-            if tracking == .weightReps || tracking == .reps {
+            if effort.showsRPE, tracking == .weightReps || tracking == .reps {
                 rpeField
             }
         }
@@ -236,7 +237,7 @@ struct SetEditor: View {
 
     /// Steps by the smallest jump this kit allows, in the user's unit.
     private var weightField: some View {
-        let step = LoadableWeight.step(for: equipment, system: units.system)
+        let step = LoadableWeight.step(for: equipment, system: units.weight)
         return NumberStepper(
             label: Text(LogCopy.weight), unit: units.weightSymbol,
             value: Binding(

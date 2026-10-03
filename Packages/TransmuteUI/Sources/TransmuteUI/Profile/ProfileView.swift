@@ -51,7 +51,7 @@
         }
 
         private var units: Units {
-            Units(system: draft.unitSystem)
+            draft.units
         }
 
         private var bodyweightHistory: some View {

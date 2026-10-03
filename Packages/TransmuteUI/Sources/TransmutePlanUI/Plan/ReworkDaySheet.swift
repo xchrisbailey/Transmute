@@ -14,6 +14,7 @@ public struct ReworkDaySheet: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
+    @Environment(\.effortDisplay) private var effort
     @State private var note = ""
     @State private var result: TemplateDay?
     @State private var error: IntelligenceError?
@@ -30,7 +31,7 @@ public struct ReworkDaySheet: View {
     }
 
     private var units: Units {
-        Units(system: profile.unitSystem)
+        Units(profile)
     }
 
     public var body: some View {
@@ -111,7 +112,8 @@ public struct ReworkDaySheet: View {
                 ForEach(Array(result.exercises.enumerated()), id: \.offset) { _, exercise in
                     let kept = before.contains(exercise.exerciseID)
                     DiffRow(
-                        name: name(exercise.exerciseID), detail: SetTargets(exercise.sets).summary(units: units),
+                        name: name(exercise.exerciseID),
+                        detail: SetTargets(exercise.sets).summary(units: units, showing: effort),
                         marker: kept ? PlanCopy.kept : PlanCopy.added, icon: kept ? "equal" : "plus",
                         tint: kept ? Color.brandText(\.subtext) : Color.brandText(\.done))
                 }
@@ -147,7 +149,7 @@ public struct ReworkDaySheet: View {
         defer { isWorking = false }
         do {
             result = try await PlanBrewer(service: service).rework(
-                ReworkTarget(day, in: plan), note: note, brief: TrainingBrief(profile), units: units.system)
+                ReworkTarget(day, in: plan), note: note, brief: TrainingBrief(profile), units: units.weight)
         } catch let failure as IntelligenceError {
             error = failure
         } catch {

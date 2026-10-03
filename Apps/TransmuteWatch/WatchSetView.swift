@@ -154,7 +154,7 @@ struct WatchSetView: View {
     /// The value as VoiceOver should say it: weight with its unit spelled out.
     private func spoken(_ field: SetField) -> String {
         guard field == .weight, let kg = values.weightKg else { return dial.text(for: field, in: values) }
-        let unit: UnitMass = units.system == .metric ? .kilograms : .pounds
+        let unit: UnitMass = units.weight == .metric ? .kilograms : .pounds
         let shown = (units.displayWeight(kg: kg) * 2).rounded() / 2
         return Measurement(value: shown, unit: unit)
             .formatted(.measurement(width: .wide, usage: .asProvided).locale(units.locale))

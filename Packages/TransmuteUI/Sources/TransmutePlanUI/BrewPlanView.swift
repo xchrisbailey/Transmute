@@ -30,7 +30,7 @@ public struct BrewPlanView: View {
     }
 
     private var units: Units {
-        Units(system: profile.unitSystem)
+        Units(profile)
     }
 
     public var body: some View {
@@ -127,7 +127,7 @@ public struct BrewPlanView: View {
             let week = DateInterval(start: Date.now.addingTimeInterval(-7 * 86_400), end: .now)
             outside = OutsideLoad(await health.otherWorkouts(in: week)).promptDescription
         }
-        session.start(TrainingBrief(profile, outsideLoad: outside), units: units.system)
+        session.start(TrainingBrief(profile, outsideLoad: outside), units: units.weight)
     }
 
     // MARK: Progress

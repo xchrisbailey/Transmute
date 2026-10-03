@@ -24,7 +24,7 @@ public struct ProgressScreen: View {
     }
 
     private var units: Units {
-        Units(system: profile.unitSystem)
+        Units(profile)
     }
 
     public var body: some View {

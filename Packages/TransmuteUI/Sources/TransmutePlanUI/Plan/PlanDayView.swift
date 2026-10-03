@@ -20,7 +20,7 @@ struct PlanDayView: View {
     let library = ExerciseLibrary.bundled
 
     private var units: Units {
-        Units(system: profile.unitSystem)
+        Units(profile)
     }
 
     var body: some View {
@@ -165,6 +165,8 @@ struct PlannedExerciseRow: View {
     let units: Units
     let library: ExerciseLibrary
 
+    @Environment(\.effortDisplay) private var effort
+
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             HStack {
@@ -182,7 +184,7 @@ struct PlannedExerciseRow: View {
             Text(verbatim: library.exercise(id: planned.exerciseID)?.name ?? planned.exerciseID)
                 .brandFont(.exerciseTitle)
                 .foregroundStyle(Color.brand(\.ink))
-            Text(verbatim: SetTargets(planned.orderedSets).summary(units: units))
+            Text(verbatim: SetTargets(planned.orderedSets).summary(units: units, showing: effort))
                 .brandNumberFont(size: 15)
                 .foregroundStyle(Color.brandText(\.subtext))
             if !planned.notes.isEmpty {
