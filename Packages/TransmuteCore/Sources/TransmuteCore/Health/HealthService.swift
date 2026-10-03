@@ -13,6 +13,10 @@ public protocol HealthService: Sendable {
     /// denied, so callers just read and handle missing values.
     func requestAccess(_ scope: HealthAccessScope) async throws
 
+    /// What Health will say about Transmute's access, for Settings (#18). Empty where there's
+    /// no Health store.
+    func accessStatus() async -> HealthAccessStatus
+
     /// Height, weight, birth year and sex, for prefilling the profile (#6).
     func bodyMetrics() async -> HealthBodyMetrics
 
@@ -48,6 +52,43 @@ public enum HealthAccessScope: Sendable, CaseIterable {
     case trainingLoad
     /// Write workouts with energy and heart rate. For finishing a session.
     case workouts
+}
+
+/// What Transmute saves to Health, each with its own permission.
+public enum HealthWriteKind: Sendable, CaseIterable {
+    case workouts, bodyweight, activeEnergy, heartRate
+}
+
+/// As much as Health tells an app about its own access (#18).
+///
+/// Health says whether saving each kind of data is allowed. It never says whether reading was
+/// allowed, so someone's choice stays private: for reading, all that can be known is whether
+/// the person has been asked yet.
+public struct HealthAccessStatus: Equatable, Sendable {
+    public enum Write: Equatable, Sendable {
+        /// The person hasn't been asked yet.
+        case notAsked
+        case allowed
+        case denied
+    }
+
+    public enum Read: Equatable, Sendable {
+        /// The person hasn't been asked about some or all of this group yet.
+        case notAsked
+        /// The person was asked. What they answered isn't known.
+        case asked
+        /// Health couldn't say.
+        case unknown
+    }
+
+    public var writes: [HealthWriteKind: Write]
+    /// One per group of data a feature reads together.
+    public var reads: [HealthAccessScope: Read]
+
+    public init(writes: [HealthWriteKind: Write] = [:], reads: [HealthAccessScope: Read] = [:]) {
+        self.writes = writes
+        self.reads = reads
+    }
 }
 
 public struct HealthBodyMetrics: Equatable, Sendable {
@@ -117,6 +158,7 @@ public struct UnavailableHealthService: HealthService {
 
     public var isAvailable: Bool { false }
     public func requestAccess(_ scope: HealthAccessScope) async throws {}
+    public func accessStatus() async -> HealthAccessStatus { HealthAccessStatus() }
     public func bodyMetrics() async -> HealthBodyMetrics { HealthBodyMetrics() }
     public func bodyweights(since date: Date) async -> [HealthBodyweight] { [] }
     public func restingHeartRate() async -> Double? { nil }

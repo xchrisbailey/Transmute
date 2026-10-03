@@ -169,11 +169,15 @@ public struct ProfileDraft: Equatable, Sendable {
 
     /// Writes the draft onto a profile. A changed weight is added as a new bodyweight entry,
     /// dated `date`; earlier entries are kept as history.
-    public func apply(to profile: Profile, on date: Date = .now) {
+    public func apply(to profile: Profile, on date: Date = .now, locale: Locale = .current) {
         profile.heightCm = heightCm
         profile.birthYear = birthYear
         profile.sex = sex
-        profile.unitSystem = unitSystem
+        // A profile with no system of its own follows the device (#18). It stays that way
+        // unless the draft asks for something else.
+        if profile.unitSystem != nil || unitSystem != .preferred(for: locale) {
+            profile.unitSystem = unitSystem
+        }
         profile.weightUnit = weightUnit
         profile.heightUnit = heightUnit
         profile.distanceUnit = distanceUnit

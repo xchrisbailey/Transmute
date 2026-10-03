@@ -7,10 +7,17 @@ import OSLog
     /// Private Cloud Compute when the user allows it and it's reachable.
     public struct FoundationModelsService: IntelligenceService {
         public let providerName = "Apple Intelligence"
-        public var settings: IntelligenceSettings
+        /// A fixed choice, for tests. `nil` reads the person's choice each time a generation
+        /// starts, so a change in Settings (#18) applies straight away.
+        public var settings: IntelligenceSettings?
 
-        public init(settings: IntelligenceSettings = .load()) {
+        public init(settings: IntelligenceSettings? = nil) {
             self.settings = settings
+        }
+
+        /// Where the next generation may run.
+        var route: ModelRoute {
+            (settings ?? .load()).route
         }
 
         public var availability: IntelligenceAvailability {
@@ -96,7 +103,7 @@ import OSLog
         }
 
         func makeSession(_ request: IntelligenceRequest) -> LanguageModelSession {
-            if settings.route == .allowPrivateCloudCompute {
+            if route == .allowPrivateCloudCompute {
                 let cloud = PrivateCloudComputeLanguageModel()
                 if cloud.isAvailable {
                     return LanguageModelSession(

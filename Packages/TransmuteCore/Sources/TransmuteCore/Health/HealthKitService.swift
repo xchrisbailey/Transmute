@@ -44,6 +44,39 @@
             }
         }
 
+        public func accessStatus() async -> HealthAccessStatus {
+            guard isAvailable else { return HealthAccessStatus() }
+            var status = HealthAccessStatus()
+            for kind in HealthWriteKind.allCases {
+                status.writes[kind] = Self.writeStatus(store.authorizationStatus(for: kind.sampleType))
+            }
+            for scope in HealthAccessScope.allCases {
+                let request = try? await store.statusForAuthorizationRequest(
+                    toShare: [], read: Self.types(for: scope).read)
+                status.reads[scope] = Self.readStatus(request)
+            }
+            return status
+        }
+
+        static func writeStatus(_ status: HKAuthorizationStatus) -> HealthAccessStatus.Write {
+            switch status {
+            case .sharingAuthorized: .allowed
+            case .sharingDenied: .denied
+            case .notDetermined: .notAsked
+            @unknown default: .notAsked
+            }
+        }
+
+        /// `unnecessary` means every type in the group has been asked about already.
+        static func readStatus(_ status: HKAuthorizationRequestStatus?) -> HealthAccessStatus.Read {
+            switch status {
+            case .unnecessary: .asked
+            case .shouldRequest: .notAsked
+            case .unknown, .none: .unknown
+            @unknown default: .unknown
+            }
+        }
+
         // MARK: Reading
 
         public func bodyMetrics() async -> HealthBodyMetrics {
@@ -179,6 +212,17 @@
                 }
             } catch let error as HKError where error.code == .errorAuthorizationDenied {
                 throw HealthServiceError.notAuthorized
+            }
+        }
+    }
+
+    extension HealthWriteKind {
+        var sampleType: HKSampleType {
+            switch self {
+            case .workouts: HKObjectType.workoutType()
+            case .bodyweight: HKQuantityType(.bodyMass)
+            case .activeEnergy: HKQuantityType(.activeEnergyBurned)
+            case .heartRate: HKQuantityType(.heartRate)
             }
         }
     }
