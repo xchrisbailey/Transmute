@@ -167,7 +167,9 @@ struct DeleteSection: View {
                 Label {
                     Text(isDeleting ? SettingsDataCopy.deleting : SettingsDataCopy.deleteAll)
                 } icon: {
+                    // Red like its words, not the accent color.
                     Image(systemName: "trash")
+                        .foregroundStyle(Color.brandText(\.alert))
                 }
             }
             .disabled(isDeleting)

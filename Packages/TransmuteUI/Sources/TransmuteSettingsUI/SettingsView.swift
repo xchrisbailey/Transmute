@@ -163,6 +163,31 @@ struct StatusRow: View {
     }
 }
 
+extension View {
+    /// The picker style for Settings rows. A menu's value stays on one line and gets cut off at
+    /// the accessibility text sizes, so there the choices move to their own screen, where the
+    /// row and every choice can wrap (#22).
+    func settingsPickerStyle() -> some View {
+        modifier(SettingsPickerStyle())
+    }
+}
+
+private struct SettingsPickerStyle: ViewModifier {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    func body(content: Content) -> some View {
+        #if os(iOS)
+            if dynamicTypeSize.isAccessibilitySize {
+                content.pickerStyle(.navigationLink)
+            } else {
+                content.pickerStyle(.menu)
+            }
+        #else
+            content
+        #endif
+    }
+}
+
 #Preview("iPhone") {
     let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
     // swiftlint:disable:next force_try

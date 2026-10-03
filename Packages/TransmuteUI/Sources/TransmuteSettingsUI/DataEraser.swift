@@ -72,8 +72,6 @@ enum DataEraser {
             context.rollback()
             throw error
         }
-        // Undoing past this point would bring deleted objects back.
-        context.undoManager?.removeAllActions()
         DefaultsReset.run(in: defaults)
         if clearsNotifications {
             let center = UNUserNotificationCenter.current()

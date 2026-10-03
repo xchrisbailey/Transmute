@@ -16,6 +16,7 @@ struct UnitsSection: View {
             } label: {
                 Text(SettingsScreenCopy.weight)
             }
+            .settingsPickerStyle()
             Picker(selection: unit(\.height)) {
                 Text(SettingsScreenCopy.matchDevice).tag(UnitSystem?.none)
                 Text(SettingsScreenCopy.centimetres).tag(UnitSystem?.some(.metric))
@@ -23,6 +24,7 @@ struct UnitsSection: View {
             } label: {
                 Text(SettingsScreenCopy.height)
             }
+            .settingsPickerStyle()
             Picker(selection: unit(\.distance)) {
                 Text(SettingsScreenCopy.matchDevice).tag(UnitSystem?.none)
                 Text(SettingsScreenCopy.kilometres).tag(UnitSystem?.some(.metric))
@@ -30,6 +32,7 @@ struct UnitsSection: View {
             } label: {
                 Text(SettingsScreenCopy.distance)
             }
+            .settingsPickerStyle()
         } header: {
             Text(SettingsScreenCopy.units)
         } footer: {
@@ -99,6 +102,7 @@ struct AppearanceSection: View {
             } label: {
                 Text(SettingsScreenCopy.appearance)
             }
+            .settingsPickerStyle()
         } header: {
             Text(SettingsScreenCopy.appearance)
         } footer: {

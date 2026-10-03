@@ -74,6 +74,7 @@ struct WorkoutSections: View {
         } label: {
             Text(label)
         }
+        .settingsPickerStyle()
     }
 
     private func effortPicker(
@@ -91,6 +92,7 @@ struct WorkoutSections: View {
         } label: {
             Text(label)
         }
+        .settingsPickerStyle()
     }
 }
 
