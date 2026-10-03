@@ -56,6 +56,7 @@ targets:
     platform: iOS
     sources:
       - Apps/TransmuteiOS
+      - Apps/IntentsShared
       - Apps/Shared
       - path: Resources/Fonts
         buildPhase: resources
@@ -98,13 +99,15 @@ targets:
           UIColorName: BrandBase
         UIAppFonts: [Geist-Regular.otf, Geist-Medium.otf, Geist-SemiBold.otf, Geist-Bold.otf, Geist-ExtraBold.otf, GeistMono-Regular.otf, GeistMono-Medium.otf, GeistMono-SemiBold.otf, GeistMono-Bold.otf]
 
-  # The Live Activity (#11), and Today on the Home Screen and Lock Screen (#19).
+  # The Live Activity (#11), Today on the Home Screen and Lock Screen, and the Control Center
+  # button (#19). The control's intent is the app's, compiled here too so the button can name it.
   TransmuteWidgets:
     type: app-extension
     platform: iOS
     sources:
       - Apps/TransmuteWidgets
       - Apps/WidgetsShared
+      - path: Apps/IntentsShared/BeginWorkoutIntent.swift
       - path: Apps/Shared/Localizable.xcstrings
       - path: Apps/Shared/Assets.xcassets
       - path: Resources/Fonts/GeistMono-SemiBold.otf
@@ -140,6 +143,9 @@ targets:
     platform: watchOS
     sources:
       - Apps/TransmuteWatch
+      # The three shortcuts (#19). Spotlight and App Entities are the iPhone's and the Mac's.
+      - path: Apps/IntentsShared
+        excludes: [Spotlight]
       - Apps/Shared
       - path: Resources/Fonts/GeistMono-SemiBold.otf
         buildPhase: resources
@@ -215,6 +221,7 @@ targets:
     platform: macOS
     sources:
       - Apps/TransmuteMac
+      - Apps/IntentsShared
       - Apps/Shared
       - path: Resources/Fonts
         buildPhase: resources

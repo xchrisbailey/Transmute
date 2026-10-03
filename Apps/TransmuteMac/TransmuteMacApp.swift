@@ -8,7 +8,8 @@ import TransmuteUI
 
 @main
 struct TransmuteMacApp: App {
-    let container = TransmuteStore.makeAppContainer()
+    /// Shared with the App Intents, which run in this process (#19).
+    let container = TransmuteStore.shared
     /// System, Mocha or Latte, chosen on this Mac (#18).
     @AppStorage(Appearance.defaultsKey) private var appearance = Appearance.system
 
@@ -35,6 +36,7 @@ struct TransmuteMacApp: App {
                 .frame(minWidth: 900, idealWidth: 1180, minHeight: 600, idealHeight: 760)
                 .appearance(appearance)
                 .reloadsWidgets()
+                .indexesSpotlight()
                 // A widget's link comes to the window that's open rather than a new one.
                 .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
         }

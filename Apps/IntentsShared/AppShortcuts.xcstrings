@@ -1,0 +1,126 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Add a weigh-in to ${applicationName}": {
+      "comment": "plain. Siri phrase for Log bodyweight. Keep ${applicationName}.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add a weigh-in to ${applicationName}"
+          }
+        }
+      }
+    },
+    "Begin the work in ${applicationName}": {
+      "comment": "plain. Siri phrase for Begin today's workout. Keep ${applicationName}.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begin the work in ${applicationName}"
+          }
+        }
+      }
+    },
+    "Begin today's workout in ${applicationName}": {
+      "comment": "plain. Siri phrase for Begin today's workout. Keep ${applicationName}.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begin today's workout in ${applicationName}"
+          }
+        }
+      }
+    },
+    "Log ${weight} as bodyweight": {
+      "comment": "plain. The Log bodyweight action as the Shortcuts app shows it. Keep ${weight}.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log ${weight} as bodyweight"
+          }
+        }
+      }
+    },
+    "Log my bodyweight in ${applicationName}": {
+      "comment": "plain. Siri phrase for Log bodyweight. Keep ${applicationName}.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log my bodyweight in ${applicationName}"
+          }
+        }
+      }
+    },
+    "Log my weight in ${applicationName}": {
+      "comment": "plain. Siri phrase for Log bodyweight. Keep ${applicationName}.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log my weight in ${applicationName}"
+          }
+        }
+      }
+    },
+    "Start my ${applicationName} workout": {
+      "comment": "plain. Siri phrase for Begin today's workout. Keep ${applicationName}.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start my ${applicationName} workout"
+          }
+        }
+      }
+    },
+    "What's my ${applicationName} workout today": {
+      "comment": "plain. Siri phrase for What's my workout today? Keep ${applicationName}.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What's my ${applicationName} workout today"
+          }
+        }
+      }
+    },
+    "What's my workout today in ${applicationName}": {
+      "comment": "plain. Siri phrase for What's my workout today? Keep ${applicationName}.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What's my workout today in ${applicationName}"
+          }
+        }
+      }
+    },
+    "What's today in ${applicationName}": {
+      "comment": "plain. Siri phrase for What's my workout today? Keep ${applicationName}.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What's today in ${applicationName}"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

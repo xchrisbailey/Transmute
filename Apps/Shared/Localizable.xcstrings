@@ -445,6 +445,30 @@
         }
       }
     },
+    "plain.control.begin": {
+      "comment": "plain. Control Center button that opens the app and starts today's session.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begin workout"
+          }
+        }
+      }
+    },
+    "plain.control.begin.description": {
+      "comment": "plain. Describes the Begin workout control in the controls gallery.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens Transmute and starts today's session."
+          }
+        }
+      }
+    },
     "plain.date": {
       "comment": "plain. Field label.",
       "extractionState": "manual",
@@ -7041,6 +7065,582 @@
           "stringUnit": {
             "state": "translated",
             "value": "Optional. Only used for estimates."
+          }
+        }
+      }
+    },
+    "plain.shortcut.begin.description": {
+      "comment": "plain. Describes the Begin today's workout shortcut in the Shortcuts app.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens Transmute and starts the session planned for today."
+          }
+        }
+      }
+    },
+    "plain.shortcut.begin.done": {
+      "comment": "plain. Siri, today's session is already logged, so nothing starts.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is done for today. Transmute is open on Today."
+          }
+        }
+      }
+    },
+    "plain.shortcut.begin.nothing": {
+      "comment": "plain. Siri, no plan or the plan has ended, so nothing starts.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing is planned for today. Transmute is open on Today."
+          }
+        }
+      }
+    },
+    "plain.shortcut.begin.rest": {
+      "comment": "plain. Siri, no session today, so nothing starts.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today is a rest day. Transmute is open on Today."
+          }
+        }
+      }
+    },
+    "plain.shortcut.begin.resuming": {
+      "comment": "plain. Siri, going back into a workout that's running, e.g. Back to Lower A.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to %@."
+          }
+        }
+      }
+    },
+    "plain.shortcut.begin.resumingUnnamed": {
+      "comment": "plain. Siri, going back into a running workout with no name.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to your workout."
+          }
+        }
+      }
+    },
+    "plain.shortcut.begin.short": {
+      "comment": "plain. Short name of the Begin today's workout shortcut.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begin workout"
+          }
+        }
+      }
+    },
+    "plain.shortcut.begin.starting": {
+      "comment": "plain. Siri, today's session begins, e.g. Starting Lower A.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starting %@."
+          }
+        }
+      }
+    },
+    "plain.shortcut.begin.title": {
+      "comment": "plain. Shortcut that opens the app and starts today's session.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Begin today's workout"
+          }
+        }
+      }
+    },
+    "plain.shortcut.plan.goal": {
+      "comment": "plain. Shortcuts, what a plan is for.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal"
+          }
+        }
+      }
+    },
+    "plain.shortcut.plan.name": {
+      "comment": "plain. Shortcuts, the name of a plan.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "plain.shortcut.plan.open": {
+      "comment": "plain. Shortcut that shows the plan in the app.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open plan"
+          }
+        }
+      }
+    },
+    "plain.shortcut.plan.type": {
+      "comment": "plain. What a training plan is called in Shortcuts and Spotlight.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan"
+          }
+        }
+      }
+    },
+    "plain.shortcut.plan.weeks": {
+      "comment": "plain. Spotlight, how long a plan runs, e.g. 8 weeks.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld week"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld weeks"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.description": {
+      "comment": "plain. Describes the What's my workout today? shortcut in the Shortcuts app.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Says today's session, its first lift and how this week is going."
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.done": {
+      "comment": "plain. Siri, today's session is already logged, e.g. Lower A is done for today.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is done for today."
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.firstUp": {
+      "comment": "plain. Siri, the first exercise of today's session, e.g. First up: Bench press.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First up: %@."
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.next": {
+      "comment": "plain. Siri, the exercise being done, e.g. Next: Bench press, 5 sets of 5.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next: %@."
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.nextSession": {
+      "comment": "plain. Siri, on a rest day, the first exercise of the next session.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your next session starts with %@."
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.nothing": {
+      "comment": "plain. Siri, there's no plan, or the plan has ended.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing is planned for today. You can make a plan in Transmute."
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.nothingTitle": {
+      "comment": "plain. Siri's snippet, heading when there's no session and no plan.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing planned"
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.rest": {
+      "comment": "plain. Siri, the plan has no session today.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today is a rest day."
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.running": {
+      "comment": "plain. Siri, a workout is going right now, e.g. Lower A is in progress.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is in progress."
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.runningUnnamed": {
+      "comment": "plain. Siri, a workout with no name is going right now.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A workout is in progress."
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.session": {
+      "comment": "plain. Siri, today's session by name, e.g. Today is Lower A.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today is %@."
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.short": {
+      "comment": "plain. Short name of the What's my workout today? shortcut.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's workout"
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.title": {
+      "comment": "plain. Shortcut that says today's session.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What's my workout today?"
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.week": {
+      "comment": "plain. Siri, sessions done out of planned, e.g. Sessions this week: 2 of 3.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sessions this week: %1$lld of %2$lld."
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.weekFigure": {
+      "comment": "plain. Siri's snippet, sessions done of planned, e.g. 1 of 3 this week.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld this week"
+          }
+        }
+      }
+    },
+    "plain.shortcut.today.weekPlanned": {
+      "comment": "plain. Siri, sessions planned this week when none is done yet.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld session planned this week."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld sessions planned this week."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "plain.shortcut.weight.ask": {
+      "comment": "plain. Siri asks for the bodyweight to log.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What's your weight?"
+          }
+        }
+      }
+    },
+    "plain.shortcut.weight.askAgain": {
+      "comment": "plain. Siri, the weight was far too low or high; asks again.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That doesn't sound like a bodyweight. What's your weight?"
+          }
+        }
+      }
+    },
+    "plain.shortcut.weight.description": {
+      "comment": "plain. Describes the Log bodyweight shortcut in the Shortcuts app.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adds a bodyweight to your Transmute profile."
+          }
+        }
+      }
+    },
+    "plain.shortcut.weight.failed": {
+      "comment": "plain. Siri, saving a bodyweight failed.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't save that. Try again in Transmute."
+          }
+        }
+      }
+    },
+    "plain.shortcut.weight.logged": {
+      "comment": "plain. Siri, a bodyweight was stored, e.g. Logged 79.4 kilograms.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logged %@."
+          }
+        }
+      }
+    },
+    "plain.shortcut.weight.loggedHealth": {
+      "comment": "plain. Siri, a bodyweight was stored and written to Health.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Logged %@, and saved it to Health."
+          }
+        }
+      }
+    },
+    "plain.shortcut.weight.needsProfile": {
+      "comment": "plain. Siri, there's no profile to log a bodyweight on yet.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Transmute and set up your profile first."
+          }
+        }
+      }
+    },
+    "plain.shortcut.weight.parameter": {
+      "comment": "plain. Name of the Log bodyweight shortcut's weight field.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight"
+          }
+        }
+      }
+    },
+    "plain.shortcut.weight.short": {
+      "comment": "plain. Short name of the Log bodyweight shortcut.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log bodyweight"
+          }
+        }
+      }
+    },
+    "plain.shortcut.weight.title": {
+      "comment": "plain. Shortcut that stores a bodyweight.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log bodyweight"
+          }
+        }
+      }
+    },
+    "plain.shortcut.workout.date": {
+      "comment": "plain. Shortcuts, when a workout was done.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date"
+          }
+        }
+      }
+    },
+    "plain.shortcut.workout.exercises": {
+      "comment": "plain. Spotlight, number of exercises in a logged workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld exercise"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld exercises"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "plain.shortcut.workout.name": {
+      "comment": "plain. Shortcuts, the name of a logged workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "plain.shortcut.workout.open": {
+      "comment": "plain. Shortcut that shows one logged workout in the app.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open workout"
+          }
+        }
+      }
+    },
+    "plain.shortcut.workout.type": {
+      "comment": "plain. What a logged workout is called in Shortcuts and Spotlight.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout"
           }
         }
       }

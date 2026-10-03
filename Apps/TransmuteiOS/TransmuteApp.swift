@@ -6,7 +6,8 @@ import TransmuteUI
 
 @main
 struct TransmuteApp: App {
-    let container = TransmuteStore.makeAppContainer()
+    /// Shared with the App Intents, which run in this process (#19).
+    let container = TransmuteStore.shared
 
     init() {
         live = PhoneLiveWorkout()
@@ -50,6 +51,7 @@ struct TransmuteApp: App {
             RootView()
                 .appearance(appearance)
                 .reloadsWidgets()
+                .indexesSpotlight()
                 .task { await link.run() }
                 .onChange(of: link.remoteHeartRate) { _, bpm in
                     live.update(heartRate: bpm, averageHeartRate: nil, activeEnergyKcal: nil)
