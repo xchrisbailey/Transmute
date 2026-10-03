@@ -14,6 +14,8 @@ By srcery.
 | `Apps/TransmuteiOS` | iPhone app. |
 | `Apps/TransmuteWatch` | Apple Watch app, embedded in the iPhone app. |
 | `Apps/TransmuteMac` | Mac app. |
+| `Apps/TransmuteWidgets`, `Apps/TransmuteWatchWidgets`, `Apps/TransmuteMacWidgets` | Widget extensions: the Live Activity and Today on iPhone, complications and the Smart Stack on the watch, Today on the Mac desktop. |
+| `Apps/WidgetsShared` | Widget views and copy the extensions share. |
 | `Apps/Shared` | Asset catalog and the `Localizable.xcstrings` String Catalog used by all three apps. |
 | `Config` | Shared build settings and local signing overrides. |
 | `Brand` | SVG masters of the mark and wordmark. See `Brand/README.md`. |
@@ -31,7 +33,7 @@ xcodegen generate
 open Transmute.xcodeproj
 ```
 
-With no team set, the apps are signed to run locally: everything works in the simulators, and the Mac app runs without iCloud. To sign for a device with iCloud, HealthKit and App Groups, copy `Config/Local.xcconfig.example` to `Config/Local.xcconfig` and set your team.
+With no team set, the apps are signed to run locally: everything works in the simulators, and the Mac app runs without iCloud (its widgets can't share its store without the App Group, so they stay empty). To sign for a device with iCloud, HealthKit and App Groups, copy `Config/Local.xcconfig.example` to `Config/Local.xcconfig` and set your team.
 
 ## Checks
 

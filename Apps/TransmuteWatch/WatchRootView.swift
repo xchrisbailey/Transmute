@@ -63,8 +63,10 @@ struct WatchRootView: View {
             if let bpm { link.sendHeartRate(bpm) }
         }
         .onChange(of: session?.snapshot) {
-            // The complication shows the next lift: keep it current as sets are logged.
+            // The complication shows the next lift: keep it current as sets are logged. The
+            // week's sessions and the streak move when the workout is finished.
             WidgetCenter.shared.reloadTimelines(ofKind: TodayGlance.watchWidgetKind)
+            WidgetCenter.shared.reloadTimelines(ofKind: TodayGlance.watchWeekWidgetKind)
         }
         .task { await link.run() }
     }

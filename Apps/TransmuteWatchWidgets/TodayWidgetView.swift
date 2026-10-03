@@ -13,32 +13,22 @@ struct TodayWidgetView: View {
         content
             .containerBackground(for: .widget) { Color.watchScreen }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel(Text(verbatim: WatchWidgetCopy.spoken(glance)))
+            .accessibilityLabel(Text(verbatim: GlanceCopy.spoken(glance)))
     }
 
     @ViewBuilder private var content: some View {
         switch family {
         case .accessoryCircular:
             WidgetMark()
-                .widgetLabel { Text(WatchWidgetCopy.title(glance)) }
+                .widgetLabel { Text(GlanceCopy.title(glance)) }
         case .accessoryCorner:
             WidgetMark()
-                .widgetLabel { Text(WatchWidgetCopy.title(glance)) }
+                .widgetLabel { Text(GlanceCopy.title(glance)) }
         case .accessoryInline:
             InlineGlance(glance: glance)
         default:
             RectangularGlance(glance: glance)
         }
-    }
-}
-
-/// The mark. On tinted faces it's desaturated and takes the tint, so it needs no template copy.
-struct WidgetMark: View {
-    var body: some View {
-        Image("Mark")
-            .resizable()
-            .widgetAccentedRenderingMode(.accentedDesaturated)
-            .scaledToFit()
     }
 }
 
@@ -50,9 +40,9 @@ struct InlineGlance: View {
         if let lift = glance.nextLift, glance.isRunning || (glance.sessionName != nil && !glance.isDone) {
             Text(verbatim: lift.text)
         } else if glance.isDone {
-            Label(WatchWidgetCopy.title(glance), systemImage: "checkmark")
+            Label(GlanceCopy.title(glance), systemImage: "checkmark")
         } else {
-            Text(WatchWidgetCopy.title(glance))
+            Text(GlanceCopy.title(glance))
         }
     }
 }
@@ -90,7 +80,7 @@ struct RectangularGlance: View {
 
     private var title: some View {
         HStack(spacing: 4) {
-            Text(WatchWidgetCopy.title(glance))
+            Text(GlanceCopy.title(glance))
             if glance.isDone {
                 Image(systemName: "checkmark")
                     .imageScale(.small)
@@ -99,64 +89,6 @@ struct RectangularGlance: View {
         .font(.headline)
         .foregroundStyle(Color.brand(\.magic))
         .widgetAccentable()
-    }
-}
-
-/// The widget's words. Plain, as everything on the watch is.
-enum WatchWidgetCopy {
-    static let today = LocalizedStringResource(
-        "plain.today.title", defaultValue: "Today", bundle: .main, comment: "plain. Tab and title of the Today screen.")
-
-    static let description = LocalizedStringResource(
-        "plain.watch.widget.description", defaultValue: "Today's session and your next lift.", bundle: .main,
-        comment: "plain. Describes the watch widget in the widget gallery.")
-
-    static let restDay = LocalizedStringResource(
-        "plain.today.restDay", defaultValue: "Rest day", bundle: .main, comment: "plain. Today has no session.")
-
-    static let done = LocalizedStringResource(
-        "plain.done", defaultValue: "Done", bundle: .main, comment: "plain. Button.")
-
-    static func next(_ lift: String) -> LocalizedStringResource {
-        LocalizedStringResource(
-            "plain.watch.widget.next", defaultValue: "Next: \(lift)", bundle: .main,
-            comment: "plain. VoiceOver, the next exercise, e.g. Next: Bench press, 5 sets of 5 at 80 kilograms.")
-    }
-
-    static func sets(_ count: Int, of amount: String) -> LocalizedStringResource {
-        LocalizedStringResource(
-            "plain.watch.widget.sets", defaultValue: "\(count) sets of \(amount)", bundle: .main,
-            comment: "plain. VoiceOver, sets of reps, time or distance, e.g. 5 sets of 5, 3 sets of 45 seconds.")
-    }
-
-    static func sets(_ count: Int, of amount: String, at load: String) -> LocalizedStringResource {
-        LocalizedStringResource(
-            "plain.watch.widget.setsAtLoad", defaultValue: "\(count) sets of \(amount) at \(load)", bundle: .main,
-            comment: "plain. VoiceOver, sets of reps at a load, e.g. 5 sets of 5 at 80 kilograms.")
-    }
-
-    /// The session's name, "Rest day", or the app's name when nothing is planned.
-    static func title(_ glance: TodayGlance) -> String {
-        switch glance.day {
-        case .session(let name): name
-        case .rest: String(localized: restDay)
-        case .nothingPlanned: "Transmute"
-        }
-    }
-
-    /// What VoiceOver says, e.g. "Lower A. Next: Bench press, 5 sets of 5 at 80 kilograms".
-    static func spoken(_ glance: TodayGlance) -> String {
-        var parts = [title(glance)]
-        if glance.isDone { parts.append(String(localized: done)) }
-        if let lift = glance.nextLift {
-            var words = [lift.name]
-            if lift.sets > 0, let amount = lift.spokenAmount {
-                let phrase = lift.spokenLoad.map { sets(lift.sets, of: amount, at: $0) } ?? sets(lift.sets, of: amount)
-                words.append(String(localized: phrase))
-            }
-            parts.append(String(localized: next(words.joined(separator: ", "))))
-        }
-        return parts.joined(separator: ". ")
     }
 }
 

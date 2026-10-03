@@ -47,6 +47,7 @@ struct TransmuteApp: App {
         WindowGroup {
             RootView()
                 .appearance(appearance)
+                .reloadsWidgets()
                 .task { await link.run() }
                 .onChange(of: link.remoteHeartRate) { _, bpm in
                     live.update(heartRate: bpm, averageHeartRate: nil, activeEnergyKcal: nil)

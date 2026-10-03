@@ -21,7 +21,8 @@ public struct TodayView: View {
     private var running: [Workout]
     @State private var session: Workout?
     @State private var didResume = false
-    /// Set to true from outside to begin a workout, as the Mac's New Workout command does.
+    /// Set to true from outside to begin a workout, as the Mac's New Workout command and a
+    /// widget's button do.
     @Binding var beginsWorkout: Bool
     let library = ExerciseLibrary.bundled
 
@@ -296,7 +297,8 @@ extension TodayView {
     /// when it's planned and not yet logged, or a workout off the plan.
     private func beginNext() {
         if let workout = running.first {
-            open(workout)
+            // Already on screen when the launch that brought this also resumed it.
+            if session == nil { open(workout) }
             return
         }
         guard !isBusy else { return }

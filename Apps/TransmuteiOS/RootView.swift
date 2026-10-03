@@ -17,13 +17,15 @@ struct RootView: View {
     let device = "iPhone"
     /// The tab last shown, kept between launches.
     @AppStorage("rootTab") private var tab = "today"
+    /// Set by a widget's button (#19): Today begins the session once it's on screen.
+    @State private var beginsWorkout = false
 
     var body: some View {
         if let profile = profiles.first {
             TabView(selection: $tab) {
                 Tab(value: "today") {
                     NavigationStack {
-                        TodayView(plan: plans.first, profile: profile)
+                        TodayView(plan: plans.first, profile: profile, beginsWorkout: $beginsWorkout)
                             .toolbar { profileItems(profile) }
                     }
                 } label: {
@@ -78,6 +80,11 @@ struct RootView: View {
             }
             .tint(Color.brand(\.magic))
             .workoutPreferences(of: profile)
+            .onOpenURL { url in
+                guard let link = DeepLink(url: url) else { return }
+                tab = "today"
+                beginsWorkout = link == .beginToday
+            }
         } else {
             OnboardingFlow {
                 // After delete-all (#18), this is where the person lands.
