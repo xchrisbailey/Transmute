@@ -2,7 +2,8 @@ import FoundationModels
 import TransmuteCore
 
 /// Answers instantly with plausible content, for SwiftUI previews and tests: a fixed blueprint,
-/// and days built from the first exercises each request offers.
+/// days built from the first exercises each request offers, and a weekly summary that repeats
+/// the request's facts.
 public struct PreviewIntelligenceService: IntelligenceService {
     public let providerName = "Apple Intelligence"
     public var availability: IntelligenceAvailability
@@ -50,7 +51,17 @@ public struct PreviewIntelligenceService: IntelligenceService {
             }
             return DayDraft(why: "Build a steady base.", exercises: Array(exercises)) as? Content
         }
+        if type == WeekSummaryDraft.self { return weekSummary(request) as? Content }
         return nil
+    }
+
+    /// The request's first facts, each as a sentence.
+    private func weekSummary(_ request: IntelligenceRequest) -> WeekSummaryDraft {
+        let prefix = WeekSummaryWriter.factPrefix
+        var lines = request.prompt.split(separator: "\n").filter { $0.hasPrefix(prefix) }.prefix(3)
+            .map { "\($0.dropFirst(prefix.count))." }
+        if lines.count < WeekSummaryWriter.minLines { lines.append("Steady work adds up.") }
+        return WeekSummaryDraft(headline: "Your week, distilled.", lines: lines)
     }
 }
 
