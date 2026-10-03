@@ -19,6 +19,14 @@ enum GlanceCopy {
         "plain.widget.week.description", defaultValue: "Your streak and this week's sessions.", bundle: .main,
         comment: "plain. Describes the watch's This week widget in the widget gallery.")
 
+    static let beginWorkout = LocalizedStringResource(
+        "plain.control.begin", defaultValue: "Begin workout", bundle: .main,
+        comment: "plain. Control Center button that opens the app and starts today's session.")
+
+    static let beginWorkoutDescription = LocalizedStringResource(
+        "plain.control.begin.description", defaultValue: "Opens Transmute and starts today's session.",
+        bundle: .main, comment: "plain. Describes the Begin workout control in the controls gallery.")
+
     static let restDay = LocalizedStringResource(
         "plain.today.restDay", defaultValue: "Rest day", bundle: .main, comment: "plain. Today has no session.")
 
