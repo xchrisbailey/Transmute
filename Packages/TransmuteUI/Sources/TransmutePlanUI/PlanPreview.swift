@@ -8,6 +8,7 @@ struct PlanPreview: View {
     let plan: BrewedPlan
     let units: Units
     var library = ExerciseLibrary.bundled
+    @Environment(\.effortDisplay) private var effort
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -44,7 +45,7 @@ struct PlanPreview: View {
                     }
                     ForEach(Array(day.exercises.enumerated()), id: \.offset) { _, exercise in
                         LabeledContent {
-                            Text(verbatim: SetTargets(exercise.sets).summary(units: units))
+                            Text(verbatim: SetTargets(exercise.sets).summary(units: units, showing: effort))
                                 .brandNumberFont(size: 15)
                                 .foregroundStyle(Color.brand(\.ink))
                         } label: {

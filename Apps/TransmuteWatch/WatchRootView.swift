@@ -19,7 +19,12 @@ struct WatchRootView: View {
     private let live = WatchLive.workout
 
     private var units: Units {
-        Units(system: profiles.first?.unitSystem)
+        Units(profiles.first)
+    }
+
+    /// Rest haptics and auto-start rest (#18), from the profile once it has synced.
+    private var preferences: WorkoutPreferences {
+        profiles.first?.preferences ?? WorkoutPreferences()
     }
 
     private var library: ExerciseLibrary {
@@ -29,7 +34,7 @@ struct WatchRootView: View {
     var body: some View {
         Group {
             if let session {
-                WatchSessionView(session: session, units: units) {
+                WatchSessionView(session: session, units: units, restHaptics: preferences.restHaptics) {
                     session.close()
                     self.session = nil
                 }

@@ -33,7 +33,7 @@ public struct SetDial: Sendable {
     public func step(for field: SetField, in values: SetValues) -> Double {
         switch field {
         case .weight:
-            units.system == .metric ? LoadableWeight.step(for: equipment, system: .metric) : 5
+            units.weight == .metric ? LoadableWeight.step(for: equipment, system: .metric) : 5
         case .reps:
             1
         case .seconds:

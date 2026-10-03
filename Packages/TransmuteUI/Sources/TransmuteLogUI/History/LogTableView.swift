@@ -73,7 +73,7 @@ struct LogTableRow: Identifiable {
         }
 
         private var units: Units {
-            Units(system: profile.unitSystem)
+            Units(profile)
         }
 
         private var rows: [LogTableRow] {

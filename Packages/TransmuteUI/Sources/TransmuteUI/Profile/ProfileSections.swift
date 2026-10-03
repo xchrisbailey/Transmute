@@ -9,7 +9,7 @@
         @Binding var draft: ProfileDraft
 
         var body: some View {
-            let units = Units(system: draft.unitSystem)
+            let units = draft.units
             Section {
                 Picker(selection: $draft.unitSystem) {
                     ForEach(UnitSystem.allCases, id: \.self) { system in
@@ -19,7 +19,7 @@
                     Text(ProfileCopy.units)
                 }
                 .pickerStyle(.segmented)
-                HeightField(cm: $draft.heightCm, system: draft.unitSystem)
+                HeightField(cm: $draft.heightCm, system: draft.units.height)
                 WeightField(label: ProfileCopy.weight, kg: $draft.weightKg, units: units)
                 LabeledContent {
                     TextField(value: $draft.birthYear, format: .number.grouping(.never)) {
@@ -108,7 +108,7 @@
             if draft.experience == .advanced {
                 Section {
                     ForEach(Self.mainLifts, id: \.self) { id in
-                        KnownLiftRow(exerciseID: id, lifts: $draft.knownLifts, units: Units(system: draft.unitSystem))
+                        KnownLiftRow(exerciseID: id, lifts: $draft.knownLifts, units: draft.units)
                     }
                 } header: {
                     Text(ProfileCopy.knownLiftsTitle)

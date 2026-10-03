@@ -37,7 +37,12 @@ public struct SessionView: View {
     }
 
     var units: Units {
-        Units(system: profile?.unitSystem)
+        Units(profile)
+    }
+
+    /// How this session runs (#18): rest alerts and whether rest starts by itself.
+    var preferences: WorkoutPreferences {
+        profile?.preferences ?? WorkoutPreferences()
     }
 
     var current: LoggedSet? {
@@ -89,7 +94,8 @@ public struct SessionView: View {
             .safeAreaInset(edge: .bottom) {
                 SessionBar(
                     workout: workout, current: current, exerciseName: current.map(name(of:)),
-                    onLog: logCurrent, onFinish: { finish(confirming: current != nil) })
+                    offersRest: !preferences.autoStartRest, onLog: logCurrent,
+                    onFinish: { finish(confirming: current != nil) })
             }
             .navigationTitle(Text(verbatim: workout.title))
             #if os(iOS)
@@ -139,9 +145,10 @@ public struct SessionView: View {
             guard workout.endedAt == nil else { return }
             activity.update(title: workout.title, state: state)
             RestAlerts.schedule(
-                at: workout.restEndsAt, next: current.map(name(of:)) ?? workout.title)
+                at: workout.restEndsAt, next: current.map(name(of:)) ?? workout.title,
+                sound: preferences.restSound)
         }
-        .onChange(of: SessionSnapshot(workout, library: library)) {
+        .onChange(of: SessionSnapshot(workout, library: library, preferences: preferences)) {
             // Every change made here goes to the watch.
             link?.publish()
         }
@@ -213,7 +220,8 @@ public struct SessionView: View {
     }
 
     /// Sleeps until the rest ends, then buzzes, chimes and clears the timer. Runs again
-    /// whenever the end moves, so skipping or adding time just restarts the wait.
+    /// whenever the end moves, so skipping or adding time just restarts the wait. The buzz and
+    /// the chime are each the person's to turn off.
     private func waitForRest() async {
         guard let remaining = WorkoutSession.restRemaining(in: workout) else {
             if workout.restEndsAt != nil { WorkoutSession.startRest(nil, in: workout) }
@@ -224,8 +232,8 @@ public struct SessionView: View {
         } catch {
             return
         }
-        RestAlerts.chime()
-        restEnded += 1
+        if preferences.restSound { RestAlerts.chime() }
+        if preferences.restHaptics { restEnded += 1 }
         WorkoutSession.startRest(nil, in: workout)
     }
 

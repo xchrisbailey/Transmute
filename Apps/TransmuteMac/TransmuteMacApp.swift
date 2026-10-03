@@ -8,6 +8,8 @@ import TransmuteUI
 @main
 struct TransmuteMacApp: App {
     let container = TransmuteStore.makeAppContainer()
+    /// System, Mocha or Latte, chosen on this Mac (#18).
+    @AppStorage(Appearance.defaultsKey) private var appearance = Appearance.system
 
     init() {
         // Plan edits are undoable (#10).
@@ -28,6 +30,7 @@ struct TransmuteMacApp: App {
         WindowGroup {
             RootView()
                 .frame(minWidth: 900, idealWidth: 1180, minHeight: 600, idealHeight: 760)
+                .appearance(appearance)
         }
         .defaultSize(width: 1180, height: 760)
         .modelContainer(container)
@@ -41,6 +44,7 @@ struct TransmuteMacApp: App {
                     IntelligenceDebugView(service: FoundationModelsService())
                 }
                 .frame(minWidth: 420, minHeight: 480)
+                .appearance(appearance)
             }
         #endif
     }

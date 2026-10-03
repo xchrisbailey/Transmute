@@ -49,7 +49,7 @@
         }
 
         private var system: UnitSystem {
-            profile.unitSystem ?? .preferred()
+            Units(profile).weight
         }
 
         private func incrementPicker(_ region: BodyRegion, label: LocalizedStringResource) -> some View {

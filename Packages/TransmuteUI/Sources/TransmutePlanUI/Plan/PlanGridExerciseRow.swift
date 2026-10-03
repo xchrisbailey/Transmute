@@ -11,6 +11,7 @@ struct PlanGridExerciseRow: View {
     let day: PlanDay
     let plan: Plan
     let units: Units
+    @Environment(\.effortDisplay) private var effort
 
     @State private var showsTargets = false
     @State private var isTargeted = false
@@ -38,7 +39,7 @@ struct PlanGridExerciseRow: View {
                         .accessibilityLabel(Text(PlanCopy.superset))
                 }
             }
-            Text(verbatim: SetTargets(planned.orderedSets).summary(units: units))
+            Text(verbatim: SetTargets(planned.orderedSets).summary(units: units, showing: effort))
                 .brandNumberFont(size: 12, relativeTo: .caption)
                 .foregroundStyle(Color.brandText(\.subtext))
         }

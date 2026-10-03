@@ -211,6 +211,10 @@ public enum LogCopy {
 
     // MARK: Rest and timers
 
+    static let startRest = LocalizedStringResource(
+        "plain.session.startRest", defaultValue: "Start rest", bundle: .main,
+        comment: "plain. Starts the rest timer by hand, when it's set not to start by itself.")
+
     static let skipRest = LocalizedStringResource(
         "plain.session.skipRest", defaultValue: "Skip rest", bundle: .main,
         comment: "plain. End the rest timer early.")

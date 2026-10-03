@@ -75,6 +75,7 @@ struct RootView: View {
                 }
             }
             .tint(Color.brand(\.magic))
+            .workoutPreferences(of: profile)
         } else {
             OnboardingFlow {
                 LiveIntelligenceNotice(service: service)

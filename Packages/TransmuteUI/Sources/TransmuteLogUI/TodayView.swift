@@ -15,6 +15,7 @@ public struct TodayView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.sessionLink) private var link
     @Environment(\.health) private var health
+    @Environment(\.effortDisplay) private var effort
     @State private var showsMirrored = false
     @Query(filter: #Predicate<Workout> { $0.endedAt == nil }, sort: \Workout.startedAt, order: .reverse)
     private var running: [Workout]
@@ -36,7 +37,7 @@ public struct TodayView: View {
     }
 
     private var units: Units {
-        Units(system: profile.unitSystem)
+        Units(profile)
     }
 
     public var body: some View {
@@ -164,7 +165,7 @@ public struct TodayView: View {
                         Text(verbatim: library.exercise(id: planned.exerciseID)?.name ?? planned.exerciseID)
                             .brandFont(.exerciseTitle)
                             .foregroundStyle(Color.brand(\.ink))
-                        Text(verbatim: SetTargets(planned.orderedSets).summary(units: units))
+                        Text(verbatim: SetTargets(planned.orderedSets).summary(units: units, showing: effort))
                             .brandNumberFont(size: 15)
                             .foregroundStyle(Color.brandText(\.subtext))
                     }

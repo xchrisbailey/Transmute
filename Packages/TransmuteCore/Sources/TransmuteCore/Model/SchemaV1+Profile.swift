@@ -33,6 +33,13 @@ extension SchemaV1 {
         public var plates = PlateInventory.standard()
         /// `nil` follows the device locale.
         public var unitSystemRaw: String?
+        /// The unit for weights, heights and distances when chosen on their own (#18); `nil`
+        /// follows `unitSystemRaw`. Read them through `Units(profile)`.
+        public var weightUnitRaw: String?
+        public var heightUnitRaw: String?
+        public var distanceUnitRaw: String?
+        /// Rest times, rest alerts, RPE and %1RM, and warm-up sets (#18).
+        public var preferences: WorkoutPreferences = WorkoutPreferences()
 
         @Relationship(deleteRule: .cascade, inverse: \BodyweightEntry.profile)
         public var bodyweights: [BodyweightEntry]? = []
@@ -67,6 +74,21 @@ extension SchemaV1 {
         public var unitSystem: UnitSystem? {
             get { unitSystemRaw.flatMap(UnitSystem.init(rawValue:)) }
             set { unitSystemRaw = newValue?.rawValue }
+        }
+
+        public var weightUnit: UnitSystem? {
+            get { weightUnitRaw.flatMap(UnitSystem.init(rawValue:)) }
+            set { weightUnitRaw = newValue?.rawValue }
+        }
+
+        public var heightUnit: UnitSystem? {
+            get { heightUnitRaw.flatMap(UnitSystem.init(rawValue:)) }
+            set { heightUnitRaw = newValue?.rawValue }
+        }
+
+        public var distanceUnit: UnitSystem? {
+            get { distanceUnitRaw.flatMap(UnitSystem.init(rawValue:)) }
+            set { distanceUnitRaw = newValue?.rawValue }
         }
 
         /// The most recent bodyweight, from Health or entered by hand.

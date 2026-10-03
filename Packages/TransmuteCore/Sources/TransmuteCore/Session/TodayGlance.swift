@@ -137,7 +137,7 @@ extension TodayGlance {
         let custom = try context.fetch(FetchDescriptor<CustomExercise>())
         return TodayGlance(
             plan: plans.first, workout: try WorkoutSession.current(in: context), profile: profile,
-            units: Units(system: profile?.unitSystem, locale: locale),
+            units: Units(profile, locale: locale),
             library: ExerciseLibrary.bundled.adding(custom.map(LibraryExercise.init)), on: date, calendar: calendar)
     }
 }
@@ -215,7 +215,7 @@ extension TodayGlance.NextLift {
     /// e.g. "80 kilograms" or "176.5 pounds", rounded as `Units.formatWeight` rounds.
     static func spoken(kg: Double, units: Units) -> String {
         let value = (units.displayWeight(kg: kg) * 2).rounded() / 2
-        return wide(Measurement(value: value, unit: units.system == .metric ? UnitMass.kilograms : .pounds), units)
+        return wide(Measurement(value: value, unit: units.weight == .metric ? UnitMass.kilograms : .pounds), units)
     }
 
     /// e.g. "10 metres", "1.5 kilometres" or "1 mile", in the units `Units.formatDistance` picks.
@@ -223,7 +223,7 @@ extension TodayGlance.NextLift {
         if meters < 1_000 {
             return wide(Measurement(value: meters.rounded(), unit: UnitLength.meters), units)
         }
-        switch units.system {
+        switch units.distance {
         case .metric: return wide(Measurement(value: meters / 1_000, unit: UnitLength.kilometers), units)
         case .imperial: return wide(Measurement(value: meters / Units.metresPerMile, unit: UnitLength.miles), units)
         }

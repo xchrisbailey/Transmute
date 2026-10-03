@@ -91,7 +91,7 @@ public struct RebrewSheet: View {
         error = nil
         var brief = TrainingBrief(profile)
         brief.schedule.weeks = plan.weekCount
-        let units = Units(system: profile.unitSystem).system
+        let units = Units(profile).weight
         let week = fromWeek
         let keep = keepEdits
         task = Task {

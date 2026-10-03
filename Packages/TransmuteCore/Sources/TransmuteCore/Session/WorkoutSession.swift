@@ -17,6 +17,7 @@ public enum WorkoutSession {
     ///
     /// With a profile, targets come from the progression engine (#12): what was logged last
     /// time decides today's numbers, and each set records the target it was logged against.
+    /// Its preferences (#18) fill in missing rests and decide whether warm-up sets appear.
     /// Without one, the plan's targets are used as written, and loads the plan leaves open come
     /// from the last time the exercise was done.
     @discardableResult
@@ -33,13 +34,7 @@ public enum WorkoutSession {
                 let history = (try? ProgressionEngine.history(of: planned.exerciseID, in: context, excluding: workout))
                 let result = ProgressionEngine.next(
                     for: planned, history: history ?? [], profile: profile, library: library)
-                let plannedSets = planned.orderedSets
-                for (index, target) in result.targets.enumerated() {
-                    let set = LoggedSet(target: target)
-                    set.order = index
-                    let source = plannedSets.indices.contains(index) ? plannedSets[index] : plannedSets.last
-                    set.restSeconds = target.restSeconds ?? source?.restSeconds
-                    set.intervalRestSeconds = target.intervalRestSeconds ?? source?.intervalRestSeconds
+                for set in sets(for: planned, targets: result.targets, profile: profile, library: library) {
                     logged.sets?.append(set)
                 }
             } else {
@@ -83,13 +78,23 @@ public enum WorkoutSession {
 
     // MARK: Sets
 
-    /// Checks a set off and starts its rest, unless it was the last set of the workout.
-    /// Returns the rest that started.
+    /// Checks a set off and starts its rest, unless it was the last set of the workout or the
+    /// person turned auto-start off (#18). Returns the rest that started.
+    ///
+    /// `preferences` defaults to the stored profile's, so a set logged from the watch or a
+    /// widget follows the same choice as one logged on the session screen.
     @discardableResult
-    public static func complete(_ set: LoggedSet, in workout: Workout, at date: Date = .now) -> TimeInterval? {
+    public static func complete(
+        _ set: LoggedSet, in workout: Workout, at date: Date = .now, preferences: WorkoutPreferences? = nil
+    ) -> TimeInterval? {
         set.complete(at: date)
+        let autoStarts = (preferences ?? .stored(in: workout.modelContext)).autoStartRest
         let rest: TimeInterval? =
-            if currentSet(of: workout) != nil, let seconds = set.restSeconds, seconds > 0 { seconds } else { nil }
+            if autoStarts, currentSet(of: workout) != nil, let seconds = set.restSeconds, seconds > 0 {
+                seconds
+            } else {
+                nil
+            }
         startRest(rest, in: workout, at: date)
         save(workout.modelContext)
         return rest
@@ -102,7 +107,8 @@ public enum WorkoutSession {
         save(workout.modelContext)
     }
 
-    /// Adds a set copying the last one's values and rest.
+    /// Adds a set copying the last one's values and rest. With no set to copy, the rest is
+    /// the profile's default.
     @discardableResult
     public static func addSet(to exercise: LoggedExercise) -> LoggedSet {
         let last = exercise.orderedSets.last
@@ -110,7 +116,7 @@ public enum WorkoutSession {
             order: exercise.orderedSets.count, weightKg: last?.weightKg, reps: last?.reps, seconds: last?.seconds,
             meters: last?.meters)
         set.rounds = last?.rounds
-        set.restSeconds = last?.restSeconds ?? 90
+        set.restSeconds = last?.restSeconds ?? WorkoutPreferences.stored(in: exercise.modelContext).workingRestSeconds
         set.intervalRestSeconds = last?.intervalRestSeconds
         exercise.sets?.append(set)
         save(exercise.modelContext)
@@ -197,8 +203,9 @@ public enum WorkoutSession {
         let lastLoad = workout.modelContext.flatMap {
             lastWorkingLoad(of: exercise.id, before: workout.startedAt, in: $0)
         }
+        let rest = WorkoutPreferences.stored(in: workout.modelContext).workingRestSeconds
         for index in 0..<count {
-            let set = defaultSet(for: exercise.tracking, order: index)
+            let set = defaultSet(for: exercise.tracking, order: index, rest: rest)
             if exercise.tracking == .weightReps { set.weightKg = lastLoad }
             logged.sets?.append(set)
         }
@@ -249,12 +256,14 @@ public enum WorkoutSession {
         return set
     }
 
-    static func defaultSet(for tracking: TrackingType, order: Int) -> LoggedSet {
+    /// A set with the usual starting numbers. `rest` is the rest between sets of reps, which
+    /// the profile sets; timed and distance work keep their own shorter rests.
+    static func defaultSet(for tracking: TrackingType, order: Int, rest: Double = 90) -> LoggedSet {
         let set = LoggedSet(order: order)
         switch tracking {
         case .weightReps, .reps:
             set.reps = 10
-            set.restSeconds = 90
+            set.restSeconds = rest
         case .time:
             set.seconds = 30
             set.restSeconds = 45

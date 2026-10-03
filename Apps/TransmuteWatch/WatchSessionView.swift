@@ -8,6 +8,8 @@ import WatchKit
 struct WatchSessionView: View {
     @Bindable var session: WatchSession
     let units: Units
+    /// Whether the wrist is tapped when rest ends (#18).
+    var restHaptics = true
     /// Leaves the workout screen once the workout is finished or discarded.
     let onClose: () -> Void
 
@@ -82,7 +84,7 @@ struct WatchSessionView: View {
         }
     }
 
-    /// Sleeps until the rest ends, then taps the wrist and clears the timer. Runs again
+    /// Sleeps until the rest ends, then taps the wrist, unless that's off, and clears the timer. Runs again
     /// whenever the end moves, so skipping or adding time just restarts the wait.
     private func waitForRest() async {
         guard let remaining = snapshot.restRemaining(at: .now) else {
@@ -94,7 +96,7 @@ struct WatchSessionView: View {
         } catch {
             return
         }
-        WKInterfaceDevice.current().play(.notification)
+        if restHaptics { WKInterfaceDevice.current().play(.notification) }
         restEnded += 1
         session.perform(.startRest(seconds: nil, at: .now))
     }

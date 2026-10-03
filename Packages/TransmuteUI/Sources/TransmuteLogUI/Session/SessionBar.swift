@@ -9,6 +9,8 @@ struct SessionBar: View {
     let workout: Workout
     let current: LoggedSet?
     let exerciseName: String?
+    /// Offers "Start rest" between sets, for when rest doesn't start by itself (#18).
+    var offersRest = false
     let onLog: () -> Void
     let onFinish: () -> Void
 
@@ -17,13 +19,18 @@ struct SessionBar: View {
             if let end = workout.restEndsAt, end > .now {
                 RestTimer(workout: workout, end: end)
             } else if let current, let exerciseName {
-                Text(
-                    verbatim:
-                        "\(exerciseName) · \(String(localized: LogCopy.setOf(current.order + 1, of: current.exercise?.orderedSets.count ?? 1)))"
-                )
-                .brandFont(.label)
-                .foregroundStyle(Color.brandText(\.subtext))
-                .frame(maxWidth: .infinity, alignment: .leading)
+                HStack {
+                    Text(
+                        verbatim:
+                            "\(exerciseName) · \(String(localized: LogCopy.setOf(current.order + 1, of: current.exercise?.orderedSets.count ?? 1)))"
+                    )
+                    .brandFont(.label)
+                    .foregroundStyle(Color.brandText(\.subtext))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    if offersRest, let rest = WorkoutSession.restToStart(in: workout) {
+                        startRestButton(rest)
+                    }
+                }
             } else {
                 Text(LogCopy.allLogged)
                     .brandFont(.label)
@@ -54,6 +61,23 @@ struct SessionBar: View {
         }
         .padding()
         .background(.bar)
+    }
+
+    /// "Start rest" with how long it will run, e.g. 1:30.
+    private func startRestButton(_ seconds: TimeInterval) -> some View {
+        Button {
+            WorkoutSession.startRest(seconds, in: workout)
+        } label: {
+            Label {
+                Text(LogCopy.startRest)
+            } icon: {
+                Image(systemName: "timer")
+            }
+            .brandFont(.label)
+            .frame(minHeight: 44)
+        }
+        .buttonStyle(.borderless)
+        .accessibilityValue(Text(verbatim: Units.clock(seconds: seconds)))
     }
 }
 

@@ -61,10 +61,27 @@ struct BrewSessionTests {
     @Test func targetsReadAsOneLine() {
         let units = Units(system: .metric)
         let lift = BrewedSet(reps: 5, loadKg: 100, rpe: 8, restSeconds: 180)
-        #expect(SetTargets([lift, lift, lift]).summary(units: units) == "3 × 5 · 100 kg · RPE 8")
+        let all = EffortDisplay.everything
+        #expect(SetTargets([lift, lift, lift]).summary(units: units, showing: all) == "3 × 5 · 100 kg · RPE 8")
         let intervals = BrewedSet(seconds: 20, restSeconds: 60, rounds: 8, intervalRestSeconds: 10)
-        #expect(SetTargets([intervals]).summary(units: units) == "8 × 0:20 / 0:10")
+        #expect(SetTargets([intervals]).summary(units: units, showing: all) == "8 × 0:20 / 0:10")
         let plank = BrewedSet(seconds: 45, restSeconds: 30)
-        #expect(SetTargets([plank, plank]).summary(units: units) == "2 × 0:45")
+        #expect(SetTargets([plank, plank]).summary(units: units, showing: all) == "2 × 0:45")
+    }
+
+    @Test func effortTermsShowOnlyWhenAskedFor() {
+        let units = Units(system: .metric)
+        let lift = BrewedSet(reps: 5, loadKg: 100, percentOneRepMax: 0.75, rpe: 8, restSeconds: 180)
+        let targets = SetTargets([lift, lift, lift])
+        #expect(targets.summary(units: units, showing: .everything) == "3 × 5 · 100 kg · 75% 1RM · RPE 8")
+        let beginner = EffortDisplay(nil)
+        #expect(targets.summary(units: units, showing: beginner) == "3 × 5 · 100 kg")
+        let rpeOnly = EffortDisplay(showsRPE: true, showsPercentOfMax: false)
+        #expect(targets.summary(units: units, showing: rpeOnly) == "3 × 5 · 100 kg · RPE 8")
+
+        let planned = PlannedSet(order: 0)
+        (planned.targetReps, planned.targetLoadKg, planned.targetPercentOneRepMax) = (5, 100, 0.8)
+        let percentOnly = EffortDisplay(showsRPE: false, showsPercentOfMax: true)
+        #expect(SetTargets([planned]).summary(units: units, showing: percentOnly) == "1 × 5 · 100 kg · 80% 1RM")
     }
 }

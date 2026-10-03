@@ -5113,6 +5113,18 @@
         }
       }
     },
+    "plain.session.startRest": {
+      "comment": "plain. Starts the rest timer by hand, when it's set not to start by itself.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start rest"
+          }
+        }
+      }
+    },
     "plain.session.startTimer": {
       "comment": "plain. Start a timed set or intervals.",
       "extractionState": "manual",
@@ -5265,6 +5277,42 @@
           "stringUnit": {
             "state": "translated",
             "value": "Set %lld"
+          }
+        }
+      }
+    },
+    "plain.settings.appearance.latte": {
+      "comment": "plain. Appearance choice: always the light palette, which is called Latte.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Latte (light)"
+          }
+        }
+      }
+    },
+    "plain.settings.appearance.mocha": {
+      "comment": "plain. Appearance choice: always the dark palette, which is called Mocha.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mocha (dark)"
+          }
+        }
+      }
+    },
+    "plain.settings.appearance.system": {
+      "comment": "plain. Appearance choice: follow the system's light or dark mode.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Match the device"
           }
         }
       }
