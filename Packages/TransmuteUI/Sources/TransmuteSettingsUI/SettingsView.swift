@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 import TransmuteCore
 import TransmuteIntelligence
+import TransmuteLogUI
 import TransmuteUI
 
 /// The groups Settings is split into: tabs on the Mac, one after another on the iPhone.
@@ -101,7 +102,8 @@ struct SettingsPaneSections: View {
                         .foregroundStyle(Color.brandText(\.subtext))
                 }
             }
-        // Reminders section (#19) goes here.
+            // Training-day reminders and the nudge after a missed day (#19).
+            ReminderSettingsSection()
         case .intelligence:
             IntelligenceSection(service: service)
         case .health:
