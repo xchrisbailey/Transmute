@@ -21,7 +21,7 @@ extension SessionView {
                 try? context.save()
             }
         } else {
-            WorkoutSession.complete(set, in: workout)
+            WorkoutSession.complete(set, in: workout, preferences: preferences)
             checkRecords(set)
         }
     }

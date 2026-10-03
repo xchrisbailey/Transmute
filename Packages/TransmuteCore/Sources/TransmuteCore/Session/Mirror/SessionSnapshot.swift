@@ -91,12 +91,12 @@ public struct SessionSnapshot: Codable, Equatable, Sendable {
         self.exercises = exercises
     }
 
-    /// The workout as it stands now.
-    public init(_ workout: Workout, library: ExerciseLibrary = .bundled) {
+    /// The workout as it stands now. `preferences` defaults to the stored profile's.
+    public init(_ workout: Workout, library: ExerciseLibrary = .bundled, preferences: WorkoutPreferences? = nil) {
         self.init(
             workoutID: workout.id, title: workout.title, startedAt: workout.startedAt, endedAt: workout.endedAt,
             restEndsAt: workout.restEndsAt, restSeconds: workout.restSeconds,
-            autoStartsRest: WorkoutPreferences.stored(in: workout.modelContext).autoStartRest,
+            autoStartsRest: (preferences ?? .stored(in: workout.modelContext)).autoStartRest,
             exercises: workout.orderedExercises.map { Exercise($0, library: library) })
     }
 
