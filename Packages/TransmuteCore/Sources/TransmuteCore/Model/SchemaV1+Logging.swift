@@ -69,6 +69,9 @@ extension SchemaV1 {
         public var isWarmUp = false
         public var isCompleted = false
         public var completedAt: Date?
+        /// The person confirmed an unusually big jump is real, so record detection trusts it
+        /// rather than asking again (#13).
+        public var isRecordConfirmed = false
         public var exercise: LoggedExercise?
 
         @Relationship(deleteRule: .nullify, inverse: \PersonalRecord.set)

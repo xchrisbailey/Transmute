@@ -2545,6 +2545,126 @@
         }
       }
     },
+    "plain.records.also": {
+      "comment": "plain. Other records the same set set, e.g. Also 3RM and Est. 1RM.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Also %@"
+          }
+        }
+      }
+    },
+    "plain.records.bestTime": {
+      "comment": "plain. Record label: fastest time over a distance, e.g. Best 20 m.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best %@"
+          }
+        }
+      }
+    },
+    "plain.records.estimatedOneRepMax": {
+      "comment": "plain. Record label: estimated one-rep max.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Est. 1RM"
+          }
+        }
+      }
+    },
+    "plain.records.longestDistance": {
+      "comment": "plain. Record label: furthest distance in one set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Longest distance"
+          }
+        }
+      }
+    },
+    "plain.records.longestTime": {
+      "comment": "plain. Record label: longest hold or effort.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Longest time"
+          }
+        }
+      }
+    },
+    "plain.records.maxReps": {
+      "comment": "plain. Record label: most reps in one set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max reps"
+          }
+        }
+      }
+    },
+    "plain.records.repMax": {
+      "comment": "plain. Record label: heaviest load for this many reps, e.g. 5RM.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lldRM"
+          }
+        }
+      }
+    },
+    "plain.records.reps": {
+      "comment": "plain. A max reps record's value. Always two or more, since a record beats a best.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld reps"
+          }
+        }
+      }
+    },
+    "plain.records.sessionVolume": {
+      "comment": "plain. Record label: most load × reps for one exercise in one session.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session volume"
+          }
+        }
+      }
+    },
+    "plain.records.title": {
+      "comment": "plain. Records screen title.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Records"
+          }
+        }
+      }
+    },
     "plain.redo": {
       "comment": "plain. Button.",
       "extractionState": "manual",
@@ -3429,6 +3549,42 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rebrewing from week %lld…"
+          }
+        }
+      }
+    },
+    "voice.records.empty": {
+      "comment": "voice. No records at all. The first session of an exercise sets the bests to beat.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing's turned to gold yet. Beat a best and it will."
+          }
+        }
+      }
+    },
+    "voice.records.goldThisBlock": {
+      "comment": "voice. Heading for records set since the plan started.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turned to gold this block"
+          }
+        }
+      }
+    },
+    "voice.records.noGoldThisBlock": {
+      "comment": "voice. No records since the plan started.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing's turned to gold this block yet."
           }
         }
       }
