@@ -289,6 +289,26 @@ public enum LogCopy {
 
     // MARK: Records and plates
 
+    // MARK: Apple Watch
+
+    static let onWatch = LocalizedStringResource(
+        "plain.session.onWatch", defaultValue: "Running on Apple Watch", bundle: .main,
+        comment: "plain. The workout was started on the watch and is being followed on iPhone.")
+
+    static let finishedOnWatch = LocalizedStringResource(
+        "plain.session.finishedOnWatch", defaultValue: "Finished. It's saved from your Apple Watch.", bundle: .main,
+        comment: "plain. A workout run on the watch has ended.")
+
+    static let done = LocalizedStringResource(
+        "plain.done", defaultValue: "Done", bundle: .main,
+        comment: "plain. Button.")
+
+    static func heartRate(_ bpm: Int) -> LocalizedStringResource {
+        LocalizedStringResource(
+            "plain.session.heartRate", defaultValue: "Heart rate, \(bpm) beats per minute", bundle: .main,
+            comment: "plain. VoiceOver label for the heart rate the watch is reading.")
+    }
+
     static let bigJump = LocalizedStringResource(
         "plain.session.bigJump", defaultValue: "That's far beyond your best. Is it right?", bundle: .main,
         comment: "plain. A logged set is suspiciously bigger than the previous record.")

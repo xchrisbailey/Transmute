@@ -3805,6 +3805,18 @@
         }
       }
     },
+    "plain.session.finishedOnWatch": {
+      "comment": "plain. A workout run on the watch has ended.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finished. It's saved from your Apple Watch."
+          }
+        }
+      }
+    },
     "plain.session.fixIt": {
       "comment": "plain. Reopen a suspiciously big set to correct it.",
       "extractionState": "manual",
@@ -3813,6 +3825,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fix it"
+          }
+        }
+      }
+    },
+    "plain.session.heartRate": {
+      "comment": "plain. VoiceOver label for the heart rate the watch is reading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate, %1$lld beats per minute"
           }
         }
       }
@@ -3933,6 +3957,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Notes"
+          }
+        }
+      }
+    },
+    "plain.session.onWatch": {
+      "comment": "plain. The workout was started on the watch and is being followed on iPhone.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Running on Apple Watch"
           }
         }
       }

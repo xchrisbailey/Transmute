@@ -13,6 +13,7 @@ public struct SessionView: View {
     let onHide: () -> Void
 
     @Environment(\.modelContext) var context
+    @Environment(\.sessionLink) var link
     @Query(sort: \CustomExercise.name) private var customExercises: [CustomExercise]
     @State var editing: PersistentIdentifier?
     @State var picker: PickerPurpose?
@@ -120,6 +121,7 @@ public struct SessionView: View {
                 Button(role: .destructive) {
                     activity.end()
                     RestAlerts.cancel()
+                    link?.discarded()
                     WorkoutSession.discard(workout, in: context)
                     onHide()
                 } label: {
@@ -138,6 +140,13 @@ public struct SessionView: View {
             activity.update(title: workout.title, state: state)
             RestAlerts.schedule(
                 at: workout.restEndsAt, next: current.map(name(of:)) ?? workout.title)
+        }
+        .onChange(of: SessionSnapshot(workout, library: library)) {
+            // Every change made here goes to the watch.
+            link?.publish()
+        }
+        .onAppear {
+            link?.onCommand = { command, outcome in fromWatch(command, outcome) }
         }
         .overlay(alignment: .top) {
             goldToast
@@ -175,6 +184,32 @@ public struct SessionView: View {
         RestAlerts.cancel()
         activity.end()
         summary = WorkoutSession.finish(workout)
+    }
+
+    /// The watch logged, reopened, finished or discarded: the workout is already changed, so
+    /// this catches the screen and the records up.
+    private func fromWatch(_ command: SessionCommand, _ outcome: SessionMirror.Outcome) {
+        switch outcome {
+        case .ignored:
+            break
+        case .discarded:
+            activity.end()
+            RestAlerts.cancel()
+            onHide()
+        case .finished(let summary):
+            activity.end()
+            RestAlerts.cancel()
+            self.summary = summary
+        case .applied:
+            let exerciseOrder: Int? =
+                switch command {
+                case .logSet(let ref, _, _), .reopenSet(let ref): ref.exerciseOrder
+                default: nil
+                }
+            guard let exercise = workout.orderedExercises.first(where: { $0.order == exerciseOrder }) else { return }
+            _ = try? RecordBook(context: context, library: library).recompute(exerciseID: exercise.exerciseID)
+            try? context.save()
+        }
     }
 
     /// Sleeps until the rest ends, then buzzes, chimes and clears the timer. Runs again

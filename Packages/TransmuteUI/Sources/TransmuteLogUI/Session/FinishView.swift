@@ -13,6 +13,7 @@ struct FinishView: View {
     let onSave: () -> Void
 
     @Environment(\.health) private var health
+    @Environment(\.sessionLink) private var link
     @Query private var records: [PersonalRecord]
     @State private var healthStatus: HealthStatus = .idle
 
@@ -105,6 +106,15 @@ struct FinishView: View {
 
     /// Writes the workout to Health once, then closes. A failure is shown but doesn't block.
     private func save() async {
+        // With the watch on the workout, the watch saves it to Health, heart rate and all, and
+        // sends back its id. Give that a moment to arrive rather than saving a second one.
+        if link?.live.isMirroring == true {
+            healthStatus = .saving
+            for _ in 0..<50 where workout.healthKitWorkoutID == nil {
+                try? await Task.sleep(for: .milliseconds(100))
+            }
+            healthStatus = .idle
+        }
         guard health.isAvailable, workout.healthKitWorkoutID == nil, healthStatus != .failed,
             let record = HealthWorkoutRecord(workout)
         else {

@@ -13,6 +13,9 @@ public struct TodayView: View {
     let profile: Profile
 
     @Environment(\.modelContext) private var context
+    @Environment(\.sessionLink) private var link
+    @Environment(\.health) private var health
+    @State private var showsMirrored = false
     @Query(filter: #Predicate<Workout> { $0.endedAt == nil }, sort: \Workout.startedAt, order: .reverse)
     private var running: [Workout]
     @State private var session: Workout?
@@ -24,16 +27,41 @@ public struct TodayView: View {
         self.profile = profile
     }
 
+    /// A workout is already going, here or on the watch.
+    private var isBusy: Bool {
+        !running.isEmpty || link?.mirrored?.isFinished == false
+    }
+
     private var units: Units {
         Units(system: profile.unitSystem)
     }
 
     public var body: some View {
         List {
-            if let workout = running.first {
+            if let link, let mirrored = link.mirrored, !mirrored.isFinished {
                 Section {
                     Button {
-                        session = workout
+                        showsMirrored = true
+                    } label: {
+                        Label {
+                            VStack(alignment: .leading) {
+                                Text(LogCopy.onWatch)
+                                    .brandFont(.exerciseTitle)
+                                Text(verbatim: mirrored.title)
+                                    .brandFont(.label)
+                                    .foregroundStyle(Color.brandText(\.subtext))
+                            }
+                        } icon: {
+                            Image(systemName: "applewatch")
+                                .foregroundStyle(Color.brand(\.now))
+                        }
+                        .frame(minHeight: 44)
+                    }
+                }
+            } else if let workout = running.first {
+                Section {
+                    Button {
+                        open(workout)
                     } label: {
                         Label {
                             VStack(alignment: .leading) {
@@ -65,7 +93,7 @@ public struct TodayView: View {
                     }
                     .frame(minHeight: 44)
                 }
-                .disabled(!running.isEmpty)
+                .disabled(isBusy)
                 NavigationLink {
                     RecordsView(since: plan?.startDate, units: units)
                 } label: {
@@ -83,14 +111,23 @@ public struct TodayView: View {
         .navigationTitle(Text(LogCopy.today))
         .onAppear {
             // A workout still running at launch was cut off; pick it straight back up.
-            if !didResume, let workout = running.first {
+            // One the watch is running stays the watch's: it shows up through the link.
+            if !didResume, let workout = running.first, workout.startedOn != .watch {
                 didResume = true
-                session = workout
+                open(workout)
             }
+        }
+        .onChange(of: link?.mirrored == nil) { _, isGone in
+            if isGone { showsMirrored = false }
         }
         #if os(iOS)
             .fullScreenCover(item: $session) { workout in
                 SessionView(workout: workout, profile: profile) { session = nil }
+            }
+            .fullScreenCover(isPresented: $showsMirrored) {
+                if let link {
+                    MirroredSessionView(link: link, units: units) { showsMirrored = false }
+                }
             }
         #else
             .sheet(item: $session) { workout in
@@ -137,7 +174,7 @@ public struct TodayView: View {
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(Color.brand(\.magic))
-                    .disabled(!running.isEmpty)
+                    .disabled(isBusy)
                     .listRowBackground(Color.clear)
                 }
             } else if let next = today.next {
@@ -245,9 +282,23 @@ public struct TodayView: View {
 
     private func begin(_ day: PlanDay?) {
         if let day {
-            session = WorkoutSession.start(day, profile: profile, in: context)
+            open(WorkoutSession.start(day, profile: profile, in: context))
         } else {
-            session = WorkoutSession.startAdHoc(title: String(localized: LogCopy.adHocTitle), in: context)
+            open(WorkoutSession.startAdHoc(title: String(localized: LogCopy.adHocTitle), in: context))
+        }
+    }
+
+    /// Shows a running workout and, when there's a watch, wakes it to record heart rate and
+    /// mirror the session (#15). Without a watch or Health access the workout runs as before.
+    private func open(_ workout: Workout) {
+        session = workout
+        guard let link, workout.startedOn != .watch else { return }
+        link.own(workout, in: context, library: library)
+        guard health.isAvailable, !link.live.isMirroring else { return }
+        let exercises = workout.orderedExercises.compactMap { library.exercise(id: $0.exerciseID) }
+        Task {
+            try? await health.requestAccess(.workouts)
+            try? await link.live.start(activity: .infer(from: exercises), at: workout.startedAt)
         }
     }
 }
