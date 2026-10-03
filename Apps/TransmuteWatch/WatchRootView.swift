@@ -14,7 +14,8 @@ struct WatchRootView: View {
     @Query(sort: \CustomExercise.name) private var customExercises: [CustomExercise]
     @Environment(\.health) private var health
     @State private var session: WatchSession?
-    @State private var live = WatchLiveWorkout()
+    private let link = WatchLive.link
+    private let live = WatchLive.workout
 
     private var units: Units {
         Units(system: profiles.first?.unitSystem)
@@ -28,6 +29,7 @@ struct WatchRootView: View {
         Group {
             if let session {
                 WatchSessionView(session: session, units: units) {
+                    session.close()
                     self.session = nil
                 }
             } else {
@@ -36,11 +38,31 @@ struct WatchRootView: View {
                 }
             }
         }
-        .onChange(of: running.first?.id, initial: true) {
-            if session == nil, let workout = running.first {
+        .onChange(of: mine?.id, initial: true) {
+            if session == nil, let workout = mine {
                 run(workout)
             }
         }
+        .onChange(of: link.mirrored) {
+            if let session {
+                session.mirrorChanged()
+            } else if let snapshot = link.mirrored, !snapshot.isFinished {
+                // The iPhone started a workout: join it.
+                let session = WatchSession(mirroring: snapshot, context: context, library: library, health: health)
+                self.session = session
+                Task { await session.startLive() }
+            }
+        }
+        .onChange(of: live.heartRate) { _, bpm in
+            if let bpm { link.sendHeartRate(bpm) }
+        }
+        .task { await link.run() }
+    }
+
+    /// The running workout this watch owns. One the iPhone started is its to run: the watch
+    /// joins it over the link instead of writing to a second copy.
+    private var mine: Workout? {
+        running.first { $0.startedOn != .phone }
     }
 
     private func start(_ day: PlanDay) {
@@ -48,7 +70,7 @@ struct WatchRootView: View {
     }
 
     private func run(_ workout: Workout) {
-        let session = WatchSession(workout: workout, context: context, library: library, live: live, health: health)
+        let session = WatchSession(workout: workout, context: context, library: library, health: health)
         self.session = session
         Task { await session.startLive() }
     }

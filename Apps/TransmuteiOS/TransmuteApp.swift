@@ -1,6 +1,7 @@
 import SwiftData
 import SwiftUI
 import TransmuteCore
+import TransmuteLogUI
 import TransmuteUI
 
 @main
@@ -8,6 +9,10 @@ struct TransmuteApp: App {
     let container = TransmuteStore.makeAppContainer()
 
     init() {
+        live = PhoneLiveWorkout()
+        link = SessionLink(live: live, device: .phone)
+        // Has to be listening from launch: the watch can start a workout at any time.
+        live.listen()
         // Plan edits are undoable (#10).
         container.mainContext.undoManager = UndoManager()
         #if DEBUG
@@ -31,12 +36,21 @@ struct TransmuteApp: App {
         #endif
     }
     let health = HealthKitService()
+    /// The iPhone's end of a workout the watch is recording, and the link that keeps the two
+    /// in step (#15).
+    let live: PhoneLiveWorkout
+    let link: SessionLink
 
     var body: some Scene {
         WindowGroup {
             RootView()
+                .task { await link.run() }
+                .onChange(of: link.remoteHeartRate) { _, bpm in
+                    live.update(heartRate: bpm, averageHeartRate: nil, activeEnergyKcal: nil)
+                }
         }
         .modelContainer(container)
         .environment(\.health, health)
+        .environment(\.sessionLink, link)
     }
 }
