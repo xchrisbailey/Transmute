@@ -2,7 +2,7 @@ import Foundation
 
 /// Strings for reading and editing a plan (#10). Plain throughout, except reworking and
 /// rebrewing, which use the voice (#3).
-enum PlanCopy {
+public enum PlanCopy {
     static let thisWeek = LocalizedStringResource(
         "plain.plan.thisWeek", defaultValue: "This week", bundle: .main,
         comment: "plain. Badge on the current week.")
@@ -212,7 +212,7 @@ enum PlanCopy {
         "plain.glossary.rpeTerm", defaultValue: "RPE", bundle: .main,
         comment: "plain. Glossary term.")
 
-    static let rpeHelp = LocalizedStringResource(
+    public static let rpeHelp = LocalizedStringResource(
         "plain.glossary.rpe",
         defaultValue:
             "RPE is how hard a set feels, from 1 to 10. At 8 you could do about two more reps with good form.",
@@ -223,7 +223,7 @@ enum PlanCopy {
         "plain.glossary.oneRepMaxTerm", defaultValue: "1RM", bundle: .main,
         comment: "plain. Glossary term.")
 
-    static let oneRepMaxHelp = LocalizedStringResource(
+    public static let oneRepMaxHelp = LocalizedStringResource(
         "plain.glossary.oneRepMax",
         defaultValue: "1RM is the most you could lift once. Plans can set weights as a percentage of it.",
         bundle: .main,

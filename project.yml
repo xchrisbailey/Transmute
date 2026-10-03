@@ -67,6 +67,8 @@ targets:
         product: TransmutePlanUI
       - package: TransmuteUI
         product: TransmuteLogUI
+      - package: TransmuteUI
+        product: TransmuteSettingsUI
       - target: TransmuteWatch
       - target: TransmuteWidgets
     settings:
@@ -215,6 +217,8 @@ targets:
         product: TransmutePlanUI
       - package: TransmuteUI
         product: TransmuteLogUI
+      - package: TransmuteUI
+        product: TransmuteSettingsUI
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: computer.srcery.transmute.mac

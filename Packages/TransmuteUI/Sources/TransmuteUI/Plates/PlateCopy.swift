@@ -3,7 +3,7 @@ import TransmuteCore
 
 /// Strings for the plate sheet and the bar and plates setup (#21). All plain: they're read
 /// mid-set.
-enum PlateCopy {
+public enum PlateCopy {
     static let plates = LocalizedStringResource(
         "plain.plates.title", defaultValue: "Plates", bundle: .main,
         comment: "plain. Title of the plate calculator sheet.")
@@ -75,11 +75,11 @@ enum PlateCopy {
 
     // MARK: Setup
 
-    static let setup = LocalizedStringResource(
+    public static let setup = LocalizedStringResource(
         "plain.plates.setup", defaultValue: "Bar and plates", bundle: .main,
-        comment: "plain. Title of the equipment setup screen, and its row on the Profile screen.")
+        comment: "plain. Title of the equipment setup screen, and its row on the Profile and Settings screens.")
 
-    static let setupNote = LocalizedStringResource(
+    public static let setupNote = LocalizedStringResource(
         "plain.plates.setupNote",
         defaultValue: "Your bar, plates, dumbbells and machines, so loads round to what you can actually lift.",
         bundle: .main, comment: "plain. Under the Bar and plates row on the Profile screen.")

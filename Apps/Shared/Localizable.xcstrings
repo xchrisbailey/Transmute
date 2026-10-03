@@ -3278,7 +3278,7 @@
       }
     },
     "plain.plates.setup": {
-      "comment": "plain. Title of the equipment setup screen, and its row on the Profile screen.",
+      "comment": "plain. Title of the equipment setup screen, and its row on the Profile and Settings screens.",
       "extractionState": "manual",
       "localizations": {
         "en": {
@@ -5281,6 +5281,78 @@
         }
       }
     },
+    "plain.settings.ai.allowCloud": {
+      "comment": "plain. Toggle: let longer plans be made on Apple's Private Cloud Compute servers.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allow Private Cloud Compute"
+          }
+        }
+      }
+    },
+    "plain.settings.ai.alwaysOn": {
+      "comment": "plain. Explains why there's no switch for AI.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transmute makes plans and weekly summaries with Apple Intelligence, so it can't be turned off here. Logging workouts works without it."
+          }
+        }
+      }
+    },
+    "plain.settings.ai.cloudOff": {
+      "comment": "plain. Footer when Private Cloud Compute is off.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off: everything is done on this device. Nothing you enter leaves it to make a plan."
+          }
+        }
+      }
+    },
+    "plain.settings.ai.cloudOn": {
+      "comment": "plain. Footer when Private Cloud Compute is on.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On: longer plans may be made on Private Cloud Compute, Apple's servers for Apple Intelligence. Transmute then sends what the plan is made from: your measurements, goal, schedule, equipment, limitations and recent training. Apple says these requests aren't stored and can't be read by Apple. It's free and needs no account."
+          }
+        }
+      }
+    },
+    "plain.settings.ai.openSettings": {
+      "comment": "plain. Button: opens the system Settings app, where Apple Intelligence is turned on or off.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the device's Settings"
+          }
+        }
+      }
+    },
+    "plain.settings.ai.ready": {
+      "comment": "plain. Status row.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence is on and ready."
+          }
+        }
+      }
+    },
     "plain.settings.appearance.latte": {
       "comment": "plain. Appearance choice: always the light palette, which is called Latte.",
       "extractionState": "manual",
@@ -5305,6 +5377,18 @@
         }
       }
     },
+    "plain.settings.appearance.note": {
+      "comment": "plain. Footer under the appearance picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chosen for this device only."
+          }
+        }
+      }
+    },
     "plain.settings.appearance.system": {
       "comment": "plain. Appearance choice: follow the system's light or dark mode.",
       "extractionState": "manual",
@@ -5313,6 +5397,1422 @@
           "stringUnit": {
             "state": "translated",
             "value": "Match the device"
+          }
+        }
+      }
+    },
+    "plain.settings.appearance.title": {
+      "comment": "plain. Section heading and picker label.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appearance"
+          }
+        }
+      }
+    },
+    "plain.settings.cancel": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "plain.settings.delete.all": {
+      "comment": "plain. Destructive button; opens a confirmation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete all data…"
+          }
+        }
+      }
+    },
+    "plain.settings.delete.confirm": {
+      "comment": "plain. Destructive button in the delete-all confirmation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete everything, here and in iCloud"
+          }
+        }
+      }
+    },
+    "plain.settings.delete.confirmMessage": {
+      "comment": "plain. Message of the delete-all confirmation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This deletes your profile, plans, workouts and records from this device and from iCloud, which removes them from your other devices too. It can't be undone."
+          }
+        }
+      }
+    },
+    "plain.settings.delete.confirmTitle": {
+      "comment": "plain. Title of the delete-all confirmation.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete everything?"
+          }
+        }
+      }
+    },
+    "plain.settings.delete.deleting": {
+      "comment": "plain. Shown while delete-all runs.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deleting…"
+          }
+        }
+      }
+    },
+    "plain.settings.delete.failed": {
+      "comment": "plain. Delete-all failed on this device.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't delete. Nothing was removed."
+          }
+        }
+      }
+    },
+    "plain.settings.delete.note": {
+      "comment": "plain. Footer under the delete button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Removes everything you've put into Transmute, here and in iCloud. Export a backup first if you might want it back."
+          }
+        }
+      }
+    },
+    "plain.settings.delete.title": {
+      "comment": "plain. Section heading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
+    "plain.settings.equipment.note": {
+      "comment": "plain. Footer under the equipment rows.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bar and plates covers bar weights, the plates you have, dumbbells and machines, with presets for a gym and for a home rack. Progression sets how much weight is added each time."
+          }
+        }
+      }
+    },
+    "plain.settings.equipment.title": {
+      "comment": "plain. Section heading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Equipment"
+          }
+        }
+      }
+    },
+    "plain.settings.erased.cloudFailed": {
+      "comment": "plain. Report after delete-all when the iCloud step failed.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything was deleted from this device, but iCloud couldn't be reached. A copy may still be in iCloud. Check your connection and try again."
+          }
+        }
+      }
+    },
+    "plain.settings.erased.dismiss": {
+      "comment": "plain. Button: dismiss the report after delete-all.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "plain.settings.erased.everywhere": {
+      "comment": "plain. Report after delete-all.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything was deleted from this device and from iCloud."
+          }
+        }
+      }
+    },
+    "plain.settings.erased.localOnly": {
+      "comment": "plain. Report after delete-all in a build that doesn't sync.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything was deleted from this device. This copy of Transmute doesn't sync with iCloud, so there was nothing to delete there."
+          }
+        }
+      }
+    },
+    "plain.settings.erased.retry": {
+      "comment": "plain. Button: retry deleting from iCloud.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try iCloud again"
+          }
+        }
+      }
+    },
+    "plain.settings.export.backup": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export a full backup"
+          }
+        }
+      }
+    },
+    "plain.settings.export.csv": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export workouts as CSV"
+          }
+        }
+      }
+    },
+    "plain.settings.export.failed": {
+      "comment": "plain. Export failed.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't make the file. Nothing was saved."
+          }
+        }
+      }
+    },
+    "plain.settings.export.note": {
+      "comment": "plain. Footer under the export buttons.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CSV is a table with one row per set, which opens in any spreadsheet. The backup is a JSON file with everything: profile, plans, workouts and records. It can be imported back into Transmute."
+          }
+        }
+      }
+    },
+    "plain.settings.export.saved": {
+      "comment": "plain. Shown after an export was saved.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved."
+          }
+        }
+      }
+    },
+    "plain.settings.export.title": {
+      "comment": "plain. Section heading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export"
+          }
+        }
+      }
+    },
+    "plain.settings.health.changeNote": {
+      "comment": "plain. Footer under the Open the Health app button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To change what Transmute can use: in the Health app, tap your picture, then Apps, then Transmute."
+          }
+        }
+      }
+    },
+    "plain.settings.health.notAsked": {
+      "comment": "plain. Health permission status: Transmute hasn't asked for this.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not asked yet"
+          }
+        }
+      }
+    },
+    "plain.settings.health.onMac": {
+      "comment": "plain. Mac. Shown instead of the Health permissions.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There's no Health on the Mac. Bodyweight and workouts from Health reach this Mac from your iPhone through iCloud."
+          }
+        }
+      }
+    },
+    "plain.settings.health.open": {
+      "comment": "plain. Button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open the Health app"
+          }
+        }
+      }
+    },
+    "plain.settings.health.read.asked": {
+      "comment": "plain. Health permission status: the person was asked, the answer isn't known.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asked"
+          }
+        }
+      }
+    },
+    "plain.settings.health.read.note": {
+      "comment": "plain. Footer under the Health read rows.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health keeps your answer private: it tells Transmute that you were asked, never whether you said yes. Transmute asks the first time a feature needs something, and works without it."
+          }
+        }
+      }
+    },
+    "plain.settings.health.read.profile": {
+      "comment": "plain. Health data Transmute reads, for the profile.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Height, weight, birth date and sex"
+          }
+        }
+      }
+    },
+    "plain.settings.health.read.trainingLoad": {
+      "comment": "plain. Health data Transmute reads, to plan around the week.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other workouts, resting heart rate and cardio fitness"
+          }
+        }
+      }
+    },
+    "plain.settings.health.read.unknown": {
+      "comment": "plain. Health permission status.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health couldn't say"
+          }
+        }
+      }
+    },
+    "plain.settings.health.read.workouts": {
+      "comment": "plain. Health data Transmute reads while a workout runs.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate and energy during a workout"
+          }
+        }
+      }
+    },
+    "plain.settings.health.reading": {
+      "comment": "plain. Section heading: what Transmute may read.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading from Health"
+          }
+        }
+      }
+    },
+    "plain.settings.health.saving": {
+      "comment": "plain. Section heading: what Transmute may write.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving to Health"
+          }
+        }
+      }
+    },
+    "plain.settings.health.title": {
+      "comment": "plain. Section heading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health"
+          }
+        }
+      }
+    },
+    "plain.settings.health.unavailable": {
+      "comment": "plain. Shown instead of the Health permissions.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health isn't available on this device."
+          }
+        }
+      }
+    },
+    "plain.settings.health.write.activeEnergy": {
+      "comment": "plain. Health data Transmute saves: calories burned in a workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active energy"
+          }
+        }
+      }
+    },
+    "plain.settings.health.write.allowed": {
+      "comment": "plain. Health permission status.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allowed"
+          }
+        }
+      }
+    },
+    "plain.settings.health.write.bodyweight": {
+      "comment": "plain. Health data Transmute saves.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bodyweight"
+          }
+        }
+      }
+    },
+    "plain.settings.health.write.denied": {
+      "comment": "plain. Health permission status.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not allowed"
+          }
+        }
+      }
+    },
+    "plain.settings.health.write.heartRate": {
+      "comment": "plain. Health data Transmute saves.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate"
+          }
+        }
+      }
+    },
+    "plain.settings.health.write.workouts": {
+      "comment": "plain. Health data Transmute saves.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workouts"
+          }
+        }
+      }
+    },
+    "plain.settings.icloud.available": {
+      "comment": "plain. iCloud status.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud sync is on. Your profile, plans and workouts are kept in your own iCloud and shared with your other devices."
+          }
+        }
+      }
+    },
+    "plain.settings.icloud.checking": {
+      "comment": "plain. iCloud status while it's being read.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking iCloud…"
+          }
+        }
+      }
+    },
+    "plain.settings.icloud.notSyncing": {
+      "comment": "plain. iCloud status: an unsigned or local build.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud sync is off in this copy of Transmute, because it wasn't signed for iCloud. Everything stays on this device."
+          }
+        }
+      }
+    },
+    "plain.settings.icloud.restricted": {
+      "comment": "plain. iCloud status.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud sync is off because iCloud isn't allowed on this device. Screen Time or a work or school profile can block it."
+          }
+        }
+      }
+    },
+    "plain.settings.icloud.signedOut": {
+      "comment": "plain. iCloud status.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud sync is off because this device isn't signed in to iCloud. Sign in from the device's Settings to sync."
+          }
+        }
+      }
+    },
+    "plain.settings.icloud.temporarilyUnavailable": {
+      "comment": "plain. iCloud status.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud is signed in but isn't ready yet. Sync starts again on its own."
+          }
+        }
+      }
+    },
+    "plain.settings.icloud.title": {
+      "comment": "plain. Section heading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud sync"
+          }
+        }
+      }
+    },
+    "plain.settings.icloud.unknown": {
+      "comment": "plain. iCloud status.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't check iCloud just now. Your data is safe on this device."
+          }
+        }
+      }
+    },
+    "plain.settings.import.allThere": {
+      "comment": "plain. Result line when an import added nothing.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything in this file is already in Transmute."
+          }
+        }
+      }
+    },
+    "plain.settings.import.bodyweightsAdded": {
+      "comment": "plain. Result line.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bodyweight entries added: %lld"
+          }
+        }
+      }
+    },
+    "plain.settings.import.customExercisesAdded": {
+      "comment": "plain. Result line: custom exercises restored from a backup.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your own exercises added: %lld"
+          }
+        }
+      }
+    },
+    "plain.settings.import.done": {
+      "comment": "plain. Heading of the result of an import that added something.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import finished"
+          }
+        }
+      }
+    },
+    "plain.settings.import.error.cantOpen": {
+      "comment": "plain. Import error: the file couldn't be read from disk.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't open that file. Nothing was changed."
+          }
+        }
+      }
+    },
+    "plain.settings.import.error.cantSave": {
+      "comment": "plain. Import error: saving to the store failed.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't save the import. Nothing was changed."
+          }
+        }
+      }
+    },
+    "plain.settings.import.error.emptyFile": {
+      "comment": "plain. Import error.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That file is empty. Nothing was changed."
+          }
+        }
+      }
+    },
+    "plain.settings.import.error.newerBackup": {
+      "comment": "plain. Import error.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That backup was made by a newer version of Transmute. Update Transmute, then import it again. Nothing was changed."
+          }
+        }
+      }
+    },
+    "plain.settings.import.error.unreadableBackup": {
+      "comment": "plain. Import error.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That file isn't a Transmute backup, or it's damaged. Nothing was changed."
+          }
+        }
+      }
+    },
+    "plain.settings.import.error.unrecognizedCSV": {
+      "comment": "plain. Import error.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That file doesn't look like a CSV export from Strong or Hevy. Nothing was changed."
+          }
+        }
+      }
+    },
+    "plain.settings.import.failed": {
+      "comment": "plain. Heading of a failed import.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import didn't work"
+          }
+        }
+      }
+    },
+    "plain.settings.import.file": {
+      "comment": "plain. Button: pick a backup or a CSV export to import.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import a file"
+          }
+        }
+      }
+    },
+    "plain.settings.import.fromBackup": {
+      "comment": "plain. Result line: where the import came from.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From a Transmute backup."
+          }
+        }
+      }
+    },
+    "plain.settings.import.fromHevy": {
+      "comment": "plain. Result line: where the import came from.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From a Hevy export."
+          }
+        }
+      }
+    },
+    "plain.settings.import.fromStrong": {
+      "comment": "plain. Result line: where the import came from.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From a Strong export."
+          }
+        }
+      }
+    },
+    "plain.settings.import.note": {
+      "comment": "plain. Footer under the import button.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a Transmute backup, or a CSV export from Strong or Hevy. Anything already in Transmute is skipped, so importing a file twice is safe. If a file doesn't say kg or lb, your weight unit is used."
+          }
+        }
+      }
+    },
+    "plain.settings.import.nothingNew": {
+      "comment": "plain. Heading of the result of an import that added nothing.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing new to import"
+          }
+        }
+      }
+    },
+    "plain.settings.import.plansAdded": {
+      "comment": "plain. Result line.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plans added: %lld"
+          }
+        }
+      }
+    },
+    "plain.settings.import.plansSkipped": {
+      "comment": "plain. Result line.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plans already here, skipped: %lld"
+          }
+        }
+      }
+    },
+    "plain.settings.import.profileAdded": {
+      "comment": "plain. Result line.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your profile was restored."
+          }
+        }
+      }
+    },
+    "plain.settings.import.profileKept": {
+      "comment": "plain. Result line.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The profile already here was kept as it is."
+          }
+        }
+      }
+    },
+    "plain.settings.import.recordsAdded": {
+      "comment": "plain. Result line.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Records added: %lld"
+          }
+        }
+      }
+    },
+    "plain.settings.import.setsAdded": {
+      "comment": "plain. Result line.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sets added: %lld"
+          }
+        }
+      }
+    },
+    "plain.settings.import.title": {
+      "comment": "plain. Section heading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import"
+          }
+        }
+      }
+    },
+    "plain.settings.import.unmatchedNames": {
+      "comment": "plain. Result line; the argument is a list of exercise names.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These exercise names aren't in Transmute's library, so they were added as your own exercises: %@."
+          }
+        }
+      }
+    },
+    "plain.settings.import.unreadableRows": {
+      "comment": "plain. Result line.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rows that couldn't be read and were left out: %lld"
+          }
+        }
+      }
+    },
+    "plain.settings.import.workoutsAdded": {
+      "comment": "plain. Result line.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workouts added: %lld"
+          }
+        }
+      }
+    },
+    "plain.settings.import.workoutsSkipped": {
+      "comment": "plain. Result line.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workouts already here, skipped: %lld"
+          }
+        }
+      }
+    },
+    "plain.settings.needsProfile": {
+      "comment": "plain. Mac. Shown in Settings before there's a profile.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish setting up Transmute to change these settings."
+          }
+        }
+      }
+    },
+    "plain.settings.pane.data": {
+      "comment": "plain. Settings tab and section heading: privacy, export, import and delete.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy and data"
+          }
+        }
+      }
+    },
+    "plain.settings.pane.general": {
+      "comment": "plain. Mac. Settings tab: units, equipment and appearance.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "General"
+          }
+        }
+      }
+    },
+    "plain.settings.pane.health": {
+      "comment": "plain. Mac. Settings tab: Health and iCloud sync.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health and iCloud"
+          }
+        }
+      }
+    },
+    "plain.settings.pane.intelligence": {
+      "comment": "plain. Settings tab and section heading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Intelligence"
+          }
+        }
+      }
+    },
+    "plain.settings.pane.workout": {
+      "comment": "plain. Mac. Settings tab: how a workout runs.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout"
+          }
+        }
+      }
+    },
+    "plain.settings.privacy.statement": {
+      "comment": "plain. The privacy statement.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Transmute has no analytics, no ads and no code from other companies. Your data stays on your devices and in your own iCloud. Crash reports reach the developer only through Apple, and only if you've chosen to share them in the device's Settings."
+          }
+        }
+      }
+    },
+    "plain.settings.title": {
+      "comment": "plain. Screen title, and the button that opens it.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "plain.settings.units.centimetres": {
+      "comment": "plain. Height unit choice.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Centimetres (cm)"
+          }
+        }
+      }
+    },
+    "plain.settings.units.distance": {
+      "comment": "plain. Picker label: the unit distances are shown in.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distance"
+          }
+        }
+      }
+    },
+    "plain.settings.units.feetAndInches": {
+      "comment": "plain. Height unit choice.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feet and inches"
+          }
+        }
+      }
+    },
+    "plain.settings.units.height": {
+      "comment": "plain. Picker label: the unit height is shown in.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Height"
+          }
+        }
+      }
+    },
+    "plain.settings.units.kilograms": {
+      "comment": "plain. Weight unit choice.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilograms (kg)"
+          }
+        }
+      }
+    },
+    "plain.settings.units.kilometres": {
+      "comment": "plain. Distance unit choice.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilometres (km)"
+          }
+        }
+      }
+    },
+    "plain.settings.units.matchDevice": {
+      "comment": "plain. Unit choice: follow the region set on the device.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Match the device"
+          }
+        }
+      }
+    },
+    "plain.settings.units.miles": {
+      "comment": "plain. Distance unit choice.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miles (mi)"
+          }
+        }
+      }
+    },
+    "plain.settings.units.note": {
+      "comment": "plain. Footer under the unit pickers.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Match the device follows the region chosen in the device's own settings. Your plates keep the unit they're marked in."
+          }
+        }
+      }
+    },
+    "plain.settings.units.pounds": {
+      "comment": "plain. Weight unit choice.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pounds (lb)"
+          }
+        }
+      }
+    },
+    "plain.settings.units.title": {
+      "comment": "plain. Section heading.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Units"
+          }
+        }
+      }
+    },
+    "plain.settings.units.weight": {
+      "comment": "plain. Picker label: the unit weights are shown in.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.autoStartRest": {
+      "comment": "plain. Toggle.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start the rest timer when a set is logged"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.effort.always": {
+      "comment": "plain. Choice for showing RPE or % of 1RM.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Always show"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.effort.automaticHidden": {
+      "comment": "plain. Choice for showing RPE or % of 1RM: follow the experience level, which currently hides it.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Match my experience (hidden)"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.effort.automaticShown": {
+      "comment": "plain. Choice for showing RPE or % of 1RM: follow the experience level, which currently shows it.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Match my experience (shown)"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.effort.never": {
+      "comment": "plain. Choice for showing RPE or % of 1RM.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never show"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.effort.note": {
+      "comment": "plain. Footer under the RPE and % of 1RM pickers, after the two glossary lines.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Match my experience hides both for beginners and shows them to everyone else."
+          }
+        }
+      }
+    },
+    "plain.settings.workout.rest": {
+      "comment": "plain. Section heading: rest between sets.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.restAlerts": {
+      "comment": "plain. Section heading: the rest timer and its alerts.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When rest ends"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.restHaptics": {
+      "comment": "plain. Toggle: a haptic tap on the iPhone and the wrist.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap when rest ends"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.restHapticsNote": {
+      "comment": "plain. Footer under the rest alert toggles.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The tap is a short vibration on your iPhone and Apple Watch."
+          }
+        }
+      }
+    },
+    "plain.settings.workout.restNote": {
+      "comment": "plain. Footer under the rest time pickers.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Used when your plan doesn't give a set its own rest."
+          }
+        }
+      }
+    },
+    "plain.settings.workout.restSound": {
+      "comment": "plain. Toggle.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Play a sound when rest ends"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.setsShow": {
+      "comment": "plain. Section heading: which extra numbers appear next to a set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What sets show"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.showPercentOfMax": {
+      "comment": "plain. Picker label: whether sets show the load as a percentage of one-rep max.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "% of 1RM"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.showRPE": {
+      "comment": "plain. Picker label: whether sets show RPE.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RPE"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.warmUpRest": {
+      "comment": "plain. Picker label: default rest after a warm-up set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest after a warm-up set"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.warmUpSets": {
+      "comment": "plain. Toggle.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm-up sets"
+          }
+        }
+      }
+    },
+    "plain.settings.workout.warmUpSetsNote": {
+      "comment": "plain. Footer under the warm-up sets toggle.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lighter sets before barbell lifts, to get ready for the heavy ones. Off leaves them out, including the ones in your plan."
+          }
+        }
+      }
+    },
+    "plain.settings.workout.workingRest": {
+      "comment": "plain. Picker label: default rest after a working set.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest after a set"
           }
         }
       }

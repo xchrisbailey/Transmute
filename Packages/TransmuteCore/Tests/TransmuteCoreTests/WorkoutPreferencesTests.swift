@@ -132,4 +132,19 @@ struct WorkoutPreferencesTests {
         #expect(profile.weightUnit == .imperial)
         #expect(profile.heightUnit == nil)
     }
+
+    /// A profile that never chose a system keeps following the device through a save (#18).
+    @Test func savingADraftDoesNotPinTheDeviceSystem() {
+        let us = Locale(identifier: "en_US")
+        let profile = Profile()
+        var draft = ProfileDraft(profile, locale: us)
+        draft.apply(to: profile, locale: us)
+        #expect(profile.unitSystem == nil)
+        draft.unitSystem = .metric
+        draft.apply(to: profile, locale: us)
+        #expect(profile.unitSystem == .metric)
+        draft.unitSystem = .imperial
+        draft.apply(to: profile, locale: us)
+        #expect(profile.unitSystem == .imperial)
+    }
 }

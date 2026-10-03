@@ -58,4 +58,17 @@ struct DeleteAllTests {
         #expect(DataTransfer.cloudContainerIdentifier(of: container) == nil)
         #expect(await DataTransfer.deleteCloudRecords(for: container) == .notSyncing)
     }
+
+    /// The apps give the main context an undo manager for plan edits (#10). Delete-all isn't
+    /// undoable and mustn't trip over it.
+    @Test func deleteAllWorksWithAnUndoManagerAndLeavesNothingToUndo() throws {
+        let undo = UndoManager()
+        context.undoManager = undo
+        SampleData.insert(into: context)
+        try context.save()
+        try DataTransfer.deleteAll(in: context)
+        #expect(try count(Profile.self, in: context) == 0)
+        #expect(context.undoManager === undo)
+        #expect(!undo.canUndo)
+    }
 }

@@ -23,6 +23,15 @@ extension DataTransfer {
     /// and the AI route, so there's nothing else to clear here.
     @discardableResult
     public static func deleteAll(in context: ModelContext) throws -> Int {
+        // Not undoable. With the apps' undo manager attached, SwiftData stops in `save()` with
+        // "A snapshot should exist before creating a new snapshot for undo", so it's set aside
+        // for the delete and comes back with nothing to undo.
+        let undoManager = context.undoManager
+        context.undoManager = nil
+        defer {
+            undoManager?.removeAllActions()
+            context.undoManager = undoManager
+        }
         let models = TransmuteMigrationPlan.schemas.last?.models ?? []
         let count = try models.reduce(0) { try $0 + count($1, in: context) }
         for model in models {
