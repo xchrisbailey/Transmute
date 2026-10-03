@@ -167,6 +167,30 @@ enum WatchCopy {
         "plain.watch.done", defaultValue: "Done", bundle: .main,
         comment: "plain. Watch. Close the finished workout's summary.")
 
+    // MARK: Health
+
+    static let heartRate = LocalizedStringResource(
+        "plain.watch.heartRate", defaultValue: "Heart rate", bundle: .main,
+        comment: "plain. Watch. VoiceOver label for the live heart rate.")
+
+    static func beatsPerMinute(_ count: Int) -> LocalizedStringResource {
+        LocalizedStringResource(
+            "plain.watch.beatsPerMinute", defaultValue: "\(count) beats per minute", bundle: .main,
+            comment: "plain. Watch. VoiceOver value for the live heart rate.")
+    }
+
+    static let averageHeartRate = LocalizedStringResource(
+        "plain.watch.averageHeartRate", defaultValue: "Avg heart rate", bundle: .main,
+        comment: "plain. Watch. Summary figure, in beats per minute.")
+
+    static let energy = LocalizedStringResource(
+        "plain.watch.energy", defaultValue: "Energy", bundle: .main,
+        comment: "plain. Watch. Summary figure: active energy burned, in kilocalories.")
+
+    static let savedToHealth = LocalizedStringResource(
+        "plain.finish.savedToHealth", defaultValue: "Saved to Health", bundle: .main,
+        comment: "plain. The workout was written to Health.")
+
     // MARK: Records
 
     static let newRecord = LocalizedStringResource(

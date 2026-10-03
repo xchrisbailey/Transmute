@@ -41,9 +41,12 @@ struct WatchSetView: View {
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
                 .accessibilityAddTraits(.isHeader)
-            Text(position)
-                .font(.footnote)
-                .foregroundStyle(Color.brandText(\.subtext))
+            HStack(spacing: 8) {
+                Text(position)
+                    .font(.footnote)
+                    .foregroundStyle(Color.brandText(\.subtext))
+                WatchHeartRate(bpm: session.live.heartRate)
+            }
             Spacer(minLength: 0)
             HStack(alignment: .firstTextBaseline, spacing: 10) {
                 ForEach(Array(dial.fields.enumerated()), id: \.element) { index, field in

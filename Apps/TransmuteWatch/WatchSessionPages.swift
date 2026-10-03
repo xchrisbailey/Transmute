@@ -136,6 +136,7 @@ struct WatchExercisesView: View {
 
 /// After Finish: the sets, the weight moved and the time, then Done.
 struct WatchSummaryView: View {
+    let session: WatchSession
     let summary: WorkoutSummary
     let units: Units
     let onDone: () -> Void
@@ -152,6 +153,21 @@ struct WatchSummaryView: View {
                     figure(WatchCopy.volume, units.formatWeight(kg: summary.volumeKg))
                 }
                 figure(WatchCopy.duration, Units.clock(seconds: summary.duration))
+                if let bpm = session.live.averageHeartRate {
+                    figure(WatchCopy.averageHeartRate, "\(Int(bpm.rounded()))")
+                }
+                if let energy = session.live.activeEnergyKcal {
+                    figure(WatchCopy.energy, "\(Int(energy.rounded())) kcal")
+                }
+                if session.isSavedToHealth {
+                    Label {
+                        Text(WatchCopy.savedToHealth)
+                    } icon: {
+                        Image(systemName: "heart.fill")
+                    }
+                    .font(.footnote)
+                    .foregroundStyle(Color.brandText(\.subtext))
+                }
                 Button(action: onDone) {
                     Text(WatchCopy.done)
                         .frame(maxWidth: .infinity)

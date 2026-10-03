@@ -4753,6 +4753,30 @@
         }
       }
     },
+    "plain.watch.averageHeartRate": {
+      "comment": "plain. Watch. Summary figure, in beats per minute.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avg heart rate"
+          }
+        }
+      }
+    },
+    "plain.watch.beatsPerMinute": {
+      "comment": "plain. Watch. VoiceOver value for the live heart rate.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld beats per minute"
+          }
+        }
+      }
+    },
     "plain.watch.crownHint": {
       "comment": "plain. Watch. VoiceOver hint on a set's weight or reps.",
       "extractionState": "manual",
@@ -4789,6 +4813,18 @@
         }
       }
     },
+    "plain.watch.energy": {
+      "comment": "plain. Watch. Summary figure: active energy burned, in kilocalories.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Energy"
+          }
+        }
+      }
+    },
     "plain.watch.exercises": {
       "comment": "plain. Watch. Title of the list of this workout's exercises.",
       "extractionState": "manual",
@@ -4797,6 +4833,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Exercises"
+          }
+        }
+      }
+    },
+    "plain.watch.heartRate": {
+      "comment": "plain. Watch. VoiceOver label for the live heart rate.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate"
           }
         }
       }
