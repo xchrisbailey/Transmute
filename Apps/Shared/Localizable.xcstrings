@@ -2101,6 +2101,42 @@
         }
       }
     },
+    "plain.mac.plan.grid": {
+      "comment": "plain. Mac. Show the plan as a grid of weeks and days.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week grid"
+          }
+        }
+      }
+    },
+    "plain.mac.plan.layout": {
+      "comment": "plain. Mac. Label of the control that switches between the week grid and the list.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan layout"
+          }
+        }
+      }
+    },
+    "plain.mac.plan.list": {
+      "comment": "plain. Mac. Show the plan as a list, like on iPhone.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "List"
+          }
+        }
+      }
+    },
     "plain.mac.sidebar.daysPerWeek": {
       "comment": "plain. Mac. Sidebar footer: how many days a week the person trains.",
       "extractionState": "manual",

@@ -22,4 +22,16 @@ enum MacCopy {
 
     static let done = LocalizedStringResource(
         "plain.done", defaultValue: "Done", bundle: .main, comment: "plain. Button.")
+
+    static let planGrid = LocalizedStringResource(
+        "plain.mac.plan.grid", defaultValue: "Week grid", bundle: .main,
+        comment: "plain. Mac. Show the plan as a grid of weeks and days.")
+
+    static let planList = LocalizedStringResource(
+        "plain.mac.plan.list", defaultValue: "List", bundle: .main,
+        comment: "plain. Mac. Show the plan as a list, like on iPhone.")
+
+    static let planLayout = LocalizedStringResource(
+        "plain.mac.plan.layout", defaultValue: "Plan layout", bundle: .main,
+        comment: "plain. Mac. Label of the control that switches between the week grid and the list.")
 }
