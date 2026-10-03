@@ -4,6 +4,7 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteLogUI
 import TransmutePlanUI
+import TransmuteSettingsUI
 import TransmuteUI
 
 /// Onboarding until there's a profile, then the window: a sidebar and its four panes.
@@ -25,8 +26,11 @@ struct RootView: View {
                 .workoutPreferences(of: profile)
         } else {
             OnboardingFlow {
+                // After delete-all (#18), this is where the person lands.
+                ErasureNotice()
                 LiveIntelligenceNotice(service: service)
             } onFinish: { _, _ in
+                ErasureNotice.clear()
             }
         }
     }
@@ -145,5 +149,17 @@ struct MacShell: View {
                 showsRebrew = plan != nil
             },
             findInLog: { searchIsFocused = true })
+    }
+}
+
+/// The Settings window (#18), opened with ⌘, from the app menu. It has its own query, since
+/// it can be open before there's a profile and after one is deleted.
+struct SettingsRoot: View {
+    @Query(sort: \Profile.createdAt) private var profiles: [Profile]
+    let service = FoundationModelsService()
+
+    var body: some View {
+        SettingsView(profile: profiles.first, service: service)
+            .tint(Color.brand(\.magic))
     }
 }

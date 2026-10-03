@@ -38,6 +38,12 @@ struct TransmuteMacApp: App {
             TransmuteCommands()
         }
 
+        Settings {
+            SettingsRoot()
+                .appearance(appearance)
+        }
+        .modelContainer(container)
+
         #if DEBUG
             Window(Text(verbatim: "AI debug"), id: "ai-debug") {
                 NavigationStack {

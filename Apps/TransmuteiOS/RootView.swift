@@ -4,10 +4,12 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteLogUI
 import TransmutePlanUI
+import TransmuteSettingsUI
 import TransmuteUI
 
 /// Onboarding until there's a profile. Then Today, where workouts are run (#11), the log
-/// of past workouts (#14), and the plan, which is the brew screen until there is one.
+/// of past workouts (#14), and the plan, which is the brew screen until there is one. Every
+/// tab has the profile and Settings (#18) in its toolbar.
 struct RootView: View {
     @Query(sort: \Profile.createdAt) private var profiles: [Profile]
     @Query(filter: #Predicate<Plan> { $0.isActive }, sort: \Plan.createdAt, order: .reverse) private var plans: [Plan]
@@ -78,8 +80,11 @@ struct RootView: View {
             .workoutPreferences(of: profile)
         } else {
             OnboardingFlow {
+                // After delete-all (#18), this is where the person lands.
+                ErasureNotice()
                 LiveIntelligenceNotice(service: service)
             } onFinish: { _, _ in
+                ErasureNotice.clear()
             }
         }
     }
@@ -93,6 +98,17 @@ struct RootView: View {
                     Text(ProfileCopy.profile)
                 } icon: {
                     Image(systemName: "person.crop.circle")
+                }
+            }
+        }
+        ToolbarItem {
+            NavigationLink {
+                SettingsView(profile: profile, service: service)
+            } label: {
+                Label {
+                    Text(SettingsCopy.title)
+                } icon: {
+                    Image(systemName: "gearshape")
                 }
             }
         }
