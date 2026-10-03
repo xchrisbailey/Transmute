@@ -12,7 +12,9 @@ struct WatchRootView: View {
     @Query(filter: #Predicate<Workout> { $0.endedAt == nil }, sort: \Workout.startedAt, order: .reverse)
     private var running: [Workout]
     @Query(sort: \CustomExercise.name) private var customExercises: [CustomExercise]
+    @Environment(\.health) private var health
     @State private var session: WatchSession?
+    @State private var live = WatchLiveWorkout()
 
     private var units: Units {
         Units(system: profiles.first?.unitSystem)
@@ -36,13 +38,18 @@ struct WatchRootView: View {
         }
         .onChange(of: running.first?.id, initial: true) {
             if session == nil, let workout = running.first {
-                session = WatchSession(workout: workout, context: context, library: library)
+                run(workout)
             }
         }
     }
 
     private func start(_ day: PlanDay) {
-        let workout = WorkoutSession.start(day, profile: profiles.first, library: library, in: context)
-        session = WatchSession(workout: workout, context: context, library: library)
+        run(WorkoutSession.start(day, profile: profiles.first, library: library, in: context))
+    }
+
+    private func run(_ workout: Workout) {
+        let session = WatchSession(workout: workout, context: context, library: library, live: live, health: health)
+        self.session = session
+        Task { await session.startLive() }
     }
 }

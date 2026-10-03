@@ -23,7 +23,7 @@ struct WatchSessionView: View {
     var body: some View {
         Group {
             if let summary = session.summary {
-                WatchSummaryView(summary: summary, units: units, onDone: onClose)
+                WatchSummaryView(session: session, summary: summary, units: units, onDone: onClose)
             } else {
                 TabView(selection: $page) {
                     WatchControlsView(session: session) { page = .now }
