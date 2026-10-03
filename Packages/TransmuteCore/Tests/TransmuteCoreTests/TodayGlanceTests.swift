@@ -219,7 +219,9 @@ struct TodayGlanceTests {
         #expect(before.week == .init())
         #expect(before.streakWeeks == 0)
     }
+}
 
+extension TodayGlanceTests {
     // MARK: Formatting
 
     @Test func weightAndRepsReadSetsByRepsThenTheLoad() throws {

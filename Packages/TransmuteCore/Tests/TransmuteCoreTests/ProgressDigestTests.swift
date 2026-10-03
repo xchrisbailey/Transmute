@@ -115,7 +115,13 @@ struct ProgressDigestTests {
 
     /// One session a week for three of a plan's four weeks. The squat goes 100, 100, 95 and the
     /// bench 60, 62.5, 65.
-    func digestLog() throws -> (plan: Plan, workouts: [Workout], records: [PersonalRecord]) {
+    struct DigestLog {
+        let plan: Plan
+        let workouts: [Workout]
+        let records: [PersonalRecord]
+    }
+
+    func digestLog() throws -> DigestLog {
         let plan = fixture.plan(weeks: 4, [("back-squat", 4), ("bench-press", 3)])
         let loads: [(squat: Double, bench: Double)] = [(100, 60), (100, 62.5), (95, 65)]
         let workouts = loads.enumerated().map { week, load in
@@ -134,7 +140,7 @@ struct ProgressDigestTests {
             fixture.record("bench-press", .repMax, 65, reps: 1, set: best),
         ]
         try fixture.context.save()
-        return (plan, workouts, records)
+        return DigestLog(plan: plan, workouts: workouts, records: records)
     }
 
     @Test func digestSumsUpTheWeek() throws {

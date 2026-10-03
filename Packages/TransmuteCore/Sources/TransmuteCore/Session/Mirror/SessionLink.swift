@@ -1,6 +1,6 @@
 import Foundation
 import OSLog
-import Observation
+import Observation  // swiftlint:disable:this sorted_imports
 import SwiftData
 
 /// Keeps a session in step between the iPhone and the watch (#15), over the live workout's
@@ -21,7 +21,14 @@ public final class SessionLink {
     public let live: any LiveWorkout
     public let device: SessionDevice
 
-    private var owned: (workout: Workout, context: ModelContext, library: ExerciseLibrary)?
+    /// The workout this device runs and saves, with where it lives.
+    private struct Owned {
+        let workout: Workout
+        let context: ModelContext
+        let library: ExerciseLibrary
+    }
+
+    private var owned: Owned?
 
     private static let logger = Logger(subsystem: Transmute.bundlePrefix, category: "link")
 
@@ -65,7 +72,7 @@ public final class SessionLink {
             workout.startedOn = device
             try? context.save()
         }
-        owned = (workout, context, library)
+        owned = Owned(workout: workout, context: context, library: library)
         mirrored = nil
         publish()
     }
