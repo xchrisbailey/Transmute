@@ -4429,6 +4429,174 @@
         }
       }
     },
+    "plain.reminders.denied": {
+      "comment": "plain. A reminder is on but the system doesn't allow Transmute's notifications.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifications are turned off for Transmute, so these reminders can't be shown. You can turn them on in Settings."
+          }
+        }
+      }
+    },
+    "plain.reminders.footer": {
+      "comment": "plain. Under the reminder settings.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders are set for this device only. Your Apple Watch shows the ones from your iPhone."
+          }
+        }
+      }
+    },
+    "plain.reminders.missedDay": {
+      "comment": "plain. Switch for a notification the morning after a planned day with no workout.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nudge me after a missed day"
+          }
+        }
+      }
+    },
+    "plain.reminders.missedDay.detail": {
+      "comment": "plain. Under the missed day nudge switch.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One gentle note the next morning when a planned session wasn't logged. Never more than one."
+          }
+        }
+      }
+    },
+    "plain.reminders.notification.missedDay.body": {
+      "comment": "plain. Body of the nudge after a planned day with no workout. Kind, never blaming.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your plan carries on from wherever you are. There's nothing to catch up on."
+          }
+        }
+      }
+    },
+    "plain.reminders.notification.missedDay.title": {
+      "comment": "plain. Title of the nudge after a planned day with no workout. Kind, never blaming.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Still here when you're ready"
+          }
+        }
+      }
+    },
+    "plain.reminders.notification.trainingDay.body": {
+      "comment": "plain. Body of the training day notification.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your session is ready when you are."
+          }
+        }
+      }
+    },
+    "plain.reminders.notification.trainingDay.title": {
+      "comment": "plain. Title of the training day notification, e.g. Today: Lower A.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today: %@"
+          }
+        }
+      }
+    },
+    "plain.reminders.notification.trainingDay.untitled": {
+      "comment": "plain. Title of the training day notification when the session has no name.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Training day"
+          }
+        }
+      }
+    },
+    "plain.reminders.openSettings": {
+      "comment": "plain. Button that opens the system's notification settings for Transmute.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open notification settings"
+          }
+        }
+      }
+    },
+    "plain.reminders.time": {
+      "comment": "plain. Label of the picker for the time of day the training day reminder comes.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder time"
+          }
+        }
+      }
+    },
+    "plain.reminders.title": {
+      "comment": "plain. Heading of the reminder settings.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminders"
+          }
+        }
+      }
+    },
+    "plain.reminders.trainingDay": {
+      "comment": "plain. Switch for a notification on each day the plan has a session.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remind me on training days"
+          }
+        }
+      }
+    },
+    "plain.reminders.trainingDay.detail": {
+      "comment": "plain. Under the training day reminder switch.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A notification on each day your plan has a session."
+          }
+        }
+      }
+    },
     "plain.remove": {
       "comment": "plain. Remove an exercise from a day.",
       "extractionState": "manual",
