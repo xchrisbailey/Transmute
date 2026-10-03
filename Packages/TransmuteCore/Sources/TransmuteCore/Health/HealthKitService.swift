@@ -186,6 +186,10 @@
             }
         }
 
+        public var canSaveBodyweight: Bool {
+            isAvailable && store.authorizationStatus(for: HKQuantityType(.bodyMass)) == .sharingAuthorized
+        }
+
         public func saveBodyweight(kg: Double, at date: Date) async throws -> UUID {
             guard isAvailable else { throw HealthServiceError.unavailable }
             let sample = HKQuantitySample(

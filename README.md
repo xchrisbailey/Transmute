@@ -14,8 +14,9 @@ By srcery.
 | `Apps/TransmuteiOS` | iPhone app. |
 | `Apps/TransmuteWatch` | Apple Watch app, embedded in the iPhone app. |
 | `Apps/TransmuteMac` | Mac app. |
-| `Apps/TransmuteWidgets`, `Apps/TransmuteWatchWidgets`, `Apps/TransmuteMacWidgets` | Widget extensions: the Live Activity and Today on iPhone, complications and the Smart Stack on the watch, Today on the Mac desktop. |
+| `Apps/TransmuteWidgets`, `Apps/TransmuteWatchWidgets`, `Apps/TransmuteMacWidgets` | Widget extensions: the Live Activity, Today and the Control Center button on iPhone, complications and the Smart Stack on the watch, Today on the Mac desktop. |
 | `Apps/WidgetsShared` | Widget views and copy the extensions share. |
+| `Apps/IntentsShared` | App Intents and App Shortcuts for Siri, Shortcuts and Spotlight, shared by the apps; the iPhone widget extension compiles the one its Control Center button runs. |
 | `Apps/Shared` | Asset catalog and the `Localizable.xcstrings` String Catalog used by all three apps. |
 | `Config` | Shared build settings and local signing overrides. |
 | `Brand` | SVG masters of the mark and wordmark. See `Brand/README.md`. |

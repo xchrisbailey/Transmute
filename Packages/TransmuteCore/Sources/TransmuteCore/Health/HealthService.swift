@@ -36,6 +36,10 @@ public protocol HealthService: Sendable {
     /// Saves a finished Transmute workout and returns the Health workout's id.
     func save(_ workout: HealthWorkoutRecord) async throws -> UUID
 
+    /// Whether a bodyweight can be saved right now without asking: Health is here and the
+    /// person already allowed it. A shortcut checks this, since it must never prompt (#19).
+    var canSaveBodyweight: Bool { get }
+
     /// Saves a bodyweight entered in Transmute and returns the sample's id.
     func saveBodyweight(kg: Double, at date: Date) async throws -> UUID
 
@@ -157,6 +161,7 @@ public struct UnavailableHealthService: HealthService {
     public init() {}
 
     public var isAvailable: Bool { false }
+    public var canSaveBodyweight: Bool { false }
     public func requestAccess(_ scope: HealthAccessScope) async throws {}
     public func accessStatus() async -> HealthAccessStatus { HealthAccessStatus() }
     public func bodyMetrics() async -> HealthBodyMetrics { HealthBodyMetrics() }

@@ -19,6 +19,9 @@ struct RootView: View {
     @AppStorage("rootTab") private var tab = "today"
     /// Set by a widget's button (#19): Today begins the session once it's on screen.
     @State private var beginsWorkout = false
+    /// Set by Open workout and Spotlight (#19): the log shows this workout once it's on screen.
+    @State private var openedWorkout: UUID?
+    private let router = DeepLinkRouter.shared
 
     var body: some View {
         if let profile = profiles.first {
@@ -37,7 +40,7 @@ struct RootView: View {
                 }
                 Tab(value: "log") {
                     NavigationStack {
-                        HistoryView(profile: profile, plan: plans.first)
+                        HistoryView(profile: profile, plan: plans.first, opening: $openedWorkout)
                             .toolbar { profileItems(profile) }
                     }
                 } label: {
@@ -81,9 +84,11 @@ struct RootView: View {
             .tint(Color.brand(\.magic))
             .workoutPreferences(of: profile)
             .onOpenURL { url in
-                guard let link = DeepLink(url: url) else { return }
-                tab = "today"
-                beginsWorkout = link == .beginToday
+                if let link = DeepLink(url: url) { follow(link) }
+            }
+            // An App Intent's link, which may have been waiting since before the window (#19).
+            .onChange(of: router.pending, initial: true) {
+                if let link = router.take() { follow(link) }
             }
             .trainingReminders(plan: plans.first) { tab = "today" }
         } else {
@@ -94,6 +99,22 @@ struct RootView: View {
             } onFinish: { _, _ in
                 ErasureNotice.clear()
             }
+        }
+    }
+
+    /// Goes where a widget, a shortcut or Spotlight pointed.
+    private func follow(_ link: DeepLink) {
+        switch link {
+        case .today, .beginToday:
+            tab = "today"
+            beginsWorkout = link == .beginToday
+        case .log:
+            tab = "log"
+        case .workout(let id):
+            tab = "log"
+            openedWorkout = id
+        case .plan:
+            tab = "plan"
         }
     }
 

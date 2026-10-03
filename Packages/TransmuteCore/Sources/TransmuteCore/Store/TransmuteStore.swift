@@ -34,6 +34,11 @@ public enum TransmuteStore {
         preconditionFailure("Even the in-memory store failed to open.")
     }
 
+    /// The one container an app's process uses: its windows and its App Intents (#19) read
+    /// and write through this, so an intent's save shows up on screen and the synced store is
+    /// only opened once.
+    public static let shared = makeAppContainer()
+
     private static let logger = Logger(subsystem: Transmute.bundlePrefix, category: "store")
 
     static func configuration(_ kind: Kind) -> ModelConfiguration {

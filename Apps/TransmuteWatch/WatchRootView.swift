@@ -17,6 +17,7 @@ struct WatchRootView: View {
     @State private var session: WatchSession?
     private let link = WatchLive.link
     private let live = WatchLive.workout
+    private let router = DeepLinkRouter.shared
 
     private var units: Units {
         Units(profiles.first)
@@ -67,6 +68,13 @@ struct WatchRootView: View {
             // week's sessions and the streak move when the workout is finished.
             WidgetCenter.shared.reloadTimelines(ofKind: TodayGlance.watchWidgetKind)
             WidgetCenter.shared.reloadTimelines(ofKind: TodayGlance.watchWeekWidgetKind)
+        }
+        // Begin today's workout, from Siri or a shortcut (#19). With a workout already on
+        // screen, or nothing to start today, the watch just shows what it has.
+        .onChange(of: router.pending, initial: true) {
+            guard router.take() == .beginToday, session == nil, mine == nil, let plan = plans.first else { return }
+            let today = TodayPlan(plan: plan)
+            if let day = today.day, !today.isDone { start(day) }
         }
         .task { await link.run() }
     }

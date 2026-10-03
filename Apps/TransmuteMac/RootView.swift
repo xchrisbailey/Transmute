@@ -48,6 +48,9 @@ struct MacShell: View {
 
     @SceneStorage("sidebar.section") private var section = SidebarSection.today
     @State private var beginsWorkout = false
+    /// Set by Open workout and Spotlight (#19): the log selects this workout.
+    @State private var openedWorkout: UUID?
+    private let router = DeepLinkRouter.shared
     @State private var showsRebrew = false
     @State private var showsProfile = false
     @FocusState private var searchIsFocused: Bool
@@ -68,9 +71,11 @@ struct MacShell: View {
         .focusedSceneValue(\.windowActions, actions)
         // A widget's tap, or its button (#19).
         .onOpenURL { url in
-            guard let link = DeepLink(url: url) else { return }
-            section = .today
-            beginsWorkout = link == .beginToday
+            if let link = DeepLink(url: url) { follow(link) }
+        }
+        // An App Intent's link, which may have been waiting since before the window (#19).
+        .onChange(of: router.pending, initial: true) {
+            if let link = router.take() { follow(link) }
         }
         .trainingReminders(plan: plan) { section = .today }
         .sheet(isPresented: $showsProfile) {
@@ -137,9 +142,25 @@ struct MacShell: View {
                 BrewPlanView(profile: profile, service: service, device: device)
             }
         case .log:
-            LogTableView(profile: profile, plan: plan, searchFocus: $searchIsFocused)
+            LogTableView(profile: profile, plan: plan, searchFocus: $searchIsFocused, opening: $openedWorkout)
         case .progress:
             ProgressPane(plan: plan, profile: profile, service: service)
+        }
+    }
+
+    /// Goes where a widget, a shortcut or Spotlight pointed.
+    private func follow(_ link: DeepLink) {
+        switch link {
+        case .today, .beginToday:
+            section = .today
+            beginsWorkout = link == .beginToday
+        case .log:
+            section = .log
+        case .workout(let id):
+            section = .log
+            openedWorkout = id
+        case .plan:
+            section = .plan
         }
     }
 
