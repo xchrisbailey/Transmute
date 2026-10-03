@@ -2101,6 +2101,42 @@
         }
       }
     },
+    "plain.mac.plan.grid": {
+      "comment": "plain. Mac. Show the plan as a grid of weeks and days.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week grid"
+          }
+        }
+      }
+    },
+    "plain.mac.plan.layout": {
+      "comment": "plain. Mac. Label of the control that switches between the week grid and the list.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan layout"
+          }
+        }
+      }
+    },
+    "plain.mac.plan.list": {
+      "comment": "plain. Mac. Show the plan as a list, like on iPhone.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "List"
+          }
+        }
+      }
+    },
     "plain.mac.sidebar.daysPerWeek": {
       "comment": "plain. Mac. Sidebar footer: how many days a week the person trains.",
       "extractionState": "manual",
@@ -2709,6 +2745,102 @@
           "stringUnit": {
             "state": "translated",
             "value": "This week"
+          }
+        }
+      }
+    },
+    "plain.planGrid.dayOptions": {
+      "comment": "plain. Menu on a day: rework it or move it.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Day options"
+          }
+        }
+      }
+    },
+    "plain.planGrid.editTargets": {
+      "comment": "plain. Opens an exercise's sets, reps, weight and rest.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit targets"
+          }
+        }
+      }
+    },
+    "plain.planGrid.moveDayTo": {
+      "comment": "plain. Move a session to another weekday; the argument is the weekday, e.g. Tuesday.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move to %@"
+          }
+        }
+      }
+    },
+    "plain.planGrid.moveDown": {
+      "comment": "plain. Move an exercise one place later in its day.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move down"
+          }
+        }
+      }
+    },
+    "plain.planGrid.moveToDay": {
+      "comment": "plain. Menu listing the days an exercise can move to.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move to another day"
+          }
+        }
+      }
+    },
+    "plain.planGrid.moveUp": {
+      "comment": "plain. Move an exercise one place earlier in its day.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move up"
+          }
+        }
+      }
+    },
+    "plain.planGrid.noSession": {
+      "comment": "plain. A weekday with nothing planned.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No session"
+          }
+        }
+      }
+    },
+    "plain.planGrid.sets": {
+      "comment": "plain. Target field: how many sets.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sets"
           }
         }
       }

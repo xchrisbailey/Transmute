@@ -20,6 +20,11 @@ public enum PlanEditor {
 
     // MARK: Days
 
+    /// The session on a weekday of a week, if there is one.
+    public static func day(of plan: Plan, week: Int, weekday: Weekday) -> PlanDay? {
+        plan.days?.first { $0.week == week && $0.weekday == weekday }
+    }
+
     /// Moves a day to another weekday in its week. If that weekday already has a session, the
     /// two swap.
     public static func move(_ day: PlanDay, to weekday: Weekday) {
@@ -63,6 +68,28 @@ public enum PlanEditor {
         for (index, exercise) in ordered.enumerated() {
             exercise.order = index
         }
+        day.isEdited = true
+    }
+
+    /// Moves an exercise to a position in a day: its own day to reorder, or another day in the
+    /// plan. `index` is where it ends up in that day's order; without one it goes last. Both
+    /// days stay numbered from zero. Moving to another day takes the exercise out of its
+    /// superset, since its partner stays behind.
+    public static func move(_ exercise: PlannedExercise, to day: PlanDay, at index: Int? = nil) {
+        guard let source = exercise.day else { return }
+        var ordered = day.orderedExercises.filter { $0 !== exercise }
+        let position = min(max(index ?? ordered.count, 0), ordered.count)
+        if source === day, exercise.order == position { return }
+        if source !== day {
+            exercise.day = day
+            exercise.supersetGroup = nil
+            source.isEdited = true
+        }
+        ordered.insert(exercise, at: position)
+        for (index, exercise) in ordered.enumerated() {
+            exercise.order = index
+        }
+        if source !== day { renumber(source) }
         day.isEdited = true
     }
 
@@ -133,6 +160,18 @@ public enum PlanEditor {
         planned.sets?.removeAll { $0 === last }
         context.delete(last)
         planned.day?.isEdited = true
+    }
+
+    /// Sets how many sets an exercise has: new ones copy the last, extra ones come off the end,
+    /// and at least one stays.
+    public static func setSetCount(of planned: PlannedExercise, to count: Int, in context: ModelContext) {
+        let target = max(1, count)
+        for _ in 0..<max(0, target - planned.orderedSets.count) {
+            addSet(to: planned)
+        }
+        for _ in 0..<max(0, planned.orderedSets.count - target) {
+            removeSet(from: planned, in: context)
+        }
     }
 
     /// Marks a day edited after its targets were changed in place.

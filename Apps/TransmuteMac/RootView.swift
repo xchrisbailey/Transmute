@@ -84,13 +84,43 @@ struct MacShell: View {
         }
     }
 
+    /// The plan as the week grid, or as the same list the iPhone shows.
+    @AppStorage("planGrid") private var showsPlanGrid = true
+
     @ViewBuilder private var pane: some View {
         switch section {
         case .today:
             TodayView(plan: plan, profile: profile, beginsWorkout: $beginsWorkout)
         case .plan:
             if let plan {
-                PlanView(plan: plan, profile: profile, service: service, device: device)
+                Group {
+                    if showsPlanGrid {
+                        PlanGridView(plan: plan, profile: profile, service: service, device: device)
+                    } else {
+                        PlanView(plan: plan, profile: profile, service: service, device: device)
+                    }
+                }
+                .toolbar {
+                    ToolbarItem {
+                        Picker(selection: $showsPlanGrid) {
+                            Label {
+                                Text(MacCopy.planGrid)
+                            } icon: {
+                                Image(systemName: "square.grid.3x3")
+                            }
+                            .tag(true)
+                            Label {
+                                Text(MacCopy.planList)
+                            } icon: {
+                                Image(systemName: "list.bullet")
+                            }
+                            .tag(false)
+                        } label: {
+                            Text(MacCopy.planLayout)
+                        }
+                        .pickerStyle(.segmented)
+                    }
+                }
             } else {
                 BrewPlanView(profile: profile, service: service, device: device)
             }

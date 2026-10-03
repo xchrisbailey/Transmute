@@ -114,7 +114,8 @@ struct PlannedExerciseView: View {
 
 /// The fields one set needs, by how the exercise is measured.
 struct SetTargetEditor: View {
-    let number: Int
+    /// The set's number for its heading; nil where the fields stand for every set (#17).
+    let number: Int?
     let set: PlannedSet
     let tracking: TrackingType
     let units: Units
@@ -123,9 +124,11 @@ struct SetTargetEditor: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(PlanCopy.setNumber(number))
-                .brandFont(.label)
-                .foregroundStyle(Color.brandText(\.subtext))
+            if let number {
+                Text(PlanCopy.setNumber(number))
+                    .brandFont(.label)
+                    .foregroundStyle(Color.brandText(\.subtext))
+            }
             switch tracking {
             case .weightReps:
                 intStepper(PlanCopy.reps, value: set.targetReps ?? 8, range: 1...30) { $0.targetReps = $1 }
@@ -164,6 +167,8 @@ struct SetTargetEditor: View {
             ) {
                 Text(PlanCopy.load)
             }
+            // The row already has its label; the Mac would draw the field's as well.
+            .labelsHidden()
             .multilineTextAlignment(.trailing)
             .brandNumberFont(size: 17)
             #if os(iOS)

@@ -52,6 +52,100 @@ struct PlanEditorTests {
         #expect(day.isEdited)
     }
 
+    @Test func findsTheDayOnAWeekday() {
+        #expect(PlanEditor.day(of: plan, week: 1, weekday: 1) === monday)
+        #expect(PlanEditor.day(of: plan, week: 1, weekday: 2) == nil)
+        #expect(PlanEditor.day(of: plan, week: 2, weekday: 1)?.week == 2)
+    }
+
+    @Test func movingADayOnlyTouchesItsOwnWeek() {
+        let nextMonday = plan.orderedDays.first { $0.week == 2 && $0.weekday == 1 }!
+        PlanEditor.move(monday, to: 7)
+        #expect(PlanEditor.day(of: plan, week: 1, weekday: 7)?.focus == "Lower and power")
+        #expect(PlanEditor.day(of: plan, week: 1, weekday: 1) == nil)
+        #expect(nextMonday.weekday == 1 && !nextMonday.isEdited)
+        #expect(plan.orderedDays.filter { $0.week == 1 }.count == 3)
+    }
+
+    @Test func movingAnExerciseWithinItsDay() {
+        let day = monday
+        let ids = day.orderedExercises.map(\.exerciseID)
+        // Down: the first exercise lands where the third was.
+        PlanEditor.move(day.orderedExercises[0], to: day, at: 2)
+        #expect(day.orderedExercises.map(\.exerciseID) == [ids[1], ids[2], ids[0], ids[3], ids[4]])
+        // Up, and past the end clamps to last.
+        PlanEditor.move(day.orderedExercises[2], to: day, at: 0)
+        #expect(day.orderedExercises.map(\.exerciseID) == ids)
+        PlanEditor.move(day.orderedExercises[1], to: day, at: 99)
+        #expect(day.orderedExercises.map(\.exerciseID) == [ids[0], ids[2], ids[3], ids[4], ids[1]])
+        #expect(day.orderedExercises.map(\.order) == Array(0..<5))
+        #expect(day.exercises?.count == 5)
+        #expect(day.isEdited)
+    }
+
+    @Test func droppingAnExerciseWhereItAlreadyIsChangesNothing() {
+        let day = monday
+        PlanEditor.move(day.orderedExercises[1], to: day, at: 1)
+        PlanEditor.move(day.orderedExercises[4], to: day)
+        #expect(!day.isEdited)
+    }
+
+    @Test func movingAnExerciseToAnotherDay() throws {
+        let day = monday
+        let wednesday = try #require(PlanEditor.day(of: plan, week: 1, weekday: 3))
+        let squat = try #require(day.orderedExercises.first { $0.exerciseID == "back-squat" })
+        let sets = squat.orderedSets.count
+        let before = wednesday.orderedExercises.map(\.exerciseID)
+
+        PlanEditor.move(squat, to: wednesday, at: 1)
+        #expect(squat.day === wednesday)
+        #expect(wednesday.orderedExercises.map(\.exerciseID) == [before[0], "back-squat"] + before.dropFirst())
+        #expect(wednesday.orderedExercises.map(\.order) == Array(0..<6))
+        #expect(!day.orderedExercises.contains { $0 === squat })
+        #expect(day.orderedExercises.map(\.order) == Array(0..<4))
+        #expect(squat.orderedSets.count == sets)
+        #expect(day.isEdited && wednesday.isEdited)
+
+        // Without an index it goes last, and it leaves its superset partner behind.
+        let press = try #require(wednesday.orderedExercises.first { $0.supersetGroup == 1 })
+        PlanEditor.move(press, to: day)
+        #expect(day.orderedExercises.last === press)
+        #expect(press.supersetGroup == nil)
+        #expect(day.orderedExercises.map(\.order) == Array(0..<5))
+        #expect(wednesday.orderedExercises.map(\.order) == Array(0..<5))
+    }
+
+    @Test func movingAnExerciseAcrossDaysCanBeUndone() throws {
+        context.undoManager = UndoManager()
+        try context.save()
+        let day = monday
+        let wednesday = try #require(PlanEditor.day(of: plan, week: 1, weekday: 3))
+        let ids = day.orderedExercises.map(\.exerciseID)
+        context.undoManager?.beginUndoGrouping()
+        PlanEditor.move(day.orderedExercises[1], to: wednesday, at: 0)
+        context.undoManager?.endUndoGrouping()
+        context.processPendingChanges()
+        #expect(wednesday.orderedExercises.first?.exerciseID == ids[1])
+        context.undoManager?.undo()
+        #expect(day.orderedExercises.map(\.exerciseID) == ids)
+        #expect(wednesday.orderedExercises.count == 5)
+        #expect(!day.isEdited && !wednesday.isEdited)
+    }
+
+    @Test func setCountGrowsAndShrinksButKeepsOne() throws {
+        let squat = try #require(monday.orderedExercises.first { $0.exerciseID == "back-squat" })
+        let load = squat.orderedSets.first?.targetLoadKg
+        PlanEditor.setSetCount(of: squat, to: 6, in: context)
+        #expect(squat.orderedSets.count == 6)
+        #expect(squat.orderedSets.map(\.order) == Array(0..<6))
+        #expect(squat.orderedSets.allSatisfy { $0.targetLoadKg == load })
+        PlanEditor.setSetCount(of: squat, to: 2, in: context)
+        #expect(squat.orderedSets.count == 2)
+        PlanEditor.setSetCount(of: squat, to: 0, in: context)
+        #expect(squat.orderedSets.count == 1)
+        #expect(monday.isEdited)
+    }
+
     @Test func swappingKeepsSetsWhenTrackingMatches() throws {
         let squat = try #require(monday.orderedExercises.first { $0.exerciseID == "back-squat" })
         let sets = squat.orderedSets.count
