@@ -66,6 +66,12 @@ struct MacShell: View {
             .id(section)
         }
         .focusedSceneValue(\.windowActions, actions)
+        // A widget's tap, or its button (#19).
+        .onOpenURL { url in
+            guard let link = DeepLink(url: url) else { return }
+            section = .today
+            beginsWorkout = link == .beginToday
+        }
         .sheet(isPresented: $showsProfile) {
             NavigationStack {
                 ProfileView(profile: profile)
