@@ -26,7 +26,7 @@
                     SportSection(draft: $draft)
                 }
                 ScheduleSection(draft: $draft)
-                EquipmentSection(draft: $draft)
+                EquipmentSection(draft: $draft, linksPlateSetup: true)
                 LimitationsSection(draft: $draft)
                 bodyweightHistory
             }

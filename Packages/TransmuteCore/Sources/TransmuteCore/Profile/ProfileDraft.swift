@@ -19,7 +19,7 @@ public struct ProfileDraft: Equatable, Sendable {
     public var sport: String
     public var schedule: Schedule
     public var equipment: Set<Equipment>
-    public var barbellKg: Double
+    public var plates: PlateInventory
     public var limitations: String
     public var limitationAreas: Set<BodyArea>
 
@@ -36,7 +36,7 @@ public struct ProfileDraft: Equatable, Sendable {
         sport = ""
         schedule = Schedule(daysPerWeek: 3, preferredWeekdays: [1, 3, 5], sessionMinutes: 45, weeks: 8)
         equipment = EquipmentPreset.homeDumbbells.equipment
-        barbellKg = unitSystem == .metric ? 20 : 20.4
+        plates = PlateInventory(.commercialGym, system: unitSystem)
         limitations = ""
         limitationAreas = []
     }
@@ -56,9 +56,15 @@ public struct ProfileDraft: Equatable, Sendable {
         sport = profile.sports.first ?? ""
         schedule = profile.schedule
         equipment = Set(profile.equipment)
-        barbellKg = profile.barbellKg
+        plates = profile.plates
         limitations = profile.limitations
         limitationAreas = Set(profile.limitationAreas)
+    }
+
+    /// The chosen bar's weight; setting it changes that bar in `plates`.
+    public var barbellKg: Double {
+        get { plates.barKg }
+        set { plates.setBarKg(newValue) }
     }
 
     // MARK: Validation
@@ -169,7 +175,8 @@ public struct ProfileDraft: Equatable, Sendable {
         }
         profile.schedule = schedule
         profile.equipment = Equipment.allCases.filter(equipment.contains)
-        profile.barbellKg = barbellKg
+        profile.plates = plates
+        profile.barbellKg = plates.barKg
         profile.limitations = limitations.trimmingCharacters(in: .whitespacesAndNewlines)
         profile.limitationAreas = BodyArea.allCases.filter(limitationAreas.contains)
         if let weightKg, profile.latestBodyweightKg.map({ abs($0 - weightKg) > 0.05 }) ?? true {

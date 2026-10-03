@@ -1969,6 +1969,486 @@
         }
       }
     },
+    "plain.plates.addPlate": {
+      "comment": "plain. Adds a plate of the entered weight.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add plate"
+          }
+        }
+      }
+    },
+    "plain.plates.bar": {
+      "comment": "plain. Heading and picker for which bar barbell work is loaded on.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bar"
+          }
+        }
+      }
+    },
+    "plain.plates.barWeight": {
+      "comment": "plain. The chosen bar's weight.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bar weight"
+          }
+        }
+      }
+    },
+    "plain.plates.cantLoad": {
+      "comment": "plain. Plate sheet when the plates can't make the target; the argument is e.g. 101 kg.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ can't be loaded exactly. Pick the nearest:"
+          }
+        }
+      }
+    },
+    "plain.plates.commercialGym": {
+      "comment": "plain. Equipment preset: a full commercial gym.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commercial gym"
+          }
+        }
+      }
+    },
+    "plain.plates.describe": {
+      "comment": "plain. VoiceOver for the drawn bar; e.g. Each side: 20, 10 and 2.5 kg. On a 20 kg bar.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each side: %1$@. On a %2$@ bar."
+          }
+        }
+      }
+    },
+    "plain.plates.describeBarOnly": {
+      "comment": "plain. VoiceOver for the drawn bar when it's empty; the argument is e.g. 20 kg.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing on the bar. Just the %@ bar."
+          }
+        }
+      }
+    },
+    "plain.plates.done": {
+      "comment": "plain. Closes the plate calculator sheet.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "plain.plates.dumbbellStep": {
+      "comment": "plain. How much each dumbbell goes up by.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dumbbell step"
+          }
+        }
+      }
+    },
+    "plain.plates.ezBar": {
+      "comment": "plain. A cambered curl bar.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EZ bar"
+          }
+        }
+      }
+    },
+    "plain.plates.heavier": {
+      "comment": "plain. Nearest loadable weight above; arguments are e.g. 102.5 kg and 25 · 15 · 1.25 per side.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heavier: %1$@, %2$@"
+          }
+        }
+      }
+    },
+    "plain.plates.heaviestDumbbell": {
+      "comment": "plain. The heaviest dumbbell there is.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heaviest dumbbell"
+          }
+        }
+      }
+    },
+    "plain.plates.home": {
+      "comment": "plain. Equipment preset: a typical home rack and plates.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home set"
+          }
+        }
+      }
+    },
+    "plain.plates.justTheBar": {
+      "comment": "plain. Plate sheet when nothing goes on the bar.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Just the bar"
+          }
+        }
+      }
+    },
+    "plain.plates.justTheBarCompact": {
+      "comment": "plain. Watch plate text when nothing goes on the bar.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "just the bar"
+          }
+        }
+      }
+    },
+    "plain.plates.kilograms": {
+      "comment": "plain. Kit marked in kilograms.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kilograms"
+          }
+        }
+      }
+    },
+    "plain.plates.lightBar": {
+      "comment": "plain. A 15 kg or 35 lb Olympic bar.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light bar"
+          }
+        }
+      }
+    },
+    "plain.plates.lighter": {
+      "comment": "plain. Nearest loadable weight below; arguments are e.g. 100 kg and 25 · 15 per side.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lighter: %1$@, %2$@"
+          }
+        }
+      }
+    },
+    "plain.plates.lighterThanBar": {
+      "comment": "plain. Plate sheet when the target is under the bar; the argument is e.g. 20 kg.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That's lighter than the %@ bar."
+          }
+        }
+      }
+    },
+    "plain.plates.machineStep": {
+      "comment": "plain. The step between pins on a machine or cable stack.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Machine stack step"
+          }
+        }
+      }
+    },
+    "plain.plates.markedIn": {
+      "comment": "plain. Picker for whether the kit is in kilograms or pounds.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plates marked in"
+          }
+        }
+      }
+    },
+    "plain.plates.moreThanPlates": {
+      "comment": "plain. Plate sheet when the target is over everything the plates can load.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That's more than your plates make."
+          }
+        }
+      }
+    },
+    "plain.plates.newPlate": {
+      "comment": "plain. Field for the weight of a plate to add.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New plate"
+          }
+        }
+      }
+    },
+    "plain.plates.onBar": {
+      "comment": "plain. Under the drawn bar; the argument is the bar's weight, e.g. 20 kg.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On a %@ bar"
+          }
+        }
+      }
+    },
+    "plain.plates.pairs": {
+      "comment": "plain. How many pairs of a plate there are.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pairs: %lld"
+          }
+        }
+      }
+    },
+    "plain.plates.perSide": {
+      "comment": "plain. Heading over one side's plates; the argument is kg or lb.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plates per side (%@)"
+          }
+        }
+      }
+    },
+    "plain.plates.perSideCompact": {
+      "comment": "plain. Watch plate text; the argument is one side's plates, e.g. 20 · 10 · 2.5.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "per side: %@"
+          }
+        }
+      }
+    },
+    "plain.plates.plateRow": {
+      "comment": "plain. VoiceOver for a plate row; e.g. 2.5 kg plates, pairs: 3.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ plates, pairs: %2$lld"
+          }
+        }
+      }
+    },
+    "plain.plates.platesNote": {
+      "comment": "plain. Footer under the plate list.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How many pairs of each plate you have. The calculator never uses more than this."
+          }
+        }
+      }
+    },
+    "plain.plates.pounds": {
+      "comment": "plain. Kit marked in pounds.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pounds"
+          }
+        }
+      }
+    },
+    "plain.plates.presets": {
+      "comment": "plain. Heading over the equipment presets.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start from"
+          }
+        }
+      }
+    },
+    "plain.plates.setup": {
+      "comment": "plain. Title of the equipment setup screen, and its row on the Profile screen.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bar and plates"
+          }
+        }
+      }
+    },
+    "plain.plates.setupNote": {
+      "comment": "plain. Under the Bar and plates row on the Profile screen.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your bar, plates, dumbbells and machines, so loads round to what you can actually lift."
+          }
+        }
+      }
+    },
+    "plain.plates.standardBar": {
+      "comment": "plain. A 20 kg or 45 lb Olympic bar.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard bar"
+          }
+        }
+      }
+    },
+    "plain.plates.steps": {
+      "comment": "plain. Heading over the dumbbell and machine steps.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dumbbells and machines"
+          }
+        }
+      }
+    },
+    "plain.plates.stepsNote": {
+      "comment": "plain. Footer under the dumbbell and machine steps.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dumbbell and machine loads round to these steps."
+          }
+        }
+      }
+    },
+    "plain.plates.title": {
+      "comment": "plain. Title of the plate calculator sheet.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plates"
+          }
+        }
+      }
+    },
+    "plain.plates.trapBar": {
+      "comment": "plain. A hex or trap bar.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trap bar"
+          }
+        }
+      }
+    },
+    "plain.plates.unitNote": {
+      "comment": "plain. Footer under the kit unit picker.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changing this starts the plates over from the preset in that unit."
+          }
+        }
+      }
+    },
+    "plain.plates.weight": {
+      "comment": "plain. Plate sheet stepper that moves to the next loadable weight.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight"
+          }
+        }
+      }
+    },
     "plain.preferNotToSay": {
       "comment": "plain. Sex picker option.",
       "extractionState": "manual",
