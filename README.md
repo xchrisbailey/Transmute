@@ -47,7 +47,11 @@ scripts/eval-intelligence.sh  # real-model tests and the planning evaluation set
 
 `eval-intelligence.sh` calls Apple Intelligence on this Mac, so it needs it turned on. The output varies run to run, so run it when prompts, schemas or the exercise library change rather than on every push.
 
-There's no hosted CI, because GitHub's macOS runners lag behind the Xcode and SDKs this project needs. Run `scripts/check.sh` before pushing.
+There's no CI on pull requests, because GitHub's macOS runners lag behind the Xcode and SDKs this project needs. Run `scripts/check.sh` before pushing.
+
+## Releasing
+
+Xcode Cloud archives the iPhone (with the watch app inside) and Mac apps and sends them to TestFlight when a `v*` tag is pushed. The scripts it runs are in `ci_scripts/`. `docs/TESTFLIGHT.md` walks through the one-time Apple Developer, App Store Connect and Xcode Cloud setup.
 
 Brand strings live in `Apps/Shared/Localizable.xcstrings` and are read through `Copy` in TransmuteUI. Each key starts with `voice.` (alchemy verbs) or `plain.` (mid-set, watch, errors, deletes, Health).
 
