@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>Transmute icon layer 4: sparkles</title>
+  <g transform="translate(192 192) scale(10)">
+    <path d="M7 3Q7 8.5 12.5 8.5Q7 8.5 7 14Q7 8.5 1.5 8.5Q7 8.5 7 3Z" fill="#f9e2af"/>
+    <circle cx="56" cy="8" r="3" stroke="#f5c2e7" stroke-width="2" fill="none"/>
+    <circle cx="59" cy="19" r="2.2" fill="#b4befe"/>
+  </g>
+</svg>

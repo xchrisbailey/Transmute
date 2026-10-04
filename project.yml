@@ -57,7 +57,12 @@ targets:
     sources:
       - Apps/TransmuteiOS
       - Apps/IntentsShared
-      - Apps/Shared
+      - path: Apps/Shared
+        excludes: [AppIcon.icon]
+      # The Icon Composer icon is one file to Xcode, not a folder of sources.
+      - path: Apps/Shared/AppIcon.icon
+        type: file
+        buildPhase: resources
       - path: Resources/Fonts
         buildPhase: resources
     dependencies:
@@ -146,7 +151,12 @@ targets:
       # The three shortcuts (#19). Spotlight and App Entities are the iPhone's and the Mac's.
       - path: Apps/IntentsShared
         excludes: [Spotlight]
-      - Apps/Shared
+      - path: Apps/Shared
+        excludes: [AppIcon.icon]
+      # The Icon Composer icon is one file to Xcode, not a folder of sources.
+      - path: Apps/Shared/AppIcon.icon
+        type: file
+        buildPhase: resources
       - path: Resources/Fonts/GeistMono-SemiBold.otf
         buildPhase: resources
       - path: Resources/Fonts/GeistMono-Bold.otf
@@ -222,7 +232,12 @@ targets:
     sources:
       - Apps/TransmuteMac
       - Apps/IntentsShared
-      - Apps/Shared
+      - path: Apps/Shared
+        excludes: [AppIcon.icon]
+      # The Icon Composer icon is one file to Xcode, not a folder of sources.
+      - path: Apps/Shared/AppIcon.icon
+        type: file
+        buildPhase: resources
       - path: Resources/Fonts
         buildPhase: resources
     dependencies:

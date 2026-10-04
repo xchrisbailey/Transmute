@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>Transmute icon layer 3: liquid and bubbles</title>
+  <g transform="translate(192 192) scale(10)">
+    <defs><clipPath id="clip-kb"><path d="M22.4 56.5A17.37 17.37 0 1 1 41.6 56.5Z"/></clipPath></defs>
+    <path clip-path="url(#clip-kb)" d="M8 44Q14 39.5 20 44T32 44T44 44T56 44V64H8Z" fill="#cba6f7"/>
+    <circle cx="27" cy="50.5" r="2.6" fill="#1e1e2e" fill-opacity="0.55"/>
+    <circle cx="37" cy="53.5" r="1.8" fill="#1e1e2e" fill-opacity="0.55"/>
+  </g>
+</svg>
