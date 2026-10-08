@@ -17,3 +17,6 @@ Package.resolved
 
 # Local signing overrides
 Config/Local.xcconfig
+
+# Claude Code agent worktrees
+.claude/worktrees/
