@@ -26,6 +26,8 @@ settings:
     GENERATE_INFOPLIST_FILE: YES
     INFOPLIST_KEY_CFBundleDisplayName: Transmute
     PRODUCT_NAME: Transmute
+    # Plain HTTPS only, so TestFlight and App Store uploads skip the export compliance question.
+    INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
     ALWAYS_SEARCH_USER_PATHS: NO
     CLANG_ENABLE_MODULES: YES
     ENABLE_PREVIEWS: YES
@@ -238,7 +240,9 @@ targets:
       - target: TransmuteMacWidgets
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: computer.srcery.transmute.mac
+        # The iPhone app's bundle ID, so one App Store Connect record sells and tests both
+        # (universal purchase, #20).
+        PRODUCT_BUNDLE_IDENTIFIER: computer.srcery.transmute
         SDKROOT: macosx
         SUPPORTED_PLATFORMS: macosx
         COMBINE_HIDPI_IMAGES: YES
@@ -276,7 +280,7 @@ targets:
       - sdk: SwiftUI.framework
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: computer.srcery.transmute.mac.widgets
+        PRODUCT_BUNDLE_IDENTIFIER: computer.srcery.transmute.widgets
         PRODUCT_NAME: TransmuteMacWidgets
         SDKROOT: macosx
         SUPPORTED_PLATFORMS: macosx

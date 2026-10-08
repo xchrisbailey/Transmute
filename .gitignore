@@ -18,5 +18,8 @@ Package.resolved
 # Local signing overrides
 Config/Local.xcconfig
 
+# Xcode Cloud writes TestFlight notes here (ci_scripts/ci_post_xcodebuild.sh)
+TestFlight/
+
 # Claude Code agent worktrees
 .claude/worktrees/
