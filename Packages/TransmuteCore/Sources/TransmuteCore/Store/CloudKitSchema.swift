@@ -13,8 +13,9 @@
 
         var errorDescription: String? {
             switch self {
-            case .noModel: "Core Data couldn't build a model from the schema's types."
-            case .notSignedForICloud: "this build isn't signed with the iCloud entitlement, or its synced store didn't open."
+            case .noModel: "Core Data couldn't build a model from the schema's types"
+            case .notSignedForICloud:
+                "this build isn't signed with the iCloud entitlement, or its synced store didn't open"
             }
         }
     }
