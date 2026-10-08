@@ -61,9 +61,10 @@ This is also the moment for the device checks still open on #4 (sync between two
 
 TestFlight and App Store builds talk to CloudKit's **Production** environment, which starts empty. Until the schema is deployed there, TestFlight builds won't sync.
 
-1. Open the [CloudKit Console](https://icloud.developer.apple.com/) → **CloudKit Database** → `iCloud.computer.srcery.transmute`.
-2. Check **Schema** → **Record Types** in Development lists the `CD_` types SwiftData made (Profile, Plan, Workout and the rest).
-3. **Deploy Schema Changes…** → **Deploy**.
+1. Launch a debug build signed with your team once with the launch argument `-initCloudKitSchema` (Xcode: **Product** → **Scheme** → **Edit Scheme** → **Run** → **Arguments**), on your iPhone or Mac, signed in to iCloud. It creates every record type and field in Development and prints a line starting `CloudKit schema:` to the Xcode console, then the app starts as usual. Without it, Development only has the fields that held a value in some record, so a TestFlight build saving a record that fills any other field would fail to sync.
+2. Open the [CloudKit Console](https://icloud.developer.apple.com/) → **CloudKit Database** → `iCloud.computer.srcery.transmute`.
+3. Check **Schema** → **Record Types** in Development lists the `CD_` types SwiftData made (Profile, Plan, Workout and the rest).
+4. **Deploy Schema Changes…** → **Deploy**.
 
 Repeat this whenever a SwiftData model changes, before shipping the build that changes it. Production schema can be added to but never have fields removed, so treat a deployed field as permanent.
 

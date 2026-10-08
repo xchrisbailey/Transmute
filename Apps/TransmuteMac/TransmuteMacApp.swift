@@ -19,6 +19,11 @@ struct TransmuteMacApp: App {
         // From launch: a tapped reminder (#19) is delivered as the app opens.
         ReminderTaps.shared.listen()
         #if DEBUG
+            // `-initCloudKitSchema` creates every record type and field in CloudKit's Development
+            // environment (#20), then the app carries on launching.
+            if ProcessInfo.processInfo.arguments.contains("-initCloudKitSchema") {
+                TransmuteStore.initializeCloudKitSchemaForLaunch()
+            }
             // `-seedSample` fills an empty store with the sample tennis player, plan and log.
             let context = container.mainContext
             if ProcessInfo.processInfo.arguments.contains("-seedSample"),
