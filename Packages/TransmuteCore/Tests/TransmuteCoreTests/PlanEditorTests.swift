@@ -164,7 +164,8 @@ struct PlanEditorTests {
     @Test func alternativesMatchPatternAndKit() {
         let options = PlanEditor.alternatives(to: "back-squat", equipment: [.dumbbell, .bench])
         #expect(!options.isEmpty)
-        #expect(options.allSatisfy { $0.exercise.pattern == .squat && $0.exercise.isDoable(with: [.dumbbell, .bench]) })
+        let kit: Set<Equipment> = [.dumbbell, .bench]
+        #expect(options.allSatisfy { $0.exercise.pattern == .squat && $0.exercise.isDoable(with: kit) })
         #expect(!options.contains { $0.exercise.id == "back-squat" })
     }
 
