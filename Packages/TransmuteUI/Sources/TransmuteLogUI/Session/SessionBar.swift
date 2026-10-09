@@ -49,6 +49,7 @@ struct SessionBar: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(Color.brand(\.magic))
+                .accessibilityInputLabels([Text(LogCopy.logSetVoiceControl), Text(Copy.logSet)])
             } else {
                 Button(action: onFinish) {
                     Text(LogCopy.finish)
@@ -57,6 +58,7 @@ struct SessionBar: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(Color.brand(\.magic))
+                .accessibilityInputLabels([Text(LogCopy.finishVoiceControl), Text(LogCopy.finish)])
             }
         }
         .padding()

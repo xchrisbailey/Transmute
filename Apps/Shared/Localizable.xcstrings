@@ -4957,6 +4957,18 @@
         }
       }
     },
+    "plain.session.finishVoiceControl": {
+      "comment": "plain. Voice Control name for the finish button under the sets, apart from the one in the toolbar.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish workout"
+          }
+        }
+      }
+    },
     "plain.session.finishedOnWatch": {
       "comment": "plain. A workout run on the watch has ended.",
       "extractionState": "manual",
@@ -5053,6 +5065,18 @@
         }
       }
     },
+    "plain.session.logSetVoiceControl": {
+      "comment": "plain. Voice Control name for the log set button; short, to be said aloud.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log"
+          }
+        }
+      }
+    },
     "plain.session.logged": {
       "comment": "plain. VoiceOver value for a set that's checked off.",
       "extractionState": "manual",
@@ -5133,6 +5157,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Running on Apple Watch"
+          }
+        }
+      }
+    },
+    "plain.session.personalRecord": {
+      "comment": "plain. VoiceOver, added to a set that set a record.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personal record"
           }
         }
       }
@@ -5305,6 +5341,18 @@
         }
       }
     },
+    "plain.session.setNumber": {
+      "comment": "plain. Names a set row; also what someone says to Voice Control, e.g. Set 3.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set %lld"
+          }
+        }
+      }
+    },
     "plain.session.setOf": {
       "comment": "plain. Which set this is, e.g. Set 2 of 4.",
       "extractionState": "manual",
@@ -5469,6 +5517,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Warm-up"
+          }
+        }
+      }
+    },
+    "plain.session.warmUpNumber": {
+      "comment": "plain. Names a warm-up set row; also what someone says to Voice Control, e.g. Warm-up 1.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm-up %lld"
           }
         }
       }
