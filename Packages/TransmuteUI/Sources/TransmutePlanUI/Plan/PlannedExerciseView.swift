@@ -294,10 +294,14 @@ private struct AlternativeRow: View {
                 } icon: {
                     Image(systemName: relation.systemImage)
                 }
+                // A list row tints a label's icon and moves it into the row's gutter.
+                .labelStyle(.titleAndIcon)
                 .brandFont(.label)
                 .foregroundStyle(Color.brandText(\.subtext))
+                .padding(.bottom, 4)
             }
         }
+        .contentShape(.rect)
         .accessibilityElement(children: .combine)
     }
 }
