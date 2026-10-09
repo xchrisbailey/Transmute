@@ -42,6 +42,22 @@ struct RestAnnouncementsTests {
         #expect(RestAnnouncements.marks(remaining: 89.2) == [90, 60, 30, 10, 0])
     }
 
+    @Test func aMarkOnTimeOrASecondLateIsStillWorthSaying() {
+        #expect(RestAnnouncements.isWorthSaying(mark: 60, secondsLate: 0))
+        #expect(RestAnnouncements.isWorthSaying(mark: 60, secondsLate: 1))
+        #expect(RestAnnouncements.isWorthSaying(mark: 60, secondsLate: -20))
+    }
+
+    @Test func aMarkWellPastIsNotSaid() {
+        #expect(!RestAnnouncements.isWorthSaying(mark: 60, secondsLate: 2.5))
+        #expect(!RestAnnouncements.isWorthSaying(mark: 10, secondsLate: 45))
+    }
+
+    @Test func theEndIsSaidHoweverLateItIs() {
+        #expect(RestAnnouncements.isWorthSaying(mark: 0, secondsLate: 0))
+        #expect(RestAnnouncements.isWorthSaying(mark: 0, secondsLate: 90))
+    }
+
     @Test func aRestExtendedMidWayIsPlannedAgainFromWhatIsLeft() {
         // 45 seconds into a 90 second rest, 15 more seconds make it 60 left.
         #expect(RestAnnouncements.marks(remaining: 60) == [60, 30, 10, 0])

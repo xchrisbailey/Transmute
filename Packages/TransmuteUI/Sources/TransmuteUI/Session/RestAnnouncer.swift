@@ -30,7 +30,11 @@ public enum RestAnnouncer {
                 }
             }
             guard !Task.isCancelled else { return false }
-            announce(mark)
+            // A late wake-up skips the marks it missed rather than speaking them back to back.
+            let secondsLate = Double(mark) - end.timeIntervalSinceNow
+            if RestAnnouncements.isWorthSaying(mark: mark, secondsLate: secondsLate) {
+                announce(mark)
+            }
         }
         return true
     }
@@ -41,7 +45,8 @@ public enum RestAnnouncer {
             mark == 0
             ? String(localized: Copy.restOverSpoken)
             : String(localized: Copy.restLeft(spoken(seconds: mark)))
-        // Low priority queues behind speech already in progress instead of cutting it off.
+        // UIAccessibilityPriorityLow: "Announcements are queued and spoken when other speech
+        // utterances have completed."
         var text = AttributedString(words)
         text.accessibilitySpeechAnnouncementPriority = .low
         AccessibilityNotification.Announcement(text).post()
