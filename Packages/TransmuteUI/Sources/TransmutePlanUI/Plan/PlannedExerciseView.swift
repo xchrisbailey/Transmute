@@ -236,11 +236,11 @@ struct SwapSheet: View {
                             ForEach(
                                 PlanEditor.alternatives(
                                     to: planned.exerciseID, equipment: equipment.union([.bodyweight]))
-                            ) { exercise in
+                            ) { alternative in
                                 Button {
-                                    pick(exercise)
+                                    pick(alternative.exercise)
                                 } label: {
-                                    ExerciseRow(exercise: exercise)
+                                    AlternativeRow(alternative: alternative)
                                 }
                                 .buttonStyle(.plain)
                             }
@@ -277,5 +277,47 @@ struct SwapSheet: View {
     private func pick(_ exercise: LibraryExercise) {
         PlanEditor.swap(planned, for: exercise)
         dismiss()
+    }
+}
+
+/// A swap suggestion, tagged "Easier" or "Harder" in words and an icon when the library links it
+/// to the exercise being swapped. VoiceOver reads the tag after the exercise's name.
+private struct AlternativeRow: View {
+    let alternative: PlanEditor.Alternative
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            ExerciseRow(exercise: alternative.exercise)
+            if let relation = alternative.relation {
+                Label {
+                    Text(relation.label)
+                } icon: {
+                    Image(systemName: relation.systemImage)
+                }
+                // A list row tints a label's icon and moves it into the row's gutter.
+                .labelStyle(.titleAndIcon)
+                .brandFont(.label)
+                .foregroundStyle(Color.brandText(\.subtext))
+                .padding(.bottom, 4)
+            }
+        }
+        .contentShape(.rect)
+        .accessibilityElement(children: .combine)
+    }
+}
+
+extension PlanEditor.Alternative.Relation {
+    fileprivate var label: LocalizedStringResource {
+        switch self {
+        case .easier: PlanCopy.swapEasier
+        case .harder: PlanCopy.swapHarder
+        }
+    }
+
+    fileprivate var systemImage: String {
+        switch self {
+        case .easier: "arrow.down.circle"
+        case .harder: "arrow.up.circle"
+        }
     }
 }

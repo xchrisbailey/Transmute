@@ -31,6 +31,14 @@ public enum PlanCopy {
         "plain.swap", defaultValue: "Swap", bundle: .main,
         comment: "plain. Swap an exercise for a similar one.")
 
+    static let swapEasier = LocalizedStringResource(
+        "plain.swapEasier", defaultValue: "Easier", bundle: .main,
+        comment: "plain. Tag on a swap suggestion that is an easier version of the exercise being swapped.")
+
+    static let swapHarder = LocalizedStringResource(
+        "plain.swapHarder", defaultValue: "Harder", bundle: .main,
+        comment: "plain. Tag on a swap suggestion that is a harder version of the exercise being swapped.")
+
     static func swapTitle(_ name: String) -> LocalizedStringResource {
         LocalizedStringResource(
             "plain.swapTitle", defaultValue: "Swap \(name)", bundle: .main,

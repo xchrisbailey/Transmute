@@ -164,8 +164,66 @@ struct PlanEditorTests {
     @Test func alternativesMatchPatternAndKit() {
         let options = PlanEditor.alternatives(to: "back-squat", equipment: [.dumbbell, .bench])
         #expect(!options.isEmpty)
-        #expect(options.allSatisfy { $0.pattern == .squat && $0.isDoable(with: [.dumbbell, .bench]) })
-        #expect(!options.contains { $0.id == "back-squat" })
+        let kit: Set<Equipment> = [.dumbbell, .bench]
+        #expect(options.allSatisfy { $0.exercise.pattern == .squat && $0.exercise.isDoable(with: kit) })
+        #expect(!options.contains { $0.exercise.id == "back-squat" })
+    }
+
+    /// Bodyweight squats `other`, `high`, `low`, `mid`, `solo` and `capped` in catalog order, plus a
+    /// lunge and a barbell squat that the filter leaves out. `capped` links to both of those.
+    private static let ladder = ExerciseLibrary(
+        catalogVersion: 1,
+        exercises: [
+            ladderExercise("other"),
+            ladderExercise("high", easier: "mid"),
+            ladderExercise("low", harder: "mid"),
+            ladderExercise("mid", easier: "low", harder: "high"),
+            ladderExercise("solo"),
+            ladderExercise("lunge", pattern: .lunge),
+            ladderExercise("heavy", equipment: [[.barbell]]),
+            ladderExercise("capped", easier: "heavy", harder: "lunge"),
+        ])
+
+    private static func ladderExercise(
+        _ id: String, pattern: MovementPattern = .squat, equipment: [[Equipment]] = [[.bodyweight]],
+        easier: String? = nil, harder: String? = nil
+    ) -> LibraryExercise {
+        LibraryExercise(
+            id: id, name: id, category: .strength, pattern: pattern, primaryMuscles: [.quads],
+            equipment: equipment, tracking: .reps, easier: easier, harder: harder)
+    }
+
+    private func relations(to id: String) -> [String: PlanEditor.Alternative.Relation?] {
+        let options = PlanEditor.alternatives(to: id, equipment: [.bodyweight], library: Self.ladder)
+        return Dictionary(uniqueKeysWithValues: options.map { ($0.exercise.id, $0.relation) })
+    }
+
+    @Test func alternativesSayWhichIsEasierAndHarder() {
+        #expect(
+            relations(to: "mid") == ["low": .easier, "high": .harder, "other": nil, "solo": nil, "capped": nil])
+    }
+
+    @Test func alternativesLabelOnlyTheVariantThatExists() {
+        #expect(relations(to: "high") == ["mid": .easier, "other": nil, "low": nil, "solo": nil, "capped": nil])
+        #expect(relations(to: "low") == ["mid": .harder, "other": nil, "high": nil, "solo": nil, "capped": nil])
+    }
+
+    @Test func alternativesWithoutVariantsAreUnlabelled() {
+        let options = PlanEditor.alternatives(to: "solo", equipment: [.bodyweight], library: Self.ladder)
+        #expect(options.map(\.exercise.id) == ["other", "high", "low", "mid", "capped"])
+        #expect(options.allSatisfy { $0.relation == nil })
+    }
+
+    @Test func alternativesKeepTheirOrderWithVariantsFirst() {
+        let options = PlanEditor.alternatives(to: "mid", equipment: [.bodyweight], library: Self.ladder)
+        #expect(options.map(\.exercise.id) == ["high", "low", "other", "solo", "capped"])
+    }
+
+    @Test func aVariantTheFilterLeavesOutStaysOut() {
+        // `capped` links to a barbell squat and a lunge; neither passes the filter, so neither shows.
+        let options = PlanEditor.alternatives(to: "capped", equipment: [.bodyweight], library: Self.ladder)
+        #expect(!options.contains { ["heavy", "lunge"].contains($0.exercise.id) })
+        #expect(options.allSatisfy { $0.relation == nil })
     }
 
     @Test func setsCopyTheLastAndKeepOne() throws {
