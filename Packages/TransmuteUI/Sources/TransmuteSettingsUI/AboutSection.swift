@@ -29,6 +29,7 @@ struct AboutInfo: Equatable {
 struct AboutSection: View {
     private let info = AboutInfo.current
     @State private var showsLicence = false
+    @Environment(\.legibilityWeight) private var legibilityWeight
 
     var body: some View {
         Section {
@@ -54,13 +55,14 @@ struct AboutSection: View {
                         .accessibilityHidden(true)
                 }
             }
+            // A sheet rather than a pushed screen: on the Mac a push swaps the Settings tabs for a
+            // back button and leaves the wrong tab lit. On the button, not the section, whose
+            // modifiers are applied to every row.
+            .sheet(isPresented: $showsLicence) {
+                FontLicenceSheet()
+            }
         } header: {
             Text(SettingsScreenCopy.paneAbout)
-        }
-        // A sheet rather than a pushed screen: on the Mac a push swaps the Settings tabs for a back
-        // button and leaves the wrong tab lit.
-        .sheet(isPresented: $showsLicence) {
-            FontLicenceSheet()
         }
     }
 
@@ -68,7 +70,7 @@ struct AboutSection: View {
     private var versionLine: AttributedString {
         var line = AttributedString(String(localized: Copy.about(version: info.version)))
         if let range = line.range(of: info.version) {
-            line[range].font = .brandNumber(size: 15, relativeTo: .body)
+            line[range].font = .brandNumber(size: 15, relativeTo: .body, bold: legibilityWeight == .bold)
         }
         return line
     }
