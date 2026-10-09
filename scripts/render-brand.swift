@@ -1,10 +1,9 @@
 #!/usr/bin/env swift
 // Renders the brand assets from the SVG masters in Brand/:
 //   - Brand/wordmark-{mocha,latte}.svg, outlined from Geist ExtraBold
-//   - the app icon PNGs in Apps/Shared/Assets.xcassets/AppIcon.appiconset
 //   - Brand/icon-{mocha,latte}.png previews
 //
-// These stand in until the Icon Composer `.icon` is exported (#3).
+// The app icon itself is Apps/Shared/AppIcon.icon, an Icon Composer document (#3).
 // Usage: swift scripts/render-brand.swift   (from the repo root)
 
 import AppKit
@@ -12,7 +11,6 @@ import CoreText
 
 let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
 let brand = root.appending(path: "Brand")
-let iconSet = root.appending(path: "Apps/Shared/Assets.xcassets/AppIcon.appiconset")
 
 struct Theme {
     let name: String
@@ -74,36 +72,9 @@ func drawIcon(_ ctx: CGContext, size: CGFloat, theme: Theme, markScale: CGFloat,
     mark(theme).draw(in: rect)
 }
 
-// MARK: - App icons
+// MARK: - Previews
 
-let iOSIcon = bitmap(1024) { drawIcon($0, size: 1024, theme: mocha, markScale: 0.62) }
-write(iOSIcon, to: iconSet.appending(path: "icon-ios.png"))
-
-let iOSDark = bitmap(1024) { drawIcon($0, size: 1024, theme: mocha, markScale: 0.62, glow: false) }
-write(iOSDark, to: iconSet.appending(path: "icon-ios-dark.png"))
-
-// Tinted icons are grayscale; the system applies the tint.
-let tinted = bitmap(1024) { ctx in
-    ctx.setFillColor(NSColor.black.cgColor)
-    ctx.fill(CGRect(x: 0, y: 0, width: 1024, height: 1024))
-    let side: CGFloat = 1024 * 0.62
-    mark(mocha).draw(in: CGRect(x: (1024 - side) / 2, y: (1024 - side) / 2, width: side, height: side))
-    ctx.setBlendMode(.saturation)
-    ctx.setFillColor(NSColor.gray.cgColor)
-    ctx.fill(CGRect(x: 0, y: 0, width: 1024, height: 1024))
-}
-write(tinted, to: iconSet.appending(path: "icon-ios-tinted.png"))
-
-// The watch masks to a circle, so the mark sits a little smaller on true black.
-let watch = bitmap(1024) { ctx in
-    ctx.setFillColor(NSColor.black.cgColor)
-    ctx.fill(CGRect(x: 0, y: 0, width: 1024, height: 1024))
-    let side: CGFloat = 1024 * 0.54
-    mark(mocha).draw(in: CGRect(x: (1024 - side) / 2, y: (1024 - side) / 2, width: side, height: side))
-}
-write(watch, to: iconSet.appending(path: "icon-watch.png"))
-
-// macOS icons carry their own rounded square on the 824pt grid.
+// The previews carry the Mac's rounded square on the 824pt grid.
 func macIcon(_ theme: Theme) -> NSBitmapImageRep {
     bitmap(1024) { ctx in
         let inset: CGFloat = 100
@@ -120,17 +91,6 @@ func macIcon(_ theme: Theme) -> NSBitmapImageRep {
         ctx.translateBy(x: inset, y: inset)
         drawIcon(ctx, size: 1024 - inset * 2, theme: theme, markScale: 0.62)
     }
-}
-
-let mac = macIcon(mocha)
-for size in [16, 32, 64, 128, 256, 512, 1024] {
-    let image = NSImage(size: NSSize(width: size, height: size))
-    image.addRepresentation(mac)
-    let scaled = bitmap(size) { ctx in
-        ctx.interpolationQuality = .high
-        image.draw(in: CGRect(x: 0, y: 0, width: size, height: size))
-    }
-    write(scaled, to: iconSet.appending(path: "icon-mac-\(size).png"))
 }
 
 write(macIcon(mocha), to: brand.appending(path: "icon-mocha.png"))
@@ -221,4 +181,4 @@ for theme in [mocha, latte] {
     try! svg.write(to: brand.appending(path: "wordmark-\(theme.name).svg"), atomically: true, encoding: .utf8)
 }
 
-print("Rendered icons and wordmarks.")
+print("Rendered previews and wordmarks.")

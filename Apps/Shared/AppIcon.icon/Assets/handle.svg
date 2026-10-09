@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>Transmute icon layer 1: handle</title>
+  <g transform="translate(192 192) scale(10)">
+    <path d="M19.5 36V24Q19.5 11.5 32 11.5Q44.5 11.5 44.5 24V36" stroke="#cdd6f4" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <path d="M19.5 36V24Q19.5 11.5 32 11.5Q44.5 11.5 44.5 24V36" stroke="#fab387" stroke-width="4" stroke-linecap="round" fill="none"/>
+  </g>
+</svg>
