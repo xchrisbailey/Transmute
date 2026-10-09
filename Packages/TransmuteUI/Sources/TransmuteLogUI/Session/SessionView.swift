@@ -219,19 +219,16 @@ public struct SessionView: View {
         }
     }
 
-    /// Sleeps until the rest ends, then buzzes, chimes and clears the timer. Runs again
-    /// whenever the end moves, so skipping or adding time just restarts the wait. The buzz and
-    /// the chime are each the person's to turn off.
+    /// Waits until the rest ends, telling VoiceOver how much is left on the way (#59), then
+    /// buzzes, chimes and clears the timer. Runs again whenever the end moves, so skipping or
+    /// adding time just restarts the wait. The buzz and the chime are each the person's to
+    /// turn off.
     private func waitForRest() async {
-        guard let remaining = WorkoutSession.restRemaining(in: workout) else {
+        guard WorkoutSession.restRemaining(in: workout) != nil, let end = workout.restEndsAt else {
             if workout.restEndsAt != nil { WorkoutSession.startRest(nil, in: workout) }
             return
         }
-        do {
-            try await Task.sleep(for: .seconds(remaining))
-        } catch {
-            return
-        }
+        guard await RestAnnouncer.countdown(until: end) else { return }
         if preferences.restSound { RestAlerts.chime() }
         if preferences.restHaptics { restEnded += 1 }
         WorkoutSession.startRest(nil, in: workout)

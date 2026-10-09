@@ -87,6 +87,9 @@ public struct MirroredSessionView: View {
                 }
             }
         }
+        .task(id: snapshot?.restEndsAt) {
+            await announceRest()
+        }
         .onChange(of: snapshot?.current, initial: true) {
             values = snapshot?.currentSet.map(SetValues.init) ?? SetValues()
         }
@@ -94,6 +97,13 @@ public struct MirroredSessionView: View {
             // Discarded on the watch, or the watch went out of reach.
             if isGone { onHide() }
         }
+    }
+
+    /// Tells VoiceOver how much rest is left (#59), the way the session screen does for its own
+    /// rest. The watch owns the workout, so this only speaks: the watch clears the timer.
+    private func announceRest() async {
+        guard let end = snapshot?.restEndsAt, end > .now else { return }
+        _ = await RestAnnouncer.countdown(until: end)
     }
 
     // MARK: Rows
@@ -208,6 +218,7 @@ public struct MirroredSessionView: View {
                     .frame(width: 44, height: 44)
             }
             .accessibilityLabel(Text(LogCopy.addRest))
+            .accessibilityInputLabels([Text(Copy.addRestSpoken), Text(LogCopy.addRest)])
             Button {
                 link.send(.startRest(seconds: nil, at: .now))
             } label: {
@@ -216,6 +227,7 @@ public struct MirroredSessionView: View {
                     .frame(width: 44, height: 44)
             }
             .accessibilityLabel(Text(LogCopy.skipRest))
+            .accessibilityInputLabels([Text(Copy.skipRestSpoken), Text(LogCopy.skipRest)])
         }
         .buttonStyle(.borderless)
     }

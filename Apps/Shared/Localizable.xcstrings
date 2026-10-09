@@ -4849,6 +4849,18 @@
         }
       }
     },
+    "plain.session.addRestVoiceControl": {
+      "comment": "plain. Voice Control name for the +15 s rest button; short, to be said aloud.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add time"
+          }
+        }
+      }
+    },
     "plain.session.allLogged": {
       "comment": "plain. Nothing left to do but finish.",
       "extractionState": "manual",
@@ -5029,6 +5041,18 @@
         }
       }
     },
+    "plain.session.lessRestVoiceControl": {
+      "comment": "plain. Voice Control name for the -15 s rest button; short, to be said aloud.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Less time"
+          }
+        }
+      }
+    },
     "plain.session.logged": {
       "comment": "plain. VoiceOver value for a set that's checked off.",
       "extractionState": "manual",
@@ -5161,6 +5185,18 @@
         }
       }
     },
+    "plain.session.restLeftSpoken": {
+      "comment": "plain. Spoken by VoiceOver during rest; the argument is the time left in words, e.g. 1 minute.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ of rest left"
+          }
+        }
+      }
+    },
     "plain.session.restOver": {
       "comment": "plain. The rest timer finished.",
       "extractionState": "manual",
@@ -5181,6 +5217,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rest's up. Next: %@."
+          }
+        }
+      }
+    },
+    "plain.session.restOverSpoken": {
+      "comment": "plain. Spoken by VoiceOver when the rest timer runs out.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest over"
           }
         }
       }
@@ -5289,6 +5337,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skip rest"
+          }
+        }
+      }
+    },
+    "plain.session.skipRestVoiceControl": {
+      "comment": "plain. Voice Control name for the skip rest button; short, to be said aloud.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
           }
         }
       }

@@ -111,20 +111,21 @@ struct RestTimer: View {
                 }
             }
             Spacer()
-            restButton("minus", label: LogCopy.lessRest) {
+            restButton("minus", label: LogCopy.lessRest, spoken: Copy.lessRestSpoken) {
                 WorkoutSession.adjustRest(by: -15, in: workout)
             }
-            restButton("plus", label: LogCopy.addRest) {
+            restButton("plus", label: LogCopy.addRest, spoken: Copy.addRestSpoken) {
                 WorkoutSession.adjustRest(by: 15, in: workout)
             }
-            restButton("forward.end", label: LogCopy.skipRest) {
+            restButton("forward.end", label: LogCopy.skipRest, spoken: Copy.skipRestSpoken) {
                 WorkoutSession.startRest(nil, in: workout)
             }
         }
     }
 
     private func restButton(
-        _ symbol: String, label: LocalizedStringResource, action: @escaping () -> Void
+        _ symbol: String, label: LocalizedStringResource, spoken: LocalizedStringResource,
+        action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
             Image(systemName: "\(symbol).circle")
@@ -133,6 +134,7 @@ struct RestTimer: View {
         }
         .buttonStyle(.borderless)
         .accessibilityLabel(Text(label))
+        .accessibilityInputLabels([Text(spoken), Text(label)])
     }
 }
 
