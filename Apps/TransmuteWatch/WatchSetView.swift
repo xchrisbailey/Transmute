@@ -109,7 +109,7 @@ struct WatchSetView: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.4)
                 .fixedSize(horizontal: false, vertical: true)
-                .contentTransition(.numericText())
+                .motionContentTransition(.numericText())
             HStack(spacing: 2) {
                 if focus == field, dial.fields.count > 1 {
                     Image(systemName: "chevron.up.chevron.down")

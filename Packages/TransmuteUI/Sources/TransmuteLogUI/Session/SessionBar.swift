@@ -109,7 +109,7 @@ struct RestTimer: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                         .fixedSize(horizontal: true, vertical: false)
-                        .contentTransition(.numericText(countsDown: true))
+                        .motionContentTransition(.numericText(countsDown: true))
                 }
             }
             Spacer()

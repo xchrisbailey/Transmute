@@ -19,6 +19,7 @@ struct WatchSessionView: View {
 
     @State private var page = Page.now
     @State private var restEnded = 0
+    private let motion = Motion()
 
     private var snapshot: SessionSnapshot { session.snapshot }
 
@@ -102,14 +103,14 @@ struct WatchSessionView: View {
     @ViewBuilder private var recordToast: some View {
         if let record = session.record {
             WatchRecordToast(mark: record.mark, units: units)
-                .transition(.move(edge: .top).combined(with: .opacity))
+                .motionTransition(.move(edge: .top).combined(with: .opacity))
                 .task(id: record.id) {
                     WKInterfaceDevice.current().play(.success)
                     try? await Task.sleep(for: .seconds(4))
-                    withAnimation { session.record = nil }
+                    motion.animate(reducedTo: Motion.fade) { session.record = nil }
                 }
                 .onTapGesture {
-                    withAnimation { session.record = nil }
+                    motion.animate(reducedTo: Motion.fade) { session.record = nil }
                 }
         }
     }
