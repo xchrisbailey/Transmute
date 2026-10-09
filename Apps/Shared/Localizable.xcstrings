@@ -7765,6 +7765,30 @@
         }
       }
     },
+    "plain.swapEasier": {
+      "comment": "plain. Tag on a swap suggestion that is an easier version of the exercise being swapped.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Easier"
+          }
+        }
+      }
+    },
+    "plain.swapHarder": {
+      "comment": "plain. Tag on a swap suggestion that is a harder version of the exercise being swapped.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harder"
+          }
+        }
+      }
+    },
     "plain.swapTitle": {
       "comment": "plain. Title of the swap picker.",
       "extractionState": "manual",
