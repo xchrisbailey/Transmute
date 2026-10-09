@@ -1,5 +1,4 @@
 import TransmuteCore
-import TransmuteUI
 
 /// What a set row reads from its model: whether the set holds a record, and which warm-up it is.
 extension LoggedSet {

@@ -180,7 +180,7 @@ public struct MirroredSessionView: View {
                     Text(LogCopy.allLogged)
                         .brandFont(.body)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    mainButton(LogCopy.finish) { link.send(.finish(at: .now)) }
+                    mainButton(LogCopy.finish, spoken: LogCopy.finishVoiceControl) { link.send(.finish(at: .now)) }
                 }
             }
         }
@@ -249,7 +249,7 @@ public struct MirroredSessionView: View {
                     values = dial.adjusting(field, by: -1, in: values)
                 }
             }
-            mainButton(Copy.logSet) {
+            mainButton(Copy.logSet, spoken: LogCopy.logSetVoiceControl) {
                 link.send(.logSet(ref, values, at: .now))
             }
         }
@@ -264,7 +264,11 @@ public struct MirroredSessionView: View {
         }
     }
 
-    private func mainButton(_ title: LocalizedStringResource, action: @escaping () -> Void) -> some View {
+    /// `spoken` is the button's short Voice Control name, when it has one on the session screen's
+    /// own bar (#60).
+    private func mainButton(
+        _ title: LocalizedStringResource, spoken: LocalizedStringResource? = nil, action: @escaping () -> Void
+    ) -> some View {
         Button(action: action) {
             Text(title)
                 .brandFont(.exerciseTitle)
@@ -272,5 +276,6 @@ public struct MirroredSessionView: View {
         }
         .buttonStyle(.borderedProminent)
         .tint(Color.brand(\.magic))
+        .accessibilityInputLabels(([spoken, title] as [LocalizedStringResource?]).compactMap { $0 }.map { Text($0) })
     }
 }
