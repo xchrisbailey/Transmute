@@ -23,7 +23,8 @@ struct BrandAssetsTests {
         Copy.weekDistilled, Copy.streak(weeks: 3), Copy.emptyLog, Copy.deleteWorkout("Lower A", date: "Sep 28"),
         Copy.healthAccess, Copy.aiUnavailable, Copy.savePlanError, Copy.about(version: "1.0"),
         Copy.aiNotReady, Copy.aiDeviceNotEligible, Copy.aiRefused, Copy.aiBusy, Copy.aiLanguage, Copy.aiFailed,
-        Copy.openSettings,
+        Copy.openSettings, Copy.restLeft("1 minute"), Copy.restOverSpoken, Copy.addRestSpoken,
+        Copy.lessRestSpoken, Copy.skipRestSpoken,
     ]
 
     @Test(arguments: resources)

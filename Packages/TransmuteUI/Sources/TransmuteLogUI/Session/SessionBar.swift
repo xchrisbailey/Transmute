@@ -49,6 +49,7 @@ struct SessionBar: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(Color.brand(\.magic))
+                .accessibilityInputLabels([Text(LogCopy.logSetVoiceControl), Text(Copy.logSet)])
             } else {
                 Button(action: onFinish) {
                     Text(LogCopy.finish)
@@ -57,6 +58,7 @@ struct SessionBar: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(Color.brand(\.magic))
+                .accessibilityInputLabels([Text(LogCopy.finishVoiceControl), Text(LogCopy.finish)])
             }
         }
         .padding()
@@ -107,24 +109,25 @@ struct RestTimer: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                         .fixedSize(horizontal: true, vertical: false)
-                        .contentTransition(.numericText(countsDown: true))
+                        .motionContentTransition(.numericText(countsDown: true))
                 }
             }
             Spacer()
-            restButton("minus", label: LogCopy.lessRest) {
+            restButton("minus", label: LogCopy.lessRest, spoken: Copy.lessRestSpoken) {
                 WorkoutSession.adjustRest(by: -15, in: workout)
             }
-            restButton("plus", label: LogCopy.addRest) {
+            restButton("plus", label: LogCopy.addRest, spoken: Copy.addRestSpoken) {
                 WorkoutSession.adjustRest(by: 15, in: workout)
             }
-            restButton("forward.end", label: LogCopy.skipRest) {
+            restButton("forward.end", label: LogCopy.skipRest, spoken: Copy.skipRestSpoken) {
                 WorkoutSession.startRest(nil, in: workout)
             }
         }
     }
 
     private func restButton(
-        _ symbol: String, label: LocalizedStringResource, action: @escaping () -> Void
+        _ symbol: String, label: LocalizedStringResource, spoken: LocalizedStringResource,
+        action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
             Image(systemName: "\(symbol).circle")
@@ -133,6 +136,7 @@ struct RestTimer: View {
         }
         .buttonStyle(.borderless)
         .accessibilityLabel(Text(label))
+        .accessibilityInputLabels([Text(spoken), Text(label)])
     }
 }
 

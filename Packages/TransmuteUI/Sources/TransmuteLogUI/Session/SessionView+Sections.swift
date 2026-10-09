@@ -12,7 +12,10 @@ extension SessionView {
         let equipment = library.exercise(id: exercise.exerciseID)?.allEquipment ?? []
         Section {
             if !exercise.isSkipped {
-                SetTableHeader(tracking: tracking, units: units)
+                // Stacked rows name their own fields, so the columns' header goes (#60).
+                if !typeSize.isAccessibilitySize {
+                    SetTableHeader(tracking: tracking, units: units)
+                }
                 ForEach(Array(exercise.orderedSets.enumerated()), id: \.element.persistentModelID) { index, set in
                     SetRow(
                         set: set, number: index + 1, total: exercise.orderedSets.count, tracking: tracking,

@@ -87,6 +87,9 @@ public struct MirroredSessionView: View {
                 }
             }
         }
+        .task(id: snapshot?.restEndsAt) {
+            await announceRest()
+        }
         .onChange(of: snapshot?.current, initial: true) {
             values = snapshot?.currentSet.map(SetValues.init) ?? SetValues()
         }
@@ -94,6 +97,13 @@ public struct MirroredSessionView: View {
             // Discarded on the watch, or the watch went out of reach.
             if isGone { onHide() }
         }
+    }
+
+    /// Tells VoiceOver how much rest is left (#59), the way the session screen does for its own
+    /// rest. The watch owns the workout, so this only speaks: the watch clears the timer.
+    private func announceRest() async {
+        guard let end = snapshot?.restEndsAt, end > .now else { return }
+        _ = await RestAnnouncer.countdown(until: end)
     }
 
     // MARK: Rows
@@ -170,7 +180,7 @@ public struct MirroredSessionView: View {
                     Text(LogCopy.allLogged)
                         .brandFont(.body)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    mainButton(LogCopy.finish) { link.send(.finish(at: .now)) }
+                    mainButton(LogCopy.finish, spoken: LogCopy.finishVoiceControl) { link.send(.finish(at: .now)) }
                 }
             }
         }
@@ -208,6 +218,7 @@ public struct MirroredSessionView: View {
                     .frame(width: 44, height: 44)
             }
             .accessibilityLabel(Text(LogCopy.addRest))
+            .accessibilityInputLabels([Text(Copy.addRestSpoken), Text(LogCopy.addRest)])
             Button {
                 link.send(.startRest(seconds: nil, at: .now))
             } label: {
@@ -216,6 +227,7 @@ public struct MirroredSessionView: View {
                     .frame(width: 44, height: 44)
             }
             .accessibilityLabel(Text(LogCopy.skipRest))
+            .accessibilityInputLabels([Text(Copy.skipRestSpoken), Text(LogCopy.skipRest)])
         }
         .buttonStyle(.borderless)
     }
@@ -237,7 +249,7 @@ public struct MirroredSessionView: View {
                     values = dial.adjusting(field, by: -1, in: values)
                 }
             }
-            mainButton(Copy.logSet) {
+            mainButton(Copy.logSet, spoken: LogCopy.logSetVoiceControl) {
                 link.send(.logSet(ref, values, at: .now))
             }
         }
@@ -252,7 +264,11 @@ public struct MirroredSessionView: View {
         }
     }
 
-    private func mainButton(_ title: LocalizedStringResource, action: @escaping () -> Void) -> some View {
+    /// `spoken` is the button's short Voice Control name, when it has one on the session screen's
+    /// own bar (#60).
+    private func mainButton(
+        _ title: LocalizedStringResource, spoken: LocalizedStringResource? = nil, action: @escaping () -> Void
+    ) -> some View {
         Button(action: action) {
             Text(title)
                 .brandFont(.exerciseTitle)
@@ -260,5 +276,6 @@ public struct MirroredSessionView: View {
         }
         .buttonStyle(.borderedProminent)
         .tint(Color.brand(\.magic))
+        .accessibilityInputLabels(([spoken, title] as [LocalizedStringResource?]).compactMap { $0 }.map { Text($0) })
     }
 }

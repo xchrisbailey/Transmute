@@ -27,6 +27,17 @@ enum SetColumn: CaseIterable {
         }
     }
 
+    /// What the field is called when a large-text row stacks and the header is gone.
+    var name: LocalizedStringResource {
+        switch self {
+        case .weight: LogCopy.weight
+        case .reps: LogCopy.reps
+        case .distance: LogCopy.distance
+        case .time: LogCopy.time
+        case .rounds: LogCopy.rounds
+        }
+    }
+
     /// The column's value for a set, or a dash when it's empty.
     func value(of set: LoggedSet, units: Units) -> String {
         let dash = "–"
@@ -90,30 +101,24 @@ struct SetRow: View {
     let onNote: () -> Void
     let onRemove: () -> Void
 
+    @Environment(\.dynamicTypeSize) private var typeSize
+
+    /// At accessibility sizes the columns can't share a line, so each field gets its own.
+    private var stacks: Bool { typeSize.isAccessibilitySize }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text(verbatim: set.isWarmUp ? "W" : "\(number)")
-                    .brandNumberFont(size: 17)
-                    .foregroundStyle(Color.brandText(\.subtext))
-                    .frame(width: 44, alignment: .leading)
-                ForEach(SetColumn.columns(for: tracking), id: \.self) { column in
-                    Text(verbatim: column.value(of: set, units: units))
-                        .brandNumberFont(size: 20, relativeTo: .title3)
-                        .foregroundStyle(Color.brand(\.ink))
-                        .frame(maxWidth: .infinity)
-                }
-                checkButton
-            }
-            .contentShape(.rect)
-            .onTapGesture(perform: onTap)
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(accessibilityLabel)
-            .accessibilityValue(Text(set.isCompleted ? LogCopy.logged : LogCopy.notLogged))
-            .accessibilityHint(isCurrent ? Text(LogCopy.current) : Text(verbatim: ""))
-            .accessibilityAction(named: Text(set.isCompleted ? LogCopy.undoSet : Copy.logSet), onToggle)
-            .accessibilityAction(named: Text(LogCopy.notes), onNote)
-            .accessibilityAction(.default, onTap)
+            figures
+                .contentShape(.rect)
+                .onTapGesture(perform: onTap)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(accessibilityLabel)
+                .accessibilityInputLabels([Text(voiceControlName), accessibilityLabel])
+                .accessibilityValue(Text(set.isCompleted ? LogCopy.logged : LogCopy.notLogged))
+                .accessibilityHint(isCurrent ? Text(LogCopy.current) : Text(verbatim: ""))
+                .accessibilityAction(named: Text(set.isCompleted ? LogCopy.undoSet : Copy.logSet), onToggle)
+                .accessibilityAction(named: Text(LogCopy.notes), onNote)
+                .accessibilityAction(.default, onTap)
 
             if !set.notes.isEmpty {
                 Text(verbatim: set.notes)
@@ -124,29 +129,122 @@ struct SetRow: View {
                 SetEditor(
                     set: set, tracking: tracking, equipment: equipment, units: units, plates: plates,
                     onDone: onToggle)
-                HStack {
-                    Button(action: onNote) {
-                        Label {
-                            Text(LogCopy.notes)
-                        } icon: {
-                            Image(systemName: "note.text")
-                        }
+                if stacks {
+                    VStack(alignment: .leading) {
+                        noteButton
+                        removeButton
                     }
-                    Spacer()
-                    Button(role: .destructive, action: onRemove) {
-                        Label {
-                            Text(LogCopy.removeSet)
-                        } icon: {
-                            Image(systemName: "minus.circle")
-                        }
+                    .buttonStyle(.borderless)
+                    .brandFont(.label)
+                } else {
+                    HStack {
+                        noteButton
+                        Spacer()
+                        removeButton
                     }
+                    .buttonStyle(.borderless)
+                    .brandFont(.label)
                 }
-                .buttonStyle(.borderless)
-                .brandFont(.label)
             }
         }
         .padding(.vertical, 4)
         .listRowBackground(background)
+    }
+
+    /// What the row shows and Voice Control and VoiceOver read, as one element.
+    private var figures: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            if stacks {
+                stackedFigures
+            } else {
+                tabularFigures
+            }
+            if set.holdsRecord {
+                recordLine
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// Set · figures · check, lined up under the header.
+    private var tabularFigures: some View {
+        HStack {
+            Text(verbatim: set.isWarmUp ? "W" : "\(number)")
+                .brandNumberFont(size: 17)
+                .foregroundStyle(Color.brandText(\.subtext))
+                .frame(width: 44, alignment: .leading)
+            ForEach(SetColumn.columns(for: tracking), id: \.self) { column in
+                Text(verbatim: column.value(of: set, units: units))
+                    .brandNumberFont(size: 20, relativeTo: .title3)
+                    .foregroundStyle(Color.brand(\.ink))
+                    .frame(maxWidth: .infinity)
+            }
+            checkButton
+        }
+    }
+
+    /// The set's name and check, then each field under its own name. There's no header above.
+    private var stackedFigures: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(voiceControlName)
+                    .brandNumberFont(size: 17)
+                    .foregroundStyle(Color.brandText(\.subtext))
+                Spacer(minLength: 8)
+                checkButton
+            }
+            ForEach(SetColumn.columns(for: tracking), id: \.self) { column in
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(column.name)
+                        .brandFont(.label)
+                        .foregroundStyle(Color.brandText(\.subtext))
+                    Text(verbatim: stackedValue(of: column))
+                        .brandNumberFont(size: 20, relativeTo: .title3)
+                        .foregroundStyle(Color.brand(\.ink))
+                }
+            }
+        }
+    }
+
+    /// The load carries its unit, since the header that held it is gone.
+    private func stackedValue(of column: SetColumn) -> String {
+        let value = column.value(of: set, units: units)
+        guard column == .weight, set.weightKg != nil else { return value }
+        return "\(value) \(units.weightSymbol)"
+    }
+
+    /// The lasting mark of a record: the toast's medal in gold, and what the record was.
+    private var recordLine: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 6) {
+            Image(systemName: "medal.fill")
+                .foregroundStyle(Color.brand(\.gold))
+            Text(
+                verbatim: set.recordMarks.map { String(localized: RecordFormat.label($0, units: units)) }
+                    .joined(separator: " · ")
+            )
+            .foregroundStyle(Color.brandText(\.gold))
+        }
+        .brandFont(.label)
+    }
+
+    private var noteButton: some View {
+        Button(action: onNote) {
+            Label {
+                Text(LogCopy.notes)
+            } icon: {
+                Image(systemName: "note.text")
+            }
+        }
+    }
+
+    private var removeButton: some View {
+        Button(role: .destructive, action: onRemove) {
+            Label {
+                Text(LogCopy.removeSet)
+            } icon: {
+                Image(systemName: "minus.circle")
+            }
+        }
     }
 
     private var checkButton: some View {
@@ -154,7 +252,7 @@ struct SetRow: View {
             Image(systemName: set.isCompleted ? "checkmark.circle.fill" : "circle")
                 .font(.title2)
                 .foregroundStyle(set.isCompleted ? Color.brandText(\.done) : Color.brandText(\.subtext))
-                .frame(width: 44, height: 44)
+                .frame(minWidth: 44, minHeight: 44)
         }
         .buttonStyle(.borderless)
         .sensoryFeedback(.impact(weight: .light), trigger: set.isCompleted)
@@ -183,7 +281,13 @@ struct SetRow: View {
         }
         let prefix =
             set.isWarmUp ? String(localized: LogCopy.warmUp) : String(localized: LogCopy.setOf(number, of: total))
-        return Text(verbatim: ([prefix] + values.filter { !$0.isEmpty }).joined(separator: ", "))
+        let record = set.holdsRecord ? [String(localized: LogCopy.personalRecord)] : []
+        return Text(verbatim: ([prefix] + values.filter { !$0.isEmpty } + record).joined(separator: ", "))
+    }
+
+    /// "Set 3" or "Warm-up 1": what someone says to tap the row, and what the stacked row shows.
+    private var voiceControlName: LocalizedStringResource {
+        self.set.isWarmUp ? LogCopy.warmUpNumber(set.warmUpNumber ?? number) : LogCopy.setNumber(number)
     }
 }
 
@@ -292,74 +396,5 @@ struct SetEditor: View {
 
     private func secondsField(_ label: LocalizedStringResource, value: Binding<Double?>) -> some View {
         NumberStepper(label: Text(label), unit: nil, value: value, step: 5, range: 0...7_200, fractionDigits: 0)
-    }
-}
-
-/// − value + with a number field in the middle: tap the buttons, or type.
-struct NumberStepper: View {
-    let label: Text
-    let unit: String?
-    @Binding var value: Double?
-    let step: Double
-    let range: ClosedRange<Double>
-    var fractionDigits = 1
-
-    var body: some View {
-        HStack(spacing: 12) {
-            label
-                .brandFont(.label)
-                .foregroundStyle(Color.brandText(\.subtext))
-                .frame(maxWidth: .infinity, alignment: .leading)
-            button("minus", by: -step)
-            TextField(value: $value, format: .number.precision(.fractionLength(0...fractionDigits))) {
-                label
-            }
-            .multilineTextAlignment(.center)
-            .brandNumberFont(size: 22, relativeTo: .title2)
-            .frame(minWidth: 64, maxWidth: 96)
-            #if os(iOS)
-                .keyboardType(fractionDigits > 0 ? .decimalPad : .numberPad)
-            #endif
-            if let unit {
-                Text(verbatim: unit)
-                    .brandFont(.label)
-                    .foregroundStyle(Color.brandText(\.subtext))
-                    .accessibilityHidden(true)
-            }
-            button("plus", by: step)
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityAdjustableAction { direction in
-            switch direction {
-            case .increment: nudge(by: step)
-            case .decrement: nudge(by: -step)
-            @unknown default: break
-            }
-        }
-    }
-
-    private func button(_ symbol: String, by delta: Double) -> some View {
-        Button {
-            nudge(by: delta)
-        } label: {
-            Image(systemName: "\(symbol).circle.fill")
-                .font(.title)
-                .frame(width: 44, height: 44)
-                .foregroundStyle(Color.brand(\.surface1), Color.brand(\.ink))
-        }
-        .buttonStyle(.borderless)
-        .accessibilityHidden(true)
-    }
-
-    private func nudge(by delta: Double) {
-        let new = (value ?? (delta > 0 ? range.lowerBound : 0)) + (value == nil && delta > 0 ? 0 : delta)
-        value = min(max(new, range.lowerBound), range.upperBound)
-    }
-}
-
-extension Double {
-    func rounded(toPlaces places: Int) -> Double {
-        let scale = pow(10, Double(places))
-        return (self * scale).rounded() / scale
     }
 }

@@ -4849,6 +4849,18 @@
         }
       }
     },
+    "plain.session.addRestVoiceControl": {
+      "comment": "plain. Voice Control name for the +15 s rest button; short, to be said aloud.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add time"
+          }
+        }
+      }
+    },
     "plain.session.allLogged": {
       "comment": "plain. Nothing left to do but finish.",
       "extractionState": "manual",
@@ -4945,6 +4957,18 @@
         }
       }
     },
+    "plain.session.finishVoiceControl": {
+      "comment": "plain. Voice Control name for the finish button under the sets, apart from the one in the toolbar.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish workout"
+          }
+        }
+      }
+    },
     "plain.session.finishedOnWatch": {
       "comment": "plain. A workout run on the watch has ended.",
       "extractionState": "manual",
@@ -5025,6 +5049,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "15 seconds less rest"
+          }
+        }
+      }
+    },
+    "plain.session.lessRestVoiceControl": {
+      "comment": "plain. Voice Control name for the -15 s rest button; short, to be said aloud.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Less time"
+          }
+        }
+      }
+    },
+    "plain.session.logSetVoiceControl": {
+      "comment": "plain. Voice Control name for the log set button; short, to be said aloud.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log"
           }
         }
       }
@@ -5113,6 +5161,18 @@
         }
       }
     },
+    "plain.session.personalRecord": {
+      "comment": "plain. VoiceOver, added to a set that set a record.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personal record"
+          }
+        }
+      }
+    },
     "plain.session.plates": {
       "comment": "plain. Open the plate calculator for a set.",
       "extractionState": "manual",
@@ -5161,6 +5221,18 @@
         }
       }
     },
+    "plain.session.restLeftSpoken": {
+      "comment": "plain. Spoken by VoiceOver during rest; the argument is the time left in words, e.g. 1 minute.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ of rest left"
+          }
+        }
+      }
+    },
     "plain.session.restOver": {
       "comment": "plain. The rest timer finished.",
       "extractionState": "manual",
@@ -5181,6 +5253,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rest's up. Next: %@."
+          }
+        }
+      }
+    },
+    "plain.session.restOverSpoken": {
+      "comment": "plain. Spoken by VoiceOver when the rest timer runs out.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest over"
           }
         }
       }
@@ -5257,6 +5341,18 @@
         }
       }
     },
+    "plain.session.setNumber": {
+      "comment": "plain. Names a set row; also what someone says to Voice Control, e.g. Set 3.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set %lld"
+          }
+        }
+      }
+    },
     "plain.session.setOf": {
       "comment": "plain. Which set this is, e.g. Set 2 of 4.",
       "extractionState": "manual",
@@ -5289,6 +5385,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skip rest"
+          }
+        }
+      }
+    },
+    "plain.session.skipRestVoiceControl": {
+      "comment": "plain. Voice Control name for the skip rest button; short, to be said aloud.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
           }
         }
       }
@@ -5413,6 +5521,18 @@
         }
       }
     },
+    "plain.session.warmUpNumber": {
+      "comment": "plain. Names a warm-up set row; also what someone says to Voice Control, e.g. Warm-up 1.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm-up %lld"
+          }
+        }
+      }
+    },
     "plain.session.weight": {
       "comment": "plain. Field label for a set's load.",
       "extractionState": "manual",
@@ -5469,6 +5589,54 @@
           "stringUnit": {
             "state": "translated",
             "value": "Set %lld"
+          }
+        }
+      }
+    },
+    "plain.settings.about.build": {
+      "comment": "plain. Label before the app's build number.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Build"
+          }
+        }
+      }
+    },
+    "plain.settings.about.catalog": {
+      "comment": "plain. Where the exercise catalog comes from.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every exercise in the catalog was written for Transmute."
+          }
+        }
+      }
+    },
+    "plain.settings.about.licence": {
+      "comment": "plain. Row and screen title for the SIL Open Font License the fonts ship under.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geist and Geist Mono licence"
+          }
+        }
+      }
+    },
+    "plain.settings.about.licenceMissing": {
+      "comment": "plain. Shown instead of the font licence when its file can't be read.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The licence file is missing from this build."
           }
         }
       }
@@ -6549,6 +6717,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Finish setting up Transmute to change these settings."
+          }
+        }
+      }
+    },
+    "plain.settings.pane.about": {
+      "comment": "plain. Settings tab and section heading: version, catalog and font licence.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About"
           }
         }
       }
@@ -7761,6 +7941,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Swap"
+          }
+        }
+      }
+    },
+    "plain.swapEasier": {
+      "comment": "plain. Tag on a swap suggestion that is an easier version of the exercise being swapped.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Easier"
+          }
+        }
+      }
+    },
+    "plain.swapHarder": {
+      "comment": "plain. Tag on a swap suggestion that is a harder version of the exercise being swapped.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harder"
           }
         }
       }

@@ -16,7 +16,6 @@ public struct BrewPlanView: View {
     @State private var saveFailed = false
     @Environment(\.modelContext) private var context
     @Environment(\.health) private var health
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Query(filter: #Predicate<Plan> { $0.isActive }) private var activePlans: [Plan]
 
     public init(
@@ -150,7 +149,7 @@ public struct BrewPlanView: View {
             }
             ForEach(session.distilled) { day in
                 DistilledDayRow(phase: day.phase, focus: day.focus, exercises: day.exercises, isDone: true)
-                    .transition(reduceMotion ? .identity : .opacity.combined(with: .move(edge: .bottom)))
+                    .motionTransition(.opacity.combined(with: .move(edge: .bottom)))
             }
             HStack(spacing: 12) {
                 ProgressView()
@@ -171,7 +170,7 @@ public struct BrewPlanView: View {
                 Text(ProfileCopy.cancel)
             }
         }
-        .animation(reduceMotion ? nil : .default, value: session.distilled)
+        .motionAnimation(value: session.distilled)
     }
 
     private var previewActions: some View {

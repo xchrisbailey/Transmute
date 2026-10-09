@@ -19,6 +19,7 @@ struct WatchSessionView: View {
 
     @State private var page = Page.now
     @State private var restEnded = 0
+    private let motion = Motion()
 
     private var snapshot: SessionSnapshot { session.snapshot }
 
@@ -84,18 +85,15 @@ struct WatchSessionView: View {
         }
     }
 
-    /// Sleeps until the rest ends, then taps the wrist, unless that's off, and clears the timer. Runs again
-    /// whenever the end moves, so skipping or adding time just restarts the wait.
+    /// Waits until the rest ends, telling VoiceOver how much is left on the way (#59), then
+    /// taps the wrist, unless that's off, and clears the timer. Runs again whenever the end
+    /// moves, so skipping or adding time just restarts the wait.
     private func waitForRest() async {
-        guard let remaining = snapshot.restRemaining(at: .now) else {
+        guard snapshot.restRemaining(at: .now) != nil, let end = snapshot.restEndsAt else {
             if snapshot.restEndsAt != nil { session.perform(.startRest(seconds: nil, at: .now)) }
             return
         }
-        do {
-            try await Task.sleep(for: .seconds(remaining))
-        } catch {
-            return
-        }
+        guard await RestAnnouncer.countdown(until: end) else { return }
         if restHaptics { WKInterfaceDevice.current().play(.notification) }
         restEnded += 1
         session.perform(.startRest(seconds: nil, at: .now))
@@ -105,14 +103,14 @@ struct WatchSessionView: View {
     @ViewBuilder private var recordToast: some View {
         if let record = session.record {
             WatchRecordToast(mark: record.mark, units: units)
-                .transition(.move(edge: .top).combined(with: .opacity))
+                .motionTransition(.move(edge: .top).combined(with: .opacity))
                 .task(id: record.id) {
                     WKInterfaceDevice.current().play(.success)
                     try? await Task.sleep(for: .seconds(4))
-                    withAnimation { session.record = nil }
+                    motion.animate(reducedTo: Motion.fade) { session.record = nil }
                 }
                 .onTapGesture {
-                    withAnimation { session.record = nil }
+                    motion.animate(reducedTo: Motion.fade) { session.record = nil }
                 }
         }
     }
