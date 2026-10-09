@@ -28,6 +28,11 @@ enum SettingsScreenCopy {
         defaultValue: "Privacy and data",
         bundle: .main, comment: "plain. Settings tab and section heading: privacy, export, import and delete.")
 
+    static let paneAbout = LocalizedStringResource(
+        "plain.settings.pane.about",
+        defaultValue: "About",
+        bundle: .main, comment: "plain. Settings tab and section heading: version, catalog and font licence.")
+
     static let needsProfile = LocalizedStringResource(
         "plain.settings.needsProfile",
         defaultValue: "Finish setting up Transmute to change these settings.",

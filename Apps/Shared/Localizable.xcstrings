@@ -5473,6 +5473,54 @@
         }
       }
     },
+    "plain.settings.about.build": {
+      "comment": "plain. Label before the app's build number.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Build"
+          }
+        }
+      }
+    },
+    "plain.settings.about.catalog": {
+      "comment": "plain. Where the exercise catalog comes from.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every exercise in the catalog was written for Transmute."
+          }
+        }
+      }
+    },
+    "plain.settings.about.licence": {
+      "comment": "plain. Row and screen title for the SIL Open Font License the fonts ship under.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geist and Geist Mono licence"
+          }
+        }
+      }
+    },
+    "plain.settings.about.licenceMissing": {
+      "comment": "plain. Shown instead of the font licence when its file can't be read.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The licence file is missing from this build."
+          }
+        }
+      }
+    },
     "plain.settings.ai.allowCloud": {
       "comment": "plain. Toggle: let longer plans be made on Apple's Private Cloud Compute servers.",
       "extractionState": "manual",
@@ -6549,6 +6597,18 @@
           "stringUnit": {
             "state": "translated",
             "value": "Finish setting up Transmute to change these settings."
+          }
+        }
+      }
+    },
+    "plain.settings.pane.about": {
+      "comment": "plain. Settings tab and section heading: version, catalog and font licence.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About"
           }
         }
       }

@@ -7,7 +7,7 @@ import TransmuteUI
 
 /// The groups Settings is split into: tabs on the Mac, one after another on the iPhone.
 enum SettingsPane: String, CaseIterable, Identifiable {
-    case general, workout, intelligence, health, data
+    case general, workout, intelligence, health, data, about
 
     var id: Self { self }
 
@@ -18,6 +18,7 @@ enum SettingsPane: String, CaseIterable, Identifiable {
         case .intelligence: SettingsScreenCopy.paneIntelligence
         case .health: SettingsScreenCopy.paneHealth
         case .data: SettingsScreenCopy.paneData
+        case .about: SettingsScreenCopy.paneAbout
         }
     }
 
@@ -28,6 +29,7 @@ enum SettingsPane: String, CaseIterable, Identifiable {
         case .intelligence: "sparkles"
         case .health: "heart"
         case .data: "hand.raised"
+        case .about: "info.circle"
         }
     }
 }
@@ -113,6 +115,8 @@ struct SettingsPaneSections: View {
             PrivacySection()
             TransferSections(profile: profile)
             DeleteSection()
+        case .about:
+            AboutSection()
         }
     }
 }
