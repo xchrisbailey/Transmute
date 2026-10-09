@@ -15,7 +15,7 @@ Use a single-context layout. See `docs/agents/domain.md`.
 ### Git workflow
 
 Write each commit subject as a plain imperative sentence ending in its issue number, such as `Add the Settings screen (#18)`.
-Work reaches `main` through a pull request. There is no hosted CI, so run `scripts/check.sh` before pushing.
+Work reaches `main` through a pull request. There is no hosted CI, so run `scripts/check.sh` before pushing; `scripts/check.sh --show <commit>` prints the recorded result for a commit.
 
 ### Orchestration
 

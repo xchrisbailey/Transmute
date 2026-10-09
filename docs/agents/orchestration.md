@@ -39,7 +39,7 @@ The engineering skills describe their own subagents and steps. In this repo they
   - the base branch, and the build and test commands;
   - what to report back: the branch, its head commit, a summary, and anything left open.
 - Coders don't widen scope or make product or architecture decisions. They stop and report any open question to Opus.
-- A coder that goes idle with a check still running may never wake to report. When one says it is waiting on a run and then goes quiet, Opus asks it for the result, or has the check rerun on the pushed head.
+- A coder that goes idle with a check still running may never wake to report. When one says it is waiting on a run and then goes quiet, Opus reads the record for the coder's head commit (`scripts/check.sh --show <commit>` exits 2 until one exists) and acts on it when it lands.
 
 **Agent teams.**
 
@@ -72,7 +72,7 @@ The engineering skills describe their own subagents and steps. In this repo they
   - the spec and ADRs;
   - the glossary;
   - `CODING_STANDARDS.md` and `AGENTS.md`.
-- Opus also confirms the checks pass. There is no hosted CI, so `scripts/check.sh` is the gate: SwiftLint, swift-format, every package's tests, and an unsigned build of all three apps. It keeps no record, so the evidence is a report that names the branch's current head commit and quotes `All checks passed.` for it. Before merging, Opus compares that commit with the branch's head; when they differ, or no such report exists, the check goes to the shepherd to run, or back to the coder.
+- Opus also confirms the checks pass. There is no hosted CI, so `scripts/check.sh` is the gate: SwiftLint, swift-format, every package's tests, and an unsigned build of all three apps. It records the result against the commit, in the repository's git directory where every worktree can read it. Before merging a branch, Opus reads the record for its current head with `scripts/check.sh --show <commit>`; anything other than `RESULT: PASS` goes to the shepherd to run, or back to the coder. A report with no passing record for the head doesn't count.
 - A change to prompts, schemas, or the exercise library also needs `scripts/eval-intelligence.sh`, which Opus runs itself; it calls the on-device model and isn't part of `scripts/check.sh`.
 - On a team, the `reviewer` passes a branch before Opus reviews it. Its pass covers the coding standards, the glossary, and the acceptance criteria; the spec, the ADRs, and the verdict stay with Opus.
 - Review findings go back to the same coder, which keeps its context, until the review passes.

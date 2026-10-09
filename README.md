@@ -39,7 +39,8 @@ With no team set, the apps are signed to run locally: everything works in the si
 ## Checks
 
 ```bash
-scripts/check.sh           # everything below, in order
+scripts/check.sh           # everything below, in order, recorded against the commit
+scripts/check.sh --show    # the recorded result for a commit (default HEAD)
 scripts/test-packages.sh   # swift test for every package
 scripts/build-apps.sh      # build all three apps, unsigned
 scripts/eval-intelligence.sh  # real-model tests and the planning evaluation set (not in check.sh)
@@ -47,7 +48,13 @@ scripts/eval-intelligence.sh  # real-model tests and the planning evaluation set
 
 `eval-intelligence.sh` calls Apple Intelligence on this Mac, so it needs it turned on. The output varies run to run, so run it when prompts, schemas or the exercise library change rather than on every push.
 
-There's no CI on pull requests, because GitHub's macOS runners lag behind the Xcode and SDKs this project needs. Run `scripts/check.sh` before pushing.
+There's no CI on pull requests, because GitHub's macOS runners lag behind the Xcode and SDKs this project needs. Run `scripts/check.sh` before pushing. It refuses uncommitted work, because the result is recorded for the commit; `--allow-dirty` runs it mid-change without a record.
+
+Turn on the pre-push hook once per clone. It runs only the two lint steps, which take a second or two:
+
+```bash
+git config core.hooksPath scripts/hooks
+```
 
 ## Releasing
 
