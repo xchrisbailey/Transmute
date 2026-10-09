@@ -116,19 +116,38 @@ public enum PlanEditor {
         planned.day?.isEdited = true
     }
 
+    /// An exercise that could stand in for another, and how it relates to it.
+    public struct Alternative: Hashable, Identifiable, Sendable {
+        /// How an alternative compares to the exercise it replaces, when the library says.
+        public enum Relation: Hashable, Sendable {
+            case easier, harder
+        }
+
+        public var exercise: LibraryExercise
+        /// `nil` when the library doesn't link the two as an easier or harder version.
+        public var relation: Relation?
+        public var id: String { exercise.id }
+    }
+
     /// Exercises that could stand in: same movement pattern and category, doable with the kit,
-    /// with the library's easier and harder variants first.
+    /// with the library's easier and harder variants first. Each says whether it is the
+    /// exercise's easier or harder variant.
     public static func alternatives(
         to exerciseID: String, equipment: Set<Equipment>, library: ExerciseLibrary = .bundled
-    ) -> [LibraryExercise] {
+    ) -> [Alternative] {
         guard let exercise = library.exercise(id: exerciseID) else { return [] }
         let similar = library.search(
             ExerciseQuery(categories: [exercise.category], patterns: [exercise.pattern], availableEquipment: equipment)
         ).filter { $0.id != exercise.id }
-        let variants = [exercise.easier, exercise.harder].compactMap { $0 }
-        return similar.sorted { lhs, rhs in
-            (variants.contains(lhs.id) ? 0 : 1) < (variants.contains(rhs.id) ? 0 : 1)
+        func relation(of candidate: LibraryExercise) -> Alternative.Relation? {
+            if candidate.id == exercise.easier { return .easier }
+            if candidate.id == exercise.harder { return .harder }
+            return nil
         }
+        return similar.map { Alternative(exercise: $0, relation: relation(of: $0)) }
+            .sorted { lhs, rhs in
+                (lhs.relation == nil ? 1 : 0) < (rhs.relation == nil ? 1 : 0)
+            }
     }
 
     // MARK: Sets
