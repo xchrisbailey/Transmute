@@ -123,7 +123,7 @@ For later builds, bump `MARKETING_VERSION` in `project.yml` when the version sho
 |---|---|
 | Post-clone fails with `set TRANSMUTE_TEAM_ID` | The environment variable from step 7 is missing or misspelled. |
 | Signing fails naming a capability or App Group | The App ID in step 2 is missing that capability, or it isn't configured with the group or container. |
-| `ITMS-90xxx` about an invalid bundle or missing icon | Upload validation. The log names the target; the iOS, Mac and watch icons are all in `Apps/Shared/Assets.xcassets/AppIcon.appiconset`. |
+| `ITMS-90xxx` about an invalid bundle or missing icon | Upload validation. The log names the target; the iOS, Mac and watch icons all come from the Icon Composer file `Apps/Shared/AppIcon.icon`. |
 | TestFlight build runs but nothing syncs | The Production CloudKit schema wasn't deployed (step 4), or is behind the models. |
 | Build stuck "Missing Compliance" | Shouldn't happen: `ITSAppUsesNonExemptEncryption` is `NO` in every Info.plist. Answer "None of the algorithms mentioned above" if it does. |
 | Watch app missing on the watch | Install it from the iPhone **Watch** app; TestFlight on the iPhone owns it. |
