@@ -67,11 +67,8 @@
             }
             .frame(maxWidth: .infinity)
             .background(Color.brand(\.base))
-            .animation(.default, value: step)
-            .transaction { if accessibilityReduceMotion { $0.animation = nil } }
+            .motionAnimation(value: step)
         }
-
-        @Environment(\.accessibilityReduceMotion) private var accessibilityReduceMotion
 
         private var header: some View {
             VStack(alignment: .leading, spacing: 8) {

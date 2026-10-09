@@ -52,7 +52,7 @@ extension SessionView {
 
     private func showGold(_ check: RecordCheck, for set: LoggedSet) {
         if let record = check.gold.first {
-            withAnimation { gold = GoldNotice(mark: record.mark, exercise: name(of: set)) }
+            motion.animate(reducedTo: Motion.fade) { gold = GoldNotice(mark: record.mark, exercise: name(of: set)) }
         }
     }
 
@@ -61,13 +61,13 @@ extension SessionView {
         if let gold {
             GoldToast(gold.mark, exercise: gold.exercise, units: units, trigger: gold.id)
                 .padding(.top, 8)
-                .transition(.move(edge: .top).combined(with: .opacity))
+                .motionTransition(.move(edge: .top).combined(with: .opacity))
                 .task(id: gold.id) {
                     try? await Task.sleep(for: .seconds(4))
-                    withAnimation { self.gold = nil }
+                    motion.animate(reducedTo: Motion.fade) { self.gold = nil }
                 }
                 .onTapGesture {
-                    withAnimation { self.gold = nil }
+                    motion.animate(reducedTo: Motion.fade) { self.gold = nil }
                 }
         }
     }

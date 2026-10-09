@@ -27,7 +27,7 @@ struct WatchRestView: View {
                             .foregroundStyle(Color.brand(\.ink))
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
-                            .contentTransition(.numericText(countsDown: true))
+                            .motionContentTransition(.numericText(countsDown: true))
                         Text(WatchCopy.rest)
                             .font(.caption2)
                             .foregroundStyle(Color.brandText(\.subtext))

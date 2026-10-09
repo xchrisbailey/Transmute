@@ -15,6 +15,7 @@ public struct SessionView: View {
     @Environment(\.modelContext) var context
     @Environment(\.sessionLink) var link
     @Environment(\.dynamicTypeSize) var typeSize
+    let motion = Motion()
     @Query(sort: \CustomExercise.name) private var customExercises: [CustomExercise]
     @State var editing: PersistentIdentifier?
     @State var picker: PickerPurpose?
@@ -88,7 +89,7 @@ public struct SessionView: View {
                 .onChange(of: current?.persistentModelID, initial: true) { _, id in
                     editing = id
                     if let id {
-                        withAnimation { scroller.scrollTo(id, anchor: .center) }
+                        motion.animate { scroller.scrollTo(id, anchor: .center) }
                     }
                 }
             }
