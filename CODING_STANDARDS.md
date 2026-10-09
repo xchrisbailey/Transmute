@@ -15,7 +15,8 @@ Names, comments, test names, and on-screen text use the terms in `GLOSSARY.md` o
 
 - Code outside the model layer names a model by its alias in `Model/Schema.swift` (`Workout`, `PlanDay`), not `SchemaV1.Workout`.
 - A new model attribute is optional or has a default. CloudKit requires it, and nothing fails locally when it is missing.
-- Until the first TestFlight build (#20), a new defaulted attribute goes onto the `SchemaV1` model in place. After that, a model change needs a new schema version and a stage in `TransmuteMigrationPlan`.
+- A model change needs a new schema version and a stage in `TransmuteMigrationPlan`. `SchemaV1` has shipped to TestFlight, so it is no longer edited in place.
+- A model change also changes the CloudKit schema, where a deployed field can never be removed or retyped. The change that makes it says so and points at step 4 of `docs/TESTFLIGHT.md`, which has to be done before the build ships.
 - Values are stored metric and converted at the edges through `Units`. A stored pound, inch, or mile is a finding.
 
 ## Mirrored sessions
