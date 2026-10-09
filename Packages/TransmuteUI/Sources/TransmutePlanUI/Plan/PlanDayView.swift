@@ -100,6 +100,9 @@ struct PlanDayView: View {
                     } icon: {
                         Image(systemName: "sparkles")
                     }
+                    // A list row tints a label's icon, here magic on a magic button, where it vanishes
+                    // and leaves the title looking off centre.
+                    .labelStyle(.titleAndIcon)
                     .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.borderedProminent)
