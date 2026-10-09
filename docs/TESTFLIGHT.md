@@ -53,9 +53,9 @@ open Transmute.xcodeproj
 
 In Xcode → **Settings** → **Accounts**, make sure your Apple ID is signed in with the team. Then run **TransmuteiOS** on your iPhone (the watch app installs with it) and **TransmuteMac** on your Mac. If a target's **Signing & Capabilities** tab shows a red error, it names the capability or ID that's missing from step 2.
 
-While the app is running on your phone, use it end to end: onboard, brew a plan, log a workout, log bodyweight. That creates every CloudKit record type in the **Development** environment, which step 4 needs.
+You don't need to create any data for CloudKit's sake: step 4 sends it the whole schema from the models.
 
-This is also the moment for the device checks still open on #4 (sync between two devices) and #15 (heart rate, Health save and mirroring on a real iPhone and watch).
+This is also the moment for the device checks still open on #15 (heart rate, Health save and mirroring on a real iPhone and watch).
 
 ## 4. Deploy the CloudKit schema
 
@@ -63,7 +63,7 @@ TestFlight and App Store builds talk to CloudKit's **Production** environment, w
 
 1. Launch a debug build signed with your team once with the launch argument `-initCloudKitSchema` (Xcode: **Product** → **Scheme** → **Edit Scheme** → **Run** → **Arguments**), on your iPhone or Mac, signed in to iCloud. It creates every record type and field in Development and prints a line starting `CloudKit schema:` to the Xcode console, then the app starts as usual. Without it, Development only has the fields that held a value in some record, so a TestFlight build saving a record that fills any other field would fail to sync.
 2. Open the [CloudKit Console](https://icloud.developer.apple.com/) → **CloudKit Database** → `iCloud.computer.srcery.transmute`.
-3. Check **Schema** → **Record Types** in Development lists the `CD_` types SwiftData made (Profile, Plan, Workout and the rest).
+3. Check **Schema** → **Record Types** in Development lists one `CD_` type for each model in `Model/Schema.swift` (eleven today), and that a field no record has filled yet is there, such as `CD_rounds` on `CD_LoggedSet`. If it isn't, step 1 didn't run.
 4. **Deploy Schema Changes…** → **Deploy**.
 
 Repeat this whenever a SwiftData model changes, before shipping the build that changes it. Production schema can be added to but never have fields removed, so treat a deployed field as permanent.

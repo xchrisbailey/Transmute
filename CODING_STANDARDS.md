@@ -11,6 +11,10 @@ Names, comments, test names, and on-screen text use the terms in `GLOSSARY.md` o
 - Every string a person reads comes from `Copy` in TransmuteUI, backed by a key in `Apps/Shared/Localizable.xcstrings`. A string literal passed straight to a view is a finding.
 - A key starts with `voice.` or `plain.`. `voice.` is for the alchemy verbs of the brand. `plain.` is for anything read mid-set or on the watch, and for errors, deletes, and Health.
 
+## Labels in list rows
+
+A list or form row gives a `Label` its own style: the icon takes the tint colour and moves into the row's leading gutter. That suits a plain navigation row. Anywhere else in a row, such as a label inside a tinted button or a tag beneath a row's title, the label sets `.labelStyle(.titleAndIcon)`. Without it an icon on a button of the same tint is invisible and its title looks off centre, as "Rework this day" did.
+
 ## Model and storage
 
 - Code outside the model layer names a model by its alias in `Model/Schema.swift` (`Workout`, `PlanDay`), not `SchemaV1.Workout`.
