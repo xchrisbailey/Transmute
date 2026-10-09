@@ -14,6 +14,7 @@ public struct SessionView: View {
 
     @Environment(\.modelContext) var context
     @Environment(\.sessionLink) var link
+    @Environment(\.dynamicTypeSize) var typeSize
     @Query(sort: \CustomExercise.name) private var customExercises: [CustomExercise]
     @State var editing: PersistentIdentifier?
     @State var picker: PickerPurpose?
