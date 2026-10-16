@@ -97,7 +97,11 @@ struct WorkoutLogTests {
         latest.healthKitWorkoutID = healthID
         let latestSets = latest.orderedExercises.flatMap(\.orderedSets)
 
-        #expect(try WorkoutLog.delete(latest, in: context) == healthID)
+        let suite = "WorkoutLogTests.\(UUID())"
+        let defaults = try #require(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+
+        #expect(try WorkoutLog.delete(latest, in: context, defaults: defaults) == healthID)
         #expect(try context.fetch(FetchDescriptor<Workout>()).count == 8)
         let records = try context.fetch(FetchDescriptor<PersonalRecord>())
         #expect(!records.contains { record in latestSets.contains { $0 === record.set } })

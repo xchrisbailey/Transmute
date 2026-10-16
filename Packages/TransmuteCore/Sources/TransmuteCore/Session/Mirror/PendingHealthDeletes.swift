@@ -62,6 +62,7 @@ struct PendingHealthDeletes {
     }
 
     func forgetDeleted(_ workoutID: UUID) {
+        guard wasDeleted(workoutID) else { return }
         write(deletedWorkouts.filter { $0 != workoutID }, Self.tombstonesKey)
     }
 
