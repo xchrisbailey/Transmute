@@ -36,6 +36,21 @@ struct PlanningPromptTests {
         }
     }
 
+    @Test func dayRequestListsEarlierDaysInOneLine() {
+        let brewer = PlanBrewer(service: PreviewIntelligenceService())
+        let spec = PlanBrewer.DaySpec(
+            phase: PlanPhase(name: "Build", focus: "Base", firstWeek: 1, lastWeek: 3),
+            outline: .init(focus: "Day", kind: DayKind.fullBody.rawValue, intensity: "hard"), weekday: 3,
+            kind: .fullBody,
+            earlier: [
+                .init(weekday: 1, exercises: ["Back squat", "Bench press"]), .init(weekday: 2, exercises: ["Pull-up"]),
+            ])
+        let request = brewer.dayRequest(.tennisPlayer, spec: spec, offered: ExerciseCandidates([]))
+        #expect(
+            request.prompt.contains(
+                "\nEarlier this week: Monday: Back squat, Bench press; Tuesday: Pull-up. Vary the exercises.\n"))
+    }
+
     @Test func warmUpProbePassesTheLookupToolAndNamesIt() {
         let request = WarmUpProbe.request(focus: "legs")
         #expect(request.makeTools().map(\.name) == ["findExercises"])

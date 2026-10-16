@@ -67,9 +67,7 @@ import OSLog
                             let mapped = await Self.mapWithExplanation(error)
                             Self.logger.error(
                                 "Attempt \(attempt) failed: \(String(describing: error), privacy: .public)")
-                            // Retry once from scratch when the model went off track before showing
-                            // anything, so the screen never jumps back.
-                            guard attempt < Self.maxAttempts, mapped.isWorthRetrying, !yieldedPartial else {
+                            guard Self.retriesSilently(mapped, attempt: attempt, yieldedPartial: yieldedPartial) else {
                                 continuation.finish(throwing: mapped)
                                 return
                             }
@@ -82,6 +80,12 @@ import OSLog
         }
 
         static let maxAttempts = 2
+
+        /// Whether to start over without telling the screen: only when the model went off track
+        /// before showing anything, so the screen never jumps back.
+        static func retriesSilently(_ error: IntelligenceError, attempt: Int, yieldedPartial: Bool) -> Bool {
+            attempt < maxAttempts && error.isWorthRetrying && !yieldedPartial
+        }
 
         /// One attempt in a fresh session, reporting partial results as they arrive.
         func generate<Content: Generable & Sendable>(
