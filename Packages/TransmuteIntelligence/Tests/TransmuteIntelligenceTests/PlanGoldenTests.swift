@@ -35,10 +35,6 @@ final class RecordingService: IntelligenceService, @unchecked Sendable {
 
 /// Pins what a brew writes: the plan and every prompt, for each example brief in both unit
 /// systems. A digest keeps the pin small; when it changes, the failure shows the new one.
-///
-/// The blueprint holds only lower, upper, full-body and mobility days. A day's main category
-/// comes from iterating a `Set`, so power and conditioning days shortlist differently from run
-/// to run.
 struct PlanGoldenTests {
     static let steadyBlueprint = PlanBlueprint(
         name: "Steady strength", goalSummary: "Get stronger", rationale: "Lift, recover, repeat.",
@@ -51,6 +47,19 @@ struct PlanGoldenTests {
             .init(focus: "Upper strength", kind: DayKind.upperStrength.rawValue, intensity: "moderate"),
             .init(focus: "Full body", kind: DayKind.fullBody.rawValue, intensity: "hard"),
             .init(focus: "Mobility", kind: DayKind.mobility.rawValue, intensity: "light"),
+        ])
+
+    static let sportBlueprint = PlanBlueprint(
+        name: "Court and cardio", goalSummary: "Move faster and last longer", rationale: "Power, then engine.",
+        phases: [
+            .init(name: "Build", weeks: 3, focus: "Base"),
+            .init(name: "Peak", weeks: 4, focus: "Speed"),
+        ],
+        days: [
+            .init(focus: "Power and speed", kind: DayKind.powerSpeed.rawValue, intensity: "hard"),
+            .init(focus: "Conditioning", kind: DayKind.conditioning.rawValue, intensity: "moderate"),
+            .init(focus: "Lower strength", kind: DayKind.lowerStrength.rawValue, intensity: "moderate"),
+            .init(focus: "Upper strength", kind: DayKind.upperStrength.rawValue, intensity: "moderate"),
         ])
 
     static func snapshot(
@@ -75,7 +84,7 @@ struct PlanGoldenTests {
         return String(hash, radix: 16)
     }
 
-    static let examples: [(name: String, brief: TrainingBrief)] = {
+    static let examples: [(name: String, brief: TrainingBrief, blueprint: PlanBlueprint)] = {
         var withLifts = TrainingBrief.experiencedLifter
         withLifts.knownLifts = [
             KnownLift(exerciseID: "back-squat", weightKg: 140, reps: 5),
@@ -91,11 +100,16 @@ struct PlanGoldenTests {
         longPlan.schedule.weeks = 12
         var shortPlan = TrainingBrief.kneeInjury
         shortPlan.schedule.weeks = 2
-        return [
-            ("experienced lifter", .experiencedLifter), ("lifter with known lifts", withLifts),
+        let steady = [
+            ("experienced lifter", TrainingBrief.experiencedLifter), ("lifter with known lifts", withLifts),
             ("knee injury", .kneeInjury), ("knee injury 2 weeks", shortPlan), ("lifter 12 weeks", longPlan),
             ("match week", matchWeek), ("match week 30 minutes", shortSessions),
-        ]
+        ].map { ($0.0, $0.1, steadyBlueprint) }
+        let sport = [
+            ("tennis player", TrainingBrief.tennisPlayer), ("weight loss beginner", .weightLossBeginner),
+            ("runner", .runner),
+        ].map { ($0.0, $0.1, sportBlueprint) }
+        return steady + sport
     }()
 
     static let expected: [String: String] = [
@@ -113,12 +127,20 @@ struct PlanGoldenTests {
         "match week 30 minutes metric": "92eb6cb46508d626",
         "match week imperial": "ced6606bb1e876eb",
         "match week metric": "ced6606bb1e876eb",
+        "runner imperial": "4fdf43233271ca8d",
+        "runner metric": "4fdf43233271ca8d",
+        "tennis player imperial": "fb70cd263d72caa7",
+        "tennis player metric": "fb70cd263d72caa7",
+        "weight loss beginner imperial": "6566f63f3ce18929",
+        "weight loss beginner metric": "6566f63f3ce18929",
     ]
 
     @Test(arguments: examples)
-    func brewsTheSamePlanAndPrompts(_ example: (name: String, brief: TrainingBrief)) async throws {
+    func brewsTheSamePlanAndPrompts(
+        _ example: (name: String, brief: TrainingBrief, blueprint: PlanBlueprint)
+    ) async throws {
         for (label, units) in [("metric", UnitSystem.metric), ("imperial", .imperial)] {
-            let text = try await Self.snapshot(example.brief, units: units)
+            let text = try await Self.snapshot(example.brief, units: units, blueprint: example.blueprint)
             let key = "\(example.name) \(label)"
             #expect(Self.digest(text) == Self.expected[key], "\(key): \(Self.digest(text))")
         }

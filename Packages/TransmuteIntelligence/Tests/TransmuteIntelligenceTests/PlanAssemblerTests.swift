@@ -241,6 +241,22 @@ struct PlanAssemblerTests {
         #expect(TrainingBrief.kneeInjury.limitationAreas.contains(.knee))
     }
 
+    /// The limit leaves room for a few of the main category's exercises beyond the mobility cap.
+    @Test(arguments: [(DayKind.powerSpeed, ExerciseCategory.power, 5), (.conditioning, .conditioning, 12)])
+    func shortlistsLeadWithTheDaysMainCategory(_ day: (kind: DayKind, main: ExerciseCategory, limit: Int)) {
+        var brief = TrainingBrief.tennisPlayer
+        brief.sports = []
+        let offered = DayShortlist.candidates(for: day.kind, brief: brief, limit: day.limit)
+        let others = offered.exercises.filter { $0.category != .mobility }
+        #expect(others.count >= 4)
+        #expect(others.allSatisfy { $0.category == day.main }, "\(others.map(\.category))")
+    }
+
+    @Test func aSportNamedTwiceKeepsTheFirstTag() {
+        #expect(DayShortlist.sportTag(for: "Tennis and running") == "tennis")
+        #expect(DayShortlist.sportTag(for: "Trail running, some tennis") == "tennis")
+    }
+
     @Test func shortlistsRespectLimitsKitAndSize() {
         let brief = TrainingBrief.kneeInjury
         for kind in DayKind.allCases {
