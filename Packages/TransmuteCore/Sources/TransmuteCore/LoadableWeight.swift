@@ -18,10 +18,10 @@ public enum LoadableWeight {
     /// The nearest loadable weight in kilograms, never below one step.
     public static func round(_ kg: Double, for equipment: Set<Equipment>, system: UnitSystem) -> Double {
         let step = step(for: equipment, system: system)
-        let display = system == .metric ? kg : kg * Units.poundsPerKilogram
+        let display = system.display(kilograms: kg)
         let displayStep = system == .metric ? step : 5
         let rounded = max(displayStep, (display / displayStep).rounded() * displayStep)
-        return system == .metric ? rounded : rounded / Units.poundsPerKilogram
+        return system.kilograms(fromDisplay: rounded)
     }
 
     /// The nearest weight this kit can make, in kilograms.

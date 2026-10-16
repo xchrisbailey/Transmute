@@ -195,7 +195,7 @@
         }
 
         private func kg(_ plate: Double) -> Double {
-            loading.system == .metric ? plate : plate / Units.poundsPerKilogram
+            loading.system.kilograms(fromDisplay: plate)
         }
 
         private var description: LocalizedStringResource {

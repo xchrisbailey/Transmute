@@ -11,7 +11,7 @@ public struct PlateLoading: Hashable, Sendable {
 
     /// Bar plus both sides, in kilograms.
     public var totalKg: Double {
-        system == .metric ? total : total / Units.poundsPerKilogram
+        system.kilograms(fromDisplay: total)
     }
 
     public var isBarOnly: Bool {

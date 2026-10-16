@@ -101,7 +101,7 @@ public struct PlateInventory: Codable, Hashable, Sendable {
 
     /// A weight in this kit's unit, converted to kilograms.
     public func kilograms(fromDisplay value: Double) -> Double {
-        system == .metric ? value : value / Units.poundsPerKilogram
+        system.kilograms(fromDisplay: value)
     }
 }
 
@@ -135,12 +135,12 @@ extension PlateInventory {
             dumbbells = (5, 50)
             machine = 5
         }
-        let kg = { (value: Double) in system == .metric ? value : value / Units.poundsPerKilogram }
         self.init(
             system: system, bars: Self.defaultBars(system),
-            plates: plates.map { Plate(kg: kg($0.weight), pairs: $0.pairs) },
-            dumbbellStepKg: kg(dumbbells.step), heaviestDumbbellKg: kg(dumbbells.heaviest),
-            machineStepKg: kg(machine))
+            plates: plates.map { Plate(kg: system.kilograms(fromDisplay: $0.weight), pairs: $0.pairs) },
+            dumbbellStepKg: system.kilograms(fromDisplay: dumbbells.step),
+            heaviestDumbbellKg: system.kilograms(fromDisplay: dumbbells.heaviest),
+            machineStepKg: system.kilograms(fromDisplay: machine))
     }
 
     /// The kit with plates of the same weight merged into one row, adding their pairs. A hand-edited
@@ -182,6 +182,6 @@ extension PlateInventory {
             system == .metric
             ? [(.standard, 20), (.light, 15), (.ezCurl, 10), (.trap, 25)]
             : [(.standard, 45), (.light, 35), (.ezCurl, 25), (.trap, 55)]
-        return weights.map { Bar($0.0, kg: system == .metric ? $0.1 : $0.1 / Units.poundsPerKilogram) }
+        return weights.map { Bar($0.0, kg: system.kilograms(fromDisplay: $0.1)) }
     }
 }

@@ -12,13 +12,13 @@ struct Hundredths: Hashable, Comparable, AdditiveArithmetic, Sendable {
     }
 
     init(kg: Double, in system: UnitSystem) {
-        let value = system == .metric ? kg : kg * Units.poundsPerKilogram
+        let value = system.display(kilograms: kg)
         self.init(count: Int((value * 100).rounded()))
     }
 
     func kg(in system: UnitSystem) -> Double {
         let value = Double(count) / 100
-        return system == .metric ? value : value / Units.poundsPerKilogram
+        return system.kilograms(fromDisplay: value)
     }
 
     /// The weight in the kit's unit, e.g. 2.5 for a 2.5 lb plate in a pound kit.

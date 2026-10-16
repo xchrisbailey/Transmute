@@ -11,6 +11,16 @@ public enum UnitSystem: String, Codable, CaseIterable, Sendable {
     public static func preferred(for locale: Locale = .current) -> UnitSystem {
         locale.measurementSystem == .metric ? .metric : .imperial
     }
+
+    /// A weight in this system's unit, converted to kilograms.
+    public func kilograms(fromDisplay value: Double) -> Double {
+        self == .metric ? value : value / Units.poundsPerKilogram
+    }
+
+    /// A weight in kilograms, converted to this system's unit.
+    public func display(kilograms: Double) -> Double {
+        self == .metric ? kilograms : kilograms * Units.poundsPerKilogram
+    }
 }
 
 /// Converts and formats metric values for display. Create one per screen with
@@ -61,12 +71,12 @@ public struct Units: Sendable {
     }
 
     public func displayWeight(kg: Double) -> Double {
-        weight == .metric ? kg : kg * Self.poundsPerKilogram
+        weight.display(kilograms: kg)
     }
 
     /// A weight the user entered, converted to kilograms for storage.
     public func kilograms(fromDisplay value: Double) -> Double {
-        weight == .metric ? value : value / Self.poundsPerKilogram
+        weight.kilograms(fromDisplay: value)
     }
 
     /// e.g. "115 kg" or "253.5 lb". Rounded to the nearest 0.5 in either unit.

@@ -53,7 +53,7 @@ public struct ProgressionSettings: Codable, Hashable, Sendable {
     /// The increment in kilograms, for the engine.
     public func incrementKg(for region: BodyRegion, system: UnitSystem) -> Double {
         let value = increment(for: region, system: system)
-        return system == .metric ? value : value / Units.poundsPerKilogram
+        return system.kilograms(fromDisplay: value)
     }
 
     public func isHeld(_ exerciseID: String) -> Bool {
