@@ -1,4 +1,4 @@
-/// One week of training as plain values, for "This week, distilled" (#16). The app fills it
+/// One week of training as plain values, for "This week, distilled". The app fills it
 /// from its stats. Every number arrives already formatted, units included, so the summary can
 /// repeat it as written and never has to format or convert one.
 public struct WeekSummaryInput: Equatable, Sendable {

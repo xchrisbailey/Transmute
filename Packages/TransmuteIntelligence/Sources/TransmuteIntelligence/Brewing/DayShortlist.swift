@@ -1,7 +1,6 @@
 import TransmuteCore
 
 extension DayKind {
-    /// What each kind of day draws on: the categories and, for strength days, the patterns.
     var categories: Set<ExerciseCategory> {
         switch self {
         case .lowerStrength, .upperStrength, .fullBody: [.strength, .mobility]
@@ -67,7 +66,6 @@ public enum DayShortlist {
         return sport * 2 + category
     }
 
-    /// The library's sport tag for a sport in the person's words, e.g. "tennis, 4.0 NTRP" → tennis.
     static func sportTag(for sport: String) -> String? {
         let lowered = sport.lowercased()
         let tags = [

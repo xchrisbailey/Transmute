@@ -70,7 +70,7 @@ struct ReworkTests {
     @Test func rebrewKeepsLoggedAndEditedDays() async throws {
         let container = try TransmuteStore.makeContainer(.inMemory)
         let context = container.mainContext
-        let (_, plan) = SampleData.insert(into: context)  // Weeks 1–3 logged.
+        let (_, plan) = SampleData.insert(into: context)
         let edited = try #require(plan.orderedDays.first { $0.week == 4 && $0.weekday == 1 })
         edited.isEdited = true
         edited.focus = "Mine"

@@ -3,11 +3,8 @@ import TransmuteCore
 import TransmuteUI
 import WatchKit
 
-/// Left of the set screen: finish, skip the exercise, lock the screen, or throw the workout
-/// away.
 struct WatchControlsView: View {
     let session: WatchSession
-    /// Goes back to the set screen.
     let onReturn: () -> Void
 
     @State private var confirmsFinish = false
@@ -85,7 +82,6 @@ struct WatchControlsView: View {
     }
 }
 
-/// Right of the set screen: every exercise and how much of it is logged.
 struct WatchExercisesView: View {
     let snapshot: SessionSnapshot
 
@@ -134,7 +130,6 @@ struct WatchExercisesView: View {
     }
 }
 
-/// After Finish: the sets, the weight moved and the time, then Done.
 struct WatchSummaryView: View {
     let session: WatchSession
     let summary: WorkoutSummary

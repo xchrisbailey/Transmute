@@ -3,8 +3,6 @@ import SwiftUI
 import TransmuteUI
 import WidgetKit
 
-/// The workout on the Lock Screen and in the Dynamic Island: the exercise, which set, and
-/// the rest counting down in peach. Words stay plain; the numbers are Geist Mono.
 struct SessionLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: SessionActivityAttributes.self) { context in
@@ -78,7 +76,6 @@ private struct SetLine: View {
     }
 }
 
-/// The rest left, or nothing between rests.
 private struct RestCountdown: View {
     let state: SessionActivityAttributes.ContentState
     let size: CGFloat

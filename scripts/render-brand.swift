@@ -3,7 +3,7 @@
 //   - Brand/wordmark-{mocha,latte}.svg, outlined from Geist ExtraBold
 //   - Brand/icon-{mocha,latte}.png previews
 //
-// The app icon itself is Apps/Shared/AppIcon.icon, an Icon Composer document (#3).
+// The app icon itself is Apps/Shared/AppIcon.icon, an Icon Composer document.
 // Usage: swift scripts/render-brand.swift   (from the repo root)
 
 import AppKit
@@ -33,8 +33,6 @@ let latte = Theme(
     name: "latte", base: hex(0xEFF1F5), ink: hex(0x4C4F69), mauve: hex(0x8839EF),
     peach: hex(0xFE640B), pink: hex(0xEA76CB), lavender: hex(0x7287FD))
 
-// MARK: - Bitmaps
-
 func bitmap(_ size: Int, draw: (CGContext) -> Void) -> NSBitmapImageRep {
     let rep = NSBitmapImageRep(
         bitmapDataPlanes: nil, pixelsWide: size, pixelsHigh: size, bitsPerSample: 8,
@@ -56,7 +54,6 @@ func mark(_ theme: Theme) -> NSImage {
     NSImage(contentsOf: brand.appending(path: "mark-\(theme.name).svg"))!
 }
 
-/// Base fill with a faint mauve glow from the top, and the mark centred.
 func drawIcon(_ ctx: CGContext, size: CGFloat, theme: Theme, markScale: CGFloat, glow: Bool = true) {
     ctx.setFillColor(theme.base.cgColor)
     ctx.fill(CGRect(x: 0, y: 0, width: size, height: size))
@@ -71,8 +68,6 @@ func drawIcon(_ ctx: CGContext, size: CGFloat, theme: Theme, markScale: CGFloat,
     let rect = CGRect(x: (size - side) / 2, y: (size - side) / 2 - size * 0.01, width: side, height: side)
     mark(theme).draw(in: rect)
 }
-
-// MARK: - Previews
 
 // The previews carry the Mac's rounded square on the 824pt grid.
 func macIcon(_ theme: Theme) -> NSBitmapImageRep {
@@ -95,8 +90,6 @@ func macIcon(_ theme: Theme) -> NSBitmapImageRep {
 
 write(macIcon(mocha), to: brand.appending(path: "icon-mocha.png"))
 write(macIcon(latte), to: brand.appending(path: "icon-latte.png"))
-
-// MARK: - Wordmark
 
 func svgPath(_ path: CGPath) -> String {
     var d = ""

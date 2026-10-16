@@ -7,7 +7,6 @@ import TransmutePlanUI
 import TransmuteSettingsUI
 import TransmuteUI
 
-/// Onboarding until there's a profile, then the window: a sidebar and its four panes.
 struct RootView: View {
     @Query(sort: \Profile.createdAt) private var profiles: [Profile]
     @Query(filter: #Predicate<Plan> { $0.isActive }, sort: \Plan.createdAt, order: .reverse) private var plans: [Plan]
@@ -26,7 +25,7 @@ struct RootView: View {
                 .workoutPreferences(of: profile)
         } else {
             OnboardingFlow {
-                // After delete-all (#18), this is where the person lands.
+                // After delete-all, this is where the person lands.
                 ErasureNotice()
                 LiveIntelligenceNotice(service: service)
             } onFinish: { _, _ in
@@ -36,8 +35,6 @@ struct RootView: View {
     }
 }
 
-/// The Mac window (#17): Today, Plan, Log and Progress in a sidebar, with the streak and the
-/// profile underneath. The menu bar drives it through `WindowActions`.
 struct MacShell: View {
     let profile: Profile
     let plan: Plan?
@@ -48,7 +45,7 @@ struct MacShell: View {
 
     @SceneStorage("sidebar.section") private var section = SidebarSection.today
     @State private var beginsWorkout = false
-    /// Set by Open workout and Spotlight (#19): the log selects this workout.
+    /// Set by Open workout and Spotlight: the log selects this workout.
     @State private var openedWorkout: UUID?
     private let router = DeepLinkRouter.shared
     @State private var showsRebrew = false
@@ -69,11 +66,11 @@ struct MacShell: View {
             .id(section)
         }
         .focusedSceneValue(\.windowActions, actions)
-        // A widget's tap, or its button (#19).
+        // A widget's tap, or its button.
         .onOpenURL { url in
             if let link = DeepLink(url: url) { follow(link) }
         }
-        // An App Intent's link, which may have been waiting since before the window (#19).
+        // An App Intent's link, which may have been waiting since before the window.
         .onChange(of: router.pending, initial: true) {
             if let link = router.take() { follow(link) }
         }
@@ -101,7 +98,6 @@ struct MacShell: View {
         }
     }
 
-    /// The plan as the week grid, or as the same list the iPhone shows.
     @AppStorage("planGrid") private var showsPlanGrid = true
 
     @ViewBuilder private var pane: some View {
@@ -148,7 +144,6 @@ struct MacShell: View {
         }
     }
 
-    /// Goes where a widget, a shortcut or Spotlight pointed.
     private func follow(_ link: DeepLink) {
         switch link {
         case .today, .beginToday:
@@ -180,8 +175,7 @@ struct MacShell: View {
     }
 }
 
-/// The Settings window (#18), opened with ⌘, from the app menu. It has its own query, since
-/// it can be open before there's a profile and after one is deleted.
+/// Has its own query, since it can be open before there's a profile and after one is deleted.
 struct SettingsRoot: View {
     @Query(sort: \Profile.createdAt) private var profiles: [Profile]
     let service = FoundationModelsService()

@@ -21,7 +21,7 @@ public struct BrewedDay: Sendable, Equatable {
     public var week: Int
     public var weekday: Weekday
     public var focus: String
-    /// One line for "From your plan" (#11).
+    /// One line for "From your plan".
     public var why: String
     public var kind: DayKind
     public var exercises: [BrewedExercise]

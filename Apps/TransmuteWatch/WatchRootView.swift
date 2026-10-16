@@ -4,8 +4,7 @@ import TransmuteCore
 import TransmuteUI
 import WidgetKit
 
-/// Today until a workout is running, then the workout. A workout left running, even by a
-/// relaunched app, opens straight back up.
+/// A workout left running, even by a relaunched app, opens straight back up.
 struct WatchRootView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \Profile.createdAt) private var profiles: [Profile]
@@ -23,7 +22,7 @@ struct WatchRootView: View {
         Units(profiles.first)
     }
 
-    /// Rest haptics and auto-start rest (#18), from the profile once it has synced.
+    /// Rest haptics and auto-start rest, from the profile once it has synced.
     private var preferences: WorkoutPreferences {
         profiles.first?.preferences ?? WorkoutPreferences()
     }
@@ -54,7 +53,6 @@ struct WatchRootView: View {
             if let session {
                 session.mirrorChanged()
             } else if let snapshot = link.mirrored, !snapshot.isFinished {
-                // The iPhone started a workout: join it.
                 let session = WatchSession(mirroring: snapshot, context: context, library: library, health: health)
                 self.session = session
                 Task { await session.startLive() }
@@ -64,12 +62,10 @@ struct WatchRootView: View {
             if let bpm { link.sendHeartRate(bpm) }
         }
         .onChange(of: session?.snapshot) {
-            // The complication shows the next lift: keep it current as sets are logged. The
-            // week's sessions and the streak move when the workout is finished.
             WidgetCenter.shared.reloadTimelines(ofKind: TodayGlance.watchWidgetKind)
             WidgetCenter.shared.reloadTimelines(ofKind: TodayGlance.watchWeekWidgetKind)
         }
-        // Begin today's workout, from Siri or a shortcut (#19). With a workout already on
+        // Begin today's workout, from Siri or a shortcut. With a workout already on
         // screen, or nothing to start today, the watch just shows what it has.
         .onChange(of: router.pending, initial: true) {
             guard router.take() == .beginToday, session == nil, mine == nil, let plan = plans.first else { return }

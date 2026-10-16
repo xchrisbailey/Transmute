@@ -64,8 +64,6 @@ extension PlanAssembler {
             && exercise.difficulty.isAtMost(brief.experience)
     }
 
-    // MARK: Targets
-
     func targets(for exercise: LibraryExercise, _ item: ExerciseDraft) -> [BrewedSet] {
         let effort = Effort(rawValue: item.effort) ?? .steady
         let rest = Double(min(max(item.restSeconds, 15), 300))
@@ -111,7 +109,7 @@ extension PlanAssembler {
     }
 
     /// From a known lift on the same exercise, or a conservative 80% of one on the same barbell
-    /// pattern. `nil` means the first session calibrates (#12).
+    /// pattern. `nil` means the first session calibrates.
     func startingOneRepMax(for exercise: LibraryExercise) -> Double? {
         if let lift = brief.knownLifts.first(where: { $0.exerciseID == exercise.id }) {
             return lift.estimatedOneRepMaxKg
@@ -123,8 +121,6 @@ extension PlanAssembler {
         }
         return related.map { $0.estimatedOneRepMaxKg * 0.8 }
     }
-
-    // MARK: Session length
 
     /// Rough minutes for a day: warm-up, the sets, the rests and moving between exercises.
     public static func estimatedMinutes(_ exercises: [BrewedExercise]) -> Double {

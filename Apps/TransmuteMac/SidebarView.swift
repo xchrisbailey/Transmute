@@ -3,7 +3,6 @@ import TransmuteCore
 import TransmuteLogUI
 import TransmuteUI
 
-/// The four places in the Mac window, in sidebar order. The symbols match the iPhone's tabs.
 enum SidebarSection: String, CaseIterable, Identifiable {
     case today, plan, log, progress
 
@@ -27,7 +26,6 @@ enum SidebarSection: String, CaseIterable, Identifiable {
         }
     }
 
-    /// ⌘1 to ⌘4, in sidebar order.
     var shortcut: KeyEquivalent {
         switch self {
         case .today: "1"
@@ -38,7 +36,6 @@ enum SidebarSection: String, CaseIterable, Identifiable {
     }
 }
 
-/// The sidebar (#17): the four sections, then the streak and the profile at the bottom.
 struct SidebarView: View {
     @Binding var section: SidebarSection
     let profile: Profile
@@ -86,7 +83,6 @@ struct SidebarView: View {
     }
 }
 
-/// Who's training: name, latest bodyweight in their units and days a week. Opens the profile.
 private struct ProfileFooter: View {
     let profile: Profile
     let action: () -> Void

@@ -6,7 +6,7 @@ import TransmuteUI
 
 @main
 struct TransmuteApp: App {
-    /// Shared with the App Intents, which run in this process (#19).
+    /// Shared with the App Intents, which run in this process.
     let container = TransmuteStore.shared
 
     init() {
@@ -14,13 +14,12 @@ struct TransmuteApp: App {
         link = SessionLink(live: live, device: .phone)
         // Has to be listening from launch: the watch can start a workout at any time.
         live.listen()
-        // Also from launch: a tapped reminder (#19) is delivered as the app opens.
+        // Also from launch: a tapped reminder is delivered as the app opens.
         ReminderTaps.shared.listen()
-        // Plan edits are undoable (#10).
         container.mainContext.undoManager = UndoManager()
         #if DEBUG
             // `-initCloudKitSchema` creates every record type and field in CloudKit's Development
-            // environment (#20), then the app carries on launching.
+            // environment, then the app carries on launching.
             if ProcessInfo.processInfo.arguments.contains("-initCloudKitSchema") {
                 TransmuteStore.initializeCloudKitSchemaForLaunch()
             }
@@ -45,10 +44,9 @@ struct TransmuteApp: App {
     }
     let health = HealthKitService()
     /// The iPhone's end of a workout the watch is recording, and the link that keeps the two
-    /// in step (#15).
+    /// in step.
     let live: PhoneLiveWorkout
     let link: SessionLink
-    /// System, Mocha or Latte, chosen on this device (#18).
     @AppStorage(Appearance.defaultsKey) private var appearance = Appearance.system
 
     var body: some Scene {

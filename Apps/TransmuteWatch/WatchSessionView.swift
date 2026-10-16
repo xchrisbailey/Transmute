@@ -3,14 +3,10 @@ import TransmuteCore
 import TransmuteUI
 import WatchKit
 
-/// The workout on the wrist: controls to the left, the current set or the rest ring in the
-/// middle, and the exercise list to the right.
 struct WatchSessionView: View {
     @Bindable var session: WatchSession
     let units: Units
-    /// Whether the wrist is tapped when rest ends (#18).
     var restHaptics = true
-    /// Leaves the workout screen once the workout is finished or discarded.
     let onClose: () -> Void
 
     enum Page: Hashable {
@@ -85,7 +81,7 @@ struct WatchSessionView: View {
         }
     }
 
-    /// Waits until the rest ends, telling VoiceOver how much is left on the way (#59), then
+    /// Waits until the rest ends, telling VoiceOver how much is left on the way, then
     /// taps the wrist, unless that's off, and clears the timer. Runs again whenever the end
     /// moves, so skipping or adding time just restarts the wait.
     private func waitForRest() async {
@@ -99,7 +95,6 @@ struct WatchSessionView: View {
         session.perform(.startRest(seconds: nil, at: .now))
     }
 
-    /// "New record" in gold at the top, gone after a few seconds or a tap.
     @ViewBuilder private var recordToast: some View {
         if let record = session.record {
             WatchRecordToast(mark: record.mark, units: units)

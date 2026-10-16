@@ -2,7 +2,7 @@ import Foundation
 import TransmuteCore
 
 /// Everything a planning prompt needs to know about the person, as a plain value. Built from
-/// the profile in the app (#9), or by hand in tests and evaluations.
+/// the profile in the app, or by hand in tests and evaluations.
 public struct TrainingBrief: Codable, Hashable, Sendable {
     public var heightCm: Double?
     public var weightKg: Double?
@@ -106,7 +106,6 @@ public struct TrainingBrief: Codable, Hashable, Sendable {
             knownLifts: profile.knownLifts, outsideLoad: outsideLoad)
     }
 
-    /// The library search every tool call starts from: what this person has and can do.
     public var exerciseScope: ExerciseQuery {
         ExerciseQuery(availableEquipment: equipment, maxDifficulty: experience)
     }

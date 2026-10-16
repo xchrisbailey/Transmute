@@ -1,9 +1,8 @@
 import TransmuteCore
 
 /// Turns limitations into exercises to leave out. The model is told about limitations too,
-/// but these rules make sure nothing risky is even offered (#9).
+/// but these rules make sure nothing risky is even offered.
 public enum LimitationRules {
-    /// Movement patterns and primary muscles that load each area.
     static func risks(for area: BodyArea) -> (patterns: Set<MovementPattern>, muscles: Set<Muscle>) {
         switch area {
         case .neck: ([], [.neck, .traps])
