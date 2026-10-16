@@ -143,6 +143,25 @@ extension PlateInventory {
             machineStepKg: system.kilograms(fromDisplay: machine))
     }
 
+    /// Most weight a hand-edited backup may give a bar, plate or step. Far past any gym, far short
+    /// of where `Hundredths` stops holding a weight.
+    static let heaviestPlausibleKg = 100_000.0
+    /// Most pairs of one plate a backup may list. The setup screen stops at 20.
+    static let mostPlausiblePairs = 1_000
+
+    /// Why this kit couldn't be one a person owns, or `nil` if it could. Zero pairs is fine: the
+    /// setup screen can leave a row at none.
+    var implausibility: String? {
+        let weights = bars.map(\.kg) + plates.map(\.kg) + [dumbbellStepKg, heaviestDumbbellKg, machineStepKg]
+        if let kg = weights.first(where: { !($0 >= 0 && $0 <= Self.heaviestPlausibleKg) }) {
+            return "A weight of \(kg) kg isn't one a kit holds."
+        }
+        if let plate = plates.first(where: { !(0...Self.mostPlausiblePairs).contains($0.pairs) }) {
+            return "\(plate.pairs) pairs of \(plate.kg) kg isn't a count a kit holds."
+        }
+        return nil
+    }
+
     /// The kit with plates of the same weight merged into one row, adding their pairs. A hand-edited
     /// or third-party backup can list a weight twice; the kit holds one row per weight.
     func mergingSameWeightPlates() -> PlateInventory {
