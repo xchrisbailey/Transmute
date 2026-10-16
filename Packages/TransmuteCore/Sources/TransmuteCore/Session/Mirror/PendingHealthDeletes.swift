@@ -38,7 +38,6 @@ struct PendingHealthDeletes {
         entries.removeAll { $0 == entry }
     }
 
-    /// Swaps `entry` for what's left of it, or drops it if nothing is.
     func replace(_ entry: Entry, with remaining: Entry) {
         guard remaining.keep != nil || remaining.remove != nil else { return remove(entry) }
         entries = entries.map { $0 == entry ? remaining : $0 }

@@ -46,7 +46,6 @@ final class FakeHealth: HealthService, @unchecked Sendable {
     var isAvailable: Bool { true }
     var canSaveBodyweight: Bool { true }
 
-    /// The workouts in Health right now.
     var workouts: Set<UUID> { lock.withLock { stored } }
     /// How many times the iPhone saved a workout, deleted or not.
     var saves: Int { lock.withLock { saveCount } }
@@ -69,7 +68,6 @@ final class FakeHealth: HealthService, @unchecked Sendable {
         }?.resume()
     }
 
-    /// How many times `deleteWorkout` was called.
     var deleteAttempts: Int { lock.withLock { deleteCount } }
 
     /// Every id `deleteWorkout` was called with, in order.

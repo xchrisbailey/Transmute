@@ -20,7 +20,6 @@ public struct PlanCalendar: Sendable {
         self.init(startDate: plan.startDate, weekCount: plan.weekCount, calendar: calendar)
     }
 
-    /// The Monday a plan week starts on.
     public func start(ofWeek week: Int) -> Date {
         let first = calendar.dateInterval(of: .weekOfYear, for: startDate)?.start ?? calendar.startOfDay(for: startDate)
         return calendar.date(byAdding: .day, value: (week - 1) * 7, to: first) ?? first
@@ -46,7 +45,6 @@ public struct PlanCalendar: Sendable {
         return calendar.date(byAdding: .day, value: weekday - 1, to: start) ?? start
     }
 
-    /// The date of a plan day.
     public func date(of day: PlanDay) -> Date {
         date(week: day.week, weekday: day.weekday)
     }

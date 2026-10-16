@@ -42,7 +42,6 @@ struct PlanBackup: Codable, Equatable {
 }
 
 extension Plan {
-    /// Days in the order a backup lists them.
     var backupDays: [PlanDay] {
         (days ?? []).sorted { ($0.week, $0.weekday, $0.focus) < ($1.week, $1.weekday, $1.focus) }
     }

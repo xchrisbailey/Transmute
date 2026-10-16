@@ -41,8 +41,6 @@ public struct PlateSolution: Hashable, Sendable {
     }
 }
 
-/// Works out the plates for a barbell weight.
-///
 /// Fills each side greedily from the heaviest plate down, as anyone loading a bar would,
 /// respecting how many pairs there are. When greedy runs out (say 15 + 15 when there's one
 /// pair of 25s), it backs off the heavier plates until it fits. When the weight can't be made

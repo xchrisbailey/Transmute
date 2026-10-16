@@ -47,7 +47,6 @@ struct Hundredths: Hashable, Comparable, AdditiveArithmetic, Sendable {
         Hundredths(count: times * weight.count)
     }
 
-    /// How many whole `divisor`s fit in `dividend`.
     static func / (dividend: Hundredths, divisor: Hundredths) -> Int {
         dividend.count / divisor.count
     }
