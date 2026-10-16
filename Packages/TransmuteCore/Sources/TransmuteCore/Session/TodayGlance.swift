@@ -161,7 +161,7 @@ extension TodayGlance {
         let plans = try context.fetch(
             FetchDescriptor<Plan>(
                 predicate: #Predicate { $0.isActive }, sortBy: [SortDescriptor(\.createdAt, order: .reverse)]))
-        let profile = try context.fetch(FetchDescriptor<Profile>()).first
+        let profile = try Profile.canonical(in: context)
         let custom = try context.fetch(FetchDescriptor<CustomExercise>())
         return TodayGlance(
             plan: plans.first, workout: try WorkoutSession.current(in: context), profile: profile,

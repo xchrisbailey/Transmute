@@ -133,6 +133,11 @@ extension LoggedSet {
         isCompleted && !isWarmUp
     }
 
+    /// The rounds of an interval set: one when none was entered, never negative.
+    var effectiveRounds: Int {
+        max(rounds ?? 1, 0)
+    }
+
     /// Load × reps of a working set, or 0.
     var workingVolumeKg: Double {
         guard isWorking, let weightKg, let reps, weightKg > 0, reps > 0 else { return 0 }

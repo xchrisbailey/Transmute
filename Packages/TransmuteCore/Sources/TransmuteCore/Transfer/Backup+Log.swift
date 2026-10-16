@@ -20,17 +20,13 @@ struct WorkoutBackup: Codable, Equatable {
         endedAt = workout.endedAt
         notes = workout.notes
         healthKitWorkoutID = workout.healthKitWorkoutID
-        if let day = workout.planDay, let plan = day.plan, let index = plan.backupDays.firstIndex(where: { $0 === day })
-        {
-            planDay = Backup.PlanDayRef(plan: plan.id, day: index)
-        }
+        planDay = workout.planDay.flatMap(Backup.PlanDayRef.init(day:))
         restEndsAt = workout.restEndsAt
         restSeconds = workout.restSeconds
         startedOn = workout.startedOnRaw
         exercises = workout.orderedExercises.map(LoggedExerciseBackup.init)
     }
 
-    /// The workout and its sets, the sets in the backup's order so a `SetRef` finds its set.
     func model(planDay: PlanDay?) -> (workout: Workout, sets: [[LoggedSet]]) {
         let workout = Workout(title: title, startedAt: startedAt, planDay: planDay)
         workout.id = id
@@ -161,12 +157,7 @@ struct RecordBackup: Codable, Equatable {
         reps = record.reps
         meters = record.meters
         date = record.date
-        if let logged = record.set, let exercise = logged.exercise, let workout = exercise.workout,
-            let exerciseIndex = workout.orderedExercises.firstIndex(where: { $0 === exercise }),
-            let setIndex = exercise.orderedSets.firstIndex(where: { $0 === logged })
-        {
-            set = Backup.SetRef(workout: workout.id, exercise: exerciseIndex, set: setIndex)
-        }
+        set = record.set.flatMap(Backup.SetRef.init(set:))
     }
 
     func model(set: LoggedSet?) -> PersonalRecord {

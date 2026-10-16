@@ -141,8 +141,7 @@ extension ProgressStats {
     static func value(of metric: ConditioningMetric, in sets: [LoggedSet]) -> Double? {
         switch metric {
         case .rounds:
-            // A completed interval set without a round count is one round.
-            sets.isEmpty ? nil : Double(sets.reduce(0) { $0 + max($1.rounds ?? 1, 0) })
+            sets.isEmpty ? nil : Double(sets.reduce(0) { $0 + $1.effectiveRounds })
         case .pace:
             sets.compactMap { set -> Double? in
                 guard let seconds = set.seconds, let meters = set.meters, seconds > 0, meters > 0 else { return nil }

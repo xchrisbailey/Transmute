@@ -74,6 +74,17 @@ struct ProgressBodyTests {
         ]
     }
 
+    @Test func aSetWithNoRoundCountIsOneRound() {
+        let set = LoggedSet(order: 0, seconds: 20)
+        #expect(set.effectiveRounds == 1)
+        set.rounds = 8
+        #expect(set.effectiveRounds == 8)
+        set.rounds = 0
+        #expect(set.effectiveRounds == 0)
+        set.rounds = -3
+        #expect(set.effectiveRounds == 0)
+    }
+
     @Test func conditioningPicksTheNumberThatMattersPerSession() {
         let series = Stats.conditioning(conditioningLog())
         let days = [fixture.evening(0), fixture.evening(7), fixture.evening(14)]
