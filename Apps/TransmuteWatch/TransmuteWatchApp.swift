@@ -24,6 +24,7 @@ struct TransmuteWatchApp: App {
     let health = HealthKitService()
 
     init() {
+        WidgetReload.listen()
         DebugLaunch.apply(to: container)
     }
 

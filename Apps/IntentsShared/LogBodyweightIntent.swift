@@ -2,7 +2,6 @@ import AppIntents
 import SwiftData
 import TransmuteCore
 import TransmuteUI
-import WidgetKit
 
 struct LogBodyweightIntent: AppIntent {
     static let title = LocalizedStringResource(
@@ -44,8 +43,6 @@ struct LogBodyweightIntent: AppIntent {
             return .result(dialog: IntentDialog(ShortcutCopy.weightFailed))
         }
         let inHealth = await saveToHealth(entry, in: context)
-        // The app may not have a window to notice the save.
-        WidgetCenter.shared.reloadAllTimelines()
         let spoken = BodyweightLog.spoken(kg: entry.kg, units: Units(system: entry.profile?.unitSystem))
         return .result(dialog: IntentDialog(ShortcutCopy.logged(spoken, inHealth: inHealth)))
     }

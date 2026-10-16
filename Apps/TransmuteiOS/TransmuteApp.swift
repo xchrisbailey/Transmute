@@ -16,6 +16,8 @@ struct TransmuteApp: App {
         live.listen()
         // Also from launch: a tapped reminder is delivered as the app opens.
         ReminderTaps.shared.listen()
+        // Also from launch: an App Intent can save in a process that never opens a window.
+        WidgetReload.listen()
         container.mainContext.undoManager = UndoManager()
         DebugLaunch.apply(to: container)
     }
@@ -30,7 +32,7 @@ struct TransmuteApp: App {
         WindowGroup {
             RootView()
                 .appearance(appearance)
-                .reloadsWidgets()
+                .reloadsWidgetsOnLeavingForeground()
                 .indexesSpotlight()
                 .task { await link.run() }
                 .onChange(of: link.remoteHeartRate) { _, bpm in
