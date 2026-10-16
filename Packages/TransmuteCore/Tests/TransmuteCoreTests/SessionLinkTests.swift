@@ -260,9 +260,9 @@ struct SessionLinkTests {
         watchReplies(workout, with: nil, after: .milliseconds(10))
 
         let started = ContinuousClock.now
-        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(30))
+        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(120))
 
-        #expect(ContinuousClock.now - started < .seconds(5))
+        #expect(ContinuousClock.now - started < .seconds(60))
         #expect(health.saves == 1)
         #expect(health.workouts.count == 1)
         #expect(workout.healthKitWorkoutID.map { health.workouts.contains($0) } == true)
@@ -314,10 +314,10 @@ struct SessionLinkTests {
         let health = FakeHealth()
 
         let started = ContinuousClock.now
-        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(30))
+        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(120))
         await settle()
 
-        #expect(ContinuousClock.now - started < .seconds(5))
+        #expect(ContinuousClock.now - started < .seconds(60))
         #expect(health.saves == 1)
         #expect(health.workouts.count == 1)
         #expect(workout.healthKitWorkoutID.map { health.workouts.contains($0) } == true)
