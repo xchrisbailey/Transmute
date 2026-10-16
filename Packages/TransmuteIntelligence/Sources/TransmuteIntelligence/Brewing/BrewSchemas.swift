@@ -48,7 +48,7 @@ public struct PlanBlueprint: Sendable, Equatable {
 }
 
 @Generable
-public struct DayDraft: Sendable, Equatable {
+public struct DayDraft: Codable, Sendable, Equatable {
     @Guide(
         description:
             "One plain sentence for the person on what today is for, e.g. Build leg strength for quicker pushes off the baseline."
@@ -60,7 +60,7 @@ public struct DayDraft: Sendable, Equatable {
 }
 
 @Generable
-public struct ExerciseDraft: Sendable, Equatable {
+public struct ExerciseDraft: Codable, Sendable, Equatable {
     @Guide(description: "The exercise id from the list.")
     public var exerciseID: String
 

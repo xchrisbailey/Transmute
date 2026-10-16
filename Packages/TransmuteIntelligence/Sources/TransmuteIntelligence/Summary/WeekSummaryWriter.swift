@@ -52,20 +52,31 @@ public struct WeekSummaryWriter: Sendable {
                 headline: Copy.quietHeadline, lines: [Copy.nothingLogged, Copy.readyWhenYouAre],
                 suggestsRework: input.suggestsRework, isFromAI: false)
         }
-        // In reading order. When there are too many, the lowest ranks are the ones kept.
-        var candidates = [(rank: 0, text: Copy.adherence(done: input.sessionsDone, planned: input.sessionsPlanned))]
+        var candidates: [(line: SummaryLine, text: String)] = [
+            (.adherence, Copy.adherence(done: input.sessionsDone, planned: input.sessionsPlanned))
+        ]
         if let volume = input.volume?.trimmingCharacters(in: .whitespaces), !volume.isEmpty {
-            candidates.append((4, Copy.volume(volume, changePercent: input.volumeChangePercent)))
+            candidates.append((.volume, Copy.volume(volume, changePercent: input.volumeChangePercent)))
         }
-        if !input.records.isEmpty { candidates.append((1, Copy.records(input.records))) }
-        if !input.wentUp.isEmpty { candidates.append((3, Copy.wentUp(input.wentUp))) }
-        if !input.stalled.isEmpty { candidates.append((2, Copy.stalled(input.stalled))) }
-        if input.streakWeeks >= 2 { candidates.append((5, Copy.streak(weeks: input.streakWeeks))) }
-        let kept = Set(candidates.map(\.rank).sorted().prefix(maxLines))
-        var lines = candidates.filter { kept.contains($0.rank) }.map(\.text)
+        if !input.records.isEmpty { candidates.append((.records, Copy.records(input.records))) }
+        if !input.wentUp.isEmpty { candidates.append((.wentUp, Copy.wentUp(input.wentUp))) }
+        if !input.stalled.isEmpty { candidates.append((.stalled, Copy.stalled(input.stalled))) }
+        if input.streakWeeks >= 2 { candidates.append((.streak, Copy.streak(weeks: input.streakWeeks))) }
+        let kept = Set(candidates.map(\.line).sorted().prefix(maxLines))
+        var lines = candidates.filter { kept.contains($0.line) }.map(\.text)
         if lines.count < minLines { lines.append(Copy.keepGoing) }
         return WeekSummary(
             headline: headline(input), lines: lines, suggestsRework: input.suggestsRework, isFromAI: false)
+    }
+
+    /// The lines a template summary can hold, in the order they're kept when there are more
+    /// than `maxLines`. The summary reads in the order they're appended, not this one.
+    enum SummaryLine: Int, Comparable, CaseIterable {
+        case adherence, records, stalled, wentUp, volume, streak
+
+        static func < (lhs: SummaryLine, rhs: SummaryLine) -> Bool {
+            lhs.rawValue < rhs.rawValue
+        }
     }
 
     static func headline(_ input: WeekSummaryInput) -> String {
@@ -151,15 +162,16 @@ extension WeekSummaryWriter {
             lines.allSatisfy({ $0.count <= maxLineLength })
         else { return nil }
         let text = ([headline] + lines).joined(separator: "\n")
-        guard numbers(in: text).isSubset(of: numbers(in: facts)), !soundsGuilty(text) else { return nil }
+        guard numberLiterals(in: text).isSubset(of: numberLiterals(in: facts)), !soundsGuilty(text) else { return nil }
         return WeekSummary(
             headline: headline, lines: Array(lines), suggestsRework: input.suggestsRework, isFromAI: true)
     }
 
     /// Every number in the text, as written: digits, with any separators between them, so
     /// "8,420" and "92.5" each count as one number and "420" on its own doesn't match "8,420".
-    static func numbers(in text: String) -> Set<String> {
-        Set(text.matches(of: /\d+(?:[.,]\d+)*/).map { String($0.output) })
+    static func numberLiterals(in text: String) -> Set<String> {
+        let numberLiteral = /\d+(?:[.,]\d+)*/
+        return Set(text.matches(of: numberLiteral).map { String($0.output) })
     }
 
     static func soundsGuilty(_ text: String) -> Bool {

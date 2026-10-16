@@ -177,9 +177,62 @@ struct PlanAssemblerTests {
         #expect(plank.sets.first?.seconds == 40)
     }
 
-    @Test func percentOfMaxMatchesTheRPEChart() {
-        #expect(abs(PlanAssembler.percentOfMax(reps: 1, rpe: 10) - 0.968) < 0.01)
-        #expect(abs(PlanAssembler.percentOfMax(reps: 5, rpe: 8) - 0.811) < 0.01)
+    @Test func epleyPercentMatchesTheRPEChart() {
+        #expect(abs(PlanAssembler.epleyPercent(reps: 1, rpe: 10) - 0.968) < 0.01)
+        #expect(abs(PlanAssembler.epleyPercent(reps: 5, rpe: 8) - 0.811) < 0.01)
+    }
+
+    @Test func startingLoadIsKnownFromTheLiftOrARelatedBarbellLift() throws {
+        var brief = TrainingBrief.experiencedLifter
+        brief.knownLifts = [KnownLift(exerciseID: "back-squat", weightKg: 140, reps: 5)]
+        let assembler = assembler(brief)
+        let squat = try #require(library.exercise(id: "back-squat"))
+        let lift = try #require(brief.knownLifts.first)
+        #expect(assembler.startingLoad(for: squat) == .known(oneRepMaxKg: lift.estimatedOneRepMaxKg))
+        let frontSquat = try #require(library.exercise(id: "front-squat"))
+        #expect(assembler.startingLoad(for: frontSquat) == .known(oneRepMaxKg: lift.estimatedOneRepMaxKg * 0.8))
+    }
+
+    @Test func startingLoadCalibratesWithoutAKnownLift() throws {
+        let barbell = assembler(.experiencedLifter)
+        #expect(barbell.startingLoad(for: try #require(library.exercise(id: "back-squat"))) == .calibrate)
+        var brief = TrainingBrief.experiencedLifter
+        brief.knownLifts = [KnownLift(exerciseID: "back-squat", weightKg: 140, reps: 5)]
+        let dumbbell = try #require(library.exercise(id: "goblet-squat"))
+        #expect(assembler(brief).startingLoad(for: dumbbell) == .calibrate)
+    }
+
+    @Test func calibratingLiftsReachTheFirstSessionWithNoLoad() throws {
+        let built = assembler(.experiencedLifter).templateDay(
+            draft(["back-squat", "bench-press"], reps: 5), kind: .fullBody, offered: ExerciseCandidates([]))
+        let sets = built.exercises.flatMap(\.sets)
+        #expect(sets.count == 6)
+        for set in sets {
+            #expect(set.loadKg == nil, "The first session finds the load")
+            #expect(set.percentOneRepMax == nil)
+            #expect(set.reps == 5)
+            #expect(set.rpe == 8)
+        }
+    }
+
+    @Test func phasesTakeTheNextTemplateAndDeloadsReuseTheLatest() {
+        func phase(_ first: Int, _ last: Int, isDeload: Bool = false) -> PlanPhase {
+            PlanPhase(name: "P", focus: "F", firstWeek: first, lastWeek: last, isDeload: isDeload)
+        }
+        let phases = [phase(1, 3), phase(4, 5), phase(6, 7), phase(8, 8, isDeload: true)]
+        #expect(PlanAssembler.templateIndices(for: phases, templateCount: 2) == [0, 1, 1, 1])
+        #expect(PlanAssembler.templateIndices(for: phases, templateCount: 1) == [0, 0, 0, 0])
+        #expect(PlanAssembler.templateIndices(for: phases, templateCount: 0) == [-1, -1, -1, -1])
+        let deloadFirst = [phase(1, 1, isDeload: true), phase(2, 4)]
+        #expect(PlanAssembler.templateIndices(for: deloadFirst, templateCount: 2) == [0, 1])
+    }
+
+    @Test func proportionalLengthsShareTheWeeks() {
+        #expect(PlanAssembler.proportionalLengths([3, 4], fitting: 7) == [3, 4])
+        #expect(PlanAssembler.proportionalLengths([3, 4], fitting: 14) == [6, 8])
+        #expect(PlanAssembler.proportionalLengths([3, 4], fitting: 4) == [2, 2])
+        #expect(PlanAssembler.proportionalLengths([4, 4, 4], fitting: 2) == [1, 1])
+        #expect(PlanAssembler.proportionalLengths([0, 6], fitting: 5) == [1, 4])
     }
 
     @Test func limitationWordsBecomeAreas() {
@@ -206,6 +259,9 @@ struct PlanAssemblerTests {
 }
 
 struct PlanBrewerTests {
+    /// The constrained ids appear again in the schema, at about this many tokens each.
+    let schemaTokensPerOfferedID = 6
+
     @Test func brewsAPlanThatPassesTheChecks() async throws {
         let brewer = PlanBrewer(service: PreviewIntelligenceService())
         var plan: BrewedPlan?
@@ -251,10 +307,11 @@ struct PlanBrewerTests {
                 let spec = PlanBrewer.DaySpec(
                     phase: PlanPhase(name: "Build", focus: "Base", firstWeek: 1, lastWeek: 3),
                     outline: .init(focus: "Day", kind: kind.rawValue, intensity: "hard"), weekday: 1, kind: kind,
-                    earlier: ["Monday: Back squat, Bench press"], beforeMatch: true)
+                    earlier: [.init(weekday: 1, exercises: ["Back squat", "Bench press"])], beforeMatch: true)
                 let day = brewer.dayRequest(brief, spec: spec, offered: offered)
-                // The constrained ids add roughly as much again in the schema.
-                let tokens = ContextBudget.estimatedTokens(in: day.instructions + day.prompt) + offered.ids.count * 6
+                let tokens =
+                    ContextBudget.estimatedTokens(in: day.instructions + day.prompt)
+                    + offered.ids.count * schemaTokensPerOfferedID
                 #expect(ContextBudget.onDevice.fits(promptTokens: tokens), "\(kind) \(tokens)")
             }
         }

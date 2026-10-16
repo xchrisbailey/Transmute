@@ -1,0 +1,4978 @@
+{
+  "appVersion" : "1.0",
+  "customExercises" : [
+    {
+      "aliases" : [
+        "snap throw"
+      ],
+      "category" : "power",
+      "createdAt" : "2026-10-16T04:35:46.700Z",
+      "cues" : [
+
+      ],
+      "difficulty" : "beginner",
+      "equipment" : [
+        "medicineBall"
+      ],
+      "exerciseID" : "custom-19a5823f-bde7-4c4b-9739-fae237cc917f",
+      "isUnilateral" : false,
+      "name" : "Racket \"snap\" throw",
+      "pattern" : "rotation",
+      "primaryMuscles" : [
+        "obliques"
+      ],
+      "secondaryMuscles" : [
+
+      ],
+      "sportTags" : [
+        "tennis"
+      ],
+      "tracking" : "reps"
+    }
+  ],
+  "exportedAt" : "2026-09-21T14:13:20Z",
+  "formatVersion" : 1,
+  "plans" : [
+    {
+      "brewedBy" : "Apple Intelligence on iPhone",
+      "createdAt" : "2026-10-16T04:35:46.673Z",
+      "days" : [
+        {
+          "exercises" : [
+            {
+              "exerciseID" : "box-jump",
+              "notes" : "",
+              "order" : 0,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 60,
+                  "targetReps" : 4
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 60,
+                  "targetReps" : 4
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 60,
+                  "targetReps" : 4
+                }
+              ]
+            },
+            {
+              "exerciseID" : "back-squat",
+              "notes" : "",
+              "order" : 1,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 90,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 90,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 90,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 90,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                }
+              ]
+            },
+            {
+              "exerciseID" : "romanian-deadlift",
+              "notes" : "",
+              "order" : 2,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 120,
+                  "targetLoadKg" : 70,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 120,
+                  "targetLoadKg" : 70,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 120,
+                  "targetLoadKg" : 70,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                }
+              ]
+            },
+            {
+              "exerciseID" : "bulgarian-split-squat",
+              "notes" : "",
+              "order" : 3,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 16,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 16,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 16,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                }
+              ]
+            },
+            {
+              "exerciseID" : "pallof-press",
+              "notes" : "",
+              "order" : 4,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetReps" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetReps" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetReps" : 10
+                }
+              ]
+            }
+          ],
+          "focus" : "Lower and power",
+          "isEdited" : false,
+          "notes" : "",
+          "week" : 1,
+          "weekday" : 1
+        },
+        {
+          "exercises" : [
+            {
+              "exerciseID" : "med-ball-rotational-throw",
+              "notes" : "",
+              "order" : 0,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 60,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 60,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 60,
+                  "targetReps" : 6
+                }
+              ]
+            },
+            {
+              "exerciseID" : "bench-press",
+              "notes" : "",
+              "order" : 1,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 70,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 70,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 70,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 70,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                }
+              ]
+            },
+            {
+              "exerciseID" : "pull-up",
+              "notes" : "",
+              "order" : 2,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                }
+              ]
+            },
+            {
+              "exerciseID" : "half-kneeling-landmine-press",
+              "notes" : "",
+              "order" : 3,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 20,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 20,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 20,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                }
+              ],
+              "supersetGroup" : 1
+            },
+            {
+              "exerciseID" : "band-external-rotation",
+              "notes" : "",
+              "order" : 4,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetReps" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetReps" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetReps" : 15
+                }
+              ],
+              "supersetGroup" : 1
+            }
+          ],
+          "focus" : "Upper and rotation",
+          "isEdited" : false,
+          "notes" : "",
+          "week" : 1,
+          "weekday" : 3
+        },
+        {
+          "exercises" : [
+            {
+              "exerciseID" : "split-step-reaction",
+              "notes" : "",
+              "order" : 0,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                }
+              ]
+            },
+            {
+              "exerciseID" : "acceleration-sprint",
+              "notes" : "",
+              "order" : 1,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 4,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 5,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                }
+              ]
+            },
+            {
+              "exerciseID" : "pro-agility-shuttle",
+              "notes" : "",
+              "order" : 2,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 4,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                }
+              ]
+            },
+            {
+              "exerciseID" : "lateral-shuffle",
+              "notes" : "",
+              "order" : 3,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                }
+              ]
+            },
+            {
+              "exerciseID" : "assault-bike-intervals",
+              "notes" : "",
+              "order" : 4,
+              "sets" : [
+                {
+                  "intervalRestSeconds" : 10,
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 10,
+                  "rounds" : 8,
+                  "targetSeconds" : 20
+                }
+              ]
+            },
+            {
+              "exerciseID" : "hip-90-90",
+              "notes" : "",
+              "order" : 5,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 30,
+                  "targetSeconds" : 60
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 30,
+                  "targetSeconds" : 60
+                }
+              ]
+            }
+          ],
+          "focus" : "Speed, agility and conditioning",
+          "isEdited" : false,
+          "notes" : "",
+          "week" : 1,
+          "weekday" : 5
+        },
+        {
+          "exercises" : [
+            {
+              "exerciseID" : "box-jump",
+              "notes" : "",
+              "order" : 0,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 60,
+                  "targetReps" : 4
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 60,
+                  "targetReps" : 4
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 60,
+                  "targetReps" : 4
+                }
+              ]
+            },
+            {
+              "exerciseID" : "back-squat",
+              "notes" : "",
+              "order" : 1,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 92,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 92,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 92,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 92,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                }
+              ]
+            },
+            {
+              "exerciseID" : "romanian-deadlift",
+              "notes" : "",
+              "order" : 2,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 120,
+                  "targetLoadKg" : 72,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 120,
+                  "targetLoadKg" : 72,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 120,
+                  "targetLoadKg" : 72,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                }
+              ]
+            },
+            {
+              "exerciseID" : "bulgarian-split-squat",
+              "notes" : "",
+              "order" : 3,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 16.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 16.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 16.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                }
+              ]
+            },
+            {
+              "exerciseID" : "pallof-press",
+              "notes" : "",
+              "order" : 4,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetReps" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetReps" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetReps" : 10
+                }
+              ]
+            }
+          ],
+          "focus" : "Lower and power",
+          "isEdited" : false,
+          "notes" : "",
+          "week" : 2,
+          "weekday" : 1
+        },
+        {
+          "exercises" : [
+            {
+              "exerciseID" : "med-ball-rotational-throw",
+              "notes" : "",
+              "order" : 0,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 60,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 60,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 60,
+                  "targetReps" : 6
+                }
+              ]
+            },
+            {
+              "exerciseID" : "bench-press",
+              "notes" : "",
+              "order" : 1,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 72,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 72,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 72,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 72,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                }
+              ]
+            },
+            {
+              "exerciseID" : "pull-up",
+              "notes" : "",
+              "order" : 2,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                }
+              ]
+            },
+            {
+              "exerciseID" : "half-kneeling-landmine-press",
+              "notes" : "",
+              "order" : 3,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 20.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 20.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 20.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                }
+              ],
+              "supersetGroup" : 1
+            },
+            {
+              "exerciseID" : "band-external-rotation",
+              "notes" : "",
+              "order" : 4,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetReps" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetReps" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetReps" : 15
+                }
+              ],
+              "supersetGroup" : 1
+            }
+          ],
+          "focus" : "Upper and rotation",
+          "isEdited" : false,
+          "notes" : "",
+          "week" : 2,
+          "weekday" : 3
+        },
+        {
+          "exercises" : [
+            {
+              "exerciseID" : "split-step-reaction",
+              "notes" : "",
+              "order" : 0,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                }
+              ]
+            },
+            {
+              "exerciseID" : "acceleration-sprint",
+              "notes" : "",
+              "order" : 1,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 4,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 5,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                }
+              ]
+            },
+            {
+              "exerciseID" : "pro-agility-shuttle",
+              "notes" : "",
+              "order" : 2,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 4,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                }
+              ]
+            },
+            {
+              "exerciseID" : "lateral-shuffle",
+              "notes" : "",
+              "order" : 3,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                }
+              ]
+            },
+            {
+              "exerciseID" : "assault-bike-intervals",
+              "notes" : "",
+              "order" : 4,
+              "sets" : [
+                {
+                  "intervalRestSeconds" : 10,
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 10,
+                  "rounds" : 8,
+                  "targetSeconds" : 20
+                }
+              ]
+            },
+            {
+              "exerciseID" : "hip-90-90",
+              "notes" : "",
+              "order" : 5,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 30,
+                  "targetSeconds" : 60
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 30,
+                  "targetSeconds" : 60
+                }
+              ]
+            }
+          ],
+          "focus" : "Speed, agility and conditioning",
+          "isEdited" : false,
+          "notes" : "",
+          "week" : 2,
+          "weekday" : 5
+        },
+        {
+          "exercises" : [
+            {
+              "exerciseID" : "box-jump",
+              "notes" : "",
+              "order" : 0,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 60,
+                  "targetReps" : 4
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 60,
+                  "targetReps" : 4
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 60,
+                  "targetReps" : 4
+                }
+              ]
+            },
+            {
+              "exerciseID" : "back-squat",
+              "notes" : "",
+              "order" : 1,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 94.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 94.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 94.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 94.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                }
+              ]
+            },
+            {
+              "exerciseID" : "romanian-deadlift",
+              "notes" : "",
+              "order" : 2,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 120,
+                  "targetLoadKg" : 73.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 120,
+                  "targetLoadKg" : 73.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 120,
+                  "targetLoadKg" : 73.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                }
+              ]
+            },
+            {
+              "exerciseID" : "bulgarian-split-squat",
+              "notes" : "",
+              "order" : 3,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 17,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 17,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 17,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                }
+              ]
+            },
+            {
+              "exerciseID" : "pallof-press",
+              "notes" : "",
+              "order" : 4,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetReps" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetReps" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetReps" : 10
+                }
+              ]
+            }
+          ],
+          "focus" : "Lower and power",
+          "isEdited" : false,
+          "notes" : "",
+          "week" : 3,
+          "weekday" : 1
+        },
+        {
+          "exercises" : [
+            {
+              "exerciseID" : "med-ball-rotational-throw",
+              "notes" : "",
+              "order" : 0,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 60,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 60,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 60,
+                  "targetReps" : 6
+                }
+              ]
+            },
+            {
+              "exerciseID" : "bench-press",
+              "notes" : "",
+              "order" : 1,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 73.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 73.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 73.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 73.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                }
+              ]
+            },
+            {
+              "exerciseID" : "pull-up",
+              "notes" : "",
+              "order" : 2,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                }
+              ]
+            },
+            {
+              "exerciseID" : "half-kneeling-landmine-press",
+              "notes" : "",
+              "order" : 3,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 21,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 21,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 21,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                }
+              ],
+              "supersetGroup" : 1
+            },
+            {
+              "exerciseID" : "band-external-rotation",
+              "notes" : "",
+              "order" : 4,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetReps" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetReps" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetReps" : 15
+                }
+              ],
+              "supersetGroup" : 1
+            }
+          ],
+          "focus" : "Upper and rotation",
+          "isEdited" : false,
+          "notes" : "",
+          "week" : 3,
+          "weekday" : 3
+        },
+        {
+          "exercises" : [
+            {
+              "exerciseID" : "split-step-reaction",
+              "notes" : "",
+              "order" : 0,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                }
+              ]
+            },
+            {
+              "exerciseID" : "acceleration-sprint",
+              "notes" : "",
+              "order" : 1,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 4,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 5,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                }
+              ]
+            },
+            {
+              "exerciseID" : "pro-agility-shuttle",
+              "notes" : "",
+              "order" : 2,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 4,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                }
+              ]
+            },
+            {
+              "exerciseID" : "lateral-shuffle",
+              "notes" : "",
+              "order" : 3,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                }
+              ]
+            },
+            {
+              "exerciseID" : "assault-bike-intervals",
+              "notes" : "",
+              "order" : 4,
+              "sets" : [
+                {
+                  "intervalRestSeconds" : 10,
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 10,
+                  "rounds" : 8,
+                  "targetSeconds" : 20
+                }
+              ]
+            },
+            {
+              "exerciseID" : "hip-90-90",
+              "notes" : "",
+              "order" : 5,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 30,
+                  "targetSeconds" : 60
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 30,
+                  "targetSeconds" : 60
+                }
+              ]
+            }
+          ],
+          "focus" : "Speed, agility and conditioning",
+          "isEdited" : false,
+          "notes" : "",
+          "week" : 3,
+          "weekday" : 5
+        },
+        {
+          "exercises" : [
+            {
+              "exerciseID" : "box-jump",
+              "notes" : "",
+              "order" : 0,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 60,
+                  "targetReps" : 4
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 60,
+                  "targetReps" : 4
+                }
+              ]
+            },
+            {
+              "exerciseID" : "back-squat",
+              "notes" : "",
+              "order" : 1,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 76.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 76.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 76.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 5
+                }
+              ]
+            },
+            {
+              "exerciseID" : "romanian-deadlift",
+              "notes" : "",
+              "order" : 2,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 120,
+                  "targetLoadKg" : 59.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 120,
+                  "targetLoadKg" : 59.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                }
+              ]
+            },
+            {
+              "exerciseID" : "bulgarian-split-squat",
+              "notes" : "",
+              "order" : 3,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 13.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 13.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                }
+              ]
+            },
+            {
+              "exerciseID" : "pallof-press",
+              "notes" : "",
+              "order" : 4,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetReps" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetReps" : 10
+                }
+              ]
+            }
+          ],
+          "focus" : "Lower and power",
+          "isEdited" : false,
+          "notes" : "",
+          "week" : 4,
+          "weekday" : 1
+        },
+        {
+          "exercises" : [
+            {
+              "exerciseID" : "med-ball-rotational-throw",
+              "notes" : "",
+              "order" : 0,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 60,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 60,
+                  "targetReps" : 6
+                }
+              ]
+            },
+            {
+              "exerciseID" : "bench-press",
+              "notes" : "",
+              "order" : 1,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 59.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 59.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 150,
+                  "targetLoadKg" : 59.5,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 6
+                }
+              ]
+            },
+            {
+              "exerciseID" : "pull-up",
+              "notes" : "",
+              "order" : 2,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 120,
+                  "targetReps" : 6
+                }
+              ]
+            },
+            {
+              "exerciseID" : "half-kneeling-landmine-press",
+              "notes" : "",
+              "order" : 3,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 17,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 90,
+                  "targetLoadKg" : 17,
+                  "targetRPE" : 7.5,
+                  "targetReps" : 8
+                }
+              ],
+              "supersetGroup" : 1
+            },
+            {
+              "exerciseID" : "band-external-rotation",
+              "notes" : "",
+              "order" : 4,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetReps" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetReps" : 15
+                }
+              ],
+              "supersetGroup" : 1
+            }
+          ],
+          "focus" : "Upper and rotation",
+          "isEdited" : false,
+          "notes" : "",
+          "week" : 4,
+          "weekday" : 3
+        },
+        {
+          "exercises" : [
+            {
+              "exerciseID" : "split-step-reaction",
+              "notes" : "",
+              "order" : 0,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetSeconds" : 10
+                }
+              ]
+            },
+            {
+              "exerciseID" : "acceleration-sprint",
+              "notes" : "",
+              "order" : 1,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 4,
+                  "restSeconds" : 60,
+                  "targetMeters" : 10
+                }
+              ]
+            },
+            {
+              "exerciseID" : "pro-agility-shuttle",
+              "notes" : "",
+              "order" : 2,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 3,
+                  "restSeconds" : 75,
+                  "targetMeters" : 18.3
+                }
+              ]
+            },
+            {
+              "exerciseID" : "lateral-shuffle",
+              "notes" : "",
+              "order" : 3,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 1,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                },
+                {
+                  "isWarmUp" : false,
+                  "order" : 2,
+                  "restSeconds" : 45,
+                  "targetMeters" : 10,
+                  "targetSeconds" : 15
+                }
+              ]
+            },
+            {
+              "exerciseID" : "assault-bike-intervals",
+              "notes" : "",
+              "order" : 4,
+              "sets" : [
+                {
+                  "intervalRestSeconds" : 10,
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 10,
+                  "rounds" : 8,
+                  "targetSeconds" : 20
+                }
+              ]
+            },
+            {
+              "exerciseID" : "hip-90-90",
+              "notes" : "",
+              "order" : 5,
+              "sets" : [
+                {
+                  "isWarmUp" : false,
+                  "order" : 0,
+                  "restSeconds" : 30,
+                  "targetSeconds" : 60
+                }
+              ]
+            }
+          ],
+          "focus" : "Speed, agility and conditioning",
+          "isEdited" : true,
+          "notes" : "Keep it light",
+          "week" : 4,
+          "weekday" : 5
+        }
+      ],
+      "goalSummary" : "Power, first-step speed and conditioning for tennis",
+      "id" : "9DBB2630-09A7-4868-AC8F-B58784914ACE",
+      "isActive" : true,
+      "name" : "Court-ready strength",
+      "phases" : [
+        {
+          "firstWeek" : 1,
+          "focus" : "Strength and power",
+          "isDeload" : false,
+          "lastWeek" : 3,
+          "name" : "Build"
+        },
+        {
+          "firstWeek" : 4,
+          "focus" : "Recover",
+          "isDeload" : true,
+          "lastWeek" : 4,
+          "name" : "Deload"
+        }
+      ],
+      "rationale" : "Heavy lifting sits on Monday, two days from your match, and speed work on Friday stays short so you're fresh for Saturday.",
+      "startDate" : "2026-08-31T04:00:00Z",
+      "weekCount" : 4
+    }
+  ],
+  "profile" : {
+    "barbellKg" : 20,
+    "birthYear" : 1990,
+    "bodyweights" : [
+      {
+        "date" : "2026-08-31T04:00:00Z",
+        "kg" : 79.4
+      },
+      {
+        "date" : "2026-09-07T04:00:00Z",
+        "kg" : 79.2
+      },
+      {
+        "date" : "2026-09-14T04:00:00Z",
+        "kg" : 79
+      },
+      {
+        "date" : "2026-09-21T04:00:00Z",
+        "kg" : 78.80000000000001
+      },
+      {
+        "date" : "2026-09-21T14:13:20Z",
+        "healthKitSampleID" : "4CF19881-1399-443F-B551-F11DB80F9C6A",
+        "kg" : 78.25
+      }
+    ],
+    "createdAt" : "2026-10-16T04:35:46.672Z",
+    "equipment" : [
+      "barbell",
+      "dumbbell",
+      "kettlebell",
+      "bench",
+      "rack",
+      "pullUpBar",
+      "medicineBall",
+      "box",
+      "cones",
+      "band",
+      "bike"
+    ],
+    "experience" : "intermediate",
+    "goalTags" : [
+      "sportPerformance",
+      "power",
+      "speed",
+      "agility",
+      "conditioning"
+    ],
+    "goalText" : "Improve overall performance on the court: first-step speed, power and staying fresh in the third set.",
+    "heightCm" : 171,
+    "heightUnit" : "metric",
+    "id" : "C640B0C5-17D3-4349-BDDC-4B71DE9A14DE",
+    "knownLifts" : [
+      {
+        "exerciseID" : "back-squat",
+        "reps" : 3,
+        "weightKg" : 100
+      }
+    ],
+    "limitationAreas" : [
+      "shoulder"
+    ],
+    "limitations" : "Right shoulder gets cranky with heavy overhead pressing.",
+    "plates" : {
+      "barKind" : "standard",
+      "bars" : [
+        {
+          "kg" : 20.411656650451594,
+          "kind" : "standard"
+        },
+        {
+          "kg" : 15.87573295035124,
+          "kind" : "light"
+        },
+        {
+          "kg" : 11.339809250250886,
+          "kind" : "ezCurl"
+        },
+        {
+          "kg" : 24.94758035055195,
+          "kind" : "trap"
+        }
+      ],
+      "dumbbellStepKg" : 2.267961850050177,
+      "heaviestDumbbellKg" : 54.43108440120425,
+      "machineStepKg" : 4.535923700100354,
+      "plates" : [
+        {
+          "kg" : 20.411656650451594,
+          "pairs" : 6
+        },
+        {
+          "kg" : 15.87573295035124,
+          "pairs" : 2
+        },
+        {
+          "kg" : 11.339809250250886,
+          "pairs" : 3
+        },
+        {
+          "kg" : 4.535923700100354,
+          "pairs" : 3
+        },
+        {
+          "kg" : 2.267961850050177,
+          "pairs" : 3
+        },
+        {
+          "kg" : 1.1339809250250885,
+          "pairs" : 3
+        }
+      ],
+      "system" : "imperial"
+    },
+    "preferences" : {
+      "autoStartRest" : true,
+      "restHaptics" : true,
+      "restSound" : true,
+      "showRPE" : false,
+      "warmUpRestSeconds" : 45,
+      "warmUpSets" : true,
+      "workingRestSeconds" : 120
+    },
+    "progression" : {
+      "heldExerciseIDs" : [
+
+      ],
+      "lowerBodyKg" : 2.5,
+      "lowerBodyLb" : 5,
+      "upperBodyKg" : 1.25,
+      "upperBodyLb" : 2.5
+    },
+    "schedule" : {
+      "commitments" : [
+        {
+          "intensity" : "moderate",
+          "label" : "Practice",
+          "weekday" : 2
+        },
+        {
+          "intensity" : "moderate",
+          "label" : "Practice",
+          "weekday" : 4
+        },
+        {
+          "intensity" : "hard",
+          "label" : "Match",
+          "weekday" : 6
+        }
+      ],
+      "daysPerWeek" : 3,
+      "preferredWeekdays" : [
+        1,
+        3,
+        5
+      ],
+      "sessionMinutes" : 60,
+      "weeks" : 4
+    },
+    "sex" : "female",
+    "sports" : [
+      "tennis"
+    ],
+    "unitSystem" : "imperial"
+  },
+  "records" : [
+    {
+      "date" : "2026-09-07T22:09:30Z",
+      "exerciseID" : "back-squat",
+      "kind" : "estimatedOneRepMax",
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 107.33333333333334
+    },
+    {
+      "date" : "2026-09-07T22:09:30Z",
+      "exerciseID" : "back-squat",
+      "kind" : "repMax",
+      "reps" : 1,
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 92
+    },
+    {
+      "date" : "2026-09-07T22:09:30Z",
+      "exerciseID" : "back-squat",
+      "kind" : "repMax",
+      "reps" : 3,
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 92
+    },
+    {
+      "date" : "2026-09-07T22:09:30Z",
+      "exerciseID" : "back-squat",
+      "kind" : "repMax",
+      "reps" : 5,
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 92
+    },
+    {
+      "date" : "2026-09-07T22:20:00Z",
+      "exerciseID" : "back-squat",
+      "kind" : "sessionVolume",
+      "set" : {
+        "exercise" : 1,
+        "set" : 3,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 1840
+    },
+    {
+      "date" : "2026-09-07T22:23:00Z",
+      "exerciseID" : "romanian-deadlift",
+      "kind" : "estimatedOneRepMax",
+      "set" : {
+        "exercise" : 2,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 91.19999999999999
+    },
+    {
+      "date" : "2026-09-07T22:23:00Z",
+      "exerciseID" : "romanian-deadlift",
+      "kind" : "repMax",
+      "reps" : 1,
+      "set" : {
+        "exercise" : 2,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 72
+    },
+    {
+      "date" : "2026-09-07T22:23:00Z",
+      "exerciseID" : "romanian-deadlift",
+      "kind" : "repMax",
+      "reps" : 3,
+      "set" : {
+        "exercise" : 2,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 72
+    },
+    {
+      "date" : "2026-09-07T22:23:00Z",
+      "exerciseID" : "romanian-deadlift",
+      "kind" : "repMax",
+      "reps" : 5,
+      "set" : {
+        "exercise" : 2,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 72
+    },
+    {
+      "date" : "2026-09-07T22:23:00Z",
+      "exerciseID" : "romanian-deadlift",
+      "kind" : "repMax",
+      "reps" : 8,
+      "set" : {
+        "exercise" : 2,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 72
+    },
+    {
+      "date" : "2026-09-07T22:29:00Z",
+      "exerciseID" : "romanian-deadlift",
+      "kind" : "sessionVolume",
+      "set" : {
+        "exercise" : 2,
+        "set" : 2,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 1728
+    },
+    {
+      "date" : "2026-09-07T22:31:30Z",
+      "exerciseID" : "bulgarian-split-squat",
+      "kind" : "estimatedOneRepMax",
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 20.9
+    },
+    {
+      "date" : "2026-09-07T22:31:30Z",
+      "exerciseID" : "bulgarian-split-squat",
+      "kind" : "repMax",
+      "reps" : 1,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 16.5
+    },
+    {
+      "date" : "2026-09-07T22:31:30Z",
+      "exerciseID" : "bulgarian-split-squat",
+      "kind" : "repMax",
+      "reps" : 3,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 16.5
+    },
+    {
+      "date" : "2026-09-07T22:31:30Z",
+      "exerciseID" : "bulgarian-split-squat",
+      "kind" : "repMax",
+      "reps" : 5,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 16.5
+    },
+    {
+      "date" : "2026-09-07T22:31:30Z",
+      "exerciseID" : "bulgarian-split-squat",
+      "kind" : "repMax",
+      "reps" : 8,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 16.5
+    },
+    {
+      "date" : "2026-09-07T22:36:30Z",
+      "exerciseID" : "bulgarian-split-squat",
+      "kind" : "sessionVolume",
+      "set" : {
+        "exercise" : 3,
+        "set" : 2,
+        "workout" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B"
+      },
+      "value" : 396
+    },
+    {
+      "date" : "2026-09-09T22:09:30Z",
+      "exerciseID" : "bench-press",
+      "kind" : "estimatedOneRepMax",
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "7F7239C6-F8FC-42DC-841D-54475F31975D"
+      },
+      "value" : 86.39999999999999
+    },
+    {
+      "date" : "2026-09-09T22:09:30Z",
+      "exerciseID" : "bench-press",
+      "kind" : "repMax",
+      "reps" : 1,
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "7F7239C6-F8FC-42DC-841D-54475F31975D"
+      },
+      "value" : 72
+    },
+    {
+      "date" : "2026-09-09T22:09:30Z",
+      "exerciseID" : "bench-press",
+      "kind" : "repMax",
+      "reps" : 3,
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "7F7239C6-F8FC-42DC-841D-54475F31975D"
+      },
+      "value" : 72
+    },
+    {
+      "date" : "2026-09-09T22:09:30Z",
+      "exerciseID" : "bench-press",
+      "kind" : "repMax",
+      "reps" : 5,
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "7F7239C6-F8FC-42DC-841D-54475F31975D"
+      },
+      "value" : 72
+    },
+    {
+      "date" : "2026-09-09T22:20:00Z",
+      "exerciseID" : "bench-press",
+      "kind" : "sessionVolume",
+      "set" : {
+        "exercise" : 1,
+        "set" : 3,
+        "workout" : "7F7239C6-F8FC-42DC-841D-54475F31975D"
+      },
+      "value" : 1728
+    },
+    {
+      "date" : "2026-09-09T22:34:30Z",
+      "exerciseID" : "half-kneeling-landmine-press",
+      "kind" : "estimatedOneRepMax",
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "7F7239C6-F8FC-42DC-841D-54475F31975D"
+      },
+      "value" : 25.966666666666665
+    },
+    {
+      "date" : "2026-09-09T22:34:30Z",
+      "exerciseID" : "half-kneeling-landmine-press",
+      "kind" : "repMax",
+      "reps" : 1,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "7F7239C6-F8FC-42DC-841D-54475F31975D"
+      },
+      "value" : 20.5
+    },
+    {
+      "date" : "2026-09-09T22:34:30Z",
+      "exerciseID" : "half-kneeling-landmine-press",
+      "kind" : "repMax",
+      "reps" : 3,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "7F7239C6-F8FC-42DC-841D-54475F31975D"
+      },
+      "value" : 20.5
+    },
+    {
+      "date" : "2026-09-09T22:34:30Z",
+      "exerciseID" : "half-kneeling-landmine-press",
+      "kind" : "repMax",
+      "reps" : 5,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "7F7239C6-F8FC-42DC-841D-54475F31975D"
+      },
+      "value" : 20.5
+    },
+    {
+      "date" : "2026-09-09T22:34:30Z",
+      "exerciseID" : "half-kneeling-landmine-press",
+      "kind" : "repMax",
+      "reps" : 8,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "7F7239C6-F8FC-42DC-841D-54475F31975D"
+      },
+      "value" : 20.5
+    },
+    {
+      "date" : "2026-09-09T22:39:30Z",
+      "exerciseID" : "half-kneeling-landmine-press",
+      "kind" : "sessionVolume",
+      "set" : {
+        "exercise" : 3,
+        "set" : 2,
+        "workout" : "7F7239C6-F8FC-42DC-841D-54475F31975D"
+      },
+      "value" : 492
+    },
+    {
+      "date" : "2026-09-14T22:09:30Z",
+      "exerciseID" : "back-squat",
+      "kind" : "estimatedOneRepMax",
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 110.25
+    },
+    {
+      "date" : "2026-09-14T22:09:30Z",
+      "exerciseID" : "back-squat",
+      "kind" : "repMax",
+      "reps" : 1,
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 94.5
+    },
+    {
+      "date" : "2026-09-14T22:09:30Z",
+      "exerciseID" : "back-squat",
+      "kind" : "repMax",
+      "reps" : 3,
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 94.5
+    },
+    {
+      "date" : "2026-09-14T22:09:30Z",
+      "exerciseID" : "back-squat",
+      "kind" : "repMax",
+      "reps" : 5,
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 94.5
+    },
+    {
+      "date" : "2026-09-14T22:20:00Z",
+      "exerciseID" : "back-squat",
+      "kind" : "sessionVolume",
+      "set" : {
+        "exercise" : 1,
+        "set" : 3,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 1890
+    },
+    {
+      "date" : "2026-09-14T22:23:00Z",
+      "exerciseID" : "romanian-deadlift",
+      "kind" : "estimatedOneRepMax",
+      "set" : {
+        "exercise" : 2,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 93.1
+    },
+    {
+      "date" : "2026-09-14T22:23:00Z",
+      "exerciseID" : "romanian-deadlift",
+      "kind" : "repMax",
+      "reps" : 1,
+      "set" : {
+        "exercise" : 2,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 73.5
+    },
+    {
+      "date" : "2026-09-14T22:23:00Z",
+      "exerciseID" : "romanian-deadlift",
+      "kind" : "repMax",
+      "reps" : 3,
+      "set" : {
+        "exercise" : 2,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 73.5
+    },
+    {
+      "date" : "2026-09-14T22:23:00Z",
+      "exerciseID" : "romanian-deadlift",
+      "kind" : "repMax",
+      "reps" : 5,
+      "set" : {
+        "exercise" : 2,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 73.5
+    },
+    {
+      "date" : "2026-09-14T22:23:00Z",
+      "exerciseID" : "romanian-deadlift",
+      "kind" : "repMax",
+      "reps" : 8,
+      "set" : {
+        "exercise" : 2,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 73.5
+    },
+    {
+      "date" : "2026-09-14T22:29:00Z",
+      "exerciseID" : "romanian-deadlift",
+      "kind" : "sessionVolume",
+      "set" : {
+        "exercise" : 2,
+        "set" : 2,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 1764
+    },
+    {
+      "date" : "2026-09-14T22:31:30Z",
+      "exerciseID" : "bulgarian-split-squat",
+      "kind" : "estimatedOneRepMax",
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 21.53333333333333
+    },
+    {
+      "date" : "2026-09-14T22:31:30Z",
+      "exerciseID" : "bulgarian-split-squat",
+      "kind" : "repMax",
+      "reps" : 1,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 17
+    },
+    {
+      "date" : "2026-09-14T22:31:30Z",
+      "exerciseID" : "bulgarian-split-squat",
+      "kind" : "repMax",
+      "reps" : 3,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 17
+    },
+    {
+      "date" : "2026-09-14T22:31:30Z",
+      "exerciseID" : "bulgarian-split-squat",
+      "kind" : "repMax",
+      "reps" : 5,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 17
+    },
+    {
+      "date" : "2026-09-14T22:31:30Z",
+      "exerciseID" : "bulgarian-split-squat",
+      "kind" : "repMax",
+      "reps" : 8,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 17
+    },
+    {
+      "date" : "2026-09-14T22:36:30Z",
+      "exerciseID" : "bulgarian-split-squat",
+      "kind" : "sessionVolume",
+      "set" : {
+        "exercise" : 3,
+        "set" : 2,
+        "workout" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF"
+      },
+      "value" : 408
+    },
+    {
+      "date" : "2026-09-16T22:09:30Z",
+      "exerciseID" : "bench-press",
+      "kind" : "estimatedOneRepMax",
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "D682D123-B253-4619-AD34-3233B711562E"
+      },
+      "value" : 88.2
+    },
+    {
+      "date" : "2026-09-16T22:09:30Z",
+      "exerciseID" : "bench-press",
+      "kind" : "repMax",
+      "reps" : 1,
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "D682D123-B253-4619-AD34-3233B711562E"
+      },
+      "value" : 73.5
+    },
+    {
+      "date" : "2026-09-16T22:09:30Z",
+      "exerciseID" : "bench-press",
+      "kind" : "repMax",
+      "reps" : 3,
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "D682D123-B253-4619-AD34-3233B711562E"
+      },
+      "value" : 73.5
+    },
+    {
+      "date" : "2026-09-16T22:09:30Z",
+      "exerciseID" : "bench-press",
+      "kind" : "repMax",
+      "reps" : 5,
+      "set" : {
+        "exercise" : 1,
+        "set" : 0,
+        "workout" : "D682D123-B253-4619-AD34-3233B711562E"
+      },
+      "value" : 73.5
+    },
+    {
+      "date" : "2026-09-16T22:20:00Z",
+      "exerciseID" : "bench-press",
+      "kind" : "sessionVolume",
+      "set" : {
+        "exercise" : 1,
+        "set" : 3,
+        "workout" : "D682D123-B253-4619-AD34-3233B711562E"
+      },
+      "value" : 1764
+    },
+    {
+      "date" : "2026-09-16T22:34:30Z",
+      "exerciseID" : "half-kneeling-landmine-press",
+      "kind" : "estimatedOneRepMax",
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "D682D123-B253-4619-AD34-3233B711562E"
+      },
+      "value" : 26.599999999999998
+    },
+    {
+      "date" : "2026-09-16T22:34:30Z",
+      "exerciseID" : "half-kneeling-landmine-press",
+      "kind" : "repMax",
+      "reps" : 1,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "D682D123-B253-4619-AD34-3233B711562E"
+      },
+      "value" : 21
+    },
+    {
+      "date" : "2026-09-16T22:34:30Z",
+      "exerciseID" : "half-kneeling-landmine-press",
+      "kind" : "repMax",
+      "reps" : 3,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "D682D123-B253-4619-AD34-3233B711562E"
+      },
+      "value" : 21
+    },
+    {
+      "date" : "2026-09-16T22:34:30Z",
+      "exerciseID" : "half-kneeling-landmine-press",
+      "kind" : "repMax",
+      "reps" : 5,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "D682D123-B253-4619-AD34-3233B711562E"
+      },
+      "value" : 21
+    },
+    {
+      "date" : "2026-09-16T22:34:30Z",
+      "exerciseID" : "half-kneeling-landmine-press",
+      "kind" : "repMax",
+      "reps" : 8,
+      "set" : {
+        "exercise" : 3,
+        "set" : 0,
+        "workout" : "D682D123-B253-4619-AD34-3233B711562E"
+      },
+      "value" : 21
+    },
+    {
+      "date" : "2026-09-16T22:39:30Z",
+      "exerciseID" : "half-kneeling-landmine-press",
+      "kind" : "sessionVolume",
+      "set" : {
+        "exercise" : 3,
+        "set" : 2,
+        "workout" : "D682D123-B253-4619-AD34-3233B711562E"
+      },
+      "value" : 504
+    }
+  ],
+  "workouts" : [
+    {
+      "endedAt" : "2026-08-31T22:41:45Z",
+      "exercises" : [
+        {
+          "exerciseID" : "box-jump",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 0,
+          "sets" : [
+            {
+              "completedAt" : "2026-08-31T22:02:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 4
+            },
+            {
+              "completedAt" : "2026-08-31T22:04:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 4
+            },
+            {
+              "completedAt" : "2026-08-31T22:06:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 4
+            }
+          ]
+        },
+        {
+          "exerciseID" : "back-squat",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 1,
+          "sets" : [
+            {
+              "completedAt" : "2026-08-31T22:09:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 5,
+              "rpe" : 8,
+              "weightKg" : 90
+            },
+            {
+              "completedAt" : "2026-08-31T22:13:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 5,
+              "rpe" : 8,
+              "weightKg" : 90
+            },
+            {
+              "completedAt" : "2026-08-31T22:16:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 5,
+              "rpe" : 8,
+              "weightKg" : 90
+            },
+            {
+              "completedAt" : "2026-08-31T22:20:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 3,
+              "reps" : 5,
+              "rpe" : 8,
+              "weightKg" : 90
+            }
+          ]
+        },
+        {
+          "exerciseID" : "romanian-deadlift",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 2,
+          "sets" : [
+            {
+              "completedAt" : "2026-08-31T22:23:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 70
+            },
+            {
+              "completedAt" : "2026-08-31T22:26:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 70
+            },
+            {
+              "completedAt" : "2026-08-31T22:29:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 70
+            }
+          ]
+        },
+        {
+          "exerciseID" : "bulgarian-split-squat",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 3,
+          "sets" : [
+            {
+              "completedAt" : "2026-08-31T22:31:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 16
+            },
+            {
+              "completedAt" : "2026-08-31T22:34:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 16
+            },
+            {
+              "completedAt" : "2026-08-31T22:36:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 16
+            }
+          ]
+        },
+        {
+          "exerciseID" : "pallof-press",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 4,
+          "sets" : [
+            {
+              "completedAt" : "2026-08-31T22:38:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 10
+            },
+            {
+              "completedAt" : "2026-08-31T22:40:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 10
+            },
+            {
+              "completedAt" : "2026-08-31T22:41:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 10
+            }
+          ]
+        }
+      ],
+      "id" : "FBF759E1-C7A3-4F53-954F-6B57715F3679",
+      "notes" : "",
+      "planDay" : {
+        "day" : 0,
+        "plan" : "9DBB2630-09A7-4868-AC8F-B58784914ACE"
+      },
+      "startedAt" : "2026-08-31T22:00:00Z",
+      "title" : "Lower and power"
+    },
+    {
+      "endedAt" : "2026-09-02T22:44:45Z",
+      "exercises" : [
+        {
+          "exerciseID" : "med-ball-rotational-throw",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 0,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-02T22:02:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-02T22:04:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-02T22:06:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 6
+            }
+          ]
+        },
+        {
+          "exerciseID" : "bench-press",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 1,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-02T22:09:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 6,
+              "rpe" : 8,
+              "weightKg" : 70
+            },
+            {
+              "completedAt" : "2026-09-02T22:13:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 6,
+              "rpe" : 8,
+              "weightKg" : 70
+            },
+            {
+              "completedAt" : "2026-09-02T22:16:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 6,
+              "rpe" : 8,
+              "weightKg" : 70
+            },
+            {
+              "completedAt" : "2026-09-02T22:20:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 3,
+              "reps" : 6,
+              "rpe" : 8,
+              "weightKg" : 70
+            }
+          ]
+        },
+        {
+          "exerciseID" : "pull-up",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 2,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-02T22:23:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-02T22:26:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-02T22:29:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-02T22:32:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 3,
+              "reps" : 6
+            }
+          ]
+        },
+        {
+          "exerciseID" : "half-kneeling-landmine-press",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 3,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-02T22:34:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 20
+            },
+            {
+              "completedAt" : "2026-09-02T22:37:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 20
+            },
+            {
+              "completedAt" : "2026-09-02T22:39:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 20
+            }
+          ]
+        },
+        {
+          "exerciseID" : "band-external-rotation",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 4,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-02T22:41:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 15
+            },
+            {
+              "completedAt" : "2026-09-02T22:43:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 15
+            },
+            {
+              "completedAt" : "2026-09-02T22:44:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 15
+            }
+          ]
+        }
+      ],
+      "id" : "035D2571-565B-41C5-9BF4-98980654C4AC",
+      "notes" : "",
+      "planDay" : {
+        "day" : 1,
+        "plan" : "9DBB2630-09A7-4868-AC8F-B58784914ACE"
+      },
+      "startedAt" : "2026-09-02T22:00:00Z",
+      "title" : "Upper and rotation"
+    },
+    {
+      "endedAt" : "2026-09-04T22:41:25Z",
+      "exercises" : [
+        {
+          "exerciseID" : "split-step-reaction",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 0,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-04T22:01:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "seconds" : 10
+            },
+            {
+              "completedAt" : "2026-09-04T22:03:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "seconds" : 10
+            },
+            {
+              "completedAt" : "2026-09-04T22:05:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "seconds" : 10
+            },
+            {
+              "completedAt" : "2026-09-04T22:07:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 3,
+              "seconds" : 10
+            }
+          ]
+        },
+        {
+          "exerciseID" : "acceleration-sprint",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 1,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-04T22:09:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 0
+            },
+            {
+              "completedAt" : "2026-09-04T22:11:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 1
+            },
+            {
+              "completedAt" : "2026-09-04T22:13:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 2
+            },
+            {
+              "completedAt" : "2026-09-04T22:15:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 3
+            },
+            {
+              "completedAt" : "2026-09-04T22:17:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 4
+            },
+            {
+              "completedAt" : "2026-09-04T22:19:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 5
+            }
+          ]
+        },
+        {
+          "exerciseID" : "pro-agility-shuttle",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 2,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-04T22:21:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 0
+            },
+            {
+              "completedAt" : "2026-09-04T22:23:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 1
+            },
+            {
+              "completedAt" : "2026-09-04T22:25:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 2
+            },
+            {
+              "completedAt" : "2026-09-04T22:28:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 3
+            },
+            {
+              "completedAt" : "2026-09-04T22:30:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 4
+            }
+          ]
+        },
+        {
+          "exerciseID" : "lateral-shuffle",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 3,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-04T22:32:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 0,
+              "seconds" : 15
+            },
+            {
+              "completedAt" : "2026-09-04T22:33:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 1,
+              "seconds" : 15
+            },
+            {
+              "completedAt" : "2026-09-04T22:35:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 2,
+              "seconds" : 15
+            },
+            {
+              "completedAt" : "2026-09-04T22:37:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 3,
+              "seconds" : 15
+            }
+          ]
+        },
+        {
+          "exerciseID" : "assault-bike-intervals",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 4,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-04T22:38:25Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "rounds" : 8,
+              "seconds" : 20
+            }
+          ]
+        },
+        {
+          "exerciseID" : "hip-90-90",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 5,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-04T22:39:55Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "seconds" : 60
+            },
+            {
+              "completedAt" : "2026-09-04T22:41:25Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "seconds" : 60
+            }
+          ]
+        }
+      ],
+      "id" : "00291785-514A-4126-B243-D992CE4A52A4",
+      "notes" : "",
+      "planDay" : {
+        "day" : 2,
+        "plan" : "9DBB2630-09A7-4868-AC8F-B58784914ACE"
+      },
+      "startedAt" : "2026-09-04T22:00:00Z",
+      "title" : "Speed, agility and conditioning"
+    },
+    {
+      "endedAt" : "2026-09-07T22:41:45Z",
+      "exercises" : [
+        {
+          "exerciseID" : "box-jump",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 0,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-07T22:02:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 4
+            },
+            {
+              "completedAt" : "2026-09-07T22:04:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 4
+            },
+            {
+              "completedAt" : "2026-09-07T22:06:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 4
+            }
+          ]
+        },
+        {
+          "exerciseID" : "back-squat",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 1,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-07T22:09:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 5,
+              "rpe" : 8,
+              "weightKg" : 92
+            },
+            {
+              "completedAt" : "2026-09-07T22:13:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 5,
+              "rpe" : 8,
+              "weightKg" : 92
+            },
+            {
+              "completedAt" : "2026-09-07T22:16:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 5,
+              "rpe" : 8,
+              "weightKg" : 92
+            },
+            {
+              "completedAt" : "2026-09-07T22:20:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 3,
+              "reps" : 5,
+              "rpe" : 8,
+              "weightKg" : 92
+            }
+          ]
+        },
+        {
+          "exerciseID" : "romanian-deadlift",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 2,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-07T22:23:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 72
+            },
+            {
+              "completedAt" : "2026-09-07T22:26:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 72
+            },
+            {
+              "completedAt" : "2026-09-07T22:29:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 72
+            }
+          ]
+        },
+        {
+          "exerciseID" : "bulgarian-split-squat",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 3,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-07T22:31:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 16.5
+            },
+            {
+              "completedAt" : "2026-09-07T22:34:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 16.5
+            },
+            {
+              "completedAt" : "2026-09-07T22:36:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 16.5
+            }
+          ]
+        },
+        {
+          "exerciseID" : "pallof-press",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 4,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-07T22:38:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 10
+            },
+            {
+              "completedAt" : "2026-09-07T22:40:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 10
+            },
+            {
+              "completedAt" : "2026-09-07T22:41:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 10
+            }
+          ]
+        }
+      ],
+      "id" : "69DA4D4E-DCBF-46DD-8642-1B5FF875975B",
+      "notes" : "",
+      "planDay" : {
+        "day" : 3,
+        "plan" : "9DBB2630-09A7-4868-AC8F-B58784914ACE"
+      },
+      "startedAt" : "2026-09-07T22:00:00Z",
+      "title" : "Lower and power"
+    },
+    {
+      "endedAt" : "2026-09-09T22:44:45Z",
+      "exercises" : [
+        {
+          "exerciseID" : "med-ball-rotational-throw",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 0,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-09T22:02:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-09T22:04:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-09T22:06:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 6
+            }
+          ]
+        },
+        {
+          "exerciseID" : "bench-press",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 1,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-09T22:09:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 6,
+              "rpe" : 8,
+              "weightKg" : 72
+            },
+            {
+              "completedAt" : "2026-09-09T22:13:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 6,
+              "rpe" : 8,
+              "weightKg" : 72
+            },
+            {
+              "completedAt" : "2026-09-09T22:16:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 6,
+              "rpe" : 8,
+              "weightKg" : 72
+            },
+            {
+              "completedAt" : "2026-09-09T22:20:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 3,
+              "reps" : 6,
+              "rpe" : 8,
+              "weightKg" : 72
+            }
+          ]
+        },
+        {
+          "exerciseID" : "pull-up",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 2,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-09T22:23:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-09T22:26:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-09T22:29:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-09T22:32:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 3,
+              "reps" : 6
+            }
+          ]
+        },
+        {
+          "exerciseID" : "half-kneeling-landmine-press",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 3,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-09T22:34:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 20.5
+            },
+            {
+              "completedAt" : "2026-09-09T22:37:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 20.5
+            },
+            {
+              "completedAt" : "2026-09-09T22:39:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 20.5
+            }
+          ]
+        },
+        {
+          "exerciseID" : "band-external-rotation",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 4,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-09T22:41:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 15
+            },
+            {
+              "completedAt" : "2026-09-09T22:43:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 15
+            },
+            {
+              "completedAt" : "2026-09-09T22:44:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 15
+            }
+          ]
+        }
+      ],
+      "id" : "7F7239C6-F8FC-42DC-841D-54475F31975D",
+      "notes" : "",
+      "planDay" : {
+        "day" : 4,
+        "plan" : "9DBB2630-09A7-4868-AC8F-B58784914ACE"
+      },
+      "startedAt" : "2026-09-09T22:00:00Z",
+      "title" : "Upper and rotation"
+    },
+    {
+      "endedAt" : "2026-09-11T22:41:25Z",
+      "exercises" : [
+        {
+          "exerciseID" : "split-step-reaction",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 0,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-11T22:01:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "seconds" : 10
+            },
+            {
+              "completedAt" : "2026-09-11T22:03:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "seconds" : 10
+            },
+            {
+              "completedAt" : "2026-09-11T22:05:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "seconds" : 10
+            },
+            {
+              "completedAt" : "2026-09-11T22:07:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 3,
+              "seconds" : 10
+            }
+          ]
+        },
+        {
+          "exerciseID" : "acceleration-sprint",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 1,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-11T22:09:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 0
+            },
+            {
+              "completedAt" : "2026-09-11T22:11:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 1
+            },
+            {
+              "completedAt" : "2026-09-11T22:13:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 2
+            },
+            {
+              "completedAt" : "2026-09-11T22:15:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 3
+            },
+            {
+              "completedAt" : "2026-09-11T22:17:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 4
+            },
+            {
+              "completedAt" : "2026-09-11T22:19:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 5
+            }
+          ]
+        },
+        {
+          "exerciseID" : "pro-agility-shuttle",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 2,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-11T22:21:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 0
+            },
+            {
+              "completedAt" : "2026-09-11T22:23:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 1
+            },
+            {
+              "completedAt" : "2026-09-11T22:25:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 2
+            },
+            {
+              "completedAt" : "2026-09-11T22:28:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 3
+            },
+            {
+              "completedAt" : "2026-09-11T22:30:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 4
+            }
+          ]
+        },
+        {
+          "exerciseID" : "lateral-shuffle",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 3,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-11T22:32:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 0,
+              "seconds" : 15
+            },
+            {
+              "completedAt" : "2026-09-11T22:33:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 1,
+              "seconds" : 15
+            },
+            {
+              "completedAt" : "2026-09-11T22:35:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 2,
+              "seconds" : 15
+            },
+            {
+              "completedAt" : "2026-09-11T22:37:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 3,
+              "seconds" : 15
+            }
+          ]
+        },
+        {
+          "exerciseID" : "assault-bike-intervals",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 4,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-11T22:38:25Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "rounds" : 8,
+              "seconds" : 20
+            }
+          ]
+        },
+        {
+          "exerciseID" : "hip-90-90",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 5,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-11T22:39:55Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "seconds" : 60
+            },
+            {
+              "completedAt" : "2026-09-11T22:41:25Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "seconds" : 60
+            }
+          ]
+        }
+      ],
+      "id" : "B3F34470-BCB3-41D9-BAA5-D3B12F9BA023",
+      "notes" : "",
+      "planDay" : {
+        "day" : 5,
+        "plan" : "9DBB2630-09A7-4868-AC8F-B58784914ACE"
+      },
+      "startedAt" : "2026-09-11T22:00:00Z",
+      "title" : "Speed, agility and conditioning"
+    },
+    {
+      "endedAt" : "2026-09-14T22:41:45Z",
+      "exercises" : [
+        {
+          "exerciseID" : "box-jump",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 0,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-14T22:02:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 4
+            },
+            {
+              "completedAt" : "2026-09-14T22:04:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 4
+            },
+            {
+              "completedAt" : "2026-09-14T22:06:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 4
+            }
+          ]
+        },
+        {
+          "exerciseID" : "back-squat",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 1,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-14T22:09:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 5,
+              "rpe" : 8,
+              "weightKg" : 94.5
+            },
+            {
+              "completedAt" : "2026-09-14T22:13:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 5,
+              "rpe" : 8,
+              "weightKg" : 94.5
+            },
+            {
+              "completedAt" : "2026-09-14T22:16:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 5,
+              "rpe" : 8,
+              "weightKg" : 94.5
+            },
+            {
+              "completedAt" : "2026-09-14T22:20:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 3,
+              "reps" : 5,
+              "rpe" : 8,
+              "weightKg" : 94.5
+            }
+          ]
+        },
+        {
+          "exerciseID" : "romanian-deadlift",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 2,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-14T22:23:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 73.5
+            },
+            {
+              "completedAt" : "2026-09-14T22:26:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 73.5
+            },
+            {
+              "completedAt" : "2026-09-14T22:29:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 73.5
+            }
+          ]
+        },
+        {
+          "exerciseID" : "bulgarian-split-squat",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 3,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-14T22:31:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 17
+            },
+            {
+              "completedAt" : "2026-09-14T22:34:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 17
+            },
+            {
+              "completedAt" : "2026-09-14T22:36:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 17
+            }
+          ]
+        },
+        {
+          "exerciseID" : "pallof-press",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 4,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-14T22:38:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 10
+            },
+            {
+              "completedAt" : "2026-09-14T22:40:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 10
+            },
+            {
+              "completedAt" : "2026-09-14T22:41:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 10
+            }
+          ]
+        }
+      ],
+      "id" : "EFF01FAA-844F-459F-BF50-42AD02BD55FF",
+      "notes" : "",
+      "planDay" : {
+        "day" : 6,
+        "plan" : "9DBB2630-09A7-4868-AC8F-B58784914ACE"
+      },
+      "startedAt" : "2026-09-14T22:00:00Z",
+      "title" : "Lower and power"
+    },
+    {
+      "endedAt" : "2026-09-16T22:44:45Z",
+      "exercises" : [
+        {
+          "exerciseID" : "med-ball-rotational-throw",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 0,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-16T22:02:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-16T22:04:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-16T22:06:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 6
+            }
+          ]
+        },
+        {
+          "exerciseID" : "bench-press",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 1,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-16T22:09:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 6,
+              "rpe" : 8,
+              "weightKg" : 73.5
+            },
+            {
+              "completedAt" : "2026-09-16T22:13:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 6,
+              "rpe" : 8,
+              "weightKg" : 73.5
+            },
+            {
+              "completedAt" : "2026-09-16T22:16:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 6,
+              "rpe" : 8,
+              "weightKg" : 73.5
+            },
+            {
+              "completedAt" : "2026-09-16T22:20:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 3,
+              "reps" : 6,
+              "rpe" : 8,
+              "weightKg" : 73.5
+            }
+          ]
+        },
+        {
+          "exerciseID" : "pull-up",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 2,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-16T22:23:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-16T22:26:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-16T22:29:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 6
+            },
+            {
+              "completedAt" : "2026-09-16T22:32:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 3,
+              "reps" : 6
+            }
+          ]
+        },
+        {
+          "exerciseID" : "half-kneeling-landmine-press",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 3,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-16T22:34:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 21
+            },
+            {
+              "completedAt" : "2026-09-16T22:37:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 21
+            },
+            {
+              "completedAt" : "2026-09-16T22:39:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 8,
+              "rpe" : 8,
+              "weightKg" : 21
+            }
+          ]
+        },
+        {
+          "exerciseID" : "band-external-rotation",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 4,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-16T22:41:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "reps" : 15
+            },
+            {
+              "completedAt" : "2026-09-16T22:43:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 15
+            },
+            {
+              "completedAt" : "2026-09-16T22:44:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "reps" : 15
+            }
+          ]
+        }
+      ],
+      "id" : "D682D123-B253-4619-AD34-3233B711562E",
+      "notes" : "",
+      "planDay" : {
+        "day" : 7,
+        "plan" : "9DBB2630-09A7-4868-AC8F-B58784914ACE"
+      },
+      "startedAt" : "2026-09-16T22:00:00Z",
+      "title" : "Upper and rotation"
+    },
+    {
+      "endedAt" : "2026-09-18T22:41:25Z",
+      "exercises" : [
+        {
+          "exerciseID" : "split-step-reaction",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 0,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-18T22:01:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "seconds" : 10
+            },
+            {
+              "completedAt" : "2026-09-18T22:03:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "seconds" : 10
+            },
+            {
+              "completedAt" : "2026-09-18T22:05:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 2,
+              "seconds" : 10
+            },
+            {
+              "completedAt" : "2026-09-18T22:07:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 3,
+              "seconds" : 10
+            }
+          ]
+        },
+        {
+          "exerciseID" : "acceleration-sprint",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 1,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-18T22:09:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 0
+            },
+            {
+              "completedAt" : "2026-09-18T22:11:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 1
+            },
+            {
+              "completedAt" : "2026-09-18T22:13:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 2
+            },
+            {
+              "completedAt" : "2026-09-18T22:15:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 3
+            },
+            {
+              "completedAt" : "2026-09-18T22:17:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 4
+            },
+            {
+              "completedAt" : "2026-09-18T22:19:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 5
+            }
+          ]
+        },
+        {
+          "exerciseID" : "pro-agility-shuttle",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 2,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-18T22:21:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 0
+            },
+            {
+              "completedAt" : "2026-09-18T22:23:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 1
+            },
+            {
+              "completedAt" : "2026-09-18T22:25:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 2
+            },
+            {
+              "completedAt" : "2026-09-18T22:28:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 3
+            },
+            {
+              "completedAt" : "2026-09-18T22:30:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 18.3,
+              "notes" : "",
+              "order" : 4
+            }
+          ]
+        },
+        {
+          "exerciseID" : "lateral-shuffle",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 3,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-18T22:32:00Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 0,
+              "seconds" : 15
+            },
+            {
+              "completedAt" : "2026-09-18T22:33:45Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 1,
+              "seconds" : 15
+            },
+            {
+              "completedAt" : "2026-09-18T22:35:30Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 2,
+              "seconds" : 15
+            },
+            {
+              "completedAt" : "2026-09-18T22:37:15Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "meters" : 10,
+              "notes" : "",
+              "order" : 3,
+              "seconds" : 15
+            }
+          ]
+        },
+        {
+          "exerciseID" : "assault-bike-intervals",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 4,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-18T22:38:25Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "rounds" : 8,
+              "seconds" : 20
+            }
+          ]
+        },
+        {
+          "exerciseID" : "hip-90-90",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 5,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-18T22:39:55Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 0,
+              "seconds" : 60
+            },
+            {
+              "completedAt" : "2026-09-18T22:41:25Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "seconds" : 60
+            }
+          ]
+        }
+      ],
+      "id" : "37D4F06B-D3FA-4F22-B16D-27F5A5765DD8",
+      "notes" : "",
+      "planDay" : {
+        "day" : 8,
+        "plan" : "9DBB2630-09A7-4868-AC8F-B58784914ACE"
+      },
+      "startedAt" : "2026-09-18T22:00:00Z",
+      "title" : "Speed, agility and conditioning"
+    },
+    {
+      "exercises" : [
+        {
+          "exerciseID" : "custom-19a5823f-bde7-4c4b-9739-fae237cc917f",
+          "isSkipped" : false,
+          "notes" : "",
+          "order" : 0,
+          "sets" : [
+            {
+              "completedAt" : "2026-09-21T14:14:20.500Z",
+              "isCompleted" : true,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : true,
+              "notes" : "Left side, then right",
+              "order" : 0,
+              "reps" : 6,
+              "rounds" : 3,
+              "rpe" : 7,
+              "targetReps" : 6
+            },
+            {
+              "isCompleted" : false,
+              "isRecordConfirmed" : false,
+              "isWarmUp" : false,
+              "notes" : "",
+              "order" : 1,
+              "reps" : 6
+            }
+          ],
+          "substitutedFromID" : "med-ball-rotational-throw"
+        }
+      ],
+      "healthKitWorkoutID" : "21A562CD-032F-4EA9-807C-119EAB24E231",
+      "id" : "4D3DB628-EE8B-4292-ADD0-CCE62A4EE0BA",
+      "notes" : "Felt quick",
+      "planDay" : {
+        "day" : 11,
+        "plan" : "9DBB2630-09A7-4868-AC8F-B58784914ACE"
+      },
+      "restEndsAt" : "2026-09-21T14:14:50Z",
+      "restSeconds" : 90,
+      "startedAt" : "2026-09-21T14:13:20.250Z",
+      "startedOn" : "watch",
+      "title" : "Friday, in progress"
+    }
+  ]
+}

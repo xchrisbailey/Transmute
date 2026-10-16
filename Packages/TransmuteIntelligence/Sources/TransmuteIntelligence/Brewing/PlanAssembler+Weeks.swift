@@ -42,6 +42,16 @@ extension PlanAssembler {
     /// How many distinct template weeks a brew writes.
     public static let maxTemplates = 2
 
+    /// The template each phase repeats. A new phase takes the next template; a deload, or a
+    /// phase past the last template, reuses the latest one.
+    static func templateIndices(for phases: [PlanPhase], templateCount: Int) -> [Int] {
+        var index = -1
+        return phases.map { phase in
+            if !phase.isDeload || index < 0 { index = min(index + 1, templateCount - 1) }
+            return index
+        }
+    }
+
     /// The whole plan: each phase's template days repeated over its weeks with progression.
     /// Deload phases reuse the template before them.
     public func assemble(
@@ -49,12 +59,8 @@ extension PlanAssembler {
         templates: [[TemplateDay]]
     ) -> BrewedPlan {
         var days: [BrewedDay] = []
-        var templateIndex = -1
-        for phase in phases {
-            // Each new phase takes the next template; deloads and phases past the last template
-            // reuse the latest one.
-            if !phase.isDeload || templateIndex < 0 { templateIndex = min(templateIndex + 1, templates.count - 1) }
-            guard templateIndex >= 0 else { break }
+        let indices = Self.templateIndices(for: phases, templateCount: templates.count)
+        for (phase, templateIndex) in zip(phases, indices) where templates.indices.contains(templateIndex) {
             for week in phase.weeks {
                 for day in templates[templateIndex] {
                     days.append(

@@ -17,7 +17,6 @@ struct RootView: View {
     @State private var beginsWorkout = false
     /// Set by Open workout and Spotlight: the log shows this workout once it's on screen.
     @State private var openedWorkout: UUID?
-    private let router = DeepLinkRouter.shared
 
     var body: some View {
         if let profile = profiles.first {
@@ -82,10 +81,7 @@ struct RootView: View {
             .onOpenURL { url in
                 if let link = DeepLink(url: url) { follow(link) }
             }
-            // An App Intent's link, which may have been waiting since before the window.
-            .onChange(of: router.pending, initial: true) {
-                if let link = router.take() { follow(link) }
-            }
+            .followsDeepLinks { follow($0) }
             .trainingReminders(plan: plans.first) { tab = "today" }
         } else {
             OnboardingFlow {
