@@ -101,7 +101,7 @@
             case .goals: Form { GoalSection(draft: $draft) }.scrollContentBackground(.hidden)
             case .sport: Form { SportSection(draft: $draft) }.scrollContentBackground(.hidden)
             case .schedule: Form { ScheduleSection(draft: $draft) }.scrollContentBackground(.hidden)
-            case .equipment: Form { EquipmentSection(draft: $draft, kit: .barWeight(barbellKg, units)) }.scrollContentBackground(.hidden)
+            case .equipment: Form { EquipmentSection(draft: $draft, kit: kit) }.scrollContentBackground(.hidden)
             case .limitations: Form { LimitationsSection(draft: $draft) }.scrollContentBackground(.hidden)
             }
         }
@@ -118,12 +118,13 @@
             }
         }
 
-        private var barbellKg: Binding<Double?> {
-            Binding {
-                settings.barbellKg
-            } set: {
-                settings.barbellKg = $0 ?? 20
-            }
+        private var kit: EquipmentSection.Kit {
+            .barWeight(
+                Binding {
+                    settings.barbellKg
+                } set: {
+                    settings.barbellKg = $0 ?? 20
+                }, units)
         }
 
         private var footer: some View {
