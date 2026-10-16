@@ -36,6 +36,12 @@ final class RecordingService: IntelligenceService, @unchecked Sendable {
 /// Pins what a brew writes: the plan and every prompt, for each example brief in both unit
 /// systems. A digest keeps the pin small; when it changes, the failure shows the new one.
 struct PlanGoldenTests {
+    struct Example: Sendable {
+        let name: String
+        let brief: TrainingBrief
+        let blueprint: PlanBlueprint
+    }
+
     static let steadyBlueprint = PlanBlueprint(
         name: "Steady strength", goalSummary: "Get stronger", rationale: "Lift, recover, repeat.",
         phases: [
@@ -84,7 +90,7 @@ struct PlanGoldenTests {
         return String(hash, radix: 16)
     }
 
-    static let examples: [(name: String, brief: TrainingBrief, blueprint: PlanBlueprint)] = {
+    static let examples: [Example] = {
         var withLifts = TrainingBrief.experiencedLifter
         withLifts.knownLifts = [
             KnownLift(exerciseID: "back-squat", weightKg: 140, reps: 5),
@@ -104,11 +110,11 @@ struct PlanGoldenTests {
             ("experienced lifter", TrainingBrief.experiencedLifter), ("lifter with known lifts", withLifts),
             ("knee injury", .kneeInjury), ("knee injury 2 weeks", shortPlan), ("lifter 12 weeks", longPlan),
             ("match week", matchWeek), ("match week 30 minutes", shortSessions),
-        ].map { ($0.0, $0.1, steadyBlueprint) }
+        ].map { Example(name: $0.0, brief: $0.1, blueprint: steadyBlueprint) }
         let sport = [
             ("tennis player", TrainingBrief.tennisPlayer), ("weight loss beginner", .weightLossBeginner),
             ("runner", .runner),
-        ].map { ($0.0, $0.1, sportBlueprint) }
+        ].map { Example(name: $0.0, brief: $0.1, blueprint: sportBlueprint) }
         return steady + sport
     }()
 
@@ -136,9 +142,7 @@ struct PlanGoldenTests {
     ]
 
     @Test(arguments: examples)
-    func brewsTheSamePlanAndPrompts(
-        _ example: (name: String, brief: TrainingBrief, blueprint: PlanBlueprint)
-    ) async throws {
+    func brewsTheSamePlanAndPrompts(_ example: Example) async throws {
         for (label, units) in [("metric", UnitSystem.metric), ("imperial", .imperial)] {
             let text = try await Self.snapshot(example.brief, units: units, blueprint: example.blueprint)
             let key = "\(example.name) \(label)"

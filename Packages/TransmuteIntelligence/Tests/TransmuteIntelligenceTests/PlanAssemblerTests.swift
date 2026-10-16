@@ -242,8 +242,17 @@ struct PlanAssemblerTests {
     }
 
     /// The limit leaves room for a few of the main category's exercises beyond the mobility cap.
-    @Test(arguments: [(DayKind.powerSpeed, ExerciseCategory.power, 5), (.conditioning, .conditioning, 12)])
-    func shortlistsLeadWithTheDaysMainCategory(_ day: (kind: DayKind, main: ExerciseCategory, limit: Int)) {
+    struct MainCategoryDay: Sendable {
+        let kind: DayKind
+        let main: ExerciseCategory
+        let limit: Int
+    }
+
+    @Test(arguments: [
+        MainCategoryDay(kind: .powerSpeed, main: .power, limit: 5),
+        MainCategoryDay(kind: .conditioning, main: .conditioning, limit: 12),
+    ])
+    func shortlistsLeadWithTheDaysMainCategory(_ day: MainCategoryDay) {
         var brief = TrainingBrief.tennisPlayer
         brief.sports = []
         let offered = DayShortlist.candidates(for: day.kind, brief: brief, limit: day.limit)
