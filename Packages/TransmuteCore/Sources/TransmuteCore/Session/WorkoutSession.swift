@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-/// Running a workout (#11). A session is a `Workout` with no end date: every change is made
+/// Running a workout. A session is a `Workout` with no end date: every change is made
 /// on the model and saved straight away, so a killed app opens back into the same set with
 /// the same rest still counting down.
 public enum WorkoutSession {
@@ -15,9 +15,9 @@ public enum WorkoutSession {
 
     /// Starts a planned day: every exercise and set, prefilled so most sets are one tap.
     ///
-    /// With a profile, targets come from the progression engine (#12): what was logged last
+    /// With a profile, targets come from the progression engine: what was logged last
     /// time decides today's numbers, and each set records the target it was logged against.
-    /// Its preferences (#18) fill in missing rests and decide whether warm-up sets appear.
+    /// Its preferences fill in missing rests and decide whether warm-up sets appear.
     /// Without one, the plan's targets are used as written, and loads the plan leaves open come
     /// from the last time the exercise was done.
     @discardableResult
@@ -57,8 +57,6 @@ public enum WorkoutSession {
         return workout
     }
 
-    // MARK: Where you are
-
     /// The set to do next: the first unlogged set of the first exercise not skipped.
     public static func currentSet(of workout: Workout) -> LoggedSet? {
         for exercise in workout.orderedExercises where !exercise.isSkipped {
@@ -76,10 +74,8 @@ public enum WorkoutSession {
         return remaining > 0 ? remaining : nil
     }
 
-    // MARK: Sets
-
     /// Checks a set off and starts its rest, unless it was the last set of the workout or the
-    /// person turned auto-start off (#18). Returns the rest that started.
+    /// person turned auto-start off. Returns the rest that started.
     ///
     /// `preferences` defaults to the stored profile's, so a set logged from the watch or a
     /// widget follows the same choice as one logged on the session screen.
@@ -134,8 +130,6 @@ public enum WorkoutSession {
         save(context)
     }
 
-    // MARK: Rest
-
     /// Starts, replaces or (with `nil`) clears the rest timer.
     public static func startRest(_ seconds: TimeInterval?, in workout: Workout, at date: Date = .now) {
         workout.restSeconds = seconds
@@ -153,9 +147,6 @@ public enum WorkoutSession {
         save(workout.modelContext)
     }
 
-    // MARK: Exercises
-
-    /// Passes over an exercise, or brings it back.
     public static func setSkipped(_ exercise: LoggedExercise, _ isSkipped: Bool) {
         exercise.isSkipped = isSkipped
         save(exercise.modelContext)
@@ -172,7 +163,6 @@ public enum WorkoutSession {
         let open = exercise.orderedSets.filter { !$0.isCompleted }
         let sameTracking = library.exercise(id: exercise.exerciseID)?.tracking == replacement.tracking
         guard exercise.orderedSets.contains(where: \.isCompleted) else {
-            // Nothing logged yet: change it in place.
             exercise.substitutedFromID = exercise.substitutedFromID ?? exercise.exerciseID
             exercise.exerciseID = replacement.id
             reset(open, keepingValues: sameTracking, for: replacement.tracking)
@@ -213,8 +203,6 @@ public enum WorkoutSession {
         return logged
     }
 
-    // MARK: Ending
-
     /// Ends the session: unlogged sets go, as do exercises left with nothing logged, and the
     /// rest timer stops. Returns the summary for the finish screen.
     @discardableResult
@@ -242,8 +230,6 @@ public enum WorkoutSession {
         context.delete(workout)
         save(context)
     }
-
-    // MARK: Helpers
 
     static func prefilled(from target: PlannedSet, fallbackLoad: Double?) -> LoggedSet {
         let set = LoggedSet(

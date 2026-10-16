@@ -14,8 +14,6 @@ struct ProgressDigestTests {
         fixture = try ProgressFixture()
     }
 
-    // MARK: Adherence
-
     /// Four weeks of Monday and Wednesday sessions, week 3 a deload. Weeks 1 and 3 are done in
     /// full, week 2 has one session finished and one still running, week 4 has nothing.
     func adherencePlan() throws -> Plan {
@@ -52,7 +50,6 @@ struct ProgressDigestTests {
         #expect(Stats.streak(weeks) == 1)
 
         #expect(Stats.adherence(of: plan, now: fixture.day(-1), calendar: calendar).isEmpty)
-        // Once the plan is over every week is listed and none is current.
         let after = Stats.adherence(of: plan, now: fixture.day(40), calendar: calendar)
         #expect(after.map(\.week) == [1, 2, 3, 4])
         #expect(after.map(\.done) == [2, 1, 2, 0])
@@ -65,12 +62,9 @@ struct ProgressDigestTests {
         #expect(Stats.sessionsKPI(of: plan, now: fixture.day(9), calendar: calendar) == .init(done: 1, planned: 2))
         #expect(Stats.sessionsKPI(of: plan, now: fixture.day(20), calendar: calendar) == .init(done: 2, planned: 2))
         #expect(Stats.sessionsKPI(of: plan, now: fixture.day(21), calendar: calendar) == .init(done: 0, planned: 2))
-        // Clamped to the plan: the first week before it starts, the last once it's over.
         #expect(Stats.sessionsKPI(of: plan, now: fixture.day(-30), calendar: calendar) == .init(done: 2, planned: 2))
         #expect(Stats.sessionsKPI(of: plan, now: fixture.day(90), calendar: calendar) == .init(done: 0, planned: 2))
     }
-
-    // MARK: Streak
 
     /// Weeks of three planned sessions with the given numbers done; the last may be current.
     func weeks(_ done: [Int], currentLast: Bool = true, deload: Set<Int> = []) -> [Stats.WeekAdherence] {
@@ -84,7 +78,6 @@ struct ProgressDigestTests {
     @Test func streakCountsBackFromTheLastCompletedWeek() {
         #expect(Stats.streak([]) == 0)
         #expect(Stats.streak(weeks([3, 3], currentLast: false)) == 2)
-        // The week in progress doesn't break the streak, and extends it once it's hit.
         #expect(Stats.streak(weeks([3, 3, 1])) == 2)
         #expect(Stats.streak(weeks([3, 3, 0])) == 2)
         #expect(Stats.streak(weeks([3, 3, 3])) == 3)
@@ -104,14 +97,11 @@ struct ProgressDigestTests {
         #expect(Stats.streak(weeks([3, 3, 2, 1], deload: [3])) == 0)
         #expect(Stats.streak(weeks([3, 2, 3, 3, 1]).reversed() as [Stats.WeekAdherence]) == 2)
 
-        // A week with nothing planned neither counts nor breaks.
         var rest = weeks([3, 3, 3, 1])
         rest[1].planned = 0
         rest[1].done = 0
         #expect(Stats.streak(rest) == 2)
     }
-
-    // MARK: Digest
 
     /// One session a week for three of a plan's four weeks. The squat goes 100, 100, 95 and the
     /// bench 60, 62.5, 65.
@@ -190,7 +180,6 @@ struct ProgressDigestTests {
             plan: log.plan, workouts: log.workouts + [running], records: log.records, now: fixture.evening(24),
             calendar: calendar)
 
-        // The week in progress doesn't break the streak, and nothing moved without a session.
         #expect(
             digest
                 == Stats.WeekDigest(
@@ -201,8 +190,6 @@ struct ProgressDigestTests {
         #expect(nothing == Stats.WeekDigest(weekStart: fixture.day(21)))
         #expect(nothing.isEmpty && nothing.volumeChange == nil)
     }
-
-    // MARK: Sample data
 
     @Test func sampleDataExercisesEveryStat() throws {
         let now = Date(timeIntervalSince1970: 1_790_000_000)

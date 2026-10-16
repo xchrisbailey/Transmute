@@ -13,7 +13,7 @@ public enum BarKind: String, Codable, CaseIterable, Sendable {
 }
 
 /// What someone can actually load: their bars, plates with how many pairs of each, and the
-/// steps their dumbbells and machine stacks go up in (#21).
+/// steps their dumbbells and machine stacks go up in.
 ///
 /// Weights are stored in kilograms like everything else, but the kit itself is in one unit: a
 /// 2.5 lb plate is 2.5 lb, not 1.134 kg. `system` is that unit, and the calculator works in it
@@ -33,7 +33,6 @@ public struct PlateInventory: Codable, Hashable, Sendable {
     }
 
     public struct Plate: Codable, Hashable, Sendable {
-        /// One plate's weight.
         public var kg: Double
         /// How many pairs there are; plates go on in pairs, one each side.
         public var pairs: Int
@@ -48,7 +47,6 @@ public struct PlateInventory: Codable, Hashable, Sendable {
     public var system: UnitSystem
     /// One of each kind of bar, with its weight.
     public var bars: [Bar]
-    /// The bar barbell work is loaded on.
     public var barKind: BarKind
     public var plates: [Plate]
     /// Dumbbells go up in this step, from one step to `heaviestDumbbellKg`.
@@ -69,8 +67,6 @@ public struct PlateInventory: Codable, Hashable, Sendable {
         self.heaviestDumbbellKg = heaviestDumbbellKg
         self.machineStepKg = machineStepKg
     }
-
-    // MARK: Bars
 
     /// The chosen bar. A kind missing from `bars` falls back to a standard bar in this unit.
     public var bar: Bar {
@@ -95,8 +91,6 @@ public struct PlateInventory: Codable, Hashable, Sendable {
         }
     }
 
-    // MARK: Units
-
     /// A weight in this kit's unit, e.g. 20.41 kg → 45 lb.
     public func display(kg: Double) -> Double {
         Double(hundredths(kg: kg)) / 100
@@ -119,10 +113,7 @@ public struct PlateInventory: Codable, Hashable, Sendable {
     }
 }
 
-// MARK: Presets
-
 extension PlateInventory {
-    /// Quick starts for the equipment setup.
     public enum Preset: String, CaseIterable, Sendable {
         /// A full commercial gym: plenty of every plate, dumbbells to 50 kg or 120 lb.
         case commercialGym
@@ -130,7 +121,6 @@ extension PlateInventory {
         case home
     }
 
-    /// A preset in kilograms or pounds.
     public init(_ preset: Preset, system: UnitSystem) {
         // Plates as (weight, pairs) in the unit, heaviest first.
         let plates: [(Double, Int)]

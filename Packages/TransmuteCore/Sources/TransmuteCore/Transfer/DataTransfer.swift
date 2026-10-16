@@ -1,15 +1,13 @@
 import Foundation
 import SwiftData
 
-/// Export, import and delete-all for Settings (#18). Files go in and out as `Data`, so the
+/// Export, import and delete-all for Settings. Files go in and out as `Data`, so the
 /// screen only needs a file exporter and importer around these calls. The CSV calls and the
 /// deletes are in extensions.
 ///
 ///     let backup = try DataTransfer.exportBackup(from: context)
 ///     let summary = try DataTransfer.importBackup(data, into: context)
 public enum DataTransfer {
-    // MARK: Export
-
     /// Everything in the store as a JSON backup: the profile with its bodyweights, custom
     /// exercises, plans, workouts and records. See `Backup` for the format.
     public static func exportBackup(
@@ -17,8 +15,6 @@ public enum DataTransfer {
     ) throws -> Data {
         try Backup(context: context, exportedAt: exportedAt, appVersion: appVersion).encoded()
     }
-
-    // MARK: Import
 
     /// Merges a JSON backup into the store and saves.
     ///
@@ -40,8 +36,6 @@ public enum DataTransfer {
         }
     }
 
-    // MARK: Helpers
-
     /// The running app's marketing version, e.g. "1.0".
     public static var bundleVersion: String? {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
@@ -59,7 +53,6 @@ public enum DataTransfer {
 }
 
 extension ExerciseLibrary {
-    /// This library plus the custom exercises in the store.
     func addingCustomExercises(in context: ModelContext) throws -> ExerciseLibrary {
         adding(try context.fetch(FetchDescriptor<CustomExercise>()).map(LibraryExercise.init))
     }

@@ -1,9 +1,7 @@
 import Foundation
 
 extension ProgressStats {
-    /// What weekly volume is split by.
     public enum VolumeGrouping: Sendable {
-        /// The exercise's category.
         case category
         /// The exercise's first primary muscle.
         case muscle
@@ -12,7 +10,6 @@ extension ProgressStats {
     /// The group of exercises the library doesn't know, or that name no primary muscle.
     public static let otherGroup = "other"
 
-    /// One group's share of a week.
     public struct VolumeSlice: Identifiable, Equatable, Sendable {
         /// An `ExerciseCategory` or `Muscle` raw value, or `otherGroup`.
         public var group: String
@@ -25,7 +22,6 @@ extension ProgressStats {
         }
     }
 
-    /// One week's volume.
     public struct WeekVolume: Identifiable, Equatable, Sendable {
         public var weekStart: Date
         /// Groups with volume, in the order `ExerciseCategory` or `Muscle` lists them.
@@ -76,7 +72,6 @@ extension ProgressStats {
         return result
     }
 
-    /// This week's volume against last week's.
     public struct VolumeKPI: Equatable, Sendable {
         public var thisWeekKg: Double
         public var lastWeekKg: Double

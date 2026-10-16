@@ -1,6 +1,6 @@
 import Foundation
 
-/// A running session as the device that doesn't own it sees it (#15).
+/// A running session as the device that doesn't own it sees it.
 ///
 /// The owner builds one from its `Workout` after every change and sends it across. The other
 /// device shows it and never writes the workout to its own store, which CloudKit would later
@@ -67,11 +67,10 @@ public struct SessionSnapshot: Codable, Equatable, Sendable {
     public var title: String
     public var startedAt: Date
     public var endedAt: Date?
-    /// When the running rest ends.
     public var restEndsAt: Date?
     /// How long that rest was set for, for the countdown ring.
     public var restSeconds: Double?
-    /// Whether logging a set starts its rest (#18), so the mirroring device predicts what the
+    /// Whether logging a set starts its rest, so the mirroring device predicts what the
     /// owner will do. `nil`, from an owner that doesn't say, means it does.
     public var autoStartsRest: Bool?
     /// In order.
@@ -100,8 +99,6 @@ public struct SessionSnapshot: Codable, Equatable, Sendable {
             exercises: workout.orderedExercises.map { Exercise($0, library: library) })
     }
 
-    // MARK: Where you are
-
     /// The set to do next: the first unlogged set of the first exercise not skipped. The same
     /// rule as `WorkoutSession.currentSet`.
     public var current: SetRef? {
@@ -113,12 +110,10 @@ public struct SessionSnapshot: Codable, Equatable, Sendable {
         return nil
     }
 
-    /// The exercise the next set belongs to.
     public var currentExercise: Exercise? {
         current.flatMap { exercise(order: $0.exerciseOrder) }
     }
 
-    /// The set to do next.
     public var currentSet: Set? {
         current.flatMap { set(at: $0) }
     }

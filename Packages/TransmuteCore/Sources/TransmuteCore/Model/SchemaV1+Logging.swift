@@ -3,7 +3,6 @@ import SwiftData
 
 extension SchemaV1 {
 
-    /// A logged session.
     @Model public final class Workout {
         public var id = UUID()
         public var title = ""
@@ -13,12 +12,12 @@ extension SchemaV1 {
         /// The workout Transmute saved to Health, once saved.
         public var healthKitWorkoutID: UUID?
         public var planDay: PlanDay?
-        /// When the running rest ends, so a relaunched app picks the timer back up (#11).
+        /// When the running rest ends, so a relaunched app picks the timer back up.
         public var restEndsAt: Date?
         /// How long that rest was set for, for the countdown ring.
         public var restSeconds: Double?
         /// The device running this session, so the other one mirrors it rather than writing its
-        /// own copy (#15).
+        /// own copy.
         public var startedOnRaw: String?
 
         @Relationship(deleteRule: .cascade, inverse: \LoggedExercise.workout)
@@ -82,8 +81,8 @@ extension SchemaV1 {
         public var meters: Double?
         public var rpe: Double?
         public var rounds: Int?
-        // The targets the set was logged against, so progression can tell a hit from a miss
-        // (#12). `nil` falls back to the plan day's set at the same order.
+        /// The targets the set was logged against, so progression can tell a hit from a miss.
+        /// `nil` falls back to the plan day's set at the same order.
         public var targetReps: Int?
         public var targetRepsMax: Int?
         public var targetLoadKg: Double?
@@ -101,7 +100,7 @@ extension SchemaV1 {
         /// For intervals: rest between rounds of `seconds` work.
         public var intervalRestSeconds: Double?
         /// The person confirmed an unusually big jump is real, so record detection trusts it
-        /// rather than asking again (#13).
+        /// rather than asking again.
         public var isRecordConfirmed = false
         public var exercise: LoggedExercise?
 
@@ -125,8 +124,6 @@ extension SchemaV1 {
             completedAt = date
         }
     }
-
-    // MARK: - Records
 
     @Model public final class PersonalRecord {
         public var exerciseID = ""

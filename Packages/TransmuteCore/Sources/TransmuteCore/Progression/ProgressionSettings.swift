@@ -1,4 +1,4 @@
-/// How progression adds load, and which exercises it leaves alone (#12). Stored on the profile.
+/// How progression adds load, and which exercises it leaves alone. Stored on the profile.
 ///
 /// Increments are kept in each unit system's own unit, so 2.5 kg and 5 lb stay round numbers
 /// whichever the person switches to.

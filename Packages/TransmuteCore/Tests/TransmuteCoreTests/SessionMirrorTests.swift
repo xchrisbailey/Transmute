@@ -37,8 +37,6 @@ struct SessionMirrorTests {
         return truth
     }
 
-    // MARK: Snapshot
-
     @Test func aSnapshotCarriesTheWorkout() throws {
         let workout = try session()
         workout.orderedExercises[1].isSkipped = true
@@ -124,8 +122,6 @@ struct SessionMirrorTests {
         workout.startedOnRaw = "toaster"
         #expect(workout.startedOn == nil)
     }
-
-    // MARK: Owner and mirror agree
 
     @Test func loggingASetWritesItsValuesAndStartsTheRest() throws {
         let workout = try session()

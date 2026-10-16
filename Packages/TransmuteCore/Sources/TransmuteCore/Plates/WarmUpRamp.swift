@@ -1,6 +1,5 @@
 import Foundation
 
-/// One warm-up set on the way to a working weight, with its plates.
 public struct WarmUpSet: Hashable, Sendable {
     public let reps: Int
     public let loading: PlateLoading

@@ -1,7 +1,6 @@
 import Foundation
 import SwiftData
 
-/// What checking off a set did for records.
 public struct RecordCheck {
     /// Records the set just turned to gold, the headline first. Empty when there's nothing to
     /// celebrate.
@@ -16,11 +15,11 @@ public struct RecordCheck {
     }
 }
 
-/// Keeps `PersonalRecord` rows in step with logged sets (#13).
+/// Keeps `PersonalRecord` rows in step with logged sets.
 ///
 /// Records are derived data: for any exercise they're exactly what `RecordDetector.replay`
 /// finds in its completed sets, oldest first. Checking off a set, confirming one, and editing
-/// or deleting a past set (#14) all recompute the exercise and apply the difference, so rows
+/// or deleting a past set all recompute the exercise and apply the difference, so rows
 /// that still hold are kept as they are, stale ones are deleted, and recomputing twice changes
 /// nothing. Nothing is saved; the caller saves with the rest of its change.
 public struct RecordBook {
@@ -68,7 +67,6 @@ public struct RecordBook {
         try apply(exerciseID: exerciseID).inserted
     }
 
-    /// Recomputes every exercise that has logged sets or records.
     public func recomputeAll() throws {
         let logged = try context.fetch(FetchDescriptor<LoggedExercise>()).map(\.exerciseID)
         let recorded = try context.fetch(FetchDescriptor<PersonalRecord>()).map(\.exerciseID)
@@ -91,8 +89,6 @@ public struct RecordBook {
         default: return .time
         }
     }
-
-    // MARK: Applying
 
     private struct Outcome {
         var inserted: [PersonalRecord] = []
@@ -195,7 +191,6 @@ public struct RecordBook {
 }
 
 extension LoggedSet {
-    /// This set as record detection sees it.
     public func recordSet(id: Int) -> RecordSet {
         RecordSet(
             id: id, weightKg: weightKg, reps: reps, seconds: seconds, meters: meters, isWarmUp: isWarmUp,
@@ -210,7 +205,6 @@ extension PersonalRecord {
         meters = mark.slot.meters
     }
 
-    /// The record as a value: its slot and value.
     public var mark: RecordMark {
         RecordMark(kind: kind, value: value, reps: reps, meters: meters)
     }

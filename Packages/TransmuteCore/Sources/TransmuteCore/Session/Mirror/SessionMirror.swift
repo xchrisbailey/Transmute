@@ -1,11 +1,10 @@
 import Foundation
 import SwiftData
 
-/// The owner's side of a mirrored session (#15): applies what the other device asked for to
+/// The owner's side of a mirrored session: applies what the other device asked for to
 /// the workout, through `WorkoutSession`, so a set logged on the watch is saved exactly like
 /// one logged on the phone.
 public enum SessionMirror {
-    /// What became of a command.
     public enum Outcome: Hashable, Sendable {
         /// The workout changed. Send a fresh snapshot.
         case applied
@@ -44,8 +43,6 @@ public enum SessionMirror {
         }
     }
 
-    // MARK: Commands
-
     private static func log(_ ref: SetRef, _ values: SetValues, at date: Date, in workout: Workout) -> Outcome {
         // Already logged: leave it, and above all don't restart the rest.
         guard let set = set(at: ref, in: workout), !set.isCompleted else { return .ignored }
@@ -80,8 +77,6 @@ public enum SessionMirror {
         WorkoutSession.setSkipped(exercise, isSkipped)
         return .applied
     }
-
-    // MARK: Helpers
 
     private static func exercise(order: Int, in workout: Workout) -> LoggedExercise? {
         workout.orderedExercises.first { $0.order == order }

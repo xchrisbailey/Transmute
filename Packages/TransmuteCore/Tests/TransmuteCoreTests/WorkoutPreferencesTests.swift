@@ -93,8 +93,6 @@ struct WorkoutPreferencesTests {
         #expect(WorkoutPreferences.stored(in: context) == chosen)
     }
 
-    // MARK: Units
-
     @Test func eachQuantityFollowsTheSystemUntilChosen() {
         let units = Units(system: .imperial, locale: Locale(identifier: "en_GB"))
         #expect(units.weight == .imperial && units.height == .imperial && units.distance == .imperial)
@@ -133,7 +131,6 @@ struct WorkoutPreferencesTests {
         #expect(profile.heightUnit == nil)
     }
 
-    /// A profile that never chose a system keeps following the device through a save (#18).
     @Test func savingADraftDoesNotPinTheDeviceSystem() {
         let american = Locale(identifier: "en_US")
         let profile = Profile()

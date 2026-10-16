@@ -1,13 +1,12 @@
 import Foundation
 
-/// Everything the two devices say to each other during a session (#15), as the `Data` the
+/// Everything the two devices say to each other during a session, as the `Data` the
 /// transport carries.
 public enum SessionMessage: Codable, Equatable, Sendable {
     /// Owner to mirror: the session as it stands.
     case snapshot(SessionSnapshot)
     /// Mirror to owner: a change to make to that workout.
     case command(SessionCommand, workoutID: UUID)
-    /// The watch's latest heart rate.
     case heartRate(bpm: Double, at: Date)
     /// Owner to mirror: the session is over, finished or discarded. `healthWorkoutID` is the
     /// workout saved to Health, when one was.

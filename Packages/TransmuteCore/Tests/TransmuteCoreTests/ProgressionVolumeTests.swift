@@ -3,7 +3,6 @@ import Testing
 
 @testable import TransmuteCore
 
-/// Reps, time, distance and intervals.
 struct ProgressionVolumeTests {
     @Test func repsOnlyAddsARepOnceEverySetHits() {
         let history = [Lift.session(2, 3, reps: 10)]

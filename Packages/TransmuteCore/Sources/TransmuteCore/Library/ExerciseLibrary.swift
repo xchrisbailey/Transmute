@@ -36,8 +36,8 @@ public struct ExerciseQuery: Hashable, Sendable {
 
 /// The bundled catalog plus the user's custom exercises, with lookup and search.
 ///
-/// Plans only ever reference exercises that are in here; the AI picks from it (#9) and the
-/// picker searches it (#10).
+/// Plans only ever reference exercises that are in here; the AI picks from it and the
+/// picker searches it.
 public struct ExerciseLibrary: Sendable {
     public let catalogVersion: Int
     public let exercises: [LibraryExercise]
@@ -54,7 +54,6 @@ public struct ExerciseLibrary: Sendable {
         }
     }
 
-    /// The catalog that ships in the app.
     public static let bundled: ExerciseLibrary = {
         do {
             return try load(from: Bundle.module.url(forResource: "exercises", withExtension: "json")!)

@@ -13,11 +13,11 @@ public protocol HealthService: Sendable {
     /// denied, so callers just read and handle missing values.
     func requestAccess(_ scope: HealthAccessScope) async throws
 
-    /// What Health will say about Transmute's access, for Settings (#18). Empty where there's
+    /// What Health will say about Transmute's access, for Settings. Empty where there's
     /// no Health store.
     func accessStatus() async -> HealthAccessStatus
 
-    /// Height, weight, birth year and sex, for prefilling the profile (#6).
+    /// Height, weight, birth year and sex, for prefilling the profile.
     func bodyMetrics() async -> HealthBodyMetrics
 
     /// Bodyweight samples since a date, newest last.
@@ -37,13 +37,13 @@ public protocol HealthService: Sendable {
     func save(_ workout: HealthWorkoutRecord) async throws -> UUID
 
     /// Whether a bodyweight can be saved right now without asking: Health is here and the
-    /// person already allowed it. A shortcut checks this, since it must never prompt (#19).
+    /// person already allowed it. A shortcut checks this, since it must never prompt.
     var canSaveBodyweight: Bool { get }
 
     /// Saves a bodyweight entered in Transmute and returns the sample's id.
     func saveBodyweight(kg: Double, at date: Date) async throws -> UUID
 
-    /// Deletes a workout Transmute saved, when the person deletes it from their log (#14).
+    /// Deletes a workout Transmute saved, when the person deletes it from their log.
     /// Workouts other apps wrote are never touched; a workout that's already gone is fine.
     func deleteWorkout(id: UUID) async throws
 }
@@ -63,14 +63,13 @@ public enum HealthWriteKind: Sendable, CaseIterable {
     case workouts, bodyweight, activeEnergy, heartRate
 }
 
-/// As much as Health tells an app about its own access (#18).
+/// As much as Health tells an app about its own access.
 ///
 /// Health says whether saving each kind of data is allowed. It never says whether reading was
 /// allowed, so someone's choice stays private: for reading, all that can be known is whether
 /// the person has been asked yet.
 public struct HealthAccessStatus: Equatable, Sendable {
     public enum Write: Equatable, Sendable {
-        /// The person hasn't been asked yet.
         case notAsked
         case allowed
         case denied
@@ -81,12 +80,10 @@ public struct HealthAccessStatus: Equatable, Sendable {
         case notAsked
         /// The person was asked. What they answered isn't known.
         case asked
-        /// Health couldn't say.
         case unknown
     }
 
     public var writes: [HealthWriteKind: Write]
-    /// One per group of data a feature reads together.
     public var reads: [HealthAccessScope: Read]
 
     public init(writes: [HealthWriteKind: Write] = [:], reads: [HealthAccessScope: Read] = [:]) {
@@ -184,7 +181,6 @@ public struct UnavailableHealthService: HealthService {
 }
 
 public enum HealthServiceError: Error, Equatable, Sendable {
-    /// No Health store on this device.
     case unavailable
     /// Health refused the save, usually because write access was denied.
     case notAuthorized

@@ -8,7 +8,6 @@ public struct ProgressionReason: Codable, Hashable, Sendable {
         case calibrate
         /// A deload week: fewer sets and a lighter load.
         case deload
-        /// The person is holding this exercise's targets.
         case held
         /// A percentage of one-rep max, resolved from the estimate.
         case percentOfMax
@@ -34,15 +33,10 @@ public struct ProgressionReason: Codable, Hashable, Sendable {
         case hold
         /// Missed three or more times in a row: back off about 10%.
         case drop
-        /// Longer holds or efforts.
         case addTime
-        /// Further.
         case addDistance
-        /// The same distance in less time.
         case faster
-        /// One more interval round.
         case addRound
-        /// Shorter rest between interval rounds.
         case shorterRest
         /// Speed, power and mobility work that stays the same, since it's about quality.
         case steady
@@ -62,7 +56,6 @@ public struct ProgressionReason: Codable, Hashable, Sendable {
     public var oneRepMaxKg: Double?
     /// Working sets judged, or a deload's sets.
     public var sets: Int?
-    /// Misses in a row.
     public var misses: Int?
     /// Average logged RPE of the working sets judged, and the target.
     public var rpe: Double?

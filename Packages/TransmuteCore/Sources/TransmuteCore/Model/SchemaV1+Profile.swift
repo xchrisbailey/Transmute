@@ -12,7 +12,6 @@ extension SchemaV1 {
         public var experienceRaw = ExperienceLevel.beginner.rawValue
         /// Optional; empty when the goal isn't about a sport.
         public var sports: [String] = []
-        /// The goal in the user's own words.
         public var goalText = ""
         public var goalTagsRaw: [String] = []
         public var schedule = Schedule()
@@ -21,7 +20,7 @@ extension SchemaV1 {
         public var limitations = ""
         /// Body areas the limitations name, picked as chips.
         public var limitationAreasRaw: [String] = []
-        /// Load increments and held exercises for the progression engine (#12).
+        /// Load increments and held exercises for the progression engine.
         public var progression: ProgressionSettings = ProgressionSettings()
         /// Lifts an experienced person entered, for starting loads.
         public var knownLifts: [KnownLift] = []
@@ -29,16 +28,16 @@ extension SchemaV1 {
         /// saved, for anything that only needs the bar; `plates` is the source of truth.
         public var barbellKg = 20.0
         /// Bars, plates, dumbbells and machine steps, for the plate calculator and for rounding
-        /// loads (#21). Starts as the commercial-gym preset in the locale's unit.
+        /// loads. Starts as the commercial-gym preset in the locale's unit.
         public var plates = PlateInventory.standard()
         /// `nil` follows the device locale.
         public var unitSystemRaw: String?
-        /// The unit for weights, heights and distances when chosen on their own (#18); `nil`
+        /// The unit for weights, heights and distances when chosen on their own; `nil`
         /// follows `unitSystemRaw`. Read them through `Units(profile)`.
         public var weightUnitRaw: String?
         public var heightUnitRaw: String?
         public var distanceUnitRaw: String?
-        /// Rest times, rest alerts, RPE and %1RM, and warm-up sets (#18).
+        /// Rest times, rest alerts, RPE and %1RM, and warm-up sets.
         public var preferences: WorkoutPreferences = WorkoutPreferences()
 
         @Relationship(deleteRule: .cascade, inverse: \BodyweightEntry.profile)

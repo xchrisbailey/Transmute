@@ -1,9 +1,6 @@
 import Foundation
 
-// MARK: - Bodyweight
-
 extension ProgressStats {
-    /// One weigh-in with the trend at that moment.
     public struct BodyweightPoint: Identifiable, Equatable, Sendable {
         public var date: Date
         public var kg: Double
@@ -18,7 +15,6 @@ extension ProgressStats {
         }
     }
 
-    /// How far back the rolling mean looks.
     static let trendWindow: TimeInterval = 7 * 86_400
 
     /// Weigh-ins on or after `since`, oldest first, each with a seven-day rolling mean. The mean
@@ -39,7 +35,6 @@ extension ProgressStats {
         return points
     }
 
-    /// The latest weigh-in and how the trend moved.
     public struct BodyweightKPI: Equatable, Sendable {
         /// The latest weigh-in as entered.
         public var currentKg: Double
@@ -60,8 +55,6 @@ extension ProgressStats {
         return BodyweightKPI(currentKg: last.kg, changeKg: points.count > 1 ? last.trendKg - first.trendKg : nil)
     }
 }
-
-// MARK: - Conditioning
 
 extension ProgressStats {
     /// The number that matters for work that isn't weight × reps.
@@ -90,7 +83,6 @@ extension ProgressStats {
         }
     }
 
-    /// One session's value.
     public struct ConditioningPoint: Identifiable, Equatable, Sendable {
         /// When the session started.
         public var date: Date

@@ -7,7 +7,6 @@ public enum SampleData {
     /// Every exercise id the sample uses. The exercise library must contain all of them.
     public static let exerciseIDs: Set<String> = Set(days.flatMap { $0.exercises.map(\.id) })
 
-    /// 5′9″, 175 lb, intermediate, playing tennis three times a week.
     public static func profile() -> Profile {
         let profile = Profile()
         profile.heightCm = Units.centimetres(feet: 5, inches: 9)
@@ -172,7 +171,6 @@ public enum SampleData {
         return (profile, plan)
     }
 
-    /// An in-memory container holding the sample, for SwiftUI previews.
     @MainActor
     public static func previewContainer() throws -> ModelContainer {
         let container = try TransmuteStore.makeContainer(.inMemory)

@@ -1,10 +1,7 @@
 import Foundation
 
-/// What the plan has on a given day (#11): a session, or rest with the next session ahead.
 public struct TodayPlan {
-    /// The plan week the date falls in.
     public var week: Int
-    /// The session planned for the date, if there is one.
     public var day: PlanDay?
     /// The next planned session after the date that hasn't been logged.
     public var next: PlanDay?
@@ -20,7 +17,6 @@ public struct TodayPlan {
         next = dated.first { $0.date > today && ($0.day.workouts ?? []).isEmpty }?.day
     }
 
-    /// True when the date's session already has a finished workout.
     public var isDone: Bool {
         (day?.workouts ?? []).contains { $0.endedAt != nil }
     }

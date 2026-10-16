@@ -35,7 +35,6 @@ struct ProfileDraftTests {
         #expect(draft.bodyIssues == [.birthYearOutOfRange])
     }
 
-    /// The epic's tennis example, entered step by step, comes out exactly.
     @Test func tennisPlayerSavesExactly() throws {
         var draft = ProfileDraft(locale: usLocale)
         draft.heightCm = Units.centimetres(feet: 5, inches: 9)
@@ -65,7 +64,6 @@ struct ProfileDraftTests {
         #expect(ProfileDraft(profile, locale: usLocale) == draft)
     }
 
-    /// A weight-loss beginner who skips everything optional still gets a usable profile.
     @Test func beginnerWhoSkipsEverythingStillSaves() {
         var draft = ProfileDraft(locale: usLocale)
         draft.heightCm = 165

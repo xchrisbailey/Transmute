@@ -5,7 +5,6 @@ import SwiftData
     import CloudKit
 #endif
 
-/// What became of asking iCloud to drop Transmute's records.
 public enum CloudErasure: Equatable, Sendable {
     /// The records are gone from the private database, or there were none.
     case deleted

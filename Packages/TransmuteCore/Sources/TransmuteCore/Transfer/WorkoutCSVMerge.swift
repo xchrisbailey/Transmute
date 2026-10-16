@@ -1,8 +1,6 @@
 import Foundation
 import SwiftData
 
-/// Adds workouts read from another app's CSV to the store. See `DataTransfer.importCSV` for
-/// the rules.
 struct WorkoutCSVMerge {
     let file: ImportedWorkouts
     let context: ModelContext

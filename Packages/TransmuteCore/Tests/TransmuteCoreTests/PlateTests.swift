@@ -10,8 +10,6 @@ struct PlateTests {
     let homeKg = PlateInventory(.home, system: .metric)
     let lb = Units(system: .imperial)
 
-    // MARK: Calculator
-
     @Test func exactInKilograms() throws {
         let calculator = PlateCalculator(inventory: gymKg)
         let hundred = try #require(calculator.solve(kg: 100).exact)
@@ -111,8 +109,6 @@ struct PlateTests {
         #expect(PlateText.compact(bar, locale: english) == "just the bar")
     }
 
-    // MARK: Rounding
-
     @Test func roundingBarbellToThePlates() {
         #expect(LoadableWeight.round(101, for: [.barbell, .rack], inventory: gymKg) == 100)
         #expect(LoadableWeight.round(101.5, for: [.barbell], inventory: gymKg) == 102.5)
@@ -140,8 +136,6 @@ struct PlateTests {
         #expect(LoadableWeight.round(101, for: [.barbell], system: .metric) == 100)
         #expect(LoadableWeight.round(13, for: [.dumbbell], system: .metric) == 14)
     }
-
-    // MARK: Presets and storage
 
     @Test(arguments: PlateInventory.Preset.allCases, UnitSystem.allCases)
     func presetsAreSane(_ preset: PlateInventory.Preset, _ system: UnitSystem) {

@@ -13,8 +13,6 @@ struct ProgressBodyTests {
         fixture = try ProgressFixture()
     }
 
-    // MARK: Bodyweight
-
     @Test func bodyweightTrendIsASevenDayRollingMean() {
         let entries = [(10, 77.0), (0, 80.0), (7, 78.0), (3, 79.0)].map {
             BodyweightEntry(date: fixture.day($0.0), kg: $0.1)
@@ -27,7 +25,6 @@ struct ProgressBodyTests {
                 // A weigh-in exactly seven days back has dropped out of the window.
                 point(fixture.day(7), 78, 78.5), point(fixture.day(10), 77, 77.5),
             ])
-        // The trend at the window's edge still uses the weigh-in before it.
         #expect(Stats.bodyweightTrend(entries, since: fixture.day(3)).first == point(fixture.day(3), 79, 79.5))
         #expect(Stats.bodyweightTrend([]).isEmpty)
     }
@@ -44,8 +41,6 @@ struct ProgressBodyTests {
         #expect(Stats.bodyweightKPI(entries, since: fixture.day(11)) == nil)
         #expect(Stats.bodyweightKPI([]) == nil)
     }
-
-    // MARK: Conditioning
 
     func conditioningLog() -> [Workout] {
         [

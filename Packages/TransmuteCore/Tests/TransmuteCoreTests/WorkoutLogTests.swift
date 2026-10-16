@@ -108,7 +108,6 @@ struct WorkoutLogTests {
         let history = try WorkoutLog.history(of: "back-squat", in: context)
         #expect(history.count == 3)
         #expect(history[0].workout.startedAt > history[1].workout.startedAt)
-        // Week 3 squatted 94.5 kg for 5: 94.5 × (1 + 5 / 30).
         let best = try #require(history[0].estimatedOneRepMaxKg)
         #expect(abs(best - 94.5 * (1 + 5.0 / 30)) < 1e-9)
     }

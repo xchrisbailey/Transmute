@@ -1,6 +1,6 @@
 import Foundation
 
-/// The JSON backup: everything in the store, as plain values (#18).
+/// The JSON backup: everything in the store, as plain values.
 ///
 /// ```
 /// {
@@ -67,8 +67,6 @@ struct Backup: Codable, Equatable {
         var set: Int
     }
 }
-
-// MARK: - Reading and writing
 
 extension Backup {
     /// Only the version, so a newer backup is turned away before its unknown shape fails to decode.

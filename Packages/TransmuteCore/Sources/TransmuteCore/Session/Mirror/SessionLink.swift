@@ -3,7 +3,7 @@ import OSLog
 import Observation  // swiftlint:disable:this sorted_imports
 import SwiftData
 
-/// Keeps a session in step between the iPhone and the watch (#15), over the live workout's
+/// Keeps a session in step between the iPhone and the watch, over the live workout's
 /// data channel. The device that started the workout owns it and saves it; the other one shows
 /// the owner's snapshot and sends commands back, which the owner applies and answers with a
 /// fresh snapshot.
@@ -21,7 +21,6 @@ public final class SessionLink {
     public let live: any LiveWorkout
     public let device: SessionDevice
 
-    /// The workout this device runs and saves, with where it lives.
     private struct Owned {
         let workout: Workout
         let context: ModelContext
@@ -59,9 +58,6 @@ public final class SessionLink {
         }
     }
 
-    // MARK: Owning
-
-    /// The id of the workout this device is running.
     public var ownedID: UUID? {
         owned?.workout.id
     }
@@ -91,8 +87,6 @@ public final class SessionLink {
         post(.ended(workoutID: id, healthWorkoutID: nil))
     }
 
-    // MARK: Mirroring
-
     /// Asks the owner to do something, and shows the likely result straight away. The owner's
     /// next snapshot replaces the guess.
     public func send(_ command: SessionCommand) {
@@ -111,8 +105,6 @@ public final class SessionLink {
         mirrored = nil
     }
 
-    // MARK: Health
-
     /// The watch's heart rate, for the iPhone to show.
     public func sendHeartRate(_ bpm: Double, at date: Date = .now) {
         post(.heartRate(bpm: bpm, at: date))
@@ -124,12 +116,9 @@ public final class SessionLink {
         post(.ended(workoutID: workoutID, healthWorkoutID: healthWorkoutID))
     }
 
-    // MARK: Messages
-
     func handle(_ message: SessionMessage) async {
         switch message {
         case .snapshot(let snapshot):
-            // A snapshot of the workout this device owns is an echo; the store is the truth.
             guard snapshot.workoutID != ownedID else { return }
             mirrored = snapshot
         case .command(let command, let workoutID):

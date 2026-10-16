@@ -1,6 +1,5 @@
 import Foundation
 
-// Weight × reps and reps-only work.
 extension ProgressionRun {
     var increment: Double {
         context.settings.incrementKg(for: BodyRegion(context.exercise), system: context.system)
@@ -48,7 +47,6 @@ extension ProgressionRun {
         return changeLoads(.rpeDown, last) { lower($0, by: $0 * share) }
     }
 
-    /// Today's reps with each working set's last load changed.
     func changeLoads(
         _ kind: ProgressionReason.Kind, _ last: Judgement, _ change: (Double) -> Double
     ) -> ProgressionResult {

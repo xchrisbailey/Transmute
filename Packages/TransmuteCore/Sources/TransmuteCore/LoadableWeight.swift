@@ -1,8 +1,8 @@
 /// Rounds a target load to one you can actually put on the bar or pick off the rack.
 ///
 /// Without an inventory it rounds to a typical step, which is what plans are brewed with. With
-/// the person's own `PlateInventory` (#21) it rounds to what their bar, plates, dumbbells and
-/// machines can really make; progression (#12) uses that.
+/// the person's own `PlateInventory` it rounds to what their bar, plates, dumbbells and
+/// machines can really make; progression uses that.
 public enum LoadableWeight {
     /// The smallest jump for this kit, in kilograms: 2.5 kg or 5 lb for barbells and machines
     /// (two small plates), 2 kg or 5 lb for dumbbells and kettlebells.
