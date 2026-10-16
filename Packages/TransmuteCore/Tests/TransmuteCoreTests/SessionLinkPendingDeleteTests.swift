@@ -145,4 +145,22 @@ struct SessionLinkPendingDeleteTests {
         #expect(health.workouts == [phonesID, watchID])
         #expect(try fetch(workoutID)?.healthKitWorkoutID == watchID)
     }
+
+    @Test(.timeLimit(.minutes(1))) func aHalfDonePassThenARestoreStillDeletesTheIPhonesCopy() async throws {
+        let health = FakeHealth()
+        let left = try await pendingAfterFailedDelete(health)
+        let saved = try backup()
+        health.failDeletes(of: [left.phonesID])
+        try WorkoutLog.delete(left.workout, in: context, defaults: defaults)
+        await relaunch(with: health, in: context)
+        #expect(pending.entries == [.init(workoutID: left.workout.id, keep: nil, remove: left.phonesID)])
+        health.failDeletes(of: [])
+
+        try DataTransfer.importBackup(saved, into: context, defaults: defaults)
+        await relaunch(with: health, in: context)
+
+        // The watch's copy went in the half-done pass; the iPhone's follows now.
+        #expect(health.workouts.isEmpty)
+        #expect(pending.entries.isEmpty)
+    }
 }

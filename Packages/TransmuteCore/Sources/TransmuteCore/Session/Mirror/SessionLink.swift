@@ -274,7 +274,8 @@ public final class SessionLink {
         var keepsRemain = true
         if let workout = try? context.fetch(descriptor).first {
             let current = workout.healthKitWorkoutID
-            guard current == nil || current == entry.keep || current == entry.remove else {
+            // With `keep` already dealt with, the iPhone's copy is deletable whatever the workout links to.
+            guard entry.keep == nil || current == nil || current == entry.keep || current == entry.remove else {
                 pending.remove(entry)
                 return
             }
