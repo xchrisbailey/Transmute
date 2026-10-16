@@ -12,13 +12,16 @@ public enum DebugLaunch {
                 }
             #endif
             let context = container.mainContext
-            guard arguments.contains(.seedSample), (try? context.fetchCount(FetchDescriptor<Profile>())) == 0
-            else { return }
-            let (profile, plan) = SampleData.insert(into: context)
-            if arguments.contains(.sampleSession) {
-                startSession(of: plan, for: profile, in: context, arguments: arguments)
+            if arguments.contains(.seedSample), (try? context.fetchCount(FetchDescriptor<Profile>())) == 0 {
+                let (profile, plan) = SampleData.insert(into: context)
+                if arguments.contains(.sampleSession) {
+                    startSession(of: plan, for: profile, in: context, arguments: arguments)
+                }
+                try? context.save()
             }
-            try? context.save()
+            if arguments.contains(.openLink), let link = LaunchArgument.deepLink() {
+                DeepLinkRouter.shared.open(link)
+            }
         #endif
     }
 
