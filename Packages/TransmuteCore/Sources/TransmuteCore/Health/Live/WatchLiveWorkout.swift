@@ -69,6 +69,7 @@
             }
         }
 
+        /// Failing is fine: the workout carries on unmirrored.
         public func ensureMirroring() async {
             guard let session, !isMirroring else { return }
             do {
