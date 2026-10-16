@@ -87,8 +87,7 @@ private struct ProfileFooter: View {
     let profile: Profile
     let action: () -> Void
 
-    /// The profile has no name of its own, so this is the Mac account's.
-    private var name: String {
+    private var accountName: String {
         let name = NSFullUserName()
         return name.isEmpty ? String(localized: ProfileCopy.profile) : name
     }
@@ -107,7 +106,7 @@ private struct ProfileFooter: View {
                     .font(.title2)
                     .foregroundStyle(Color.brandText(\.subtext))
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(verbatim: name)
+                    Text(verbatim: accountName)
                         .brandFont(.label)
                         .foregroundStyle(Color.brand(\.ink))
                     Text(verbatim: detail)

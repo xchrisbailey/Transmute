@@ -60,7 +60,7 @@
                 adopt(recovered, builder)
                 state = LiveWorkoutState(recovered.state)
                 refreshMetrics(from: builder)
-                await startMirroring()
+                await ensureMirroring()
                 return true
             } catch {
                 Self.logger.error(
@@ -69,10 +69,7 @@
             }
         }
 
-        /// Connects the session to the iPhone. Called on start and recover; call it again to
-        /// reconnect after `isMirroring` went false. Failing is fine: the workout carries on
-        /// unmirrored.
-        public func startMirroring() async {
+        public func ensureMirroring() async {
             guard let session, !isMirroring else { return }
             do {
                 try await session.startMirroringToCompanionDevice()
@@ -100,7 +97,7 @@
                 }
                 throw Self.mapped(error)
             }
-            await startMirroring()
+            await ensureMirroring()
         }
 
         private func adopt(_ session: HKWorkoutSession, _ builder: HKLiveWorkoutBuilder) {

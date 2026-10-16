@@ -89,6 +89,22 @@ struct IndexChangesTests {
         #expect(changes.removed == [Self.first, Self.second])
     }
 
+    @Test func theFirstIndexIsAFullReset() {
+        #expect(IndexChanges(indexed: nil, current: [Self.first: "Lower A"]).isFullReset)
+        #expect(IndexChanges(indexed: nil, current: [:]).isFullReset)
+    }
+
+    @Test func anOrdinaryDiffIsNotAFullReset() {
+        let changes = IndexChanges(
+            indexed: [Self.first: "Lower A", Self.second: "Upper A"], current: [Self.first: "Lower B"])
+        #expect(!changes.isFullReset)
+        #expect(!IndexChanges(indexed: [:], current: [:]).isFullReset)
+    }
+
+    @Test func removingTheLastItemIsAFullReset() {
+        #expect(IndexChanges(indexed: [Self.first: "Lower A"], current: [:]).isFullReset)
+    }
+
     @Test func nothingChangedIsEmpty() {
         #expect(IndexChanges(indexed: [Self.first: "Lower A"], current: [Self.first: "Lower A"]).isEmpty)
         #expect(IndexChanges(indexed: [:], current: [:]).isEmpty)
