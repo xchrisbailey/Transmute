@@ -2,12 +2,9 @@
     import SwiftUI
     import TransmuteCore
 
-    // Form sections for each part of the profile. Onboarding shows one per step; the Profile
-    // screen shows them all in one form.
-
     struct BodySection: View {
         @Binding var draft: ProfileDraft
-        /// Onboarding asks for the units here. Afterwards they're chosen in Settings (#18), so
+        /// Onboarding asks for the units here. Afterwards they're chosen in Settings, so
         /// the Profile screen leaves the picker out.
         var showsUnits = true
 

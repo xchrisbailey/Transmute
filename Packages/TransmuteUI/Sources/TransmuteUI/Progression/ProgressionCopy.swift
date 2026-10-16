@@ -1,12 +1,9 @@
 import Foundation
 import TransmuteCore
 
-/// Strings for progression (#12): the templated "From your plan" sentence built from the
+/// Strings for progression: the templated "From your plan" sentence built from the
 /// engine's `ProgressionReason`, and the progression settings. All plain, since they're read
 /// mid-session.
-///
-/// Phrasing the sentence with the on-device model is left for later; the template is always
-/// the fallback.
 public enum ProgressionCopy {
     public static let fromYourPlan = LocalizedStringResource(
         "plain.progression.fromYourPlan", defaultValue: "From your plan", bundle: .main,
@@ -64,7 +61,6 @@ public enum ProgressionCopy {
         comment: "plain. Empty held exercises list.")
 }
 
-// The "From your plan" sentence.
 extension ProgressionCopy {
     /// The sentence for a reason, e.g. "Back Squat goes up 2.5 kg since every set moved well on
     /// Thursday."
@@ -88,7 +84,6 @@ extension ProgressionCopy {
         }
     }
 
-    /// The numbers a sentence needs, formatted.
     struct Parts {
         let load: String?
         let change: String?

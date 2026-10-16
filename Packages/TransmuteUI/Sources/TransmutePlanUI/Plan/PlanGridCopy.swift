@@ -1,7 +1,6 @@
 import Foundation
 import TransmuteCore
 
-/// Strings for the plan's week grid (#17). All plain: they name moves and targets.
 enum PlanGridCopy {
     static let moveUp = LocalizedStringResource(
         "plain.planGrid.moveUp", defaultValue: "Move up", bundle: .main,

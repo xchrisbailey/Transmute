@@ -7,7 +7,7 @@ import UserNotifications
 
 /// Tells you rest is up: a chime in the app, and a notification with sound when Transmute is
 /// in the background. The haptic comes from the session screen. The sound and the haptic can
-/// each be turned off (#18); the notification itself still arrives, silently.
+/// each be turned off; the notification itself still arrives, silently.
 enum RestAlerts {
     static let identifier = "transmute.rest"
 
@@ -34,7 +34,6 @@ enum RestAlerts {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
     }
 
-    /// A short system sound, for when rest ends with the app open.
     static func chime() {
         #if os(iOS)
             AudioServicesPlaySystemSound(1_005)

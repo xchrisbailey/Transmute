@@ -1,7 +1,7 @@
 import Foundation
 import TransmuteCore
 
-/// The three unit choices as Settings shows them (#18): weight is always kilograms or pounds,
+/// The three unit choices as Settings shows them: weight is always kilograms or pounds,
 /// while height and distance can each match the device (`nil`).
 ///
 /// The profile also has an overall system, set in onboarding, which a unit without its own
@@ -36,7 +36,7 @@ struct UnitSettings: Equatable {
     }
 }
 
-/// Whether sets show RPE or % of 1RM: by experience level until the person chooses (#18).
+/// Whether sets show RPE or % of 1RM: by experience level until the person chooses.
 enum EffortChoice: Hashable, CaseIterable {
     /// Hidden for beginners, shown to everyone else.
     case automatic

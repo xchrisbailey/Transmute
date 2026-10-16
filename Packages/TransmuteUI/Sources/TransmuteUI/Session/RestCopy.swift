@@ -1,6 +1,5 @@
 import Foundation
 
-/// What the rest timer says to VoiceOver and to Voice Control (#59). All plain.
 extension Copy {
     /// Spoken as rest ticks down, e.g. "1 minute of rest left".
     public static func restLeft(_ time: String) -> LocalizedStringResource {

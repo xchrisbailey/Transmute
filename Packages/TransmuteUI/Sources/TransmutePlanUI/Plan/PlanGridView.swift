@@ -4,9 +4,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// The whole plan as a week grid (#17): a row for each week, a column for each weekday.
-/// Exercises drag within a day or onto another, days drag to another weekday, and every move
-/// is also in a menu and an accessibility action (#22). Rebrew is in the toolbar.
 public struct PlanGridView: View {
     let plan: Plan
     let profile: Profile
@@ -86,7 +83,6 @@ public struct PlanGridView: View {
         }
         .padding(.horizontal, Self.padding + Self.spacing)
         .padding(.vertical, 8)
-        // The cells say their own weekday, so VoiceOver skips the column headings.
         .accessibilityHidden(true)
     }
 
@@ -124,7 +120,6 @@ extension View {
     }
 }
 
-/// One week: its number, phase and markers, then a cell for each weekday.
 struct PlanGridWeekRow: View {
     let plan: Plan
     let week: Int
@@ -148,7 +143,6 @@ struct PlanGridWeekRow: View {
         }
         .fixedSize(horizontal: false, vertical: true)
         .padding(PlanGridView.spacing)
-        // The current week has an outline as well as its "This week" badge (#22).
         .overlay {
             if isCurrent {
                 RoundedRectangle(cornerRadius: 16)

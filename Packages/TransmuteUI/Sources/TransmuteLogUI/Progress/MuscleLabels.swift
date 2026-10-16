@@ -2,7 +2,6 @@ import Foundation
 import TransmuteCore
 
 extension Muscle {
-    /// The muscle group's plain name, for the volume chart's legend.
     var label: LocalizedStringResource {
         switch self {
         case .quads:

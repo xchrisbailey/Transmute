@@ -4,8 +4,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// Brew a plan (#9): the profile goes in, a plan distils onto the screen day by day, and the
-/// person keeps it or brews again. Nothing is saved until they keep it.
 public struct BrewPlanView: View {
     let profile: Profile
     let device: String
@@ -55,8 +53,6 @@ public struct BrewPlanView: View {
         .alert(Text(Copy.savePlanError), isPresented: $saveFailed) {}
         .sensoryFeedback(.success, trigger: session.state.isPreview)
     }
-
-    // MARK: Start
 
     private var start: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -128,8 +124,6 @@ public struct BrewPlanView: View {
         }
         session.start(TrainingBrief(profile, outsideLoad: outside), units: units.weight)
     }
-
-    // MARK: Progress
 
     private var progress: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -208,7 +202,6 @@ extension BrewSession.State {
     }
 }
 
-/// One distilled day while brewing: its focus and the exercises picked so far.
 struct DistilledDayRow: View {
     let phase: String?
     let focus: String?

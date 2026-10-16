@@ -3,9 +3,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// The summary after Finish: "The work is done. 18 sets, 8,420 kg moved.", the numbers, and a
-/// plain Save. The workout is already stored when this shows; Save writes it to Health and
-/// closes.
 struct FinishView: View {
     let workout: Workout
     let summary: WorkoutSummary
@@ -81,7 +78,6 @@ struct FinishView: View {
         }
     }
 
-    /// Records this workout set, headline first per set.
     private var gold: [[PersonalRecord]] {
         let mine = records.filter { $0.set?.exercise?.workout === workout }
         return RecordBoard.gold(mine, since: workout.startedAt)
@@ -134,7 +130,6 @@ struct FinishView: View {
     }
 }
 
-/// One record from the finished workout, in gold: "Back squat · 5RM · 115 kg".
 private struct GoldRow: View {
     let record: PersonalRecord
     let units: Units

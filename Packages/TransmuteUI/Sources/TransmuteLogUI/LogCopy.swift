@@ -1,10 +1,6 @@
 import Foundation
 
-/// Strings for Today and the workout session (#11). Mid-set everything stays plain; only the
-/// rest-day and done lines use the voice (#3).
 public enum LogCopy {
-    // MARK: Tabs
-
     public static let today = LocalizedStringResource(
         "plain.today.title", defaultValue: "Today", bundle: .main,
         comment: "plain. Tab and title of the Today screen.")
@@ -12,8 +8,6 @@ public enum LogCopy {
     public static let plan = LocalizedStringResource(
         "plain.tab.plan", defaultValue: "Plan", bundle: .main,
         comment: "plain. Tab for the plan.")
-
-    // MARK: Today
 
     static func eyebrow(week: Int, day: Int) -> LocalizedStringResource {
         LocalizedStringResource(
@@ -58,8 +52,6 @@ public enum LogCopy {
     static let fromYourPlan = LocalizedStringResource(
         "plain.today.fromYourPlan", defaultValue: "From your plan", bundle: .main,
         comment: "plain. Label before the reason targets changed.")
-
-    // MARK: Session
 
     static let set = LocalizedStringResource(
         "plain.session.set", defaultValue: "Set", bundle: .main,
@@ -209,8 +201,6 @@ public enum LogCopy {
         "plain.session.more", defaultValue: "More", bundle: .main,
         comment: "plain. Menu of exercise actions.")
 
-    // MARK: Rest and timers
-
     static let startRest = LocalizedStringResource(
         "plain.session.startRest", defaultValue: "Start rest", bundle: .main,
         comment: "plain. Starts the rest timer by hand, when it's set not to start by itself.")
@@ -259,8 +249,6 @@ public enum LogCopy {
             comment: "plain. Interval progress, e.g. Round 3 of 8.")
     }
 
-    // MARK: Finish
-
     static let sets = LocalizedStringResource(
         "plain.finish.sets", defaultValue: "Sets", bundle: .main,
         comment: "plain. Summary figure.")
@@ -290,10 +278,6 @@ public enum LogCopy {
             "voice.finish.workDoneNoLoad", defaultValue: "The work is done. \(sets) sets.", bundle: .main,
             comment: "voice. Workout finished with no weighted sets, so no volume to show.")
     }
-
-    // MARK: Records and plates
-
-    // MARK: Apple Watch
 
     static let onWatch = LocalizedStringResource(
         "plain.session.onWatch", defaultValue: "Running on Apple Watch", bundle: .main,

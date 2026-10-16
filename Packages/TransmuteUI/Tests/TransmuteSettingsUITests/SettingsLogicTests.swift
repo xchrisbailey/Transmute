@@ -17,8 +17,6 @@ struct UnitSettingsTests {
         #expect(settings == UnitSettings(weight: .imperial, height: nil, distance: nil))
     }
 
-    /// Onboarding stores the overall system. While it agrees with the device, height and
-    /// distance still read as matching the device; once it doesn't, they're a choice.
     @Test func anOverallSystemCountsAsAChoiceOnlyWhenItDiffers() {
         let profile = Profile()
         profile.unitSystem = .imperial
@@ -41,7 +39,6 @@ struct UnitSettingsTests {
         let units = Units(profile, locale: france)
         #expect(units.weight == .metric)
         #expect(units.height == .imperial)
-        // Matching the device now means the device, not what onboarding picked.
         #expect(units.distance == .metric)
         #expect(Units(profile, locale: american).distance == .imperial)
         #expect(UnitSettings(profile, locale: france) == settings)
@@ -73,7 +70,6 @@ struct StatusMappingTests {
         for status in all {
             #expect(status.message.key.hasPrefix("plain.settings.icloud."))
         }
-        // Only a signed-in, syncing build gets the tick.
         #expect(all.filter { $0.tone == .good } == [.available])
     }
 

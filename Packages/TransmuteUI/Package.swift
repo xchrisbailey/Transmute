@@ -6,11 +6,8 @@ let package = Package(
     platforms: [.iOS("27.0"), .watchOS("27.0"), .macOS("27.0")],
     products: [
         .library(name: "TransmuteUI", targets: ["TransmuteUI"]),
-        // Screens that brew and edit plans. iPhone and Mac only: the watch never generates.
         .library(name: "TransmutePlanUI", targets: ["TransmutePlanUI"]),
-        // Today, the workout session and history. iPhone and Mac; the watch has its own (#15).
         .library(name: "TransmuteLogUI", targets: ["TransmuteLogUI"]),
-        // The Settings screen (#18). iPhone and Mac; it reaches into every other target.
         .library(name: "TransmuteSettingsUI", targets: ["TransmuteSettingsUI"]),
     ],
     dependencies: [

@@ -1,8 +1,6 @@
 // swiftlint:disable file_length
 import Foundation
 
-/// Strings for onboarding and the Profile screen (#6). Voice for the welcome and hand-off;
-/// plain everywhere else, and always for Health and limitations (#3).
 public enum ProfileCopy {
     static let welcome = LocalizedStringResource(
         "voice.onboarding.welcome",

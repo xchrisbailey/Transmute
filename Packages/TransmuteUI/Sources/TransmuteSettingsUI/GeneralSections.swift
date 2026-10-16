@@ -3,7 +3,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// Weight, height and distance units (#18). Changes save straight away.
 struct UnitsSection: View {
     @Bindable var profile: Profile
     @Environment(\.modelContext) private var context
@@ -52,7 +51,7 @@ struct UnitsSection: View {
     }
 }
 
-/// Rows to the bar and plates setup (#21) and the progression settings (#12), which are the
+/// Rows to the bar and plates setup and the progression settings, which are the
 /// same screens the Profile links to. Here they save straight away.
 struct EquipmentLinksSection: View {
     @Bindable var profile: Profile
@@ -89,7 +88,6 @@ struct EquipmentLinksSection: View {
     }
 }
 
-/// System, Mocha or Latte, for this device (#18).
 struct AppearanceSection: View {
     @AppStorage(Appearance.defaultsKey) private var appearance = Appearance.system
 

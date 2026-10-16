@@ -1,6 +1,5 @@
 import Foundation
 
-/// Strings for privacy, export, import and delete-all in Settings (#18). All plain.
 enum SettingsDataCopy {
     static let privacy = LocalizedStringResource(
         "plain.settings.privacy.statement",

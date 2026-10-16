@@ -13,8 +13,6 @@ struct DataTransferScreenTests {
         resources.map { String(localized: $0) }
     }
 
-    // MARK: Export
-
     @Test func exportNamesCarryThePersonsDate() throws {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = try #require(TimeZone(identifier: "America/New_York"))
@@ -27,8 +25,6 @@ struct DataTransferScreenTests {
         #expect(ExportKind.workouts.contentType == .commaSeparatedText)
         #expect(ExportKind.backup.contentType == .json)
     }
-
-    // MARK: Import
 
     @Test func filesAreToldApartByTheirContents() {
         #expect(ImportKind(Data("{\"formatVersion\":1}".utf8)) == .backup)
@@ -49,7 +45,6 @@ struct DataTransferScreenTests {
         #expect(summary.profile == .added)
         #expect(try fresh.mainContext.fetchCount(FetchDescriptor<Profile>()) == 1)
 
-        // Transmute's own CSV isn't a Strong or Hevy export, and says so.
         #expect(throws: DataTransferError.unrecognizedCSV) {
             try DataTransfer.importFile(csv, into: fresh.mainContext, fallbackUnits: .metric)
         }
@@ -129,8 +124,6 @@ struct DataTransferScreenTests {
         #expect(!report.succeeded)
         #expect(text(report.lines).first?.contains("newer version of Transmute") == true)
     }
-
-    // MARK: Delete
 
     @Test func resetClearsTransmutesKeysAndNothingElse() throws {
         let suite = "settings-\(UUID().uuidString)"

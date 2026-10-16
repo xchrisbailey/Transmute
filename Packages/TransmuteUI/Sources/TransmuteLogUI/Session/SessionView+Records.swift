@@ -3,15 +3,12 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// A record just set, for the toast.
 struct GoldNotice: Equatable, Identifiable {
     let id = UUID()
     let mark: RecordMark
     let exercise: String
 }
 
-/// Records during the session (#13): checked on every check-off, recomputed when a check is
-/// taken back, and a plain question when a set is far beyond the previous best.
 extension SessionView {
     func toggle(_ set: LoggedSet) {
         if set.isCompleted {
@@ -56,7 +53,6 @@ extension SessionView {
         }
     }
 
-    /// The toast at the top, gone after a few seconds.
     @ViewBuilder var goldToast: some View {
         if let gold {
             GoldToast(gold.mark, exercise: gold.exercise, units: units, trigger: gold.id)

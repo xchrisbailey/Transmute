@@ -2,8 +2,6 @@ import SwiftUI
 import TransmuteIntelligence
 import TransmuteUI
 
-/// Explains why brewing isn't possible right now, in plain words (#3). Shown in place of AI
-/// actions; existing plans and logging keep working around it.
 public struct IntelligenceNotice: View {
     let availability: IntelligenceAvailability
     @Environment(\.openURL) private var openURL
@@ -61,7 +59,6 @@ public struct IntelligenceNotice: View {
     }
 }
 
-/// `IntelligenceNotice` that keeps itself up to date, for screens without their own status.
 public struct LiveIntelligenceNotice: View {
     @State private var status: IntelligenceStatus
 
@@ -76,7 +73,6 @@ public struct LiveIntelligenceNotice: View {
 }
 
 extension IntelligenceError {
-    /// What to tell someone when a generation fails.
     public var message: LocalizedStringResource {
         switch self {
         case .unavailable(.deviceNotEligible): Copy.aiDeviceNotEligible

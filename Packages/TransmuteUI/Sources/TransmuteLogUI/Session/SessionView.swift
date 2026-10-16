@@ -3,9 +3,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// The workout in progress (#11): exercise by exercise, a set table prefilled from the plan,
-/// and one big button at the bottom that logs the current set or shows the rest timer. Built
-/// to be run with one thumb: the button sits where the thumb is, and the list follows along.
 public struct SessionView: View {
     @Bindable var workout: Workout
     let profile: Profile?
@@ -42,7 +39,7 @@ public struct SessionView: View {
         Units(profile)
     }
 
-    /// How this session runs (#18): rest alerts and whether rest starts by itself.
+    /// How this session runs: rest alerts and whether rest starts by itself.
     var preferences: WorkoutPreferences {
         profile?.preferences ?? WorkoutPreferences()
     }
@@ -151,7 +148,6 @@ public struct SessionView: View {
                 sound: preferences.restSound)
         }
         .onChange(of: SessionSnapshot(workout, library: library, preferences: preferences)) {
-            // Every change made here goes to the watch.
             link?.publish()
         }
         .onAppear {
@@ -177,8 +173,6 @@ public struct SessionView: View {
             await RestAlerts.requestPermission()
         }
     }
-
-    // MARK: Actions
 
     private func logCurrent() {
         guard let current else { return }
@@ -221,7 +215,7 @@ public struct SessionView: View {
         }
     }
 
-    /// Waits until the rest ends, telling VoiceOver how much is left on the way (#59), then
+    /// Waits until the rest ends, telling VoiceOver how much is left on the way, then
     /// buzzes, chimes and clears the timer. Runs again whenever the end moves, so skipping or
     /// adding time just restarts the wait. The buzz and the chime are each the person's to
     /// turn off.

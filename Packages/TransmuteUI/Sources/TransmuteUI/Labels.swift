@@ -1,7 +1,6 @@
 import Foundation
 import TransmuteCore
 
-/// Plain labels for library vocabulary and the picker, from the app's String Catalog.
 enum Labels {
     static let searchExercises = LocalizedStringResource(
         "plain.searchExercises", defaultValue: "Search exercises", bundle: .main, comment: "plain. Exercise picker.")

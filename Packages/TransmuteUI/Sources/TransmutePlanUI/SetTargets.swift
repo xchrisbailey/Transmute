@@ -4,8 +4,7 @@ import TransmuteIntelligence
 
 /// An exercise's targets in one line, e.g. "4 × 6 · 185 lb · 75% 1RM · RPE 8" or "8 rounds of
 /// 0:20 on, 0:10 off". Numbers only, so they read the same in any language; set rows for
-/// VoiceOver spell them out separately. RPE and %1RM appear only when the person shows them
-/// (#18).
+/// VoiceOver spell them out separately. RPE and %1RM appear only when the person shows them.
 public struct SetTargets: Equatable, Sendable {
     public var sets: Int
     public var reps: Int?

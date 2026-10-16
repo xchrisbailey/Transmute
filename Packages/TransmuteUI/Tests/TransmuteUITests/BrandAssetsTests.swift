@@ -3,8 +3,6 @@ import Testing
 
 @testable import TransmuteUI
 
-/// Checks the pieces of the brand that live outside the package: the app's String Catalog
-/// and the bundled fonts.
 struct BrandAssetsTests {
     static let repo = URL(fileURLWithPath: #filePath)
         .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
@@ -69,8 +67,6 @@ struct BrandAssetsTests {
 }
 
 extension BrandAssetsTests {
-    /// Every `voice.` or `plain.` key written anywhere in the packages or apps is in the catalog,
-    /// so no screen falls back to an untranslated default.
     @Test func everyKeyInTheSourceIsInTheCatalog() throws {
         let pattern = /"((?:voice|plain)\.[A-Za-z0-9.]+)"/
         var missing: [String] = []

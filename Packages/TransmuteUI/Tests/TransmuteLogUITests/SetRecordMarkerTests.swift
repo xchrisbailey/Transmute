@@ -5,8 +5,6 @@ import TransmuteCore
 
 @testable import TransmuteLogUI
 
-/// Which logged sets wear the record marker on their row (#60): the ones with rows in
-/// `LoggedSet.records`, the same rule History uses.
 @MainActor
 struct SetRecordMarkerTests {
     let container: ModelContainer
@@ -47,7 +45,6 @@ struct SetRecordMarkerTests {
         try book.recompute(exerciseID: "back-squat")
         try context.save()
 
-        // The first ever set is a baseline, not a record.
         #expect(!baseline.holdsRecord)
         #expect(!lighter.holdsRecord)
         #expect(lighter.recordMarks.isEmpty)
@@ -86,7 +83,6 @@ struct SetRecordMarkerTests {
         try context.save()
         #expect(middle.holdsRecord && latest.holdsRecord)
 
-        // Last week was really 110, so this week's 107.5 no longer beats anything.
         middle.weightKg = 110
         try book.recompute(exerciseID: "back-squat")
         try context.save()

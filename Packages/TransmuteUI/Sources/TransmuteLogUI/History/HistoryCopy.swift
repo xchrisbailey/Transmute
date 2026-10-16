@@ -1,7 +1,5 @@
 import Foundation
 
-/// Strings for the workout log (#14). Plain throughout; the empty log and deletes use the
-/// wording from the brand book (#3).
 public enum HistoryCopy {
     public static let title = LocalizedStringResource(
         "plain.history.title", defaultValue: "Log", bundle: .main,
@@ -101,8 +99,6 @@ public enum HistoryCopy {
     static let estimatedMaxTrend = LocalizedStringResource(
         "plain.history.estimatedMaxTrend", defaultValue: "Estimated 1RM", bundle: .main,
         comment: "plain. Chart title.")
-
-    // MARK: Mac table
 
     static let columnDate = LocalizedStringResource(
         "plain.mac.log.date", defaultValue: "Date", bundle: .main,

@@ -4,7 +4,7 @@ import TransmuteIntelligence
 import TransmuteUI
 
 /// A developer screen that streams a small structured result from the model, to check guided
-/// generation, streaming and the library tool on a real device (#8). Debug builds only, so its
+/// generation, streaming and the library tool on a real device. Debug builds only, so its
 /// labels aren't localized.
 public struct IntelligenceDebugView: View {
     @State private var status: IntelligenceStatus

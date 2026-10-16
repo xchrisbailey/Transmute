@@ -5,9 +5,6 @@ import TransmuteIntelligence
 import TransmutePlanUI
 import TransmuteUI
 
-/// The screen people open most (#11): today's session with its targets and one mauve
-/// button, Begin the work. Rest days say so and point at the next session. A workout left
-/// running, even by a killed app, opens straight back up.
 public struct TodayView: View {
     let plan: Plan?
     let profile: Profile
@@ -317,7 +314,7 @@ extension TodayView {
     }
 
     /// Shows a running workout and, when there's a watch, wakes it to record heart rate and
-    /// mirror the session (#15). Without a watch or Health access the workout runs as before.
+    /// mirror the session. Without a watch or Health access the workout runs as before.
     private func open(_ workout: Workout) {
         session = workout
         guard let link, workout.startedOn != .watch else { return }

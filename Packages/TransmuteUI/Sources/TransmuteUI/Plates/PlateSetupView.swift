@@ -2,7 +2,7 @@
     import SwiftUI
     import TransmuteCore
 
-    /// Bars, plates and the dumbbell and machine steps (#21). Edits a binding, so it works on a
+    /// Edits a binding, so it works on a
     /// `ProfileDraft` and is saved with the rest of the profile.
     ///
     /// Weights here are in the kit's own unit, which can differ from the display unit: plates

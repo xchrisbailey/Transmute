@@ -3,13 +3,11 @@ import TransmuteCore
 import TransmuteUI
 
 extension EnvironmentValues {
-    /// The link to the watch during a workout (#15). `nil` where there's no watch to link to:
+    /// The link to the watch during a workout. `nil` where there's no watch to link to:
     /// the Mac and previews.
     @Entry public var sessionLink: SessionLink?
 }
 
-/// A workout the Apple Watch is running, followed live on the iPhone (#15). The watch saves
-/// it; this screen shows what the watch shows and can log, rest and finish from here too.
 public struct MirroredSessionView: View {
     let link: SessionLink
     let units: Units
@@ -99,14 +97,12 @@ public struct MirroredSessionView: View {
         }
     }
 
-    /// Tells VoiceOver how much rest is left (#59), the way the session screen does for its own
+    /// Tells VoiceOver how much rest is left, the way the session screen does for its own
     /// rest. The watch owns the workout, so this only speaks: the watch clears the timer.
     private func announceRest() async {
         guard let end = snapshot?.restEndsAt, end > .now else { return }
         _ = await RestAnnouncer.countdown(until: end)
     }
-
-    // MARK: Rows
 
     private func heartRate(_ bpm: Double) -> some View {
         Label {
@@ -155,10 +151,6 @@ public struct MirroredSessionView: View {
             units: units)
     }
 
-    // MARK: Bar
-
-    /// Under the thumb, like the session screen's own bar: the rest countdown, the current set
-    /// with steppers and Log set, or the end of the workout.
     @ViewBuilder private var bar: some View {
         VStack(spacing: 10) {
             Label {
@@ -265,7 +257,7 @@ public struct MirroredSessionView: View {
     }
 
     /// `spoken` is the button's short Voice Control name, when it has one on the session screen's
-    /// own bar (#60).
+    /// own bar.
     private func mainButton(
         _ title: LocalizedStringResource, spoken: LocalizedStringResource? = nil, action: @escaping () -> Void
     ) -> some View {

@@ -44,7 +44,6 @@ enum NoteTarget: Identifiable {
     }
 }
 
-/// An exercise's name over its sets, with a menu for substituting, notes and skipping.
 struct ExerciseHeader<Actions: View>: View {
     let name: String
     let substitutedFor: String?
@@ -90,7 +89,6 @@ struct ExerciseHeader<Actions: View>: View {
     }
 }
 
-/// A sheet with one text editor, for workout, exercise and set notes.
 struct NoteEditor: View {
     let title: LocalizedStringResource
     @Binding var text: String

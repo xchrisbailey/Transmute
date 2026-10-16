@@ -3,8 +3,6 @@
     import SwiftUI
     import TransmuteCore
 
-    /// Load increments for upper and lower body, in the profile's units, and the exercises the
-    /// person is holding (#12). Changes save straight away.
     public struct ProgressionSettingsView: View {
         @Bindable var profile: Profile
         @Environment(\.modelContext) private var context

@@ -1,6 +1,5 @@
 import Foundation
 
-/// What the set row says to Voice Control and VoiceOver, and shows when it stacks (#60).
 extension LogCopy {
     /// Shown on the stacked row and said to Voice Control: "Set 3".
     static func setNumber(_ number: Int) -> LocalizedStringResource {

@@ -4,7 +4,6 @@ import Testing
 
 struct IntervalPhaseTests {
     @Test func walksThroughWorkAndRest() {
-        // 3 rounds of 20 s on, 10 s off: 80 s in all, with no rest after the last round.
         let start = IntervalPhase.at(0, rounds: 3, work: 20, rest: 10)
         #expect(start == IntervalPhase(round: 1, isWork: true, remaining: 20, isFinished: false, index: 0))
         let firstRest = IntervalPhase.at(25, rounds: 3, work: 20, rest: 10)

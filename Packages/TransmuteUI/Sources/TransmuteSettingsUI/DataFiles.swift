@@ -4,7 +4,6 @@ import SwiftUI
 import TransmuteCore
 import UniformTypeIdentifiers
 
-/// The two files Settings can export (#18).
 enum ExportKind: Sendable {
     /// Every logged set as CSV.
     case workouts
@@ -41,7 +40,6 @@ enum ExportKind: Sendable {
     }
 }
 
-/// An export ready for the file exporter.
 struct ExportedFile: FileDocument {
     static let readableContentTypes: [UTType] = [.json, .commaSeparatedText]
 
@@ -67,13 +65,12 @@ struct ExportedFile: FileDocument {
     }
 }
 
-/// What kind of file was picked to import (#18). Told apart by the contents, so a backup
+/// What kind of file was picked to import. Told apart by the contents, so a backup
 /// renamed to .txt still imports.
 enum ImportKind: Equatable {
     case backup
     case csv
 
-    /// The types the file importer offers.
     static let contentTypes: [UTType] = [.json, .commaSeparatedText, .plainText]
 
     /// JSON backups start with a brace; anything else is read as CSV, which reports its own

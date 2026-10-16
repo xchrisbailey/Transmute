@@ -3,7 +3,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// One weekday of one week: a session card, or an empty slot a day can be dropped on.
 struct PlanGridCell: View {
     let plan: Plan
     let week: Int
@@ -49,8 +48,6 @@ struct PlanGridCell: View {
     }
 }
 
-/// A session in the grid: focus, length, markers and its exercises. The heading drags the
-/// whole day; the menu does the same moves without dragging.
 struct PlanGridDayCard: View {
     let day: PlanDay
     let plan: Plan

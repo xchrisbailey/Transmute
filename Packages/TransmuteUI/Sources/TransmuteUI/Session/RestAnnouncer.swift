@@ -11,7 +11,7 @@ import TransmuteCore
 #endif
 
 /// Counts down a rest and, when VoiceOver is running, says how much is left at the marks in
-/// `RestAnnouncements` (#59). The session screens call it from where they already wait for
+/// `RestAnnouncements`. The session screens call it from where they already wait for
 /// rest to end, so it speaks whichever page is showing, and on whichever device has VoiceOver on.
 @MainActor
 public enum RestAnnouncer {
@@ -30,7 +30,6 @@ public enum RestAnnouncer {
                 }
             }
             guard !Task.isCancelled else { return false }
-            // A late wake-up skips the marks it missed rather than speaking them back to back.
             let secondsLate = Double(mark) - end.timeIntervalSinceNow
             if RestAnnouncements.isWorthSaying(mark: mark, secondsLate: secondsLate) {
                 announce(mark)

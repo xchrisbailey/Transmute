@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// The one place Reduce Motion is decided (#62). Anything that slides, scales or counts goes
+/// The one place Reduce Motion is decided. Anything that slides, scales or counts goes
 /// through here instead of straight to SwiftUI, so the rule reads the same on iPhone, Mac
 /// and Apple Watch: with Reduce Motion on, movement is dropped, and a fade or nothing at all
 /// takes its place.

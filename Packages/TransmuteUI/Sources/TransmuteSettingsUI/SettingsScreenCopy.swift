@@ -1,7 +1,6 @@
 import Foundation
 
-/// Strings for the Settings screen's own controls (#18): units, equipment, appearance and
-/// workout. All plain. The appearance names are in `SettingsCopy`, next to `Appearance`.
+/// The appearance names are in `SettingsCopy`, next to `Appearance`.
 enum SettingsScreenCopy {
     static let paneGeneral = LocalizedStringResource(
         "plain.settings.pane.general",

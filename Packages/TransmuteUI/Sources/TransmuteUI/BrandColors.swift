@@ -8,7 +8,6 @@ import TransmuteCore
 #endif
 
 extension Color {
-    /// A fixed color from the palette.
     public init(_ brand: BrandColor) {
         self.init(.sRGB, red: brand.red, green: brand.green, blue: brand.blue)
     }
@@ -28,7 +27,6 @@ extension Color {
 
     private static func adaptive(dark: BrandColor, light: BrandColor) -> Color {
         #if os(watchOS)
-            // The watch is always dark; its own palette only differs in base and platters.
             return Color(dark)
         #elseif canImport(UIKit)
             return Color(

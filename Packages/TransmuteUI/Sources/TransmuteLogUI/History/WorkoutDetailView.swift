@@ -3,9 +3,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// One past workout (#14): every exercise and set, notes, the plan day it came from, and
-/// its records. Any set can be changed or deleted, and the whole workout can go; records are
-/// rebuilt after each change and progression reads the log as it is.
 struct WorkoutDetailView: View {
     @Bindable var workout: Workout
     let profile: Profile
@@ -124,7 +121,6 @@ struct WorkoutDetailView: View {
                         Text(HistoryCopy.deleteSet)
                     }
                 }
-                // The same delete without a swipe, for a mouse.
                 .contextMenu {
                     Button(role: .destructive) {
                         try? WorkoutLog.delete(set, in: context, library: library)
@@ -169,7 +165,6 @@ struct WorkoutDetailView: View {
     }
 }
 
-/// A logged set read-only: its numbers, its note, and gold for any record it set.
 struct PastSetRow: View {
     let set: LoggedSet
     let number: Int
@@ -221,7 +216,6 @@ struct PastSetRow: View {
     }
 }
 
-/// Changes a past set with the same steppers the session uses, plus its note.
 struct LoggedSetEditor: View {
     @Bindable var set: LoggedSet
     let tracking: TrackingType
@@ -251,7 +245,6 @@ struct LoggedSetEditor: View {
                 }
             }
         }
-        // Saves however the sheet closes, so a swipe down keeps the change too.
         .onDisappear(perform: onSave)
     }
 }
