@@ -13,17 +13,15 @@ struct RootView: View {
     let service = FoundationModelsService()
     let device = "iPhone"
     @AppStorage("rootTab") private var tab = "today"
-    /// Set by a widget's button: Today begins the session once it's on screen.
-    @State private var beginsWorkout = false
-    /// Set by Open workout and Spotlight: the log shows this workout once it's on screen.
-    @State private var openedWorkout: UUID?
+    @State private var beginRequest: WorkoutBeginRequest?
+    @State private var openRequest: WorkoutOpenRequest?
 
     var body: some View {
         if let profile = profiles.first {
             TabView(selection: $tab) {
                 Tab(value: "today") {
                     NavigationStack {
-                        TodayView(plan: plans.first, profile: profile, beginsWorkout: $beginsWorkout)
+                        TodayView(plan: plans.first, profile: profile, consumingBeginRequest: $beginRequest)
                             .toolbar { profileItems(profile) }
                     }
                 } label: {
@@ -35,7 +33,7 @@ struct RootView: View {
                 }
                 Tab(value: "log") {
                     NavigationStack {
-                        HistoryView(profile: profile, plan: plans.first, opening: $openedWorkout)
+                        HistoryView(profile: profile, plan: plans.first, consumingOpenRequest: $openRequest)
                             .toolbar { profileItems(profile) }
                     }
                 } label: {
@@ -98,12 +96,12 @@ struct RootView: View {
         switch link {
         case .today, .beginToday:
             tab = "today"
-            beginsWorkout = link == .beginToday
+            beginRequest = link == .beginToday ? WorkoutBeginRequest() : nil
         case .log:
             tab = "log"
         case .workout(let id):
             tab = "log"
-            openedWorkout = id
+            openRequest = WorkoutOpenRequest(workoutID: id)
         case .plan:
             tab = "plan"
         }

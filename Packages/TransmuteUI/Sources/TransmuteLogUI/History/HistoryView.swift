@@ -12,14 +12,15 @@ public struct HistoryView: View {
     @Query(sort: \CustomExercise.name) private var customExercises: [CustomExercise]
     @State private var filter = WorkoutLog.Filter()
     @State private var range: DateRange = .any
-    /// Set from outside to the `Workout.id` to show, as Open workout and Spotlight do.
-    @Binding var opening: UUID?
+    @Binding var consumingOpenRequest: WorkoutOpenRequest?
     @State private var opened: Workout?
 
-    public init(profile: Profile, plan: Plan?, opening: Binding<UUID?> = .constant(nil)) {
+    public init(
+        profile: Profile, plan: Plan?, consumingOpenRequest: Binding<WorkoutOpenRequest?> = .constant(nil)
+    ) {
         self.profile = profile
         self.plan = plan
-        _opening = opening
+        _consumingOpenRequest = consumingOpenRequest
     }
 
     enum DateRange: CaseIterable {
@@ -119,10 +120,10 @@ public struct HistoryView: View {
         .navigationDestination(item: $opened) { workout in
             WorkoutDetailView(workout: workout, profile: profile)
         }
-        .onChange(of: opening, initial: true) { _, id in
-            guard let id else { return }
-            opening = nil
-            opened = workouts.first { $0.id == id && $0.endedAt != nil }
+        .onChange(of: consumingOpenRequest, initial: true) { _, request in
+            guard let request else { return }
+            consumingOpenRequest = nil
+            opened = workouts.first { $0.id == request.workoutID && $0.endedAt != nil }
         }
     }
 }
