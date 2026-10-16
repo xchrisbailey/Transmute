@@ -176,7 +176,8 @@ struct RecordDetectorTests {
         #expect(replay.needsConfirmation.allSatisfy { $0.setID == 1 })
         #expect(!replay.needsConfirmation.isEmpty)
         #expect(replay.records.contains(RecordEvent(setID: 2, mark: RecordMark(kind: .repMax, value: 102.5, reps: 5))))
-        // The typo doesn't add to the session's volume either: 102.5 × 5 beats 500 on its own.
-        #expect(replay.records.contains(RecordEvent(setID: 2, mark: RecordMark(kind: .sessionVolume, value: 512.5))))
+        #expect(
+            replay.records.contains(RecordEvent(setID: 2, mark: RecordMark(kind: .sessionVolume, value: 102.5 * 5))),
+            "The typo adds nothing to the session's volume")
     }
 }

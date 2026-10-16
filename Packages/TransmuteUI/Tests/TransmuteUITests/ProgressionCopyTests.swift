@@ -1,6 +1,7 @@
 import Foundation
 import Testing
 import TransmuteCore
+import TransmuteTestSupport
 
 @testable import TransmuteUI
 
@@ -12,7 +13,7 @@ struct ProgressionCopyTests {
         calendar.locale = locale
         return calendar
     }()
-    static let now = Date(timeIntervalSince1970: 1_790_553_600)  // Monday 2026-09-28, UTC.
+    static let now = utc(2026, 9, 28)
     static let thursday = now.addingTimeInterval(-4 * 86_400)
 
     func sentence(_ reason: ProgressionReason, _ system: UnitSystem = .metric) -> String {

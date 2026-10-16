@@ -9,7 +9,7 @@ struct SessionMessageTests {
     let container: ModelContainer
     var context: ModelContext { container.mainContext }
     /// Not a whole second, so a lossy date encoding would show.
-    let now = Date(timeIntervalSinceReferenceDate: 812_345_678.123_456_7)
+    let subSecondNow = Date(timeIntervalSinceReferenceDate: 812_345_678.123_456_7)
     let first = SetRef(exerciseOrder: 0, setOrder: 0)
 
     init() throws {
@@ -17,17 +17,17 @@ struct SessionMessageTests {
     }
 
     func session() throws -> Workout {
-        let (_, plan) = SampleData.insert(into: context, now: now)
+        let (_, plan) = SampleData.insert(into: context, now: subSecondNow)
         try context.save()
         let day = try #require(plan.orderedDays.first { $0.week == 4 && $0.weekday == 1 })
-        return WorkoutSession.start(day, at: now, in: context)
+        return WorkoutSession.start(day, at: subSecondNow, in: context)
     }
 
     @Test func finishingKeepsOnlyWhatWasLogged() throws {
         let workout = try session()
         let values = SetValues(weightKg: 60, reps: 5)
-        SessionMirror.apply(.logSet(first, values, at: now.addingTimeInterval(60)), to: workout, in: context)
-        let end = now.addingTimeInterval(1800)
+        SessionMirror.apply(.logSet(first, values, at: subSecondNow.addingTimeInterval(60)), to: workout, in: context)
+        let end = subSecondNow.addingTimeInterval(1800)
         let guess = SessionSnapshot(workout).applying(.finish(at: end))
 
         let outcome = SessionMirror.apply(.finish(at: end), to: workout, in: context)
@@ -45,13 +45,15 @@ struct SessionMessageTests {
 
     @Test func nothingChangesOnceTheSessionHasEnded() throws {
         let workout = try session()
-        SessionMirror.apply(.logSet(first, SetValues(reps: 5), at: now), to: workout, in: context)
-        SessionMirror.apply(.finish(at: now.addingTimeInterval(600)), to: workout, in: context)
+        SessionMirror.apply(.logSet(first, SetValues(reps: 5), at: subSecondNow), to: workout, in: context)
+        SessionMirror.apply(.finish(at: subSecondNow.addingTimeInterval(600)), to: workout, in: context)
         let ended = SessionSnapshot(workout)
         let commands: [SessionCommand] = [
-            .logSet(first, SetValues(reps: 9), at: now), .reopenSet(first), .updateSet(first, SetValues(reps: 9)),
-            .startRest(seconds: 60, at: now), .adjustRest(by: 15, at: now), .setSkipped(exerciseOrder: 0, true),
-            .finish(at: now.addingTimeInterval(900)), .discard,
+            .logSet(first, SetValues(reps: 9), at: subSecondNow), .reopenSet(first),
+            .updateSet(first, SetValues(reps: 9)),
+            .startRest(seconds: 60, at: subSecondNow), .adjustRest(by: 15, at: subSecondNow),
+            .setSkipped(exerciseOrder: 0, true),
+            .finish(at: subSecondNow.addingTimeInterval(900)), .discard,
         ]
         for command in commands {
             #expect(ended.applying(command) == ended)
@@ -75,17 +77,20 @@ struct SessionMessageTests {
     @Test func everyMessageRoundTrips() throws {
         let workout = try session()
         let logged = SetValues(weightKg: 42.5, reps: 5, rpe: 7.5)
-        SessionMirror.apply(.logSet(first, logged, at: now), to: workout, in: context)
+        SessionMirror.apply(.logSet(first, logged, at: subSecondNow), to: workout, in: context)
         let id = workout.id
         let commands: [SessionCommand] = [
-            .logSet(first, SetValues(weightKg: 0.1 + 0.2, reps: 5, seconds: 1.0 / 3, meters: 20, rpe: 8.5), at: now),
-            .reopenSet(first), .updateSet(first, SetValues()), .startRest(seconds: 90, at: now),
-            .startRest(seconds: nil, at: now), .adjustRest(by: -15, at: now), .setSkipped(exerciseOrder: 2, true),
-            .finish(at: now), .discard,
+            .logSet(
+                first, SetValues(weightKg: 0.1 + 0.2, reps: 5, seconds: 1.0 / 3, meters: 20, rpe: 8.5), at: subSecondNow
+            ),
+            .reopenSet(first), .updateSet(first, SetValues()), .startRest(seconds: 90, at: subSecondNow),
+            .startRest(seconds: nil, at: subSecondNow), .adjustRest(by: -15, at: subSecondNow),
+            .setSkipped(exerciseOrder: 2, true),
+            .finish(at: subSecondNow), .discard,
         ]
         let messages: [SessionMessage] =
             commands.map { .command($0, workoutID: id) } + [
-                .snapshot(SessionSnapshot(workout)), .heartRate(bpm: 142.5, at: now),
+                .snapshot(SessionSnapshot(workout)), .heartRate(bpm: 142.5, at: subSecondNow),
                 .ended(workoutID: id, healthWorkoutID: UUID()), .ended(workoutID: id, healthWorkoutID: nil),
                 .requestSnapshot,
             ]
@@ -95,7 +100,10 @@ struct SessionMessageTests {
     }
 
     @Test func datesSurviveTheTripExactly() throws {
-        let dates = [now, .distantPast, Date(timeIntervalSince1970: 0.000_001), now.addingTimeInterval(1.0 / 3)]
+        let dates = [
+            subSecondNow, .distantPast, Date(timeIntervalSince1970: 0.000_001),
+            subSecondNow.addingTimeInterval(1.0 / 3),
+        ]
         for date in dates {
             let decoded = try SessionMessage(data: SessionMessage.heartRate(bpm: 60, at: date).encoded())
             guard case .heartRate(_, let back) = decoded else {

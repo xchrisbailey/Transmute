@@ -171,28 +171,43 @@ struct SessionMirrorTests {
         #expect(after.restEndsAt == before.restEndsAt)
     }
 
-    @Test func reopeningAndUpdatingASet() throws {
+    @Test func reopeningASetThatWasNeverLoggedIsIgnored() throws {
         let workout = try session()
         expectSame(.reopenSet(first), on: workout, .ignored)
+    }
+
+    @Test func reopeningALoggedSetClearsItsCompletion() throws {
+        let workout = try session()
         expectSame(.logSet(first, SetValues(reps: 5), at: now), on: workout)
         let reopened = expectSame(.reopenSet(first), on: workout)
         #expect(reopened.set(at: first)?.isCompleted == false)
         #expect(reopened.set(at: first)?.completedAt == nil)
         #expect(reopened.current == first)
+    }
 
+    @Test func updatingASetKeepsItOpen() throws {
+        let workout = try session()
         let values = SetValues(weightKg: 20, reps: 12, seconds: 30, meters: 100, rpe: 6.5)
         let updated = expectSame(.updateSet(first, values), on: workout)
         #expect(updated.set(at: first).map(SetValues.init) == values)
         #expect(updated.set(at: first)?.isCompleted == false)
-        // Values replace: what the command leaves out is cleared.
+    }
+
+    @Test func updatingASetReplacesItsValuesAndClearsWhatTheCommandLeavesOut() throws {
+        let workout = try session()
+        expectSame(
+            .updateSet(first, SetValues(weightKg: 20, reps: 12, seconds: 30, meters: 100, rpe: 6.5)), on: workout)
         let cleared = expectSame(.updateSet(first, SetValues(reps: 3)), on: workout)
         #expect(cleared.set(at: first).map(SetValues.init) == SetValues(reps: 3))
     }
 
-    @Test func startingSkippingAndAdjustingTheRest() throws {
+    @Test func adjustingARestThatNeverStartedIsIgnored() throws {
         let workout = try session()
         expectSame(.adjustRest(by: 15, at: now), on: workout, .ignored)
+    }
 
+    @Test func startingAndAdjustingARest() throws {
+        let workout = try session()
         let started = expectSame(.startRest(seconds: 120, at: now), on: workout)
         #expect(started.restRemaining(at: now) == 120)
         let longer = expectSame(.adjustRest(by: 30, at: now.addingTimeInterval(20.25)), on: workout)
@@ -202,10 +217,17 @@ struct SessionMirrorTests {
         #expect(shorter.restRemaining(at: now.addingTimeInterval(40)) == 95)
         let gone = expectSame(.adjustRest(by: -500, at: now.addingTimeInterval(50)), on: workout)
         #expect(gone.restEndsAt == nil)
-        // The rest ran out on its own: nothing left to adjust.
+    }
+
+    @Test func aRestThatRanOutOnItsOwnCannotBeAdjusted() throws {
+        let workout = try session()
         expectSame(.startRest(seconds: 10, at: now), on: workout)
         expectSame(.adjustRest(by: 15, at: now.addingTimeInterval(10)), on: workout, .ignored)
+    }
 
+    @Test func startingARestWithoutSecondsSkipsIt() throws {
+        let workout = try session()
+        expectSame(.startRest(seconds: 120, at: now), on: workout)
         let skipped = expectSame(.startRest(seconds: nil, at: now), on: workout)
         #expect(skipped.restEndsAt == nil)
         #expect(skipped.restSeconds == nil)
