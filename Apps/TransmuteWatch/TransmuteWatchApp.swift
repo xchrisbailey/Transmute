@@ -31,6 +31,7 @@ struct TransmuteWatchApp: App {
     var body: some Scene {
         WindowGroup {
             WatchRootView()
+                .reloadsWidgetsOnLeavingForeground()
         }
         .modelContainer(container)
         .environment(\.health, health)
