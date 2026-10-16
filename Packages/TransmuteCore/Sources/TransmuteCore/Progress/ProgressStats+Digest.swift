@@ -79,7 +79,7 @@ extension ProgressStats {
         var digest = WeekDigest(weekStart: span.lowerBound, sessionsDone: logged, isEmpty: logged == 0)
 
         if let plan {
-            let current = planWeek(of: plan, on: now, calendar: calendar)
+            let current = PlanCalendar(plan: plan, calendar: calendar).week(containing: now)
             if (1...max(plan.weekCount, 1)).contains(current) {
                 let entry = adherence(of: plan, week: current, isCurrent: true, calendar: calendar)
                 digest.sessionsDone = entry.done

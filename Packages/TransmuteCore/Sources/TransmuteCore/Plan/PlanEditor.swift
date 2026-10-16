@@ -4,18 +4,16 @@ import SwiftData
 /// Hand edits to a plan. Each marks the day edited so a rebrew keeps it, and leaves the
 /// plan ordered and consistent. Undo comes from the model context's undo manager.
 public enum PlanEditor {
-    /// The week a date falls in, counting from the plan's start, clamped to the plan.
+    /// The week a date falls in, clamped to the plan.
     public static func week(of plan: Plan, on date: Date = .now, calendar: Calendar = .init(identifier: .iso8601))
         -> Int
     {
-        let days = calendar.dateComponents([.day], from: calendar.startOfDay(for: plan.startDate), to: date).day ?? 0
-        return min(max(days / 7 + 1, 1), max(plan.weekCount, 1))
+        PlanCalendar(plan: plan, calendar: calendar).clampedWeek(containing: date)
     }
 
     /// The calendar date of a plan day.
     public static func date(of day: PlanDay, in plan: Plan, calendar: Calendar = .init(identifier: .iso8601)) -> Date {
-        let start = calendar.dateInterval(of: .weekOfYear, for: plan.startDate)?.start ?? plan.startDate
-        return calendar.date(byAdding: .day, value: (day.week - 1) * 7 + day.weekday - 1, to: start) ?? start
+        PlanCalendar(plan: plan, calendar: calendar).date(of: day)
     }
 
     /// The session on a weekday of a week, if there is one.
