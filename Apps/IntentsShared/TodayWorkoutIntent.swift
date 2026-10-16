@@ -4,8 +4,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// "What's my workout today?" (#19): answered without opening the app, from the same glance
-/// the widgets draw.
 struct TodayWorkoutIntent: AppIntent {
     static let title = LocalizedStringResource(
         "plain.shortcut.today.title", defaultValue: "What's my workout today?",

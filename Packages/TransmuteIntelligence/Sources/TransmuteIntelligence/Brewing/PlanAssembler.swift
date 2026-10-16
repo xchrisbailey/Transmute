@@ -22,8 +22,6 @@ public struct PlanAssembler: Sendable {
         self.library = library
     }
 
-    // MARK: Phases
-
     /// The blueprint's phases fitted to the plan's length. Plans of six weeks or more end with a
     /// one-week deload if the model didn't include one.
     public func phases(from blueprint: [PlanBlueprint.Phase]) -> [PlanPhase] {
@@ -72,8 +70,6 @@ public struct PlanAssembler: Sendable {
         return words.contains("deload") || words.contains("taper") || words.contains("recover")
     }
 
-    // MARK: Days of the week
-
     /// The person's training days, or a sensible spread if they didn't pick.
     public var weekdays: [Weekday] {
         let schedule = brief.schedule
@@ -101,7 +97,6 @@ public struct PlanAssembler: Sendable {
                 slots[index].outline = slots[swap].outline
                 slots[swap].outline = outline
             } else {
-                // Nothing lighter to swap with: keep the day but make it moderate.
                 slots[index].outline.intensity = "moderate"
             }
         }

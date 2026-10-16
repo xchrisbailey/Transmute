@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# Builds every app target for its simulator (or the Mac) without signing.
 # Usage: scripts/build-apps.sh [scheme ...]
 set -euo pipefail
 cd "$(dirname "$0")/.."

@@ -68,7 +68,6 @@ struct SessionSketch: Codable, Sendable {
     var exerciseIDs: [String]
 }
 
-/// A person from the evaluation set, and the movement patterns their limitations rule out.
 struct BriefSample: SampleProtocol {
     var name: String
     var brief: TrainingBrief
@@ -77,7 +76,7 @@ struct BriefSample: SampleProtocol {
     var input: String { name }
 }
 
-/// The #8 evaluation: for each person, sketch a session and check the schema held, every id is
+/// The evaluation: for each person, sketch a session and check the schema held, every id is
 /// real, the kit fits, limitations are respected and nothing repeats.
 struct SessionSketchEvaluation: Evaluation {
     static let validIDs = Metric("validIDs")

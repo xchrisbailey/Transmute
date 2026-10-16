@@ -3,8 +3,6 @@ import TransmuteCore
 import TransmuteUI
 import WidgetKit
 
-/// One glance drawn for whichever complication slot it's in. Words are the system font and
-/// numbers Geist Mono; mauve marks the day and becomes the face's tint on tinted faces.
 struct TodayWidgetView: View {
     @Environment(\.widgetFamily) private var family
     let glance: TodayGlance
@@ -32,7 +30,6 @@ struct TodayWidgetView: View {
     }
 }
 
-/// One line: the next lift while there's a session to do, otherwise the day.
 struct InlineGlance: View {
     let glance: TodayGlance
 
@@ -47,8 +44,6 @@ struct InlineGlance: View {
     }
 }
 
-/// The day on top, then the next lift: its name, and its numbers in Geist Mono. With no
-/// lift to show, the mark beside the day or the app's name.
 struct RectangularGlance: View {
     let glance: TodayGlance
 
@@ -91,8 +86,6 @@ struct RectangularGlance: View {
         .widgetAccentable()
     }
 }
-
-// MARK: - Previews
 
 extension TodayEntry {
     fileprivate static let samples: [TodayEntry] = [

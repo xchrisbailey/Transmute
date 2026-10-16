@@ -4,9 +4,6 @@ import SwiftUI
 import TransmuteCore
 import WidgetKit
 
-/// Today on the Home Screen, the Lock Screen and the Mac desktop (#19): the session, the
-/// next lift, the streak and this week's sessions, with a button to begin where a widget
-/// can have one.
 struct TodayWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: TodayGlance.widgetKind, provider: TodayProvider()) { entry in

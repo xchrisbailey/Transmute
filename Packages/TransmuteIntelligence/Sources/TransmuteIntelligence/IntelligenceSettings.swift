@@ -1,7 +1,7 @@
 import Foundation
 
 /// Where generation may run. On-device is the default; Private Cloud Compute (free, no keys)
-/// is opt-in from Settings (#18) for longer plans.
+/// is opt-in from Settings for longer plans.
 public enum ModelRoute: String, CaseIterable, Sendable {
     case onDeviceOnly
     case allowPrivateCloudCompute

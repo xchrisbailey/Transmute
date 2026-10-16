@@ -8,14 +8,13 @@ import OSLog
     public struct FoundationModelsService: IntelligenceService {
         public let providerName = "Apple Intelligence"
         /// A fixed choice, for tests. `nil` reads the person's choice each time a generation
-        /// starts, so a change in Settings (#18) applies straight away.
+        /// starts, so a change in Settings applies straight away.
         public var settings: IntelligenceSettings?
 
         public init(settings: IntelligenceSettings? = nil) {
             self.settings = settings
         }
 
-        /// Where the next generation may run.
         var route: ModelRoute {
             (settings ?? .load()).route
         }
@@ -96,7 +95,7 @@ import OSLog
                 Content.generationSchema, allowedValues: request.allowedValues, arrayCounts: request.arrayCounts)
             let stream = session.streamResponse(to: Prompt(request.prompt), schema: schema, options: options)
             for try await snapshot in stream {
-                // Rebuilt from the Sendable raw content so each partial is independent of the stream.
+                // Each partial is rebuilt from the raw content because `onPartial` takes a `sending` value.
                 onPartial(try Content.PartiallyGenerated(snapshot.rawContent))
             }
             return try Content(try await stream.collect().content)

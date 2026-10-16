@@ -2,8 +2,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// The set to do now: the exercise, "Set 3 of 5", one big number, and Log set. Tap a number
-/// and turn the Digital Crown to change it before logging.
 struct WatchSetView: View {
     let session: WatchSession
     let ref: SetRef
@@ -151,7 +149,6 @@ struct WatchSetView: View {
         }
     }
 
-    /// The value as VoiceOver should say it: weight with its unit spelled out.
     private func spoken(_ field: SetField) -> String {
         guard field == .weight, let kg = values.weightKg else { return dial.text(for: field, in: values) }
         let unit: UnitMass = units.weight == .metric ? .kilograms : .pounds

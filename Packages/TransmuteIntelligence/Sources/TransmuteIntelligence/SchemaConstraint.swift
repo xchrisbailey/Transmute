@@ -18,8 +18,6 @@ public enum SchemaConstraint {
         return try JSONDecoder().decode(GenerationSchema.self, from: data)
     }
 
-    /// Walks the JSON schema, adding an `enum` to every string property with a restricted name
-    /// and fixing the length of every array property with a counted name.
     static func patch(_ node: Any, allowedValues: [String: [String]], arrayCounts: [String: Int] = [:]) -> Any {
         if let array = node as? [Any] {
             return array.map { patch($0, allowedValues: allowedValues, arrayCounts: arrayCounts) }

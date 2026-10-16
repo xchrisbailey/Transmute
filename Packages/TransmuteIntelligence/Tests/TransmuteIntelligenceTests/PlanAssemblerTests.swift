@@ -21,8 +21,6 @@ struct PlanAssemblerTests {
             })
     }
 
-    // MARK: Phases
-
     @Test func phasesStretchToThePlanAndEndOnADeload() {
         let phases = assembler().phases(from: [
             .init(name: "Build", weeks: 2, focus: "Base"), .init(name: "Strength", weeks: 2, focus: "Heavy"),
@@ -54,10 +52,7 @@ struct PlanAssemblerTests {
         #expect(phases.reduce(0) { $0 + $1.weeks.count } == 2)
     }
 
-    // MARK: The week
-
     @Test func legDaysMoveOffTheDayBeforeTheMatch() {
-        // Tennis plays a hard match on Saturday and trains Monday, Tuesday, Thursday, Friday.
         let outlines: [PlanBlueprint.DayOutline] = [
             .init(focus: "Upper", kind: "upper strength", intensity: "moderate"),
             .init(focus: "Conditioning", kind: "conditioning", intensity: "moderate"),
@@ -85,8 +80,6 @@ struct PlanAssemblerTests {
         let beginner = assembler(.weightLossBeginner).balanced(Array(outlines.prefix(3))).map(PlanAssembler.kind(of:))
         #expect(beginner == [.lowerStrength, .upperStrength, .conditioning])
     }
-
-    // MARK: Days
 
     @Test func daysDropUnknownRepeatedAndUnsafeExercises() {
         let brief = TrainingBrief.kneeInjury
@@ -146,7 +139,6 @@ struct PlanAssemblerTests {
         let load = try #require(set.loadKg)
         let pounds = load * Units.poundsPerKilogram
         #expect(abs(pounds - (pounds / 5).rounded() * 5) < 0.01, "Rounded to 5 lb")
-        // 140 × 5 is about 163 kg; 5 reps at RPE 8 is about 80%.
         #expect((125...135).contains(load))
         #expect(set.percentOneRepMax != nil)
     }
@@ -167,8 +159,6 @@ struct PlanAssemblerTests {
         #expect(built.exercises.count >= 3)
         #expect(built.report.trimmedSets > 0)
     }
-
-    // MARK: Weeks
 
     @Test func laterWeeksProgressAndDeloadsEaseOff() throws {
         var brief = TrainingBrief.experiencedLifter
@@ -236,7 +226,6 @@ struct PlanBrewerTests {
             "\(PlanCheck.problems(in: brewed, brief: .tennisPlayer))")
         let kinds = Set(brewed.days(inWeek: 1).map(\.kind))
         #expect(kinds.contains(.powerSpeed))
-        // Nothing repeats within a week.
         for week in 1...8 {
             let ids = brewed.days(inWeek: week).flatMap { $0.exercises.map(\.exerciseID) }
             #expect(Set(ids).count == ids.count)

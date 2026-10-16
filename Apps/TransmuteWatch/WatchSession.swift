@@ -3,7 +3,6 @@ import Observation
 import SwiftData
 import TransmuteCore
 
-/// A record just set, for the toast.
 struct RecordNotice: Equatable, Identifiable {
     let id = UUID()
     let mark: RecordMark
@@ -17,7 +16,7 @@ enum WatchLive {
     static let link = SessionLink(live: workout, device: .watch)
 }
 
-/// The workout running on the watch (#15). Screens draw its snapshot and send it commands, so
+/// The workout running on the watch. Screens draw its snapshot and send it commands, so
 /// they don't care whether the workout lives in this watch's store or is mirrored from the
 /// iPhone.
 @MainActor @Observable
@@ -30,10 +29,8 @@ final class WatchSession: Identifiable {
     /// A logged set far beyond the previous best, waiting for a yes or a fix.
     var suspicious: SetRef?
 
-    /// The Health workout running alongside: heart rate and energy while it lasts.
     let live: WatchLiveWorkout
     let link: SessionLink
-    /// True once the finished workout is in Health.
     private(set) var isSavedToHealth = false
 
     let library: ExerciseLibrary
@@ -44,7 +41,6 @@ final class WatchSession: Identifiable {
     private var own: SessionSnapshot
     private var isEnding = false
 
-    /// A workout this watch runs and saves.
     init(
         workout: Workout, context: ModelContext, library: ExerciseLibrary, link: SessionLink = WatchLive.link,
         live: WatchLiveWorkout = WatchLive.workout, health: any HealthService
@@ -78,7 +74,6 @@ final class WatchSession: Identifiable {
         own = snapshot
     }
 
-    /// The session as it stands: this watch's own workout, or the iPhone's latest snapshot.
     var snapshot: SessionSnapshot {
         if workout == nil, let mirrored = link.mirrored, mirrored.workoutID == id { return mirrored }
         return own
@@ -135,12 +130,10 @@ final class WatchSession: Identifiable {
         }
     }
 
-    /// Closes the summary of a workout the iPhone ran.
     func close() {
         if workout == nil { link.dismissMirrored() }
     }
 
-    /// The person said the big jump is real: record it.
     func confirmSuspicious() {
         guard let ref = suspicious, let set = set(at: ref) else { return }
         suspicious = nil
@@ -149,15 +142,12 @@ final class WatchSession: Identifiable {
         record = check.gold.first.map { RecordNotice(mark: $0.mark) }
     }
 
-    /// The person said it was a slip: open the set back up to correct it.
     func fixSuspicious() {
         guard let ref = suspicious else { return }
         suspicious = nil
         perform(.startRest(seconds: nil, at: .now))
         perform(.reopenSet(ref))
     }
-
-    // MARK: Owning
 
     private func applied(_ command: SessionCommand, _ outcome: SessionMirror.Outcome, fromPhone: Bool) {
         guard let workout else { return }
@@ -222,7 +212,6 @@ extension SessionSnapshot {
 }
 
 extension WorkoutSummary {
-    /// The summary of a workout the iPhone ran, from its last snapshot.
     init(_ snapshot: SessionSnapshot) {
         let logged = snapshot.exercises.flatMap(\.sets).filter(\.isCompleted)
         self.init(

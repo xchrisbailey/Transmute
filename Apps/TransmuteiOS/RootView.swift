@@ -7,19 +7,15 @@ import TransmutePlanUI
 import TransmuteSettingsUI
 import TransmuteUI
 
-/// Onboarding until there's a profile. Then Today, where workouts are run (#11), the log
-/// of past workouts (#14), and the plan, which is the brew screen until there is one. Every
-/// tab has the profile and Settings (#18) in its toolbar.
 struct RootView: View {
     @Query(sort: \Profile.createdAt) private var profiles: [Profile]
     @Query(filter: #Predicate<Plan> { $0.isActive }, sort: \Plan.createdAt, order: .reverse) private var plans: [Plan]
     let service = FoundationModelsService()
     let device = "iPhone"
-    /// The tab last shown, kept between launches.
     @AppStorage("rootTab") private var tab = "today"
-    /// Set by a widget's button (#19): Today begins the session once it's on screen.
+    /// Set by a widget's button: Today begins the session once it's on screen.
     @State private var beginsWorkout = false
-    /// Set by Open workout and Spotlight (#19): the log shows this workout once it's on screen.
+    /// Set by Open workout and Spotlight: the log shows this workout once it's on screen.
     @State private var openedWorkout: UUID?
     private let router = DeepLinkRouter.shared
 
@@ -86,14 +82,14 @@ struct RootView: View {
             .onOpenURL { url in
                 if let link = DeepLink(url: url) { follow(link) }
             }
-            // An App Intent's link, which may have been waiting since before the window (#19).
+            // An App Intent's link, which may have been waiting since before the window.
             .onChange(of: router.pending, initial: true) {
                 if let link = router.take() { follow(link) }
             }
             .trainingReminders(plan: plans.first) { tab = "today" }
         } else {
             OnboardingFlow {
-                // After delete-all (#18), this is where the person lands.
+                // After delete-all, this is where the person lands.
                 ErasureNotice()
                 LiveIntelligenceNotice(service: service)
             } onFinish: { _, _ in
@@ -102,7 +98,6 @@ struct RootView: View {
         }
     }
 
-    /// Goes where a widget, a shortcut or Spotlight pointed.
     private func follow(_ link: DeepLink) {
         switch link {
         case .today, .beginToday:

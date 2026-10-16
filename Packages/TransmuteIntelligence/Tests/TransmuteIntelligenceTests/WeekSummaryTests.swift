@@ -119,7 +119,6 @@ struct WeekSummaryTests {
         let writer = WeekSummaryWriter(service: DraftService(draft: invented))
         #expect(await writer.write(Self.strongWeek) == WeekSummaryWriter.template(Self.strongWeek))
 
-        // Part of a real number is still an invented one.
         let partial = WeekSummaryDraft(headline: "Distilled.", lines: ["You lifted 420 kg.", "You did 4 sessions."])
         #expect(await WeekSummaryWriter(service: DraftService(draft: partial)).write(Self.strongWeek).isFromAI == false)
     }
@@ -155,7 +154,6 @@ struct WeekSummaryTests {
     }
 }
 
-/// Plays back one draft, or throws, in place of the model.
 struct DraftService: IntelligenceService {
     let providerName = "Draft"
     let availability = IntelligenceAvailability.available
@@ -176,7 +174,7 @@ struct DraftService: IntelligenceService {
     }
 }
 
-/// The real model writes a week. Runs with the other model tests: `scripts/eval-intelligence.sh`.
+/// Runs with the other model tests: `scripts/eval-intelligence.sh`.
 @Suite(.enabled(if: ModelTesting.isEnabled), .serialized)
 struct WeekSummaryModelTests {
     @Test(arguments: [WeekSummaryTests.strongWeek, WeekSummaryTests.stalledWeek, WeekSummaryTests.lightWeek])

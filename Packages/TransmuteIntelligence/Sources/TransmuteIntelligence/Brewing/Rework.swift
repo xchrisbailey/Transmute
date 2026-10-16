@@ -94,7 +94,7 @@ public struct ReworkTarget: Sendable {
 
 extension PlanBrewer {
     /// Rewrites one day around a note like "no barbell today", "only 30 minutes" or "knee's
-    /// sore" (#10). Returns the new exercises for the day's week of its phase; nothing changes
+    /// sore". Returns the new exercises for the day's week of its phase; nothing changes
     /// until the caller applies them.
     public func rework(_ target: ReworkTarget, note: String, brief: TrainingBrief, units: UnitSystem) async throws
         -> TemplateDay

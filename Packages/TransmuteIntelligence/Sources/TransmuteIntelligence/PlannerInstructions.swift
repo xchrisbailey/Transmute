@@ -1,7 +1,7 @@
 import TransmuteCore
 
 /// The standing instructions every planning request starts with. They set the model's role and
-/// the guardrails from #8: a training planner, not a doctor; limitations are hard rules; no diet
+/// the guardrails: a training planner, not a doctor; limitations are hard rules; no diet
 /// or medical advice; beginner plans stay simple; exercises only come from the library.
 ///
 /// Written in plain English with no provider-specific syntax, so another model could use them.

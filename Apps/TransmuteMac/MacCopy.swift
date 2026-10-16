@@ -1,6 +1,5 @@
 import Foundation
 
-/// Strings only the Mac app shows (#17): the sidebar and the menu bar. All plain.
 enum MacCopy {
     static let progress = LocalizedStringResource(
         "plain.mac.sidebar.progress", defaultValue: "Progress", bundle: .main,

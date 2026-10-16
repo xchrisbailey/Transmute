@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# Runs every check locally and records the result against the commit: lint, package tests
-# and an unsigned build of each app. There's no hosted CI; run this before pushing.
-#
 #   scripts/check.sh                   run everything on HEAD and record it
 #   scripts/check.sh <scheme> ...      build only those apps; recorded as PARTIAL
 #   scripts/check.sh --allow-dirty     run on uncommitted work; nothing is recorded

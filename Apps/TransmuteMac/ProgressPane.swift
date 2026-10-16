@@ -4,8 +4,6 @@ import TransmuteIntelligence
 import TransmuteLogUI
 import TransmuteUI
 
-/// Progress at desk width (#16, #17): the charts across the window with the records list
-/// beside them.
 struct ProgressPane: View {
     let plan: Plan?
     let profile: Profile

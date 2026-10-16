@@ -12,7 +12,7 @@ public struct WeekSummaryDraft: Sendable, Equatable {
     public var lines: [String]
 }
 
-/// Writes "This week, distilled" (#16): by the model when it's available, by a template when it
+/// Writes "This week, distilled": by the model when it's available, by a template when it
 /// isn't, the week is empty, or the model's draft doesn't hold up.
 public struct WeekSummaryWriter: Sendable {
     public var service: any IntelligenceService
@@ -25,10 +25,8 @@ public struct WeekSummaryWriter: Sendable {
     static let minLines = 2
     static let maxHeadlineLength = 80
     static let maxLineLength = 160
-    /// How many items of each list go in the prompt, to keep it short.
     static let maxFactItems = 5
     static let maxGoalLength = 200
-    /// Words that read as guilt about a light week. A draft using one is dropped.
     static let guiltWords = ["missed", "failed", "only", "should have"]
 
     /// The summary for the week. Never fails: anything that goes wrong gives the template.
@@ -37,7 +35,6 @@ public struct WeekSummaryWriter: Sendable {
         return (try? await writeWithModel(input)) ?? Self.template(input)
     }
 
-    /// The model's summary, checked. Throws when the model fails or its draft is rejected.
     func writeWithModel(_ input: WeekSummaryInput) async throws -> WeekSummary {
         let request = Self.request(input)
         let draft = try await service.respond(request, generating: WeekSummaryDraft.self)
@@ -80,11 +77,9 @@ public struct WeekSummaryWriter: Sendable {
     }
 }
 
-// MARK: - The model's request
-
 extension WeekSummaryWriter {
-    /// Written in plain English with no provider-specific syntax, and as what to do rather than
-    /// what to avoid: prohibitions made the on-device model refuse ordinary requests.
+    /// Written as what to do rather than what to avoid: prohibitions made the on-device model
+    /// refuse ordinary requests.
     static let instructions = """
         You write the weekly training summary in Transmute, a workout log, for one person.
 
@@ -95,7 +90,6 @@ extension WeekSummaryWriter {
         - The sentences stay plain. The headline may carry one light touch of alchemy.
         """
 
-    /// Marks a fact line in the prompt.
     static let factPrefix = "- "
 
     static func request(_ input: WeekSummaryInput) -> IntelligenceRequest {
@@ -119,7 +113,6 @@ extension WeekSummaryWriter {
             : "For the headline, the new records can be turned to gold, e.g. A week turned to gold."
     }
 
-    /// The week as short labelled lines. These hold the only numbers the model may use.
     static func facts(_ input: WeekSummaryInput) -> [String] {
         var facts = [
             input.sessionsPlanned > 0
@@ -149,11 +142,7 @@ extension WeekSummaryWriter {
     }
 }
 
-// MARK: - Checking the draft
-
 extension WeekSummaryWriter {
-    /// The draft as a summary, or nil when it breaks a rule: a number that isn't in the facts,
-    /// a blank or overlong headline, too few lines, an overlong line, or guilt wording.
     static func validated(_ draft: WeekSummaryDraft, facts: String, input: WeekSummaryInput) -> WeekSummary? {
         let headline = draft.headline.trimmingCharacters(in: .whitespacesAndNewlines)
         let lines = draft.lines.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.filter { !$0.isEmpty }

@@ -3,8 +3,6 @@ import TransmuteCore
 import TransmuteUI
 import WidgetKit
 
-/// One glance drawn for whichever size it's in. Words are the system font and numbers Geist
-/// Mono. A tap opens Today; the medium size also has the button that begins the session.
 struct TodayWidgetView: View {
     @Environment(\.widgetFamily) private var family
     let glance: TodayGlance
@@ -29,7 +27,6 @@ struct TodayWidgetView: View {
     }
 }
 
-/// The day, the next lift, then the week along the bottom.
 struct SmallToday: View {
     let glance: TodayGlance
 
@@ -49,7 +46,6 @@ struct SmallToday: View {
     }
 }
 
-/// The day and the next lift on the left; the week, the streak and the button on the right.
 struct MediumToday: View {
     let glance: TodayGlance
 
@@ -77,7 +73,6 @@ struct MediumToday: View {
     }
 }
 
-/// What state the day is in, its name, and the next lift with its numbers.
 struct DayBlock: View {
     let glance: TodayGlance
 
@@ -151,7 +146,6 @@ private struct StatusLabelStyle: LabelStyle {
     }
 }
 
-/// The small size's bottom edge: the pills, then "2/3 this week" and the streak.
 struct WeekFooter: View {
     let glance: TodayGlance
 
@@ -179,7 +173,6 @@ struct WeekFooter: View {
     }
 }
 
-/// The medium size's right half: "This week", the figure and its pills, then the streak.
 struct WeekBlock: View {
     let glance: TodayGlance
 
@@ -214,9 +207,7 @@ struct WeekBlock: View {
     }
 }
 
-/// The one mauve action: opens the app and begins today's session, or goes back into the
-/// one that's running. Where the Home Screen is tinted it's an outline, so the words stay
-/// readable.
+/// Outlined where the Home Screen is tinted, so the words stay readable.
 struct BeginButton: View {
     @Environment(\.widgetRenderingMode) private var renderingMode
     let isRunning: Bool
@@ -246,7 +237,6 @@ struct BeginButton: View {
     }
 }
 
-/// No plan to show: the mark, the app's name and where to go.
 struct EmptyToday: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -266,8 +256,6 @@ struct EmptyToday: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 }
-
-// MARK: - Previews
 
 extension TodayEntry {
     fileprivate static let samples: [TodayEntry] = [

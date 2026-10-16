@@ -2,8 +2,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// The watch's first screen: today's session by name, one mauve button to start it, and its
-/// exercises underneath. Rest days say so and point at the next session.
 struct WatchTodayView: View {
     let plan: Plan?
     let units: Units
@@ -107,7 +105,6 @@ struct WatchTodayView: View {
     }
 }
 
-/// An exercise's targets in a few characters, e.g. "5 × 5 · 80 kg" or "3 × 0:45".
 enum WatchTargets {
     static func summary(of sets: [PlannedSet], units: Units) -> String {
         let working = sets.filter { !$0.isWarmUp }

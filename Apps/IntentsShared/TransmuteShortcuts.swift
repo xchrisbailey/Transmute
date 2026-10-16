@@ -1,8 +1,7 @@
 import AppIntents
 
-/// The shortcuts Transmute offers with no setup (#19): in the Shortcuts app, Spotlight and
-/// Siri, and for the Action button. Every phrase has to name the app; translations of the
-/// phrases go in `AppShortcuts.xcstrings`, which is the table the system reads them from.
+/// Every phrase has to name the app; translations of the phrases go in `AppShortcuts.xcstrings`,
+/// which is the table the system reads them from.
 struct TransmuteShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(

@@ -65,7 +65,6 @@ struct IntelligenceServiceTests {
     }
 }
 
-/// Plays back a fixed result, the way tests and previews stand in for the model.
 struct StubService: IntelligenceService {
     let providerName = "Stub"
     let availability = IntelligenceAvailability.available

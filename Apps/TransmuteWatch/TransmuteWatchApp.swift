@@ -19,7 +19,7 @@ final class WatchAppDelegate: NSObject, WKApplicationDelegate {
 @main
 struct TransmuteWatchApp: App {
     @WKApplicationDelegateAdaptor private var delegate: WatchAppDelegate
-    /// Shared with the App Intents, which run in this process (#19).
+    /// Shared with the App Intents, which run in this process.
     let container = TransmuteStore.shared
     let health = HealthKitService()
 

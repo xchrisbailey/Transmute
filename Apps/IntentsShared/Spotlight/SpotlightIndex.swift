@@ -6,7 +6,7 @@ import SwiftUI
 import TransmuteCore
 
 extension View {
-    /// Keeps logged workouts and plans in Spotlight (#19). The index is rebuilt once at
+    /// Keeps logged workouts and plans in Spotlight. The index is rebuilt once at
     /// launch, which also clears anything deleted on another device meanwhile; after that
     /// each save of the store indexes what changed and takes out what was deleted.
     func indexesSpotlight() -> some View {

@@ -8,19 +8,17 @@ import TransmuteUI
 
 @main
 struct TransmuteMacApp: App {
-    /// Shared with the App Intents, which run in this process (#19).
+    /// Shared with the App Intents, which run in this process.
     let container = TransmuteStore.shared
-    /// System, Mocha or Latte, chosen on this Mac (#18).
     @AppStorage(Appearance.defaultsKey) private var appearance = Appearance.system
 
     init() {
-        // Plan edits are undoable (#10).
         container.mainContext.undoManager = UndoManager()
-        // From launch: a tapped reminder (#19) is delivered as the app opens.
+        // From launch: a tapped reminder is delivered as the app opens.
         ReminderTaps.shared.listen()
         #if DEBUG
             // `-initCloudKitSchema` creates every record type and field in CloudKit's Development
-            // environment (#20), then the app carries on launching.
+            // environment, then the app carries on launching.
             if ProcessInfo.processInfo.arguments.contains("-initCloudKitSchema") {
                 TransmuteStore.initializeCloudKitSchemaForLaunch()
             }

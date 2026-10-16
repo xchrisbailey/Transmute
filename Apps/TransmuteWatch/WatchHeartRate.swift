@@ -1,7 +1,6 @@
 import SwiftUI
 import TransmuteUI
 
-/// The live heart rate: a red heart and the beats per minute. Nothing until the first reading.
 struct WatchHeartRate: View {
     let bpm: Double?
 
