@@ -79,6 +79,10 @@ final class WatchSession: Identifiable {
         own = snapshot
     }
 
+    private var ownedWorkout: Workout? {
+        if case .owned(let workout) = ownership { workout } else { nil }
+    }
+
     var snapshot: SessionSnapshot {
         if case .mirrored = ownership, let mirrored = link.mirrored, mirrored.workoutID == id { return mirrored }
         return own
@@ -96,7 +100,7 @@ final class WatchSession: Identifiable {
     }
 
     func perform(_ command: SessionCommand) {
-        guard case .owned(let workout) = ownership else {
+        guard let workout = ownedWorkout else {
             link.send(command)
             return
         }
@@ -158,7 +162,7 @@ final class WatchSession: Identifiable {
     }
 
     private func applied(_ command: SessionCommand, _ outcome: SessionMirror.Outcome, fromPhone: Bool) {
-        guard case .owned(let workout) = ownership else { return }
+        guard let workout = ownedWorkout else { return }
         switch outcome {
         case .ignored:
             break
@@ -208,8 +212,7 @@ final class WatchSession: Identifiable {
     }
 
     private func set(at ref: SetRef) -> LoggedSet? {
-        guard case .owned(let workout) = ownership else { return nil }
-        return workout.orderedExercises.first { $0.order == ref.exerciseOrder }?
+        ownedWorkout?.orderedExercises.first { $0.order == ref.exerciseOrder }?
             .orderedSets.first { $0.order == ref.setOrder }
     }
 }
