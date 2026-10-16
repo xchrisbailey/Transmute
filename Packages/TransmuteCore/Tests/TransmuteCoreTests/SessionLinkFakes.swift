@@ -2,6 +2,7 @@ import Foundation
 import Observation
 import SwiftData
 import Testing
+import TransmuteTestSupport
 
 @testable import TransmuteCore
 

@@ -10,7 +10,7 @@ let package = Package(
     ],
     targets: [
         .target(name: "TransmuteCore", resources: [.process("Resources")]),
-        .target(name: "TransmuteTestSupport"),
+        .target(name: "TransmuteTestSupport", dependencies: ["TransmuteCore"]),
         .testTarget(
             name: "TransmuteCoreTests", dependencies: ["TransmuteCore", "TransmuteTestSupport"],
             resources: [.copy("Fixtures")]),
