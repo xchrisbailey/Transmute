@@ -48,10 +48,12 @@ public enum LoadableWeight {
 
     /// The nearest whole number of steps, worked in the kit's unit so pound steps stay exact.
     private static func steps(_ kg: Double, step: Double, heaviest: Double?, in inventory: PlateInventory) -> Double {
-        let step = inventory.hundredths(kg: step)
-        guard step > 0 else { return kg }
-        let most = heaviest.map { max(1, inventory.hundredths(kg: $0) / step) } ?? .max
-        let count = min(most, max(1, Int((Double(inventory.hundredths(kg: kg)) / Double(step)).rounded())))
-        return inventory.kilograms(hundredths: count * step)
+        let system = inventory.system
+        let step = Hundredths(kg: step, in: system)
+        guard step > .zero else { return kg }
+        let most = heaviest.map { max(1, Hundredths(kg: $0, in: system) / step) } ?? .max
+        let target = Hundredths(kg: kg, in: system)
+        let count = min(most, max(1, Int((Double(target.count) / Double(step.count)).rounded())))
+        return (count * step).kg(in: system)
     }
 }

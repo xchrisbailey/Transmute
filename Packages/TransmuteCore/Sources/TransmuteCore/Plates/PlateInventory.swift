@@ -96,23 +96,12 @@ public struct PlateInventory: Codable, Hashable, Sendable {
 
     /// A weight in this kit's unit, e.g. 20.41 kg → 45 lb.
     public func display(kg: Double) -> Double {
-        Double(hundredths(kg: kg)) / 100
+        Hundredths(kg: kg, in: system).inUnit
     }
 
     /// A weight in this kit's unit, converted to kilograms.
     public func kilograms(fromDisplay value: Double) -> Double {
         system == .metric ? value : value / Units.poundsPerKilogram
-    }
-
-    /// The weight in hundredths of this kit's unit. Every real plate is a whole number of these,
-    /// so sums are exact integers, and rounding here absorbs the float error of the kg round trip.
-    func hundredths(kg: Double) -> Int {
-        let value = system == .metric ? kg : kg * Units.poundsPerKilogram
-        return Int((value * 100).rounded())
-    }
-
-    func kilograms(hundredths: Int) -> Double {
-        kilograms(fromDisplay: Double(hundredths) / 100)
     }
 }
 
@@ -152,6 +141,25 @@ extension PlateInventory {
             plates: plates.map { Plate(kg: kg($0.weight), pairs: $0.pairs) },
             dumbbellStepKg: kg(dumbbells.step), heaviestDumbbellKg: kg(dumbbells.heaviest),
             machineStepKg: kg(machine))
+    }
+
+    /// The kit with plates of the same weight merged into one row, adding their pairs. A hand-edited
+    /// or third-party backup can list a weight twice; the kit holds one row per weight.
+    func mergingSameWeightPlates() -> PlateInventory {
+        var merged = self
+        merged.plates = []
+        for plate in plates {
+            if let index = merged.plates.firstIndex(where: { sameWeight($0.kg, plate.kg) }) {
+                merged.plates[index].pairs += plate.pairs
+            } else {
+                merged.plates.append(plate)
+            }
+        }
+        return merged
+    }
+
+    private func sameWeight(_ lhs: Double, _ rhs: Double) -> Bool {
+        Hundredths(kg: lhs, in: system) == Hundredths(kg: rhs, in: system)
     }
 
     /// The commercial-gym preset in the locale's unit, which new profiles start with.
