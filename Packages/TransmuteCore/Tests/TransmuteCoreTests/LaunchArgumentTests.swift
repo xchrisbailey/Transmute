@@ -5,7 +5,9 @@ import Testing
 struct LaunchArgumentTests {
     @Test func flagsKeepTheirSpelling() {
         #expect(
-            LaunchArgument.allCases.map(\.flag) == ["-initCloudKitSchema", "-seedSample", "-sampleSession", "-sampleRest"])
+            LaunchArgument.allCases.map(\.flag) == [
+                "-initCloudKitSchema", "-seedSample", "-sampleSession", "-sampleRest",
+            ])
     }
 
     @Test func noArgumentsPassNoFlags() {
@@ -24,7 +26,9 @@ struct LaunchArgumentTests {
     }
 
     @Test func otherArgumentsAreIgnored() {
-        let arguments = ["Transmute", "-AppleLanguages", "(de)", "seedSample", "--seedSample", "-seedSamples", "-SEEDSAMPLE"]
+        let arguments = [
+            "Transmute", "-AppleLanguages", "(de)", "seedSample", "--seedSample", "-seedSamples", "-SEEDSAMPLE",
+        ]
         #expect(LaunchArgument.passed(in: arguments).isEmpty)
     }
 }
