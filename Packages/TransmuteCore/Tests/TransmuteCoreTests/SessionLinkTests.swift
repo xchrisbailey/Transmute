@@ -35,7 +35,11 @@ final class FakeHealth: HealthService, @unchecked Sendable {
     private let lock = NSLock()
     private var stored: Set<UUID> = []
     private var saveCount = 0
-    var saveDelay: Duration = .zero
+    private var held: CheckedContinuation<Void, Never>?
+    private var saveStarted = false
+    private var holds = false
+    private var deleteFailures = false
+    private var deleteCount = 0
 
     var isAvailable: Bool { true }
     var canSaveBodyweight: Bool { true }
@@ -44,6 +48,30 @@ final class FakeHealth: HealthService, @unchecked Sendable {
     var workouts: Set<UUID> { lock.withLock { stored } }
     /// How many times the iPhone saved a workout, deleted or not.
     var saves: Int { lock.withLock { saveCount } }
+
+    /// Makes `save` suspend until `releaseSave()`, so a test can decide what happens meanwhile.
+    func holdSaves() { lock.withLock { holds = true } }
+
+    /// Returns once a held save has begun.
+    func saveBegan() async {
+        while !lock.withLock({ saveStarted }), !Task.isCancelled { await Task.yield() }
+    }
+
+    func releaseSave() {
+        lock.withLock {
+            holds = false
+            saveStarted = false
+            let held = held
+            self.held = nil
+            return held
+        }?.resume()
+    }
+
+    /// How many times `deleteWorkout` was called.
+    var deleteAttempts: Int { lock.withLock { deleteCount } }
+
+    /// Makes `deleteWorkout` throw until it's turned off.
+    func failDeletes(_ fails: Bool) { lock.withLock { deleteFailures = fails } }
 
     /// A workout the watch recorded, whose id it then sends to the iPhone.
     func recordOnWatch() -> UUID {
@@ -62,7 +90,15 @@ final class FakeHealth: HealthService, @unchecked Sendable {
     func saveBodyweight(kg: Double, at date: Date) async throws -> UUID { UUID() }
 
     func save(_ workout: HealthWorkoutRecord) async throws -> UUID {
-        try await Task.sleep(for: saveDelay)
+        await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+            let resume = lock.withLock {
+                guard holds else { return true }
+                saveStarted = true
+                held = continuation
+                return false
+            }
+            if resume { continuation.resume() }
+        }
         return lock.withLock {
             let id = UUID()
             stored.insert(id)
@@ -72,7 +108,71 @@ final class FakeHealth: HealthService, @unchecked Sendable {
     }
 
     func deleteWorkout(id: UUID) async throws {
+        lock.withLock { deleteCount += 1 }
+        if lock.withLock({ deleteFailures }) { throw HealthServiceError.notAuthorized }
         lock.withLock { _ = stored.remove(id) }
+    }
+}
+
+final class Beats { var count = 0 }
+
+/// A clock that only moves when a test says so, so a timeout never depends on how fast the run is.
+final class ManualClock: Clock, @unchecked Sendable {
+    struct Instant: InstantProtocol {
+        var offset: Duration
+        func advanced(by duration: Duration) -> Instant { Instant(offset: offset + duration) }
+        func duration(to other: Instant) -> Duration { other.offset - offset }
+        static func < (lhs: Instant, rhs: Instant) -> Bool { lhs.offset < rhs.offset }
+    }
+
+    private struct Sleeper {
+        let id: UUID
+        let deadline: Instant
+        let continuation: CheckedContinuation<Void, any Error>
+    }
+
+    private let lock = NSLock()
+    private var current = Instant(offset: .zero)
+    private var sleepers: [Sleeper] = []
+
+    var now: Instant { lock.withLock { current } }
+    var minimumResolution: Duration { .zero }
+
+    func sleep(until deadline: Instant, tolerance: Duration?) async throws {
+        let id = UUID()
+        try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, any Error>) in
+                lock.lock()
+                if deadline <= current {
+                    lock.unlock()
+                    continuation.resume()
+                } else {
+                    sleepers.append(Sleeper(id: id, deadline: deadline, continuation: continuation))
+                    lock.unlock()
+                }
+            }
+        } onCancel: {
+            let cancelled = lock.withLock {
+                let index = sleepers.firstIndex { $0.id == id }
+                return index.map { sleepers.remove(at: $0) }
+            }
+            cancelled?.continuation.resume(throwing: CancellationError())
+        }
+    }
+
+    /// Returns once something is sleeping on the clock.
+    func sleeperArrived() async {
+        while lock.withLock({ sleepers.isEmpty }), !Task.isCancelled { await Task.yield() }
+    }
+
+    func advance(by duration: Duration) {
+        let due = lock.withLock {
+            current = current.advanced(by: duration)
+            let due = sleepers.filter { $0.deadline <= current }
+            sleepers.removeAll { $0.deadline <= current }
+            return due
+        }
+        for sleeper in due { sleeper.continuation.resume() }
     }
 }
 
@@ -84,14 +184,16 @@ struct SessionLinkTests {
     let watch: SessionLink
     let phone: SessionLink
     let ends: (watch: LoopbackWorkout, phone: LoopbackWorkout)
+    let clock = ManualClock()
+    let defaults = UserDefaults(suiteName: UUID().uuidString)!
 
     init() throws {
         container = try TransmuteStore.makeContainer(.inMemory)
         ends = (LoopbackWorkout(), LoopbackWorkout())
         ends.watch.peer = ends.phone
         ends.phone.peer = ends.watch
-        watch = SessionLink(live: ends.watch, device: .watch)
-        phone = SessionLink(live: ends.phone, device: .phone)
+        watch = SessionLink(live: ends.watch, device: .watch, clock: clock, defaults: defaults)
+        phone = SessionLink(live: ends.phone, device: .phone, clock: clock, defaults: defaults)
         let (watch, phone) = (watch, phone)
         Task { await watch.run() }
         Task { await phone.run() }
@@ -106,7 +208,7 @@ struct SessionLinkTests {
 
     /// Lets the queued messages cross and be handled.
     func settle(until done: () -> Bool = { false }) async {
-        for _ in 0..<200 where !done() {
+        for _ in 0..<2_000 where !done() {
             try? await Task.sleep(for: .milliseconds(5))
         }
     }
@@ -176,7 +278,7 @@ struct SessionLinkTests {
         WorkoutSession.finish(workout, at: now.addingTimeInterval(600))
         phone.publish()
         let healthID = UUID()
-        watch.ended(workoutID: workout.id, healthWorkoutID: healthID)
+        await watch.ended(workoutID: workout.id, healthWorkoutID: healthID)
         await settle { workout.healthKitWorkoutID != nil }
         #expect(workout.healthKitWorkoutID == healthID)
     }
@@ -218,121 +320,251 @@ struct SessionLinkTests {
         return workout
     }
 
-    /// Sends the watch's answer once the iPhone has started waiting for it.
-    func watchReplies(_ workout: Workout, with id: UUID?, after delay: Duration = .milliseconds(30)) {
-        let watch = watch
-        Task {
-            try? await Task.sleep(for: delay)
-            watch.ended(workoutID: workout.id, healthWorkoutID: id)
-        }
+    let beats = Beats()
+
+    /// Returns once the iPhone has handled everything the watch sent before this call: messages
+    /// cross in order, and the iPhone handles them one at a time.
+    func flush() async {
+        beats.count += 1
+        let bpm = Double(beats.count)
+        watch.sendHeartRate(bpm)
+        await settle { phone.remoteHeartRate == bpm }
     }
 
-    @Test func theWatchsIDArrivingInTimeIsAdoptedAndTheIPhoneSavesNothing() async throws {
+    /// Starts saving and returns once the iPhone is waiting on the watch.
+    func startSaving(_ workout: Workout, with health: any HealthService, timeout: Duration = .seconds(5)) async
+        -> Task<Void, any Error>
+    {
+        let phone = phone
+        let saving = Task { try await phone.saveToHealth(workout, with: health, waitingForWatch: timeout) }
+        await clock.sleeperArrived()
+        return saving
+    }
+
+    @Test(.timeLimit(.minutes(1))) func theWatchsIDArrivingInTimeIsAdoptedAndTheIPhoneSavesNothing() async throws {
         let workout = try finishedOnPhone()
         let health = FakeHealth()
         let watchID = health.recordOnWatch()
-        watchReplies(workout, with: watchID)
+        let saving = await startSaving(workout, with: health)
 
-        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(120))
+        await watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
+        try await saving.value
 
         #expect(health.saves == 0)
         #expect(health.workouts == [watchID])
         #expect(workout.healthKitWorkoutID == watchID)
     }
 
-    @Test func theWatchsIDArrivingBeforeTheWaitBeginsIsAdopted() async throws {
+    @Test(.timeLimit(.minutes(1))) func theWatchsIDArrivingBeforeTheWaitBeginsIsAdopted() async throws {
         let workout = try finishedOnPhone()
         let health = FakeHealth()
         let watchID = health.recordOnWatch()
-        watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
+        await watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
         await settle { workout.healthKitWorkoutID != nil }
 
-        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(120))
+        try await phone.saveToHealth(workout, with: health)
 
         #expect(health.saves == 0)
         #expect(health.workouts == [watchID])
         #expect(workout.healthKitWorkoutID == watchID)
     }
 
-    @Test func aNilFromTheWatchEndsTheWaitAtOnceAndTheIPhoneSavesItsOwn() async throws {
+    @Test(.timeLimit(.minutes(1))) func aNilFromTheWatchEndsTheWaitAtOnceAndTheIPhoneSavesItsOwn() async throws {
         let workout = try finishedOnPhone()
         let health = FakeHealth()
-        watchReplies(workout, with: nil, after: .milliseconds(10))
+        let saving = await startSaving(workout, with: health)
 
-        let started = ContinuousClock.now
-        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(120))
-
-        #expect(ContinuousClock.now - started < .seconds(60))
-        #expect(health.saves == 1)
-        #expect(health.workouts.count == 1)
-        #expect(workout.healthKitWorkoutID.map { health.workouts.contains($0) } == true)
-    }
-
-    @Test func aTimedOutWaitLeavesTheIPhoneToSaveItsOwn() async throws {
-        let workout = try finishedOnPhone()
-        let health = FakeHealth()
-
-        try await phone.saveToHealth(workout, with: health, waitingForWatch: .milliseconds(50))
+        await watch.ended(workoutID: workout.id, healthWorkoutID: nil)
+        try await saving.value
 
         #expect(health.saves == 1)
         #expect(health.workouts.count == 1)
         #expect(workout.healthKitWorkoutID.map { health.workouts.contains($0) } == true)
     }
 
-    @Test func aLateIDReplacesTheIPhonesHealthWorkoutWithTheWatchs() async throws {
+    @Test(.timeLimit(.minutes(1))) func aTimedOutWaitLeavesTheIPhoneToSaveItsOwn() async throws {
         let workout = try finishedOnPhone()
         let health = FakeHealth()
-        try await phone.saveToHealth(workout, with: health, waitingForWatch: .milliseconds(20))
+        let saving = await startSaving(workout, with: health, timeout: .seconds(5))
+
+        clock.advance(by: .seconds(5))
+        try await saving.value
+
+        #expect(health.saves == 1)
+        #expect(health.workouts.count == 1)
+        #expect(workout.healthKitWorkoutID.map { health.workouts.contains($0) } == true)
+    }
+
+    @Test(.timeLimit(.minutes(1))) func theWaitStillHappensAfterTheWatchsSessionClosed() async throws {
+        let workout = try finishedOnPhone()
+        // The watch ends its session when it sees the finish, before the person taps Save.
+        ends.phone.isMirroring = false
+        let health = FakeHealth()
+        let watchID = health.recordOnWatch()
+        let saving = await startSaving(workout, with: health)
+
+        await watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
+        try await saving.value
+
+        #expect(health.saves == 0)
+        #expect(health.workouts == [watchID])
+        #expect(workout.healthKitWorkoutID == watchID)
+    }
+
+    @Test(.timeLimit(.minutes(1))) func aWorkoutTheWatchNeverRecordedIsSavedWithoutWaiting() async throws {
+        ends.phone.isMirroring = false
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+
+        try await phone.saveToHealth(workout, with: health)
+
+        #expect(health.saves == 1)
+        #expect(health.workouts.count == 1)
+        #expect(workout.healthKitWorkoutID.map { health.workouts.contains($0) } == true)
+    }
+
+    @Test(.timeLimit(.minutes(1))) func aLateIDReplacesTheIPhonesHealthWorkoutWithTheWatchs() async throws {
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+        let saving = await startSaving(workout, with: health)
+        clock.advance(by: .seconds(5))
+        try await saving.value
         let phonesID = try #require(workout.healthKitWorkoutID)
 
         let watchID = health.recordOnWatch()
-        watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
-        await settle { workout.healthKitWorkoutID == watchID }
+        await watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
+        await flush()
 
         #expect(workout.healthKitWorkoutID == watchID)
-        await settle { health.workouts == [watchID] }
         #expect(health.workouts == [watchID])
         #expect(!health.workouts.contains(phonesID))
     }
 
-    @Test func anIDArrivingWhileTheIPhoneIsSavingLeavesOnlyTheWatchs() async throws {
+    @Test(.timeLimit(.minutes(1))) func anIDArrivingWhileTheIPhoneIsSavingLeavesOnlyTheWatchs() async throws {
         let workout = try finishedOnPhone()
         let health = FakeHealth()
-        health.saveDelay = .milliseconds(150)
-        let watchID = health.recordOnWatch()
-        watchReplies(workout, with: watchID, after: .milliseconds(100))
+        health.holdSaves()
+        let saving = await startSaving(workout, with: health)
+        clock.advance(by: .seconds(5))
+        await health.saveBegan()
 
-        try await phone.saveToHealth(workout, with: health, waitingForWatch: .milliseconds(20))
+        let watchID = health.recordOnWatch()
+        await watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
+        await flush()
+        health.releaseSave()
+        try await saving.value
 
         #expect(health.workouts == [watchID])
         #expect(workout.healthKitWorkoutID == watchID)
     }
 
-    @Test func aWatchThatNeverRepliesLeavesTheIPhonesWorkoutAlone() async throws {
-        let workout = try finishedOnPhone()
-        ends.phone.isMirroring = false
-        let health = FakeHealth()
-
-        let started = ContinuousClock.now
-        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(120))
-        await settle()
-
-        #expect(ContinuousClock.now - started < .seconds(60))
-        #expect(health.saves == 1)
-        #expect(health.workouts.count == 1)
-        #expect(workout.healthKitWorkoutID.map { health.workouts.contains($0) } == true)
-    }
-
-    @Test func aNilArrivingAfterTheIPhoneSavedChangesNothing() async throws {
+    @Test(.timeLimit(.minutes(1))) func aNilArrivingAfterTheIPhoneSavedChangesNothing() async throws {
         let workout = try finishedOnPhone()
         let health = FakeHealth()
-        try await phone.saveToHealth(workout, with: health, waitingForWatch: .milliseconds(20))
+        let saving = await startSaving(workout, with: health)
+        clock.advance(by: .seconds(5))
+        try await saving.value
         let phonesID = workout.healthKitWorkoutID
 
-        watch.ended(workoutID: workout.id, healthWorkoutID: nil)
-        await settle()
+        await watch.ended(workoutID: workout.id, healthWorkoutID: nil)
+        await flush()
 
         #expect(workout.healthKitWorkoutID == phonesID)
         #expect(health.workouts.count == 1)
+    }
+
+    @Test(.timeLimit(.minutes(1))) func aFailedDeleteIsRetriedWhenTheWatchAnswersAgain() async throws {
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+        let saving = await startSaving(workout, with: health)
+        clock.advance(by: .seconds(5))
+        try await saving.value
+        let phonesID = try #require(workout.healthKitWorkoutID)
+        health.failDeletes(true)
+        let watchID = health.recordOnWatch()
+        await watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
+        await flush()
+        #expect(workout.healthKitWorkoutID == watchID)
+        #expect(health.workouts == [phonesID, watchID])
+
+        health.failDeletes(false)
+        await watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
+        await flush()
+
+        #expect(health.workouts == [watchID])
+    }
+
+    @Test(.timeLimit(.minutes(1))) func aDeleteLeftUndoneByAKillIsFinishedAtTheNextLaunch() async throws {
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+        let saving = await startSaving(workout, with: health)
+        clock.advance(by: .seconds(5))
+        try await saving.value
+        health.failDeletes(true)
+        let watchID = health.recordOnWatch()
+        await watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
+        await flush()
+        #expect(health.workouts.count == 2)
+
+        // A new launch: a fresh link over the same defaults.
+        health.failDeletes(false)
+        let relaunched = SessionLink(live: LoopbackWorkout(), device: .phone, clock: clock, defaults: defaults)
+        await relaunched.retryPendingDeletes(with: health, in: context)
+
+        #expect(health.workouts == [watchID])
+        #expect(workout.healthKitWorkoutID == watchID)
+    }
+
+    @Test(.timeLimit(.minutes(1))) func aFinishedDeleteIsNotAttemptedAgainAtTheNextLaunch() async throws {
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+        let saving = await startSaving(workout, with: health)
+        clock.advance(by: .seconds(5))
+        try await saving.value
+        let watchID = health.recordOnWatch()
+        await watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
+        await flush()
+        let attempts = health.deleteAttempts
+        #expect(attempts == 1)
+
+        let relaunched = SessionLink(live: LoopbackWorkout(), device: .phone, clock: clock, defaults: defaults)
+        await relaunched.retryPendingDeletes(with: health, in: context)
+
+        #expect(health.deleteAttempts == attempts)
+    }
+
+    @Test(.timeLimit(.minutes(1))) func aLateIDForADeletedWorkoutRemovesTheWatchsHealthWorkout() async throws {
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+        let saving = await startSaving(workout, with: health)
+        clock.advance(by: .seconds(5))
+        try await saving.value
+        let phonesID = try #require(workout.healthKitWorkoutID)
+
+        // What History does when the person deletes the workout.
+        let removed = try WorkoutLog.delete(workout, in: context)
+        try await health.deleteWorkout(id: try #require(removed))
+        #expect(removed == phonesID)
+        let watchID = health.recordOnWatch()
+        await watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
+        await flush()
+
+        #expect(health.workouts.isEmpty)
+    }
+
+    @Test(.timeLimit(.minutes(1))) func aSecondSaveWhileTheFirstWaitsJoinsIt() async throws {
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+        let watchID = health.recordOnWatch()
+        let first = await startSaving(workout, with: health)
+        let second = await startSaving(workout, with: health)
+
+        await watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
+        try await first.value
+        try await second.value
+
+        #expect(health.saves == 0)
+        #expect(health.workouts == [watchID])
+        #expect(workout.healthKitWorkoutID == watchID)
     }
 }

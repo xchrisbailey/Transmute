@@ -102,6 +102,7 @@ struct FinishView: View {
 
     /// Writes the workout to Health once, then closes. A failure is shown but doesn't block.
     private func save() async {
+        guard healthStatus != .saving else { return }
         guard let link, health.isAvailable, workout.healthKitWorkoutID == nil, healthStatus != .failed else {
             onSave()
             return

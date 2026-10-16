@@ -139,6 +139,22 @@
         }
 
         public func finish(workoutID: UUID, title: String, at date: Date) async throws -> UUID? {
+            try await finish(workoutID: workoutID, title: title, at: date, beforeEnding: { _ in })
+        }
+
+        /// Like `finish(workoutID:title:at:)`, and calls `beforeEnding` once with the Health
+        /// workout's id (nil if nothing was saved) while the session is still running. The
+        /// iPhone's mirror sends through the session, so a message sent after it ended would be
+        /// dropped; this is the last point the Health id can still go out.
+        ///
+        /// The builder is finished before `end()`, not after as in Apple's sample for stopping
+        /// a mirrored session, because the id only exists once `finishWorkout()` returns and the
+        /// message needs the session alive. Apple's documentation doesn't say whether
+        /// `sendToRemoteWorkoutSession(data:)` still works after `end()`; ending last doesn't
+        /// depend on it.
+        public func finish(
+            workoutID: UUID, title: String, at date: Date, beforeEnding: @MainActor (UUID?) async -> Void
+        ) async throws -> UUID? {
             guard let session, let builder else { return nil }
             defer {
                 if session === self.session {
@@ -146,19 +162,22 @@
                     state = .ended
                 }
             }
+            let workout: HKWorkout?
             do {
                 try await builder.addMetadata(HealthWorkoutRecord.metadata(workoutID: workoutID, title: title))
-                session.end()
                 try await builder.endCollection(at: date)
-                let workout = try await builder.finishWorkout()
-                refreshMetrics(from: builder)
-                return workout?.uuid
+                workout = try await builder.finishWorkout()
             } catch {
                 // Ending twice is harmless, and the watch mustn't be left in a session.
+                await beforeEnding(nil)
                 session.end()
                 builder.discardWorkout()
                 throw Self.mapped(error)
             }
+            await beforeEnding(workout?.uuid)
+            session.end()
+            refreshMetrics(from: builder)
+            return workout?.uuid
         }
 
         public func discard() async {

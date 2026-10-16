@@ -41,26 +41,32 @@ public final class SessionLink {
     private final class Ending {
         let workoutID: UUID
         let context: ModelContext?
+        /// Whether the watch was recording this workout when it ended, so it will answer with a
+        /// Health id or a `nil`. This is a fact about the workout, not about the connection now:
+        /// the watch's session may have closed by the time the person taps Save.
+        let expectsWatchReply: Bool
         var health: (any HealthService)?
         var reply: WatchReply?
         /// The Health workout the iPhone saved itself, until the watch's replaces it.
         var phoneSaved: UUID?
+        /// The save in flight, so a second call joins it instead of starting another.
+        var saving: Task<Void, any Error>?
         private var waiter: CheckedContinuation<Void, Never>?
         private var timer: Task<Void, Never>?
 
-        init(workoutID: UUID, context: ModelContext?) {
+        init(workoutID: UUID, context: ModelContext?, expectsWatchReply: Bool) {
             self.workoutID = workoutID
             self.context = context
+            self.expectsWatchReply = expectsWatchReply
         }
 
-        /// Returns when the watch answers, or after `timeout`.
-        func awaitReply(timeout: Duration) async {
+        /// Returns when the watch answers, or after `timeout` on `clock`.
+        func awaitReply(timeout: Duration, clock: any Clock<Duration>) async {
             guard reply == nil else { return }
-            resumeWaiter()
             await withCheckedContinuation { continuation in
                 waiter = continuation
                 timer = Task {
-                    try? await Task.sleep(for: timeout)
+                    try? await clock.sleep(for: timeout)
                     guard !Task.isCancelled else { return }
                     resumeWaiter()
                 }
@@ -75,21 +81,54 @@ public final class SessionLink {
         }
     }
 
+    /// A Health workout still to remove, kept in `defaults` until Health has done it, so a failed
+    /// delete or a kill between linking and deleting is picked up by a later pass.
+    private struct PendingDelete: Codable, Equatable {
+        let workoutID: UUID
+        /// The Health workout the Transmute workout ends up linked to.
+        let keep: UUID
+        /// The iPhone's own Health workout, which `keep` replaces.
+        let remove: UUID?
+    }
+
     private var ending: Ending?
+
+    private let clock: any Clock<Duration>
+    private let defaults: UserDefaults
+    private static let pendingKey = "link.pendingHealthDeletes"
+
+    private var pending: [PendingDelete] {
+        get { defaults.data(forKey: Self.pendingKey).flatMap { try? JSONDecoder().decode([PendingDelete].self, from: $0) } ?? [] }
+        set { defaults.set(try? JSONEncoder().encode(newValue), forKey: Self.pendingKey) }
+    }
 
     private static let logger = Logger(subsystem: Transmute.bundlePrefix, category: "link")
 
     /// Messages go out one at a time, so a newer snapshot never lands before an older one.
-    private let outbox: AsyncStream<Data>.Continuation
+    private let outbox: AsyncStream<Outgoing>.Continuation
 
-    public init(live: any LiveWorkout, device: SessionDevice) {
+    private struct Outgoing {
+        let data: Data
+        /// Called once the message has been handed to the channel.
+        var sent: (@Sendable () -> Void)?
+    }
+
+    /// `clock` times the wait for the watch's Health id. `defaults` holds the Health workouts
+    /// still to delete.
+    public init(
+        live: any LiveWorkout, device: SessionDevice, clock: any Clock<Duration> = ContinuousClock(),
+        defaults: UserDefaults = .standard
+    ) {
         self.live = live
         self.device = device
-        let (messages, outbox) = AsyncStream.makeStream(of: Data.self)
+        self.clock = clock
+        self.defaults = defaults
+        let (messages, outbox) = AsyncStream.makeStream(of: Outgoing.self)
         self.outbox = outbox
         Task {
-            for await data in messages {
-                await live.send(data)
+            for await message in messages {
+                await live.send(message.data)
+                message.sent?()
             }
         }
     }
@@ -126,7 +165,8 @@ public final class SessionLink {
         guard let owned else { return }
         post(.snapshot(SessionSnapshot(owned.workout, library: owned.library)))
         if owned.workout.endedAt != nil {
-            ending = Ending(workoutID: owned.workout.id, context: owned.context)
+            ending = Ending(
+                workoutID: owned.workout.id, context: owned.context, expectsWatchReply: live.isMirroring)
             self.owned = nil
         }
     }
@@ -164,17 +204,29 @@ public final class SessionLink {
     /// Saves a finished workout to Health, leaving exactly one Health workout linked to it.
     ///
     /// While the watch is recording, it saves the workout itself, with heart rate, and sends back
-    /// its Health id. This waits up to `timeout` for that id and adopts it. A `nil` from the watch
-    /// ends the wait at once, and so does the timeout; either way the iPhone saves its own. If
-    /// the watch's id still arrives later, the iPhone's Health workout is deleted and the watch's
-    /// adopted.
+    /// its Health id. If it was recording this workout, this waits up to `timeout` for that id
+    /// and adopts it. A `nil` from the watch ends the wait at once, and so does the timeout;
+    /// either way the iPhone saves its own. If the watch's id still arrives later, the iPhone's
+    /// Health workout is deleted and the watch's adopted. A call made while another is saving the
+    /// same workout joins it.
     public func saveToHealth(
         _ workout: Workout, with health: any HealthService, waitingForWatch timeout: Duration = .seconds(5)
     ) async throws {
         guard health.isAvailable, workout.healthKitWorkoutID == nil else { return }
         let ending = ending(for: workout)
+        if let saving = ending.saving { return try await saving.value }
         ending.health = health
-        if live.isMirroring { await ending.awaitReply(timeout: timeout) }
+        let saving = Task { try await save(workout, to: health, ending: ending, timeout: timeout) }
+        ending.saving = saving
+        defer { ending.saving = nil }
+        try await saving.value
+    }
+
+    private func save(
+        _ workout: Workout, to health: any HealthService, ending: Ending, timeout: Duration
+    ) async throws {
+        if let context = ending.context { await retryPendingDeletes(with: health, in: context) }
+        if ending.expectsWatchReply { await ending.awaitReply(timeout: timeout, clock: clock) }
         guard workout.healthKitWorkoutID == nil, let record = HealthWorkoutRecord(workout) else { return }
         try await health.requestAccess(.workouts)
         let id = try await health.save(record)
@@ -189,15 +241,22 @@ public final class SessionLink {
 
     private func ending(for workout: Workout) -> Ending {
         if let ending, ending.workoutID == workout.id { return ending }
-        let ending = Ending(workoutID: workout.id, context: workout.modelContext)
+        let ending = Ending(workoutID: workout.id, context: workout.modelContext, expectsWatchReply: live.isMirroring)
         self.ending = ending
         return ending
     }
 
     /// The watch saved the workout to Health (or ended it without saving): tells the iPhone, so
-    /// it keeps the Health id and doesn't save a second workout.
-    public func ended(workoutID: UUID, healthWorkoutID: UUID?) {
-        post(.ended(workoutID: workoutID, healthWorkoutID: healthWorkoutID))
+    /// it keeps the Health id and doesn't save a second workout. Returns once the message has
+    /// gone, so the sender can end its session after.
+    public func ended(workoutID: UUID, healthWorkoutID: UUID?) async {
+        guard let data = try? SessionMessage.ended(workoutID: workoutID, healthWorkoutID: healthWorkoutID).encoded()
+        else { return }
+        await withCheckedContinuation { continuation in
+            let result = outbox.yield(Outgoing(data: data, sent: { continuation.resume() }))
+            if case .enqueued = result { return }
+            continuation.resume()
+        }
     }
 
     func handle(_ message: SessionMessage) async {
@@ -217,13 +276,13 @@ public final class SessionLink {
         case .heartRate(let bpm, _):
             remoteHeartRate = bpm
         case .ended(let workoutID, let healthWorkoutID):
-            await ended(workoutID, healthWorkoutID)
+            await peerEnded(workoutID, healthWorkoutID)
         case .requestSnapshot:
             publish()
         }
     }
 
-    private func ended(_ workoutID: UUID, _ healthWorkoutID: UUID?) async {
+    private func peerEnded(_ workoutID: UUID, _ healthWorkoutID: UUID?) async {
         if mirrored?.workoutID == workoutID {
             // Finished sessions stay up for their summary; a discarded one just goes.
             if mirrored?.isFinished != true { mirrored = nil }
@@ -233,33 +292,69 @@ public final class SessionLink {
         ending.reply = healthWorkoutID.map(WatchReply.healthWorkout) ?? .nothingSaved
         ending.resumeWaiter()
         await reconcile(ending)
+        if let health = ending.health, let context = ending.context {
+            await retryPendingDeletes(with: health, in: context)
+        }
     }
 
     /// Links the workout to the watch's Health workout, and deletes the iPhone's own if it saved
     /// one first.
     private func reconcile(_ ending: Ending) async {
         guard case .healthWorkout(let watchID)? = ending.reply, let context = ending.context else { return }
-        let workoutID = ending.workoutID
-        let descriptor = FetchDescriptor<Workout>(predicate: #Predicate { $0.id == workoutID })
-        guard let workout = try? context.fetch(descriptor).first else { return }
-        let current = workout.healthKitWorkoutID
-        guard current == nil || current == ending.phoneSaved || current == watchID else { return }
-        if current != watchID {
-            workout.healthKitWorkoutID = watchID
-            try? context.save()
-        }
-        guard let phoneSaved = ending.phoneSaved, phoneSaved != watchID else { return }
+        let phoneSaved = ending.phoneSaved.flatMap { $0 == watchID ? nil : $0 }
+        let entry = PendingDelete(workoutID: ending.workoutID, keep: watchID, remove: phoneSaved)
+        // Written before anything changes, so a kill from here on is finished by the next pass.
+        if !pending.contains(entry) { pending.append(entry) }
         ending.phoneSaved = nil
-        do {
-            try await ending.health?.deleteWorkout(id: phoneSaved)
-        } catch {
-            Self.logger.notice(
-                "Couldn't delete the iPhone's Health workout: \(String(describing: error), privacy: .public)")
+        await resolve(entry, with: ending.health, in: context)
+    }
+
+    /// Finishes any Health deletes an earlier pass left undone. Call it at launch, with the
+    /// store the workouts live in.
+    public func retryPendingDeletes(with health: any HealthService, in context: ModelContext) async {
+        for entry in pending {
+            await resolve(entry, with: health, in: context)
         }
+    }
+
+    /// Makes the workout point at `entry.keep`, then deletes what `entry` says to. The entry stays
+    /// until every delete has gone through. A workout deleted from History in the meantime leaves
+    /// nothing for the watch's Health workout to belong to, so that goes too.
+    private func resolve(_ entry: PendingDelete, with health: (any HealthService)?, in context: ModelContext) async {
+        let workoutID = entry.workoutID
+        let descriptor = FetchDescriptor<Workout>(predicate: #Predicate { $0.id == workoutID })
+        var doomed = [UUID]()
+        if let workout = try? context.fetch(descriptor).first {
+            let current = workout.healthKitWorkoutID
+            guard current == nil || current == entry.keep || current == entry.remove else {
+                pending.removeAll { $0 == entry }
+                return
+            }
+            if current != entry.keep {
+                workout.healthKitWorkoutID = entry.keep
+                try? context.save()
+            }
+        } else {
+            doomed.append(entry.keep)
+        }
+        doomed.append(contentsOf: entry.remove.map { [$0] } ?? [])
+        if !doomed.isEmpty {
+            guard let health else { return }
+            for id in doomed {
+                do {
+                    try await health.deleteWorkout(id: id)
+                } catch {
+                    Self.logger.notice(
+                        "Couldn't delete a Health workout: \(String(describing: error), privacy: .public)")
+                    return
+                }
+            }
+        }
+        pending.removeAll { $0 == entry }
     }
 
     private func post(_ message: SessionMessage) {
         guard let data = try? message.encoded() else { return }
-        outbox.yield(data)
+        outbox.yield(Outgoing(data: data))
     }
 }
