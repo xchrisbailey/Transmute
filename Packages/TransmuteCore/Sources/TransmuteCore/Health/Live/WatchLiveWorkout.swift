@@ -154,8 +154,9 @@
         ///   article: `stopActivity(with:)`, wait for `.stopped`, `endCollection`, `finishWorkout`,
         ///   then `end()`, with `beforeEnding` between the last two. Whether
         ///   `sendToRemoteWorkoutSession(data:)` still works after `end()` isn't documented, so
-        ///   ending last doesn't depend on it. If collection or the finish fails, the recording is
-        ///   kept (no `discardWorkout()`), the iPhone is told `nil` and the session ends.
+        ///   ending last doesn't depend on it. If collection or the finish fails, `discardWorkout()`
+        ///   isn't called, the iPhone is told `nil` and the session ends. Unless `finishWorkout`
+        ///   ran, no `HKWorkout` exists then; only the samples collected so far stay in Health.
         /// - Without it, `end()` comes first, then `endCollection` and `finishWorkout`. That is the
         ///   order of Apple's 2018 sample, and what the watch-owned path has always done.
         public func finish(
