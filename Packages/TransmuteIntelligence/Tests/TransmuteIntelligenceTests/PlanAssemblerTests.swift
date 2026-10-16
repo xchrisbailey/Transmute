@@ -40,6 +40,16 @@ struct PlanAssemblerTests {
         #expect(phases.last?.isDeload == true)
     }
 
+    @Test(arguments: [1, 2, 4]) func aBlueprintOfOnlyADeloadStillFillsThePlan(weeks: Int) {
+        var brief = TrainingBrief.tennisPlayer
+        brief.schedule.weeks = weeks
+        let phases = assembler(brief).phases(from: [.init(name: "Deload", weeks: 1, focus: "Recover")])
+        #expect(phases.last?.isDeload == true)
+        #expect(phases.last?.weeks == weeks...weeks)
+        #expect(phases.dropLast().allSatisfy { !$0.isDeload })
+        #expect(phases.dropLast().map(\.weeks) == (weeks > 1 ? [1...(weeks - 1)] : []))
+    }
+
     @Test func shortPlansDropExtraPhasesAndSkipTheDeload() {
         var brief = TrainingBrief.kneeInjury
         brief.schedule.weeks = 2
