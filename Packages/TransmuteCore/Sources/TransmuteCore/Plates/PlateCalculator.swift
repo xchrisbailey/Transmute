@@ -1,6 +1,5 @@
 import Foundation
 
-/// A bar and the plates on each side of it.
 public struct PlateLoading: Hashable, Sendable {
     public let system: UnitSystem
     public let bar: PlateInventory.Bar
@@ -12,10 +11,9 @@ public struct PlateLoading: Hashable, Sendable {
 
     /// Bar plus both sides, in kilograms.
     public var totalKg: Double {
-        system == .metric ? total : total / Units.poundsPerKilogram
+        system.kilograms(fromDisplay: total)
     }
 
-    /// Nothing on the bar.
     public var isBarOnly: Bool {
         perSide.isEmpty
     }
@@ -43,34 +41,27 @@ public struct PlateSolution: Hashable, Sendable {
     }
 }
 
-/// Works out the plates for a barbell weight (#21).
-///
 /// Fills each side greedily from the heaviest plate down, as anyone loading a bar would,
 /// respecting how many pairs there are. When greedy runs out (say 15 + 15 when there's one
 /// pair of 25s), it backs off the heavier plates until it fits. When the weight can't be made
 /// at all, it gives the nearest loadable weights below and above.
-///
-/// Everything is worked in hundredths of the kit's unit, as integers, so pound plates add up
-/// exactly; kilograms only come in and go out at the edges.
 public struct PlateCalculator: Sendable {
     public let inventory: PlateInventory
     public let bar: PlateInventory.Bar
-    /// Plate weights in hundredths with their pair counts, heaviest first, duplicates merged.
-    private let plates: [(weight: Int, pairs: Int)]
-    /// Every per-side total the plates can make, in hundredths, ascending.
-    private let reachable: [Int]
+    private let plates: [(weight: Hundredths, pairs: Int)]
+    private let reachable: [Hundredths]
 
     /// - Parameter bar: The bar to load; the inventory's chosen bar when `nil`.
     public init(inventory: PlateInventory, bar: BarKind? = nil) {
         self.inventory = inventory
         self.bar = inventory.bar(bar ?? inventory.barKind)
-        var merged: [Int: Int] = [:]
+        var merged: [Hundredths: Int] = [:]
         for plate in inventory.plates where plate.pairs > 0 {
-            let weight = inventory.hundredths(kg: plate.kg)
-            if weight > 0 { merged[weight, default: 0] += plate.pairs }
+            let weight = Hundredths(kg: plate.kg, in: inventory.system)
+            if weight > .zero { merged[weight, default: 0] += plate.pairs }
         }
         plates = merged.sorted { $0.key > $1.key }.map { (weight: $0.key, pairs: $0.value) }
-        var sums: Set<Int> = [0]
+        var sums: Set<Hundredths> = [.zero]
         for plate in plates {
             var next = sums
             for count in 1...plate.pairs {
@@ -83,10 +74,9 @@ public struct PlateCalculator: Sendable {
 
     /// The loading for a target weight in kilograms.
     public func solve(kg targetKg: Double) -> PlateSolution {
-        let barWeight = inventory.hundredths(kg: bar.kg)
-        let needed = inventory.hundredths(kg: targetKg) - barWeight
-        // Both sides carry the same, so the plates make up half of what's needed each.
-        let exact = needed >= 0 && needed.isMultiple(of: 2) && contains(needed / 2) ? loading(perSide: needed / 2) : nil
+        let needed = Hundredths(kg: targetKg, in: inventory.system) - barWeight
+        // Both sides carry the same, so the plates make up half of what is needed each.
+        let exact = needed >= .zero ? needed.half.flatMap { contains($0) ? loading(perSide: $0) : nil } : nil
         let below = reachable.last { 2 * $0 < needed }.map(loading(perSide:))
         let above = reachable.first { 2 * $0 > needed }.map(loading(perSide:))
         return PlateSolution(targetKg: targetKg, exact: exact, below: below, above: above)
@@ -99,10 +89,14 @@ public struct PlateCalculator: Sendable {
 
     /// The heaviest weight the plates make on this bar, in kilograms.
     public var heaviestKg: Double {
-        loading(perSide: reachable.last ?? 0).totalKg
+        loading(perSide: reachable.last ?? .zero).totalKg
     }
 
-    private func contains(_ sum: Int) -> Bool {
+    private var barWeight: Hundredths {
+        Hundredths(kg: bar.kg, in: inventory.system)
+    }
+
+    private func contains(_ sum: Hundredths) -> Bool {
         var low = 0
         var high = reachable.count
         while low < high {
@@ -113,30 +107,28 @@ public struct PlateCalculator: Sendable {
     }
 
     /// The plates for a per-side total that's known to be reachable.
-    private func loading(perSide sum: Int) -> PlateLoading {
+    private func loading(perSide sum: Hundredths) -> PlateLoading {
         var failed: Set<[Int]> = []
         let counts = fill(sum, from: 0, failed: &failed) ?? []
         var side: [Double] = []
         for (plate, count) in zip(plates, counts) {
-            side += Array(repeating: Double(plate.weight) / 100, count: count)
+            side += Array(repeating: plate.weight.inUnit, count: count)
         }
-        let barWeight = inventory.hundredths(kg: bar.kg)
-        return PlateLoading(
-            system: inventory.system, bar: bar, perSide: side, total: Double(barWeight + 2 * sum) / 100)
+        return PlateLoading(system: inventory.system, bar: bar, perSide: side, total: (barWeight + 2 * sum).inUnit)
     }
 
     /// Greedy from `index` down: as many of each plate as fit, backing off one at a time when
     /// what's left can't be made. Returns a count per plate from `index` on.
-    private func fill(_ remaining: Int, from index: Int, failed: inout Set<[Int]>) -> [Int]? {
-        if remaining == 0 { return Array(repeating: 0, count: plates.count - index) }
-        guard index < plates.count, !failed.contains([index, remaining]) else { return nil }
+    private func fill(_ remaining: Hundredths, from index: Int, failed: inout Set<[Int]>) -> [Int]? {
+        if remaining == .zero { return Array(repeating: 0, count: plates.count - index) }
+        guard index < plates.count, !failed.contains([index, remaining.count]) else { return nil }
         let plate = plates[index]
         for count in stride(from: min(plate.pairs, remaining / plate.weight), through: 0, by: -1) {
             if let rest = fill(remaining - count * plate.weight, from: index + 1, failed: &failed) {
                 return [count] + rest
             }
         }
-        failed.insert([index, remaining])
+        failed.insert([index, remaining.count])
         return nil
     }
 }

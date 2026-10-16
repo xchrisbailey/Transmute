@@ -1,8 +1,8 @@
 /// Rounds a target load to one you can actually put on the bar or pick off the rack.
 ///
 /// Without an inventory it rounds to a typical step, which is what plans are brewed with. With
-/// the person's own `PlateInventory` (#21) it rounds to what their bar, plates, dumbbells and
-/// machines can really make; progression (#12) uses that.
+/// the person's own `PlateInventory` it rounds to what their bar, plates, dumbbells and
+/// machines can really make; progression uses that.
 public enum LoadableWeight {
     /// The smallest jump for this kit, in kilograms: 2.5 kg or 5 lb for barbells and machines
     /// (two small plates), 2 kg or 5 lb for dumbbells and kettlebells.
@@ -18,10 +18,10 @@ public enum LoadableWeight {
     /// The nearest loadable weight in kilograms, never below one step.
     public static func round(_ kg: Double, for equipment: Set<Equipment>, system: UnitSystem) -> Double {
         let step = step(for: equipment, system: system)
-        let display = system == .metric ? kg : kg * Units.poundsPerKilogram
+        let display = system.display(kilograms: kg)
         let displayStep = system == .metric ? step : 5
         let rounded = max(displayStep, (display / displayStep).rounded() * displayStep)
-        return system == .metric ? rounded : rounded / Units.poundsPerKilogram
+        return system.kilograms(fromDisplay: rounded)
     }
 
     /// The nearest weight this kit can make, in kilograms.
@@ -48,10 +48,12 @@ public enum LoadableWeight {
 
     /// The nearest whole number of steps, worked in the kit's unit so pound steps stay exact.
     private static func steps(_ kg: Double, step: Double, heaviest: Double?, in inventory: PlateInventory) -> Double {
-        let step = inventory.hundredths(kg: step)
-        guard step > 0 else { return kg }
-        let most = heaviest.map { max(1, inventory.hundredths(kg: $0) / step) } ?? .max
-        let count = min(most, max(1, Int((Double(inventory.hundredths(kg: kg)) / Double(step)).rounded())))
-        return inventory.kilograms(hundredths: count * step)
+        let system = inventory.system
+        let step = Hundredths(kg: step, in: system)
+        guard step > .zero else { return kg }
+        let most = heaviest.map { max(1, Hundredths(kg: $0, in: system) / step) } ?? .max
+        let target = Hundredths(kg: kg, in: system)
+        let count = min(most, max(1, Int((Double(target.count) / Double(step.count)).rounded())))
+        return (count * step).kg(in: system)
     }
 }

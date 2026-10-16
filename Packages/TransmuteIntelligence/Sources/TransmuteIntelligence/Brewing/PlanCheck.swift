@@ -1,7 +1,6 @@
 import TransmuteCore
 
-/// Checks a brewed plan against the person, the way #9's validation and the evaluation set
-/// see it. Empty means the plan is safe to save.
+/// Checks a brewed plan against the person. Empty means the plan is safe to save.
 public enum PlanCheck {
     public static func problems(in plan: BrewedPlan, brief: TrainingBrief, library: ExerciseLibrary = .bundled)
         -> [String]

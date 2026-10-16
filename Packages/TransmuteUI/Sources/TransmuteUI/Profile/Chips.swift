@@ -1,7 +1,7 @@
 #if !os(watchOS)
     import SwiftUI
 
-    /// A toggle shown as a pill. Selection is shown with a checkmark as well as colour (#22).
+    /// A toggle shown as a pill. Selection is shown with a checkmark as well as colour.
     struct Chip: View {
         let label: LocalizedStringResource
         @Binding var isOn: Bool

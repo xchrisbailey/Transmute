@@ -70,8 +70,6 @@ struct WorkoutCSVReader {
         return nil
     }
 
-    // MARK: Strong
-
     private func readStrong() -> ImportedWorkouts {
         var file = ImportedWorkouts(source: .strong)
         let weight = table.column(measuring: "weight")
@@ -109,8 +107,6 @@ struct WorkoutCSVReader {
         return file
     }
 
-    // MARK: Hevy
-
     private func readHevy() -> ImportedWorkouts {
         var file = ImportedWorkouts(source: .hevy)
         let weight = table.column("weight_kg").map { ($0, "kg") } ?? table.column("weight_lbs").map { ($0, "lbs") }
@@ -142,8 +138,6 @@ struct WorkoutCSVReader {
         }
         return file
     }
-
-    // MARK: Values
 
     /// Both apps write wall-clock times with no zone.
     private func date(_ text: String) -> Date? {

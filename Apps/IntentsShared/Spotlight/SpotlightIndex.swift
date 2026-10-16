@@ -6,7 +6,7 @@ import SwiftUI
 import TransmuteCore
 
 extension View {
-    /// Keeps logged workouts and plans in Spotlight (#19). The index is rebuilt once at
+    /// Keeps logged workouts and plans in Spotlight. The index is rebuilt once at
     /// launch, which also clears anything deleted on another device meanwhile; after that
     /// each save of the store indexes what changed and takes out what was deleted.
     func indexesSpotlight() -> some View {
@@ -16,17 +16,17 @@ extension View {
 
 private struct SpotlightIndexing: ViewModifier {
     @Environment(\.modelContext) private var context
-    /// Bumped by each save; the task below waits for saves to settle before it reads.
-    @State private var saves = 0
+    @State private var saveGeneration = 0
+
+    private var settleDelay: Duration { saveGeneration == 0 ? .zero : .seconds(2) }
 
     func body(content: Content) -> some View {
         content
             .onReceive(NotificationCenter.default.publisher(for: ModelContext.didSave)) { _ in
-                saves += 1
+                saveGeneration += 1
             }
-            .task(id: saves) {
-                // Logging a set saves too. Wait out a burst rather than index on each one.
-                guard (try? await Task.sleep(for: .seconds(saves == 0 ? 0 : 2))) != nil else { return }
+            .task(id: saveGeneration) {
+                guard (try? await Task.sleep(for: settleDelay)) != nil else { return }
                 await SpotlightIndex.shared.update(from: context)
             }
     }
@@ -53,15 +53,14 @@ final class SpotlightIndex {
         }
     }
 
-    /// Sends one type's changes and returns what's indexed now. The first pass clears the
-    /// type and indexes everything; so does deleting the last item.
+    /// Sends one type's changes and returns what's indexed now.
     private func send<Entity: IndexedEntity>(_ entities: [Entity], text: [String], indexed: [UUID: String]?)
         async throws -> [UUID: String]
     where Entity.ID == UUID {
         let current = Dictionary(zip(entities.map(\.id), text)) { $1 }
-        let changes = IndexChanges(indexed: indexed ?? [:], current: current)
+        let changes = IndexChanges(indexed: indexed, current: current)
         let index = CSSearchableIndex.default()
-        if indexed == nil || (entities.isEmpty && !changes.removed.isEmpty) {
+        if changes.isFullReset {
             try await index.deleteAppEntities(ofType: Entity.self)
         } else if !changes.removed.isEmpty {
             try await index.deleteAppEntities(identifiedBy: Array(changes.removed), ofType: Entity.self)

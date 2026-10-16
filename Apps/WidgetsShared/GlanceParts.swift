@@ -38,11 +38,8 @@ struct WeekPills: View {
     }
 }
 
-/// The streak: a flame, peach where there's colour, then the weeks, with the figure in
-/// Geist Mono.
 struct StreakLabel: View {
     let weeks: Int
-    /// "3 wk" rather than "3 weeks in a row".
     var isShort = false
     var size: CGFloat = 13
 
@@ -81,7 +78,6 @@ extension TodayGlance {
         sessionName != nil && !isDone && !isRunning
     }
 
-    /// For the widget gallery, placeholders and previews.
     static let sample = TodayGlance(
         day: .session("Lower A"),
         nextLift: NextLift(

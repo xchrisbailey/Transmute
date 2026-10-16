@@ -11,7 +11,7 @@ struct WorkoutLogTests {
     let now = Date(timeIntervalSince1970: 1_790_000_000)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     func sample() throws -> [Workout] {
@@ -97,19 +97,62 @@ struct WorkoutLogTests {
         latest.healthKitWorkoutID = healthID
         let latestSets = latest.orderedExercises.flatMap(\.orderedSets)
 
-        #expect(try WorkoutLog.delete(latest, in: context) == healthID)
+        let suite = "WorkoutLogTests.\(UUID())"
+        let defaults = try #require(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+
+        #expect(try WorkoutLog.delete(latest, in: context, defaults: defaults) == healthID)
         #expect(try context.fetch(FetchDescriptor<Workout>()).count == 8)
         let records = try context.fetch(FetchDescriptor<PersonalRecord>())
         #expect(!records.contains { record in latestSets.contains { $0 === record.set } })
     }
 
     @Test func exerciseHistoryTracksTheEstimatedMax() throws {
-        _ = try sample()
-        let history = try WorkoutLog.history(of: "back-squat", in: context)
+        let all = try sample()
+        let history = WorkoutLog.history(of: "back-squat", in: all)
         #expect(history.count == 3)
         #expect(history[0].workout.startedAt > history[1].workout.startedAt)
-        // Week 3 squatted 94.5 kg for 5: 94.5 × (1 + 5 / 30).
         let best = try #require(history[0].estimatedOneRepMaxKg)
         #expect(abs(best - 94.5 * (1 + 5.0 / 30)) < 1e-9)
+    }
+
+    @Test func exerciseHistoryComesFromTheWorkoutsItIsGivenAndSkipsOneInProgress() throws {
+        let all = try sample()
+        let running = WorkoutSession.startAdHoc(title: "Still going", at: now, in: context)
+        let squat = LoggedExercise(exerciseID: "back-squat", order: 0)
+        squat.workout = running
+        let set = LoggedSet(order: 0, weightKg: 200, reps: 5)
+        set.complete(at: now)
+        set.exercise = squat
+        context.insert(squat)
+        context.insert(set)
+
+        #expect(WorkoutLog.history(of: "back-squat", in: all + [running]).count == 3)
+        #expect(WorkoutLog.history(of: "back-squat", in: []).isEmpty)
+        #expect(WorkoutLog.history(of: "back-squat", in: all.filter { $0.title == "Upper and rotation" }).isEmpty)
+    }
+
+    @Test func historyMergesARepeatedExerciseIntoOneEntry() throws {
+        let workout = Workout(title: "Squat twice", startedAt: now)
+        workout.endedAt = now.addingTimeInterval(3_600)
+        let blocks: [(id: String, weights: [Double])] = [
+            ("back-squat", [100, 100]), ("bench-press", [60]), ("back-squat", [80]),
+        ]
+        workout.exercises = blocks.enumerated().map { order, block in
+            let exercise = LoggedExercise(exerciseID: block.id, order: order)
+            exercise.sets = block.weights.enumerated().map { index, kg in
+                let set = LoggedSet(order: index, weightKg: kg, reps: 5)
+                set.complete(at: now)
+                return set
+            }
+            return exercise
+        }
+        context.insert(workout)
+        try context.save()
+
+        let history = WorkoutLog.history(of: "back-squat", in: [workout])
+
+        #expect(history.count == 1)
+        #expect(history.first?.sets.map(\.weightKg) == [100, 100, 80])
     }
 }

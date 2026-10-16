@@ -67,9 +67,11 @@ struct WorkoutPreferencesTests {
         let chosen = WorkoutPreferences(
             workingRestSeconds: 180, restSound: false, autoStartRest: false, showRPE: true, warmUpSets: false)
         func open() throws -> ModelContainer {
-            try ModelContainer(
+            let container = try ModelContainer(
                 for: TransmuteStore.schema, migrationPlan: TransmuteMigrationPlan.self,
                 configurations: ModelConfiguration(schema: TransmuteStore.schema, url: url, cloudKitDatabase: .none))
+            container.mainContext.autosaveEnabled = false
+            return container
         }
         do {
             let container = try open()
@@ -92,8 +94,6 @@ struct WorkoutPreferencesTests {
         #expect(profile.distanceUnit == .metric)
         #expect(WorkoutPreferences.stored(in: context) == chosen)
     }
-
-    // MARK: Units
 
     @Test func eachQuantityFollowsTheSystemUntilChosen() {
         let units = Units(system: .imperial, locale: Locale(identifier: "en_GB"))
@@ -119,32 +119,22 @@ struct WorkoutPreferencesTests {
         #expect(units.formatWeight(kg: 100) == "100 kg")
     }
 
-    @Test func theDraftKeepsUnitsChosenOnTheirOwn() {
+    @Test func savingADraftKeepsUnitsChosenOnTheirOwn() {
         let profile = Profile()
         profile.unitSystem = .metric
         profile.weightUnit = .imperial
-        var draft = ProfileDraft(profile, locale: Locale(identifier: "en_GB"))
-        #expect(draft.units.weight == .imperial)
-        #expect(draft.units.height == .metric)
-        draft.unitSystem = .imperial
-        draft.apply(to: profile)
-        #expect(profile.unitSystem == .imperial)
+        let units = Units(profile, locale: Locale(identifier: "en_GB"))
+        #expect(units.weight == .imperial)
+        #expect(units.height == .metric)
+        ProfileDraft(profile).apply(to: profile)
+        #expect(profile.unitSystem == .metric)
         #expect(profile.weightUnit == .imperial)
         #expect(profile.heightUnit == nil)
     }
 
-    /// A profile that never chose a system keeps following the device through a save (#18).
     @Test func savingADraftDoesNotPinTheDeviceSystem() {
-        let american = Locale(identifier: "en_US")
         let profile = Profile()
-        var draft = ProfileDraft(profile, locale: american)
-        draft.apply(to: profile, locale: american)
+        ProfileDraft(profile).apply(to: profile)
         #expect(profile.unitSystem == nil)
-        draft.unitSystem = .metric
-        draft.apply(to: profile, locale: american)
-        #expect(profile.unitSystem == .metric)
-        draft.unitSystem = .imperial
-        draft.apply(to: profile, locale: american)
-        #expect(profile.unitSystem == .imperial)
     }
 }

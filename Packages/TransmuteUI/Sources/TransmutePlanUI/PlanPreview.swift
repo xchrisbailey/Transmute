@@ -3,7 +3,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// A freshly brewed plan before it's kept: name, why, phases and the first week in full.
 struct PlanPreview: View {
     let plan: BrewedPlan
     let units: Units
@@ -61,8 +60,6 @@ struct PlanPreview: View {
     }
 }
 
-/// The plan's phases as proportional segments, with names and weeks in text so it reads
-/// without colour (#22).
 public struct PhaseBar: View {
     let phases: [PlanPhase]
     let weekCount: Int

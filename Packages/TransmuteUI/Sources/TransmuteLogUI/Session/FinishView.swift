@@ -3,9 +3,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// The summary after Finish: "The work is done. 18 sets, 8,420 kg moved.", the numbers, and a
-/// plain Save. The workout is already stored when this shows; Save writes it to Health and
-/// closes.
 struct FinishView: View {
     let workout: Workout
     let summary: WorkoutSummary
@@ -81,7 +78,6 @@ struct FinishView: View {
         }
     }
 
-    /// Records this workout set, headline first per set.
     private var gold: [[PersonalRecord]] {
         let mine = records.filter { $0.set?.exercise?.workout === workout }
         return RecordBoard.gold(mine, since: workout.startedAt)
@@ -106,27 +102,15 @@ struct FinishView: View {
 
     /// Writes the workout to Health once, then closes. A failure is shown but doesn't block.
     private func save() async {
-        // With the watch on the workout, the watch saves it to Health, heart rate and all, and
-        // sends back its id. Give that a moment to arrive rather than saving a second one.
-        if link?.live.isMirroring == true {
-            healthStatus = .saving
-            for _ in 0..<50 where workout.healthKitWorkoutID == nil {
-                try? await Task.sleep(for: .milliseconds(100))
-            }
-            healthStatus = .idle
-        }
-        guard health.isAvailable, workout.healthKitWorkoutID == nil, healthStatus != .failed,
-            let record = HealthWorkoutRecord(workout)
-        else {
+        guard healthStatus != .saving else { return }
+        guard let link, health.isAvailable, workout.healthKitWorkoutID == nil, healthStatus != .failed else {
             onSave()
             return
         }
         healthStatus = .saving
         do {
-            try await health.requestAccess(.workouts)
-            workout.healthKitWorkoutID = try await health.save(record)
-            try? workout.modelContext?.save()
-            healthStatus = .saved
+            try await link.saveToHealth(workout, with: health)
+            healthStatus = workout.healthKitWorkoutID == nil ? .idle : .saved
             onSave()
         } catch {
             healthStatus = .failed
@@ -134,7 +118,6 @@ struct FinishView: View {
     }
 }
 
-/// One record from the finished workout, in gold: "Back squat · 5RM · 115 kg".
 private struct GoldRow: View {
     let record: PersonalRecord
     let units: Units

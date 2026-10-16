@@ -1,6 +1,6 @@
 import Foundation
 
-/// Progress and insights (#16): the numbers behind the charts, tiles and weekly summary.
+/// Progress and insights: the numbers behind the charts, tiles and weekly summary.
 ///
 /// Everything is computed from what's passed in, in metric units. Only finished workouts and
 /// completed working sets count; warm-ups and sessions still running are left out.
@@ -8,14 +8,11 @@ public enum ProgressStats {
     /// Differences smaller than this are float noise, not progress.
     static let tolerance = 1e-6
 
-    // MARK: Estimated one-rep max
-
     /// The best estimated one-rep max of one session.
     public struct MaxPoint: Identifiable, Equatable, Sendable {
         /// When the session started.
         public var date: Date
         public var kg: Double
-        /// The session set an estimated one-rep max record.
         public var isRecord: Bool
         public var id: Date { date }
 
@@ -42,8 +39,6 @@ public enum ProgressStats {
         }
     }
 
-    // MARK: Key lifts
-
     /// The plan's key lifts: its weight × reps exercises, the ones with the most planned working
     /// sets first and ties in library order. Without a plan, or when the plan has none, the
     /// weight × reps exercises with the most logged working sets.
@@ -64,7 +59,6 @@ public enum ProgressStats {
         return ranked(logged, tracking: [.weightReps], library: library, limit: limit)
     }
 
-    /// Where a key lift's estimated one-rep max stands.
     public struct LiftKPI: Identifiable, Equatable, Sendable {
         public var exerciseID: String
         /// The exercise's library name, or its id when the library doesn't have it.
@@ -99,8 +93,6 @@ public enum ProgressStats {
     }
 }
 
-// MARK: - Shared helpers
-
 extension ProgressStats {
     /// Finished workouts, oldest first.
     static func finished(_ workouts: [Workout]) -> [Workout] {
@@ -124,7 +116,6 @@ extension ProgressStats {
         return Array(ids.prefix(max(limit, 0)))
     }
 
-    /// The start of the week a date falls in.
     static func weekStart(of date: Date, calendar: Calendar) -> Date {
         calendar.dateInterval(of: .weekOfYear, for: date)?.start ?? calendar.startOfDay(for: date)
     }
@@ -140,6 +131,11 @@ extension LoggedSet {
     /// Completed and not a warm-up.
     var isWorking: Bool {
         isCompleted && !isWarmUp
+    }
+
+    /// The rounds of an interval set: one when none was entered, never negative.
+    var effectiveRounds: Int {
+        max(rounds ?? 1, 0)
     }
 
     /// Load × reps of a working set, or 0.

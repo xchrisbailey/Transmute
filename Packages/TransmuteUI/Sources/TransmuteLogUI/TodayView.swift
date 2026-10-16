@@ -5,9 +5,6 @@ import TransmuteIntelligence
 import TransmutePlanUI
 import TransmuteUI
 
-/// The screen people open most (#11): today's session with its targets and one mauve
-/// button, Begin the work. Rest days say so and point at the next session. A workout left
-/// running, even by a killed app, opens straight back up.
 public struct TodayView: View {
     let plan: Plan?
     let profile: Profile
@@ -20,16 +17,20 @@ public struct TodayView: View {
     @Query(filter: #Predicate<Workout> { $0.endedAt == nil }, sort: \Workout.startedAt, order: .reverse)
     private var running: [Workout]
     @State private var session: Workout?
-    @State private var didResume = false
-    /// Set to true from outside to begin a workout, as the Mac's New Workout command and a
-    /// widget's button do.
-    @Binding var beginsWorkout: Bool
+    @State private var resumedAtLaunch = false
+    @Binding var consumingBeginRequest: WorkoutBeginRequest?
     let library = ExerciseLibrary.bundled
 
-    public init(plan: Plan?, profile: Profile, beginsWorkout: Binding<Bool> = .constant(false)) {
+    public init(
+        plan: Plan?, profile: Profile, consumingBeginRequest: Binding<WorkoutBeginRequest?> = .constant(nil)
+    ) {
         self.plan = plan
         self.profile = profile
-        _beginsWorkout = beginsWorkout
+        _consumingBeginRequest = consumingBeginRequest
+    }
+
+    private var runningState: RunningWorkoutState {
+        RunningWorkoutState(running: running.first, device: link?.device ?? .phone, session: session)
     }
 
     /// A workout is already going, here or on the watch.
@@ -115,19 +116,17 @@ public struct TodayView: View {
         .background(Color.brand(\.base))
         .navigationTitle(Text(LogCopy.today))
         .onAppear {
-            // A workout still running at launch was cut off; pick it straight back up.
-            // One the watch is running stays the watch's: it shows up through the link.
-            if !didResume, let workout = running.first, workout.startedOn != .watch {
-                didResume = true
+            if !resumedAtLaunch, case .resumable(let workout) = runningState {
+                resumedAtLaunch = true
                 open(workout)
             }
         }
         .onChange(of: link?.mirrored == nil) { _, isGone in
             if isGone { showsMirrored = false }
         }
-        .onChange(of: beginsWorkout, initial: true) { _, isWanted in
-            guard isWanted else { return }
-            beginsWorkout = false
+        .onChange(of: consumingBeginRequest, initial: true) { _, request in
+            guard request != nil else { return }
+            consumingBeginRequest = nil
             beginNext()
         }
         #if os(iOS)
@@ -250,7 +249,7 @@ extension TodayView {
         Text(
             LogCopy.next(
                 day.focus,
-                on: PlanEditor.date(of: day, in: plan).formatted(.dateTime.weekday(.wide)))
+                on: PlanCalendar(plan: plan).date(of: day).formatted(.dateTime.weekday(.wide)))
         )
         .brandFont(.body)
         .foregroundStyle(Color.brand(\.ink))
@@ -298,14 +297,16 @@ extension TodayView {
     /// Goes back into a running workout if there is one; otherwise begins today's session
     /// when it's planned and not yet logged, or a workout off the plan.
     private func beginNext() {
-        if let workout = running.first {
-            // Already on screen when the launch that brought this also resumed it.
-            if session == nil { open(workout) }
+        switch runningState {
+        case .onScreen:
             return
+        case .resumable(let workout), .ownedElsewhere(let workout):
+            open(workout)
+        case .none:
+            guard !isBusy else { return }
+            let today = plan.map { TodayPlan(plan: $0) }
+            begin(today.flatMap { $0.isDone ? nil : $0.day })
         }
-        guard !isBusy else { return }
-        let today = plan.map { TodayPlan(plan: $0) }
-        begin(today.flatMap { $0.isDone ? nil : $0.day })
     }
 
     private func begin(_ day: PlanDay?) {
@@ -317,10 +318,10 @@ extension TodayView {
     }
 
     /// Shows a running workout and, when there's a watch, wakes it to record heart rate and
-    /// mirror the session (#15). Without a watch or Health access the workout runs as before.
+    /// mirror the session. Without a watch or Health access the workout runs as before.
     private func open(_ workout: Workout) {
         session = workout
-        guard let link, workout.startedOn != .watch else { return }
+        guard let link, workout.isOwned(by: link.device) else { return }
         link.own(workout, in: context, library: library)
         guard health.isAvailable, !link.live.isMirroring else { return }
         let exercises = workout.orderedExercises.compactMap { library.exercise(id: $0.exerciseID) }

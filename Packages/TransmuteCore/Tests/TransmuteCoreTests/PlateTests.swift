@@ -10,8 +10,6 @@ struct PlateTests {
     let homeKg = PlateInventory(.home, system: .metric)
     let lb = Units(system: .imperial)
 
-    // MARK: Calculator
-
     @Test func exactInKilograms() throws {
         let calculator = PlateCalculator(inventory: gymKg)
         let hundred = try #require(calculator.solve(kg: 100).exact)
@@ -111,8 +109,6 @@ struct PlateTests {
         #expect(PlateText.compact(bar, locale: english) == "just the bar")
     }
 
-    // MARK: Rounding
-
     @Test func roundingBarbellToThePlates() {
         #expect(LoadableWeight.round(101, for: [.barbell, .rack], inventory: gymKg) == 100)
         #expect(LoadableWeight.round(101.5, for: [.barbell], inventory: gymKg) == 102.5)
@@ -140,8 +136,6 @@ struct PlateTests {
         #expect(LoadableWeight.round(101, for: [.barbell], system: .metric) == 100)
         #expect(LoadableWeight.round(13, for: [.dumbbell], system: .metric) == 14)
     }
-
-    // MARK: Presets and storage
 
     @Test(arguments: PlateInventory.Preset.allCases, UnitSystem.allCases)
     func presetsAreSane(_ preset: PlateInventory.Preset, _ system: UnitSystem) {
@@ -175,29 +169,20 @@ struct PlateTests {
     }
 
     @MainActor @Test func profileStoresPlatesAndKeepsTheBarInSync() throws {
-        let container = try TransmuteStore.makeContainer(.inMemory)
+        let container = try TransmuteStore.makeTestContainer()
         let profile = Profile()
         container.mainContext.insert(profile)
-        var draft = ProfileDraft(profile, locale: Locale(identifier: "en_US"))
-        draft.plates = PlateInventory(.home, system: .imperial)
-        draft.plates.barKind = .ezCurl
-        draft.plates.plates[0].pairs = 3
-        draft.apply(to: profile)
+        var settings = OnboardingSettings(locale: Locale(identifier: "en_US"))
+        settings.plates = PlateInventory(.home, system: .imperial)
+        settings.plates.barKind = .ezCurl
+        settings.plates.plates[0].pairs = 3
+        settings.apply(to: profile)
         try container.mainContext.save()
 
         let fresh = ModelContext(container)
         let stored = try #require(try fresh.fetch(FetchDescriptor<Profile>()).first)
-        #expect(stored.plates == draft.plates)
-        #expect(stored.barbellKg == draft.plates.barKg)
+        #expect(stored.plates == settings.plates)
+        #expect(stored.barbellKg == settings.plates.barKg)
         #expect(stored.plates.display(kg: stored.barbellKg) == 25)
-        #expect(ProfileDraft(stored).plates == draft.plates)
-    }
-
-    @Test func draftBarbellWeightEditsTheChosenBar() {
-        var draft = ProfileDraft(locale: Locale(identifier: "de_DE"))
-        #expect(draft.barbellKg == 20)
-        draft.barbellKg = 15
-        #expect(draft.plates.bar(.standard).kg == 15)
-        #expect(draft.plates.preset == nil)
     }
 }

@@ -22,10 +22,8 @@ extension ProgressStats {
         public var stalled: [Move]
         /// See `ProgressStats.streak(_:)`. 0 without a plan.
         public var streakWeeks: Int
-        /// Nothing was logged this week.
         public var isEmpty: Bool
 
-        /// A record set this week.
         public struct Gold: Equatable, Sendable {
             public var exerciseID: String
             public var name: String
@@ -81,7 +79,7 @@ extension ProgressStats {
         var digest = WeekDigest(weekStart: span.lowerBound, sessionsDone: logged, isEmpty: logged == 0)
 
         if let plan {
-            let current = planWeek(of: plan, on: now, calendar: calendar)
+            let current = PlanCalendar(plan: plan, calendar: calendar).week(containing: now)
             if (1...max(plan.weekCount, 1)).contains(current) {
                 let entry = adherence(of: plan, week: current, isCurrent: true, calendar: calendar)
                 digest.sessionsDone = entry.done
@@ -107,8 +105,6 @@ extension ProgressStats {
         }
         return digest
     }
-
-    // MARK: Helpers
 
     static func gold(_ records: [PersonalRecord], in week: Range<Date>, library: ExerciseLibrary) -> [WeekDigest.Gold] {
         RecordBoard.gold(records.filter { $0.date < week.upperBound }, since: week.lowerBound)

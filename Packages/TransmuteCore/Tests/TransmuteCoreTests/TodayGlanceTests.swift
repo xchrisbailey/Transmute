@@ -14,7 +14,7 @@ struct TodayGlanceTests {
     let imperial = Units(system: .imperial, locale: Locale(identifier: "en_US"))
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     /// The sample plan with three weeks logged. Week 4, this week, has sessions on Monday,
@@ -52,8 +52,6 @@ struct TodayGlanceTests {
         try context.save()
         return plan
     }
-
-    // MARK: The day
 
     @Test func noPlanHasNothingToShow() throws {
         let empty = glance(nil)
@@ -104,8 +102,6 @@ struct TodayGlanceTests {
         #expect(today.nextLift == nil)
     }
 
-    // MARK: A running workout
-
     @Test func aRunningWorkoutShowsTheCurrentSet() throws {
         let plan = try plan()
         let monday = try #require(plan.orderedDays.first { $0.week == 4 && $0.weekday == 1 })
@@ -125,7 +121,6 @@ struct TodayGlanceTests {
         today = glance(plan, workout: workout)
         #expect(today.nextLift?.text == "Back squat 3×5 · 80 kg")
 
-        // Everything logged but the workout not ended: there's no lift left to show.
         for set in workout.orderedExercises.flatMap(\.orderedSets) {
             WorkoutSession.complete(set, in: workout, at: date(weekday: 1))
         }
@@ -159,35 +154,41 @@ struct TodayGlanceTests {
         #expect(today.nextLift?.text == "Split-step reaction 3×0:10")
     }
 
-    // MARK: The streak and the week
+    func startSession(_ plan: Plan, weekday: Int) throws -> Workout {
+        let day = try #require(plan.orderedDays.first { $0.week == 4 && $0.weekday == weekday })
+        return WorkoutSession.start(day, at: date(weekday: weekday), in: context)
+    }
 
-    @Test func theStreakAndTheWeekComeFromThePlan() throws {
-        let plan = try plan()
-        // Three weeks logged in full, and nothing yet in week 4.
-        var today = glance(plan)
+    @Test func threeFullyLoggedWeeksMakeAStreakAndWeekFourStartsEmpty() throws {
+        let today = glance(try plan())
         #expect(today.streakWeeks == 3)
         #expect(today.week == .init(done: 0, planned: 3))
         #expect(!today.week.isHit)
+    }
 
-        // A running workout doesn't count until it's finished.
-        let monday = try #require(plan.orderedDays.first { $0.week == 4 && $0.weekday == 1 })
-        let workout = WorkoutSession.start(monday, at: date(weekday: 1), in: context)
-        today = glance(plan, workout: workout)
+    @Test func aRunningWorkoutDoesNotCountUntilItIsFinished() throws {
+        let plan = try plan()
+        let workout = try startSession(plan, weekday: 1)
+        let today = glance(plan, workout: workout)
         #expect(today.isRunning)
         #expect(today.streakWeeks == 3)
         #expect(today.week == .init(done: 0, planned: 3))
+    }
 
-        WorkoutSession.finish(workout, at: date(weekday: 1))
-        today = glance(plan, weekday: 2)
+    @Test func aFinishedSessionCountsTowardsTheWeek() throws {
+        let plan = try plan()
+        WorkoutSession.finish(try startSession(plan, weekday: 1), at: date(weekday: 1))
+        let today = glance(plan, weekday: 2)
         #expect(today.week == .init(done: 1, planned: 3))
         #expect(today.streakWeeks == 3)
+    }
 
-        // The week's last session done: the week is hit and joins the streak.
-        for weekday in [3, 5] {
-            let day = try #require(plan.orderedDays.first { $0.week == 4 && $0.weekday == weekday })
-            WorkoutSession.finish(WorkoutSession.start(day, at: date(weekday: weekday), in: context))
+    @Test func theWeeksLastSessionDoneHitsTheWeekAndJoinsTheStreak() throws {
+        let plan = try plan()
+        for weekday in [1, 3, 5] {
+            WorkoutSession.finish(try startSession(plan, weekday: weekday))
         }
-        today = glance(plan, weekday: 5)
+        let today = glance(plan, weekday: 5)
         #expect(today.week == .init(done: 3, planned: 3))
         #expect(today.week.isHit)
         #expect(today.streakWeeks == 4)
@@ -212,7 +213,6 @@ struct TodayGlanceTests {
         let later = calendar.date(byAdding: .weekOfYear, value: 3, to: now)!
         let after = TodayGlance(plan: plan, units: metric, on: later, calendar: calendar)
         #expect(after.week == .init())
-        // Week 4 went unlogged, so the streak ended with it.
         #expect(after.streakWeeks == 0)
 
         let before = TodayGlance(plan: plan, units: metric, on: plan.startDate.addingTimeInterval(-86_400 * 8))
@@ -222,8 +222,6 @@ struct TodayGlanceTests {
 }
 
 extension TodayGlanceTests {
-    // MARK: Formatting
-
     @Test func weightAndRepsReadSetsByRepsThenTheLoad() throws {
         let plan = try plan(of: "bench-press", sets: 5) {
             $0.targetReps = 5
@@ -299,16 +297,23 @@ extension TodayGlanceTests {
         #expect(lift.detail == nil)
     }
 
-    @Test func withAProfileTheNumbersAreTheOnesTheSessionStartsWith() throws {
-        let plan = try plan()
+    func profileWithoutWarmUps() throws -> Profile {
         let profile = try #require(try context.fetch(FetchDescriptor<Profile>()).first)
-        // With warm-ups on, the running session would be on its first warm-up set instead.
         profile.preferences.warmUpSets = false
-        let monday = try #require(plan.orderedDays.first { $0.week == 4 && $0.weekday == 1 })
-        // Put the squat first so the lift has a load for progression to move.
-        for exercise in monday.orderedExercises {
+        return profile
+    }
+
+    func putSquatFirst(in day: PlanDay) {
+        for exercise in day.orderedExercises {
             exercise.order = exercise.exerciseID == "back-squat" ? -1 : exercise.order
         }
+    }
+
+    @Test func withAProfileTheNumbersAreTheOnesTheSessionStartsWith() throws {
+        let plan = try plan()
+        let profile = try profileWithoutWarmUps()
+        let monday = try #require(plan.orderedDays.first { $0.week == 4 && $0.weekday == 1 })
+        putSquatFirst(in: monday)
         let before = TodayGlance(
             plan: plan, profile: profile, units: imperial, on: date(weekday: 1), calendar: calendar)
         let workout = WorkoutSession.start(monday, profile: profile, at: date(weekday: 1), in: context)

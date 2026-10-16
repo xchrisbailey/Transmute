@@ -1,15 +1,13 @@
 import Foundation
 import SwiftData
 
-/// Export, import and delete-all for Settings (#18). Files go in and out as `Data`, so the
+/// Export, import and delete-all for Settings. Files go in and out as `Data`, so the
 /// screen only needs a file exporter and importer around these calls. The CSV calls and the
 /// deletes are in extensions.
 ///
 ///     let backup = try DataTransfer.exportBackup(from: context)
 ///     let summary = try DataTransfer.importBackup(data, into: context)
 public enum DataTransfer {
-    // MARK: Export
-
     /// Everything in the store as a JSON backup: the profile with its bodyweights, custom
     /// exercises, plans, workouts and records. See `Backup` for the format.
     public static func exportBackup(
@@ -17,8 +15,6 @@ public enum DataTransfer {
     ) throws -> Data {
         try Backup(context: context, exportedAt: exportedAt, appVersion: appVersion).encoded()
     }
-
-    // MARK: Import
 
     /// Merges a JSON backup into the store and saves.
     ///
@@ -29,18 +25,21 @@ public enum DataTransfer {
     /// history yet; otherwise they're recomputed from the merged sets. A plan stays active only
     /// if the store has no active plan already.
     ///
+    /// A workout that comes back under an id the person had deleted is no longer deleted, so its
+    /// tombstone in `defaults` goes.
+    ///
     /// Throws `DataTransferError` for a file that isn't a readable backup, and the store's own
     /// error if saving fails. Nothing is kept when it throws.
     @discardableResult
-    public static func importBackup(_ data: Data, into context: ModelContext) throws -> ImportSummary {
+    public static func importBackup(
+        _ data: Data, into context: ModelContext, defaults: UserDefaults = .standard
+    ) throws -> ImportSummary {
         let backup = try Backup(data: data)
         return try rollingBack(context) {
-            var restore = BackupRestore(backup: backup, context: context)
+            var restore = BackupRestore(backup: backup, context: context, defaults: defaults)
             return try restore.run()
         }
     }
-
-    // MARK: Helpers
 
     /// The running app's marketing version, e.g. "1.0".
     public static var bundleVersion: String? {
@@ -59,7 +58,6 @@ public enum DataTransfer {
 }
 
 extension ExerciseLibrary {
-    /// This library plus the custom exercises in the store.
     func addingCustomExercises(in context: ModelContext) throws -> ExerciseLibrary {
         adding(try context.fetch(FetchDescriptor<CustomExercise>()).map(LibraryExercise.init))
     }

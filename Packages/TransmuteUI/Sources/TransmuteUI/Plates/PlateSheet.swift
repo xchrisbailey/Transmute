@@ -2,7 +2,7 @@
     import SwiftUI
     import TransmuteCore
 
-    /// What to put on the bar for a target weight (#21): a drawn bar with each side's plates,
+    /// What to put on the bar for a target weight: a drawn bar with each side's plates,
     /// labelled, and the nearest loadable weights when the target can't be made exactly. It
     /// follows the binding, so it updates as the weight changes, and its stepper moves the
     /// weight to the next loadable one either way.
@@ -195,7 +195,7 @@
         }
 
         private func kg(_ plate: Double) -> Double {
-            loading.system == .metric ? plate : plate / Units.poundsPerKilogram
+            loading.system.kilograms(fromDisplay: plate)
         }
 
         private var description: LocalizedStringResource {

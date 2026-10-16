@@ -12,7 +12,7 @@ struct RecordBookTests {
     let day = Date(timeIntervalSince1970: 1_790_000_000)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     /// A finished workout `daysAgo` before `day` with one exercise and these sets.
@@ -116,13 +116,16 @@ struct RecordBookTests {
         #expect(Set(first) == Set(second))
     }
 
-    @Test func sampleRecordsMatchItsProgression() throws {
+    @Test func sampleBackSquatFiveRepMaxesFollowTheWeeklyLoadClimb() throws {
         SampleData.insert(into: context, now: day)
         try book.recomputeAll()
-        // Loads climb 2.5% a week, rounded to 0.5 kg: 90, 92 and 94.5 kg back squat for 4 × 5.
         let squat = try records().filter { $0.kind == .repMax && $0.reps == 5 }.map(\.value).sorted()
         #expect(squat == [92, 94.5])
-        // Sprints and holds repeat the plan exactly, so they set baselines and never turn gold.
+    }
+
+    @Test func sampleSprintsAndHoldsSetBaselinesAndNeverTurnGold() throws {
+        SampleData.insert(into: context, now: day)
+        try book.recomputeAll()
         #expect(try records("acceleration-sprint").isEmpty)
         #expect(try records("hip-90-90").isEmpty)
     }
@@ -136,7 +139,6 @@ struct RecordBookTests {
         try book.recompute(exerciseID: "back-squat")
         #expect(try records().filter { $0.kind == .repMax && $0.reps == 5 }.map(\.value).sorted() == [105, 107.5])
 
-        // Last week was really 110, so this week's 107.5 is no longer a record.
         middle.weightKg = 110
         try book.recompute(exerciseID: "back-squat")
         try context.save()
@@ -146,24 +148,28 @@ struct RecordBookTests {
         #expect(try records().allSatisfy { $0.set !== latest })
     }
 
-    @Test func deletingASetOrWorkoutRecomputes() throws {
+    @Test func deletingAWorkoutRecomputes() throws {
         log("back-squat", daysAgo: 14, [LoggedSet(order: 0, weightKg: 100, reps: 5)])
-        let middle = LoggedSet(order: 0, weightKg: 105, reps: 5)
-        let middleWorkout = log("back-squat", daysAgo: 7, [middle])
+        let middleWorkout = log("back-squat", daysAgo: 7, [LoggedSet(order: 0, weightKg: 105, reps: 5)])
+        log("back-squat", daysAgo: 0, [LoggedSet(order: 0, weightKg: 107.5, reps: 5)])
+        try book.recompute(exerciseID: "back-squat")
+        try context.save()
+
+        context.delete(middleWorkout)
+        try book.recompute(exerciseID: "back-squat")
+        try context.save()
+        let fiveRMs = try records().filter { $0.kind == .repMax && $0.reps == 5 }
+        #expect(fiveRMs.map(\.value) == [107.5], "Without the middle workout, 107.5 beats the 100 before it")
+        #expect(try records().allSatisfy { $0.set != nil })
+    }
+
+    @Test func deletingTheOnlyLaterSetLeavesNothingButTheBaseline() throws {
+        log("back-squat", daysAgo: 14, [LoggedSet(order: 0, weightKg: 100, reps: 5)])
         let latest = LoggedSet(order: 0, weightKg: 107.5, reps: 5)
         log("back-squat", daysAgo: 0, [latest])
         try book.recompute(exerciseID: "back-squat")
         try context.save()
 
-        // Without last week, this week's 107.5 beats 100 instead.
-        context.delete(middleWorkout)
-        try book.recompute(exerciseID: "back-squat")
-        try context.save()
-        let fiveRMs = try records().filter { $0.kind == .repMax && $0.reps == 5 }
-        #expect(fiveRMs.map(\.value) == [107.5])
-        #expect(try records().allSatisfy { $0.set != nil })
-
-        // Deleting the only later set leaves nothing but the baseline.
         context.delete(latest)
         try book.recompute(exerciseID: "back-squat")
         try context.save()
@@ -197,7 +203,6 @@ struct RecordBookTests {
         #expect(gold.allSatisfy { group in group.allSatisfy { $0.date >= lastWeek && $0.set === group[0].set } })
         let dates = gold.compactMap { $0.first?.date }
         #expect(dates == dates.sorted(by: >))
-        // Week 3's first set of 94.5 kg leads with its 5RM; its estimate and lighter maxes follow.
         let squatGroup = try #require(
             gold.first { group in group.contains { $0.exerciseID == "back-squat" && $0.value == 94.5 } })
         #expect(squatGroup.first?.kind == .repMax)
@@ -205,8 +210,7 @@ struct RecordBookTests {
         #expect(squatGroup.contains { $0.kind == .estimatedOneRepMax })
     }
 
-    /// Two years of three sessions a week, five sets each: about 1,500 sets of one lift.
-    @Test func recomputeHandlesAFewThousandSets() throws {
+    @Test func recomputingFifteenHundredSetsTakesUnderFiveSeconds() throws {
         for session in 0..<300 {
             let load = 60 + Double(session) * 0.25
             log(

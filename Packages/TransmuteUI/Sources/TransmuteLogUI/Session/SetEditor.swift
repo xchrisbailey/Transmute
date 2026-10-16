@@ -3,7 +3,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// Steppers and fields for one set, sized for a thumb and big text (#22).
 struct SetEditor: View {
     @Bindable var set: LoggedSet
     let tracking: TrackingType
@@ -62,7 +61,6 @@ struct SetEditor: View {
             step: units.displayWeight(kg: step).rounded(toPlaces: 2), range: 0...1_000)
     }
 
-    /// "per side: 20 · 10 · 2.5", opening the drawn bar to change the weight.
     private func platesButton(_ plates: PlateInventory, kg: Double) -> some View {
         let bar: BarKind? = equipment.contains(.trapBar) && !equipment.contains(.barbell) ? .trap : nil
         let loading = PlateCalculator(inventory: plates, bar: bar).solve(kg: kg).nearest

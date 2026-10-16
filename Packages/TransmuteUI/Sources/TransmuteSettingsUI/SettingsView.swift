@@ -5,7 +5,6 @@ import TransmuteIntelligence
 import TransmuteLogUI
 import TransmuteUI
 
-/// The groups Settings is split into: tabs on the Mac, one after another on the iPhone.
 enum SettingsPane: String, CaseIterable, Identifiable {
     case general, workout, intelligence, health, data, about
 
@@ -34,9 +33,6 @@ enum SettingsPane: String, CaseIterable, Identifiable {
     }
 }
 
-/// Settings (#18): units, equipment, workout, Apple Intelligence, Health, appearance, iCloud,
-/// and privacy with export, import and delete-all.
-///
 /// On the iPhone it's one form, pushed onto a navigation stack. On the Mac it's the tabs of the
 /// Settings window, where there may be no profile yet: the settings that live on the profile
 /// wait until onboarding is done.
@@ -81,7 +77,6 @@ public struct SettingsView: View {
     }
 }
 
-/// The sections of one pane.
 struct SettingsPaneSections: View {
     let pane: SettingsPane
     let profile: Profile?
@@ -104,7 +99,6 @@ struct SettingsPaneSections: View {
                         .foregroundStyle(Color.brandText(\.subtext))
                 }
             }
-            // Training-day reminders and the nudge after a missed day (#19).
             ReminderSettingsSection()
         case .intelligence:
             IntelligenceSection(service: service)
@@ -121,7 +115,7 @@ struct SettingsPaneSections: View {
     }
 }
 
-/// One status as a symbol and words, so color is never the only signal (#22).
+/// One status as a symbol and words, so color is never the only signal.
 struct StatusRow: View {
     enum Tone {
         case good, off, problem, waiting
@@ -172,7 +166,7 @@ struct StatusRow: View {
 extension View {
     /// The picker style for Settings rows. A menu's value stays on one line and gets cut off at
     /// the accessibility text sizes, so there the choices move to their own screen, where the
-    /// row and every choice can wrap (#22).
+    /// row and every choice can wrap.
     func settingsPickerStyle() -> some View {
         modifier(SettingsPickerStyle())
     }
@@ -195,20 +189,16 @@ private struct SettingsPickerStyle: ViewModifier {
 }
 
 #Preview("iPhone") {
-    let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
-    // swiftlint:disable:next force_try
-    let profile = try! container.mainContext.fetch(FetchDescriptor<Profile>()).first!
+    let fixture = SampleData.previewFixture()
     return NavigationStack {
-        SettingsView(profile: profile, service: PreviewIntelligenceService())
+        SettingsView(profile: fixture.profile, service: PreviewIntelligenceService())
     }
-    .modelContainer(container)
+    .modelContainer(fixture.container)
 }
 
 #Preview("No profile yet") {
-    // swiftlint:disable:next force_try
-    let container = try! TransmuteStore.makeContainer(.inMemory)
-    return NavigationStack {
+    NavigationStack {
         SettingsView(profile: nil, service: PreviewIntelligenceService())
     }
-    .modelContainer(container)
+    .modelContainer(SampleData.emptyPreviewContainer())
 }

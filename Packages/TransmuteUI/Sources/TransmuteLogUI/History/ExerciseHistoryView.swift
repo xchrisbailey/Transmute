@@ -4,19 +4,15 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// Every logged set for one exercise, newest session first, with the estimated 1RM over
-/// time for lifts that have one (shared with #16).
 struct ExerciseHistoryView: View {
     let exerciseID: String
     let name: String
     let units: Units
 
-    @Environment(\.modelContext) private var context
     @Query private var workouts: [Workout]
 
     private var entries: [WorkoutLog.ExerciseEntry] {
-        _ = workouts.count  // Re-read when the log changes.
-        return (try? WorkoutLog.history(of: exerciseID, in: context)) ?? []
+        WorkoutLog.history(of: exerciseID, in: workouts)
     }
 
     var body: some View {

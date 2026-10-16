@@ -27,7 +27,6 @@ struct PlanBackup: Codable, Equatable {
         days = plan.backupDays.map(PlanDayBackup.init)
     }
 
-    /// The plan and its days, the days in the backup's order so a `PlanDayRef` finds its day.
     func model() -> (plan: Plan, days: [PlanDay]) {
         let plan = Plan(name: name, goalSummary: goalSummary, startDate: startDate, weekCount: weekCount)
         plan.id = id
@@ -43,7 +42,6 @@ struct PlanBackup: Codable, Equatable {
 }
 
 extension Plan {
-    /// Days in the order a backup lists them, which is the order `PlanDayRef.day` counts in.
     var backupDays: [PlanDay] {
         (days ?? []).sorted { ($0.week, $0.weekday, $0.focus) < ($1.week, $1.weekday, $1.focus) }
     }

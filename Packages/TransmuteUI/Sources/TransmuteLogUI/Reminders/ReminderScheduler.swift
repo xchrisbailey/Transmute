@@ -2,14 +2,13 @@ import Foundation
 import TransmuteCore
 import UserNotifications
 
-/// Whether the system lets Transmute show notifications.
 public enum ReminderPermission: Sendable {
     case notAsked
     case allowed
     case denied
 }
 
-/// Hands the planner's reminders to the system (#19). It only ever touches requests whose
+/// Hands the planner's reminders to the system. It only ever touches requests whose
 /// identifier starts with `ReminderPlanner.identifierPrefix`, so the rest alert is left alone.
 public enum ReminderScheduler {
     public static func permission() async -> ReminderPermission {
@@ -46,7 +45,7 @@ public enum ReminderScheduler {
         }
     }
 
-    /// What a reminder says. The nudge never names what was missed (#22).
+    /// What a reminder says. The nudge never names what was missed.
     static func content(for reminder: PlannedReminder) -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
         switch reminder.kind {

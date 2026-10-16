@@ -1,6 +1,6 @@
 import Foundation
 
-/// When a rest timer speaks to someone using VoiceOver (#59): how much is left at the start,
+/// When a rest timer speaks to someone using VoiceOver: how much is left at the start,
 /// at each whole minute, at 30 and at 10 seconds, and when it runs out.
 public enum RestAnnouncements {
     /// The remaining-seconds marks to announce, largest first (so earliest in time first), for
@@ -18,7 +18,6 @@ public enum RestAnnouncements {
             if let last = kept.last, last - mark <= collapseWindow { continue }
             kept.append(mark)
         }
-        // The start is dropped when it sits right beside the end.
         if let last = kept.last, last <= collapseWindow { kept.removeLast() }
         return kept + [0]
     }

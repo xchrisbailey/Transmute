@@ -6,9 +6,7 @@ extension Backup {
     /// data differ only in `exportedAt`.
     init(context: ModelContext, exportedAt: Date, appVersion: String?) throws {
         self.init(exportedAt: exportedAt, appVersion: appVersion)
-        // One profile is the rule; if sync ever leaves two, the first made is the one kept.
-        profile = try context.fetch(FetchDescriptor<Profile>(sortBy: [SortDescriptor(\.createdAt)])).first
-            .map(ProfileBackup.init)
+        profile = try Profile.canonical(in: context).map(ProfileBackup.init)
         customExercises = try context.fetch(FetchDescriptor<CustomExercise>())
             .sorted { ($0.createdAt, $0.exerciseID) < ($1.createdAt, $1.exerciseID) }
             .map(CustomExerciseBackup.init)

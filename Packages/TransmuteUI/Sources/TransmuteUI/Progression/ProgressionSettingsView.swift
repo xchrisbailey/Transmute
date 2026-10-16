@@ -3,8 +3,6 @@
     import SwiftUI
     import TransmuteCore
 
-    /// Load increments for upper and lower body, in the profile's units, and the exercises the
-    /// person is holding (#12). Changes save straight away.
     public struct ProgressionSettingsView: View {
         @Bindable var profile: Profile
         @Environment(\.modelContext) private var context
@@ -55,7 +53,7 @@
         private func incrementPicker(_ region: BodyRegion, label: LocalizedStringResource) -> some View {
             Picker(selection: increment(region)) {
                 ForEach(ProgressionSettings.incrementChoices(for: system), id: \.self) { value in
-                    Text(verbatim: format(value))
+                    Text(verbatim: Units(system: system).formatIncrement(value))
                         .brandNumberFont(size: 17)
                         .tag(value)
                 }
@@ -99,23 +97,14 @@
                 ?? customExercises.first { $0.exerciseID == exerciseID }?.name
                 ?? exerciseID
         }
-
-        /// e.g. "1.25 kg" or "2.5 lb". Not `Units.formatWeight`, which rounds to the half.
-        private func format(_ value: Double) -> String {
-            let units = Units(system: system)
-            let number = value.formatted(.number.precision(.fractionLength(0...2)).locale(units.locale))
-            return "\(number) \(units.weightSymbol)"
-        }
     }
 
     #Preview {
-        let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
-        // swiftlint:disable:next force_try
-        let profile = try! container.mainContext.fetch(FetchDescriptor<Profile>()).first!
-        profile.progression.setHeld(true, "back-squat")
+        let fixture = SampleData.previewFixture()
+        fixture.profile.progression.setHeld(true, "back-squat")
         return NavigationStack {
-            ProgressionSettingsView(profile: profile)
+            ProgressionSettingsView(profile: fixture.profile)
         }
-        .modelContainer(container)
+        .modelContainer(fixture.container)
     }
 #endif

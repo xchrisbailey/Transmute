@@ -2,8 +2,6 @@ import SwiftUI
 import TransmuteIntelligence
 import TransmuteUI
 
-/// Explains why brewing isn't possible right now, in plain words (#3). Shown in place of AI
-/// actions; existing plans and logging keep working around it.
 public struct IntelligenceNotice: View {
     let availability: IntelligenceAvailability
     @Environment(\.openURL) private var openURL
@@ -28,7 +26,7 @@ public struct IntelligenceNotice: View {
                             .foregroundStyle(Color.brandText(\.subtext))
                     }
                 }
-                if availability == .turnedOff, let settingsURL {
+                if availability == .turnedOff, let settingsURL = Self.settingsURL {
                     Button {
                         openURL(settingsURL)
                     } label: {
@@ -52,7 +50,9 @@ public struct IntelligenceNotice: View {
         }
     }
 
-    private var settingsURL: URL? {
+    /// Where the person can turn Apple Intelligence on: the app's page in Settings on iPhone,
+    /// System Settings on Mac.
+    public static var settingsURL: URL? {
         #if os(iOS)
             URL(string: UIApplication.openSettingsURLString)
         #else
@@ -61,7 +61,6 @@ public struct IntelligenceNotice: View {
     }
 }
 
-/// `IntelligenceNotice` that keeps itself up to date, for screens without their own status.
 public struct LiveIntelligenceNotice: View {
     @State private var status: IntelligenceStatus
 
@@ -76,7 +75,6 @@ public struct LiveIntelligenceNotice: View {
 }
 
 extension IntelligenceError {
-    /// What to tell someone when a generation fails.
     public var message: LocalizedStringResource {
         switch self {
         case .unavailable(.deviceNotEligible): Copy.aiDeviceNotEligible

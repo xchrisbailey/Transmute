@@ -4,9 +4,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// One day of the plan (#10): exercises in order with targets, supersets grouped, and every
-/// edit: reorder, add, remove, swap, change targets, move to another weekday, or rework the
-/// whole day with AI.
 struct PlanDayView: View {
     @Bindable var day: PlanDay
     let plan: Plan
@@ -31,7 +28,7 @@ struct PlanDayView: View {
                         .brandFont(.largeTitle)
                         .foregroundStyle(Color.brand(\.ink))
                         .accessibilityAddTraits(.isHeader)
-                    Text(PlanEditor.date(of: day, in: plan), format: .dateTime.weekday(.wide).day().month())
+                    Text(PlanCalendar(plan: plan).date(of: day), format: .dateTime.weekday(.wide).day().month())
                         .brandFont(.label)
                         .foregroundStyle(Color.brandText(\.subtext))
                     if !day.notes.isEmpty {
@@ -161,8 +158,6 @@ struct PlanDayView: View {
     }
 }
 
-/// An exercise in a day: name, one-line targets, and its superset if it has one. Reads as a
-/// sentence for VoiceOver.
 struct PlannedExerciseRow: View {
     let planned: PlannedExercise
     let units: Units
@@ -200,7 +195,6 @@ struct PlannedExerciseRow: View {
     }
 }
 
-/// Plain explanations of the terms plans use (#22).
 struct GlossaryView: View {
     @Environment(\.dismiss) private var dismiss
 

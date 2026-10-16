@@ -3,8 +3,7 @@ import TransmuteIntelligence
 import TransmutePlanUI
 import TransmuteUI
 
-/// Apple Intelligence (#18): whether it's ready, where plans may be made, and what leaves the
-/// device. There's no switch for AI itself, since plans need it.
+/// There's no switch for AI itself, since plans need it.
 struct IntelligenceSection: View {
     @State private var status: IntelligenceStatus
     @AppStorage(IntelligenceSettings.routeKey) private var route = ModelRoute.onDeviceOnly
@@ -22,7 +21,7 @@ struct IntelligenceSection: View {
                 IntelligenceNotice(availability: status.availability)
             }
             // The notice has its own button when Apple Intelligence is turned off.
-            if status.availability != .turnedOff, let settingsURL {
+            if status.availability != .turnedOff, let settingsURL = IntelligenceNotice.settingsURL {
                 Button {
                     openURL(settingsURL)
                 } label: {
@@ -51,15 +50,6 @@ struct IntelligenceSection: View {
         } set: {
             route = $0 ? .allowPrivateCloudCompute : .onDeviceOnly
         }
-    }
-
-    /// The same places `IntelligenceNotice` opens.
-    private var settingsURL: URL? {
-        #if os(iOS)
-            URL(string: UIApplication.openSettingsURLString)
-        #else
-            URL(string: "x-apple.systempreferences:")
-        #endif
     }
 }
 

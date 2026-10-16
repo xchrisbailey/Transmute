@@ -22,8 +22,6 @@ public struct PlanAssembler: Sendable {
         self.library = library
     }
 
-    // MARK: Phases
-
     /// The blueprint's phases fitted to the plan's length. Plans of six weeks or more end with a
     /// one-week deload if the model didn't include one.
     public func phases(from blueprint: [PlanBlueprint.Phase]) -> [PlanPhase] {
@@ -35,25 +33,8 @@ public struct PlanAssembler: Sendable {
             drafts.append(PlanBlueprint.Phase(name: "Deload", weeks: 1, focus: "A lighter week to recover"))
             deload = true
         }
-        // A deload is always one week; the rest share what's left in proportion.
         let main = deload ? Array(drafts.dropLast()) : drafts
-        let available = total - (deload ? 1 : 0)
-        let requested = max(1, main.reduce(0) { $0 + max(1, $1.weeks) })
-        var lengths = main.map {
-            max(1, Int((Double(max(1, $0.weeks)) * Double(available) / Double(requested)).rounded()))
-        }
-        while lengths.reduce(0, +) > available, let index = lengths.indices.max(by: { lengths[$0] < lengths[$1] }),
-            lengths[index] > 1
-        {
-            lengths[index] -= 1
-        }
-        while lengths.reduce(0, +) < available {
-            lengths[lengths.count - 1] += 1
-        }
-        // Too many phases for a short plan: drop from the end.
-        while lengths.reduce(0, +) > available, lengths.count > 1 {
-            lengths.removeLast()
-        }
+        let lengths = Self.proportionalLengths(main.map(\.weeks), fitting: total - (deload ? 1 : 0))
         var phases: [PlanPhase] = []
         var week = 1
         for (draft, length) in zip(main, lengths) {
@@ -67,12 +48,31 @@ public struct PlanAssembler: Sendable {
         return phases
     }
 
+    /// The requested week counts scaled to share `available` weeks, each phase at least one
+    /// week. When there are more phases than weeks, the last ones go.
+    static func proportionalLengths(_ requested: [Int], fitting available: Int) -> [Int] {
+        let requestedTotal = max(1, requested.reduce(0) { $0 + max(1, $1) })
+        var lengths = requested.map {
+            max(1, Int((Double(max(1, $0)) * Double(available) / Double(requestedTotal)).rounded()))
+        }
+        while lengths.reduce(0, +) > available, let index = lengths.indices.max(by: { lengths[$0] < lengths[$1] }),
+            lengths[index] > 1
+        {
+            lengths[index] -= 1
+        }
+        while lengths.reduce(0, +) < available {
+            lengths[lengths.count - 1] += 1
+        }
+        while lengths.reduce(0, +) > available, lengths.count > 1 {
+            lengths.removeLast()
+        }
+        return lengths
+    }
+
     static func isDeload(_ phase: PlanBlueprint.Phase) -> Bool {
         let words = (phase.name + " " + phase.focus).lowercased()
         return words.contains("deload") || words.contains("taper") || words.contains("recover")
     }
-
-    // MARK: Days of the week
 
     /// The person's training days, or a sensible spread if they didn't pick.
     public var weekdays: [Weekday] {
@@ -101,7 +101,6 @@ public struct PlanAssembler: Sendable {
                 slots[index].outline = slots[swap].outline
                 slots[swap].outline = outline
             } else {
-                // Nothing lighter to swap with: keep the day but make it moderate.
                 slots[index].outline.intensity = "moderate"
             }
         }

@@ -8,14 +8,13 @@ import OSLog
     public struct FoundationModelsService: IntelligenceService {
         public let providerName = "Apple Intelligence"
         /// A fixed choice, for tests. `nil` reads the person's choice each time a generation
-        /// starts, so a change in Settings (#18) applies straight away.
+        /// starts, so a change in Settings applies straight away.
         public var settings: IntelligenceSettings?
 
         public init(settings: IntelligenceSettings? = nil) {
             self.settings = settings
         }
 
-        /// Where the next generation may run.
         var route: ModelRoute {
             (settings ?? .load()).route
         }
@@ -68,9 +67,7 @@ import OSLog
                             let mapped = await Self.mapWithExplanation(error)
                             Self.logger.error(
                                 "Attempt \(attempt) failed: \(String(describing: error), privacy: .public)")
-                            // Retry once from scratch when the model went off track before showing
-                            // anything, so the screen never jumps back.
-                            guard attempt < Self.maxAttempts, mapped.isWorthRetrying, !yieldedPartial else {
+                            guard Self.retriesSilently(mapped, attempt: attempt, yieldedPartial: yieldedPartial) else {
                                 continuation.finish(throwing: mapped)
                                 return
                             }
@@ -84,6 +81,12 @@ import OSLog
 
         static let maxAttempts = 2
 
+        /// Whether to start over without telling the screen: only when the model went off track
+        /// before showing anything, so the screen never jumps back.
+        static func retriesSilently(_ error: IntelligenceError, attempt: Int, yieldedPartial: Bool) -> Bool {
+            attempt < maxAttempts && error.isWorthRetrying && !yieldedPartial
+        }
+
         /// One attempt in a fresh session, reporting partial results as they arrive.
         func generate<Content: Generable & Sendable>(
             _ request: IntelligenceRequest, generating type: Content.Type,
@@ -96,7 +99,7 @@ import OSLog
                 Content.generationSchema, allowedValues: request.allowedValues, arrayCounts: request.arrayCounts)
             let stream = session.streamResponse(to: Prompt(request.prompt), schema: schema, options: options)
             for try await snapshot in stream {
-                // Rebuilt from the Sendable raw content so each partial is independent of the stream.
+                // Each partial is rebuilt from the raw content because `onPartial` takes a `sending` value.
                 onPartial(try Content.PartiallyGenerated(snapshot.rawContent))
             }
             return try Content(try await stream.collect().content)

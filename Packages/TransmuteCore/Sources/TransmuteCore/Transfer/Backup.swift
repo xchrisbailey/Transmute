@@ -1,6 +1,6 @@
 import Foundation
 
-/// The JSON backup: everything in the store, as plain values (#18).
+/// The JSON backup: everything in the store, as plain values.
 ///
 /// ```
 /// {
@@ -58,6 +58,19 @@ struct Backup: Codable, Equatable {
     struct PlanDayRef: Codable, Equatable {
         var plan: UUID
         var day: Int
+
+        /// Counts in `Plan.backupDays`, the order export writes `days` in.
+        init?(day: PlanDay) {
+            guard let plan = day.plan, let index = plan.backupDays.firstIndex(where: { $0 === day }) else {
+                return nil
+            }
+            self.plan = plan.id
+            self.day = index
+        }
+
+        func day(in days: [PlanDay]) -> PlanDay? {
+            days.indices.contains(day) ? days[day] : nil
+        }
     }
 
     /// A logged set, by its place in the workout's `exercises` and that exercise's `sets`.
@@ -65,14 +78,28 @@ struct Backup: Codable, Equatable {
         var workout: UUID
         var exercise: Int
         var set: Int
+
+        /// Counts in `Workout.orderedExercises` and `LoggedExercise.orderedSets`, the orders
+        /// export writes `exercises` and `sets` in.
+        init?(set logged: LoggedSet) {
+            guard let exercise = logged.exercise, let workout = exercise.workout,
+                let exerciseIndex = workout.orderedExercises.firstIndex(where: { $0 === exercise }),
+                let setIndex = exercise.orderedSets.firstIndex(where: { $0 === logged })
+            else { return nil }
+            self.workout = workout.id
+            self.exercise = exerciseIndex
+            self.set = setIndex
+        }
+
+        func set(in exercises: [[LoggedSet]]) -> LoggedSet? {
+            guard exercises.indices.contains(exercise), exercises[exercise].indices.contains(set) else { return nil }
+            return exercises[exercise][set]
+        }
     }
 }
 
-// MARK: - Reading and writing
-
 extension Backup {
-    /// Only the version, so a newer backup is turned away before its unknown shape fails to decode.
-    private struct Header: Decodable {
+    private struct VersionProbe: Decodable {
         var formatVersion: Int
     }
 
@@ -98,7 +125,7 @@ extension Backup {
             return date
         }
         do {
-            let version = try decoder.decode(Header.self, from: data).formatVersion
+            let version = try decoder.decode(VersionProbe.self, from: data).formatVersion
             guard version <= Backup.currentFormatVersion else {
                 throw DataTransferError.newerBackup(formatVersion: version, supported: Backup.currentFormatVersion)
             }

@@ -4,7 +4,7 @@
     import TransmuteCore
 
     /// First launch: collects what a plan needs in a few short steps, then saves the profile
-    /// and hands off to brewing (#6). Only the body step blocks; the rest can be skipped.
+    /// and hands off to brewing. Only the body step blocks; the rest can be skipped.
     ///
     /// `notice` sits on the welcome step, for anything the person should know first, such as
     /// Apple Intelligence being off.
@@ -15,6 +15,7 @@
         @Environment(\.modelContext) private var context
         @Environment(\.health) var health
         @State var draft = ProfileDraft()
+        @State var settings = OnboardingSettings()
         @State var step = Step.welcome
         @State var healthResult: LocalizedStringResource?
         @AccessibilityFocusState private var titleFocused: Bool
@@ -49,7 +50,6 @@
             }
         }
 
-        /// The steps this person sees: sport only when it's relevant.
         var steps: [Step] {
             Step.allCases.filter { $0 != .sport || draft.suggestsSport }
         }
@@ -96,14 +96,37 @@
             switch step {
             case .welcome: welcome
             case .ready: ready
-            case .body: Form { BodySection(draft: $draft) }.scrollContentBackground(.hidden)
-            case .experience: Form { ExperienceSection(draft: $draft) }.scrollContentBackground(.hidden)
+            case .body:
+                Form { BodySection(draft: $draft, units: units, unitSystem: unitSystem) }.scrollContentBackground(
+                    .hidden)
+            case .experience: Form { ExperienceSection(draft: $draft, units: units) }.scrollContentBackground(.hidden)
             case .goals: Form { GoalSection(draft: $draft) }.scrollContentBackground(.hidden)
             case .sport: Form { SportSection(draft: $draft) }.scrollContentBackground(.hidden)
             case .schedule: Form { ScheduleSection(draft: $draft) }.scrollContentBackground(.hidden)
-            case .equipment: Form { EquipmentSection(draft: $draft) }.scrollContentBackground(.hidden)
+            case .equipment: Form { EquipmentSection(draft: $draft, kit: kit) }.scrollContentBackground(.hidden)
             case .limitations: Form { LimitationsSection(draft: $draft) }.scrollContentBackground(.hidden)
             }
+        }
+
+        private var units: Units {
+            settings.units()
+        }
+
+        private var unitSystem: Binding<UnitSystem> {
+            Binding {
+                units.system
+            } set: {
+                settings.select($0)
+            }
+        }
+
+        private var kit: EquipmentSection.Kit {
+            .barWeight(
+                Binding {
+                    settings.barbellKg
+                } set: {
+                    settings.barbellKg = $0 ?? 20
+                }, units)
         }
 
         private var footer: some View {
@@ -155,7 +178,6 @@
             return steps[max(index - 1, 0)]
         }
 
-        /// Puts the step's defaults back and moves on.
         private func skip() {
             let defaults = ProfileDraft()
             switch step {
@@ -194,6 +216,7 @@
             let profile = Profile()
             context.insert(profile)
             draft.apply(to: profile)
+            settings.apply(to: profile)
             try? context.save()
             onFinish(profile, brewNow)
         }
@@ -302,6 +325,6 @@
 
     #Preview {
         OnboardingFlow { _, _ in }
-            .modelContainer(try! TransmuteStore.makeContainer(.inMemory))  // swiftlint:disable:this force_try
+            .modelContainer(SampleData.emptyPreviewContainer())
     }
 #endif

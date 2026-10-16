@@ -10,7 +10,7 @@ struct WorkoutCSVTests {
     var context: ModelContext { container.mainContext }
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     @Test func exportsOneRowPerSet() throws {
@@ -48,7 +48,6 @@ struct WorkoutCSVTests {
                     "",
                 ].joined(separator: "\r\n"))
 
-        // What was written reads back field for field.
         let rows = CSV.rows(text)
         #expect(rows.count == 5)
         #expect(rows.allSatisfy { $0.count == WorkoutCSV.header.count })

@@ -5,8 +5,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// One brew, from tapping Brew to keeping the plan. Holds what the screen shows while the plan
-/// distils, and only saves when the person keeps it.
 @MainActor @Observable
 public final class BrewSession {
     public enum State: Equatable {
@@ -16,7 +14,6 @@ public final class BrewSession {
         case failed(IntelligenceError)
     }
 
-    /// A finished day as the progress list shows it.
     public struct DistilledDay: Equatable, Identifiable {
         public let id: Int
         public let phase: String
@@ -25,14 +22,12 @@ public final class BrewSession {
     }
 
     public private(set) var state = State.idle
-    /// The line under the progress: sketching, or the day being distilled.
     public private(set) var status: LocalizedStringResource?
     public private(set) var planName: String?
     public private(set) var rationale: String?
     public private(set) var phases: [PlanPhase] = []
     public private(set) var distilled: [DistilledDay] = []
-    /// Exercises of the day being written, as they stream in.
-    public private(set) var current: [String] = []
+    public private(set) var streamingExercises: [String] = []
 
     let brewer: PlanBrewer
     private var task: Task<Void, Never>?
@@ -71,7 +66,6 @@ public final class BrewSession {
         reset()
     }
 
-    /// Saves the previewed plan as the active one.
     @discardableResult
     public func keep(in context: ModelContext, startDate: Date = .now, device: String) throws -> Plan? {
         guard case .preview(let plan) = state else { return nil }
@@ -97,10 +91,10 @@ public final class BrewSession {
             self.phases = phases
         case .distilling(let phase, let focus, let exercises):
             status = phase.firstWeek == 1 ? BrewCopy.distillingDay(focus) : Copy.distilling(week: phase.firstWeek)
-            current = exercises
+            streamingExercises = exercises
         case .distilled(let phase, let focus, let exercises):
             distilled.append(DistilledDay(id: distilled.count, phase: phase.name, focus: focus, exercises: exercises))
-            current = []
+            streamingExercises = []
         case .finished(let plan):
             state = .preview(plan)
         }
@@ -113,6 +107,6 @@ public final class BrewSession {
         rationale = nil
         phases = []
         distilled = []
-        current = []
+        streamingExercises = []
     }
 }

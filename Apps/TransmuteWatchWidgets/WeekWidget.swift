@@ -3,7 +3,6 @@ import TransmuteCore
 import TransmuteUI
 import WidgetKit
 
-/// This week in the Smart Stack (#19): sessions done of sessions planned, and the streak.
 /// Its own widget, because the Today one already fills its three lines.
 struct WeekWidget: Widget {
     var body: some WidgetConfiguration {
@@ -34,7 +33,6 @@ struct WeekWidgetView: View {
         }
     }
 
-    /// e.g. "This week. Sessions this week: 2 of 3. 3 weeks in a row".
     private var spoken: String {
         [
             String(localized: GlanceCopy.thisWeek),
@@ -44,7 +42,6 @@ struct WeekWidgetView: View {
     }
 }
 
-/// The week's sessions as a ring around the figure. With nothing planned, the mark.
 struct CircularWeek: View {
     let glance: TodayGlance
 
@@ -65,7 +62,6 @@ struct CircularWeek: View {
     }
 }
 
-/// "This week" in mauve, as Today's title is, then the figure beside its pills and the streak.
 struct RectangularWeek: View {
     let glance: TodayGlance
 
@@ -94,8 +90,6 @@ struct RectangularWeek: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
-
-// MARK: - Previews
 
 #Preview("Week, rectangular", as: .accessoryRectangular) {
     WeekWidget()

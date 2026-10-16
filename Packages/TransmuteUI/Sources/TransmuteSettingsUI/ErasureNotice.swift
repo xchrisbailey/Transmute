@@ -3,9 +3,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// Says how delete-all went (#18), where the person lands afterwards: on onboarding's welcome
-/// step, and in the Mac's Settings window. Shows nothing until there's something to report.
-///
 /// If iCloud couldn't be reached it says so and offers to try again, rather than claiming
 /// everything is gone.
 public struct ErasureNotice: View {

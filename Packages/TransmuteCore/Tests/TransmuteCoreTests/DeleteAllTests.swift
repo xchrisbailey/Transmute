@@ -10,7 +10,7 @@ struct DeleteAllTests {
     var context: ModelContext { container.mainContext }
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     private func count<Model: PersistentModel>(_ model: Model.Type, in context: ModelContext) throws -> Int {
@@ -59,7 +59,7 @@ struct DeleteAllTests {
         #expect(await DataTransfer.deleteCloudRecords(for: container) == .notSyncing)
     }
 
-    /// The apps give the main context an undo manager for plan edits (#10). Delete-all isn't
+    /// The apps give the main context an undo manager for plan edits. Delete-all isn't
     /// undoable and mustn't trip over it.
     @Test func deleteAllWorksWithAnUndoManagerAndLeavesNothingToUndo() throws {
         let undo = UndoManager()

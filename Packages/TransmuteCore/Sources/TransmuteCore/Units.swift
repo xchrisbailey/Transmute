@@ -11,12 +11,22 @@ public enum UnitSystem: String, Codable, CaseIterable, Sendable {
     public static func preferred(for locale: Locale = .current) -> UnitSystem {
         locale.measurementSystem == .metric ? .metric : .imperial
     }
+
+    /// A weight in this system's unit, converted to kilograms.
+    public func kilograms(fromDisplay value: Double) -> Double {
+        self == .metric ? value : value / Units.poundsPerKilogram
+    }
+
+    /// A weight in kilograms, converted to this system's unit.
+    public func display(kilograms: Double) -> Double {
+        self == .metric ? kilograms : kilograms * Units.poundsPerKilogram
+    }
 }
 
 /// Converts and formats metric values for display. Create one per screen with
 /// `Units(profile)`, which reads the profile's choices and falls back to the locale.
 ///
-/// Weight, height and distance can each be chosen on their own (#18); one left alone follows
+/// Weight, height and distance can each be chosen on their own; one left alone follows
 /// the overall `system`. This is the only place that decides which unit a quantity is shown in.
 public struct Units: Sendable {
     /// The overall system, which any quantity without its own choice follows.
@@ -55,21 +65,18 @@ public struct Units: Sendable {
             distance: profile?.distanceUnit, locale: locale)
     }
 
-    // MARK: Weight
-
     /// The symbol a weight is shown with: "kg" or "lb".
     public var weightSymbol: String {
         weight == .metric ? "kg" : "lb"
     }
 
-    /// A stored weight in the user's unit.
     public func displayWeight(kg: Double) -> Double {
-        weight == .metric ? kg : kg * Self.poundsPerKilogram
+        weight.display(kilograms: kg)
     }
 
     /// A weight the user entered, converted to kilograms for storage.
     public func kilograms(fromDisplay value: Double) -> Double {
-        weight == .metric ? value : value / Self.poundsPerKilogram
+        weight.kilograms(fromDisplay: value)
     }
 
     /// e.g. "115 kg" or "253.5 lb". Rounded to the nearest 0.5 in either unit.
@@ -78,7 +85,11 @@ public struct Units: Sendable {
         return "\(value.formatted(.number.precision(.fractionLength(0...1)).locale(locale))) \(weightSymbol)"
     }
 
-    // MARK: Height
+    /// e.g. "1.25 kg" or "2.5 lb". Takes a value already in this unit and keeps two decimals,
+    /// since an increment is often a quarter or an eighth of a unit.
+    public func formatIncrement(_ displayValue: Double) -> String {
+        "\(displayValue.formatted(.number.precision(.fractionLength(0...2)).locale(locale))) \(weightSymbol)"
+    }
 
     /// Feet and whole inches, e.g. 175.26 cm → (5, 9).
     public static func feetAndInches(cm: Double) -> (feet: Int, inches: Int) {
@@ -101,8 +112,6 @@ public struct Units: Sendable {
         }
     }
 
-    // MARK: Distance
-
     /// Short distances stay in metres in both systems, as they do on a track or court.
     /// Longer ones use kilometres or miles.
     public func formatDistance(meters: Double) -> String {
@@ -115,8 +124,6 @@ public struct Units: Sendable {
         case .imperial: return "\((meters / Self.metresPerMile).formatted(number)) mi"
         }
     }
-
-    // MARK: Time
 
     /// A duration as a clock, e.g. 108 → "1:48", 3_725 → "1:02:05".
     public static func clock(seconds: Double) -> String {

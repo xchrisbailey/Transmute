@@ -94,7 +94,6 @@ public struct RecordSet: Hashable, Sendable {
     }
 }
 
-/// The best value so far in each slot, for one exercise.
 public struct RecordBests: Hashable, Sendable {
     public private(set) var values: [RecordSlot: Double]
 
@@ -121,7 +120,6 @@ public struct RecordBests: Hashable, Sendable {
     }
 }
 
-/// What one set did for an exercise's records.
 public struct RecordDetection: Hashable, Sendable {
     /// New records, the headline first.
     public var records: [RecordMark]

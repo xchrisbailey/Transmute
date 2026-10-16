@@ -1,6 +1,5 @@
 import Foundation
 
-// Time, distance and intervals: small steps of volume or density, never below today's plan.
 extension ProgressionRun {
     /// Interval work adds rounds up to this many, then shortens the rest.
     static let maxRounds = 10

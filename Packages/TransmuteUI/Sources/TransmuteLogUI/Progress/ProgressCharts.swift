@@ -3,7 +3,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// Estimated 1RM over time for one of the plan's key lifts, with records as gold points.
 struct MaxChartCard: View {
     let lifts: [String]
     let workouts: [Workout]
@@ -58,14 +57,12 @@ struct MaxChartCard: View {
     }
 }
 
-/// Weight lifted per week, stacked by kind of training or by muscle.
 struct VolumeChartCard: View {
     let workouts: [Workout]
     let units: Units
 
     @State private var grouping = ProgressStats.VolumeGrouping.category
 
-    /// One bar segment, with its legend name resolved.
     private struct Segment: Identifiable {
         let weekStart: Date
         let group: String
@@ -73,14 +70,16 @@ struct VolumeChartCard: View {
         var id: String { "\(weekStart.timeIntervalSince1970)-\(group)" }
     }
 
+    /// The biggest groups the legend names; the rest are merged into one "other".
+    private static let legendLimit = 5
+
     private var segments: [Segment] {
         let weeks = ProgressStats.weeklyVolume(workouts, by: grouping)
-        // Keep the legend readable: the five biggest groups, and the rest together.
         var totals: [String: Double] = [:]
         for slice in weeks.flatMap(\.slices) {
             totals[slice.group, default: 0] += slice.kg
         }
-        let top = Set(totals.sorted { $0.value > $1.value }.prefix(5).map(\.key))
+        let top = Set(totals.sorted { $0.value > $1.value }.prefix(Self.legendLimit).map(\.key))
         let other = String(localized: ProgressCopy.other)
         return weeks.flatMap { week in
             var merged: [String: Double] = [:]
@@ -132,7 +131,6 @@ struct VolumeChartCard: View {
     }
 }
 
-/// Bodyweight entries, with a 7-day average through them.
 struct BodyweightChartCard: View {
     let points: [ProgressStats.BodyweightPoint]
     let units: Units
@@ -166,7 +164,6 @@ struct BodyweightChartCard: View {
     }
 }
 
-/// One conditioning exercise over time: rounds, pace, longest effort or most reps.
 struct ConditioningChartCard: View {
     let series: ProgressStats.ConditioningSeries
 
@@ -201,7 +198,6 @@ struct ConditioningChartCard: View {
     }
 }
 
-/// Sessions planned and done in each week of the plan so far.
 struct AdherenceChartCard: View {
     let weeks: [ProgressStats.WeekAdherence]
 
@@ -231,7 +227,6 @@ struct AdherenceChartCard: View {
 }
 
 extension View {
-    /// Geist Mono on a chart's axis numbers, like every other number in the app.
     func numberAxes() -> some View {
         chartYAxis {
             AxisMarks { _ in

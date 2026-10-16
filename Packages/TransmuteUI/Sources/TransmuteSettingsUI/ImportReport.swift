@@ -1,7 +1,7 @@
 import Foundation
 import TransmuteCore
 
-/// What an import did, in plain words for the screen (#18): a heading and one line per thing
+/// What an import did, in plain words for the screen: a heading and one line per thing
 /// worth saying. Counts of zero are left out.
 struct ImportReport: Equatable {
     var succeeded: Bool
@@ -28,7 +28,6 @@ struct ImportReport: Equatable {
             (summary.recordsAdded, SettingsDataCopy.recordsAdded),
         ]
         lines += counts.filter { $0.0 > 0 }.map { $0.1($0.0) }
-        // A CSV names the exercises it had to add; a backup only has a count.
         if !summary.unmatchedExerciseNames.isEmpty {
             lines.append(SettingsDataCopy.unmatchedNames(summary.unmatchedExerciseNames.formatted(.list(type: .and))))
         } else if summary.customExercises.added > 0 {
@@ -41,7 +40,7 @@ struct ImportReport: Equatable {
     }
 
     /// A failed import. Every case says that nothing was changed, which the importers promise.
-    init(_ error: any Error) {
+    init(_ error: DataTransferError) {
         succeeded = false
         heading = SettingsDataCopy.importFailed
         lines = [Self.message(for: error)]
@@ -55,19 +54,17 @@ struct ImportReport: Equatable {
         }
     }
 
-    static func message(for error: any Error) -> LocalizedStringResource {
+    static func message(for error: DataTransferError) -> LocalizedStringResource {
         switch error {
-        case DataTransferError.emptyFile: SettingsDataCopy.errorEmptyFile
-        case DataTransferError.unreadableBackup: SettingsDataCopy.errorUnreadableBackup
-        case DataTransferError.newerBackup: SettingsDataCopy.errorNewerBackup
-        case DataTransferError.unrecognizedCSV: SettingsDataCopy.errorUnrecognizedCSV
-        case ImportFailure.cantOpen: SettingsDataCopy.errorCantOpen
-        // Anything else came from saving to the store.
-        default: SettingsDataCopy.errorCantSave
+        case .emptyFile: SettingsDataCopy.errorEmptyFile
+        case .unreadableBackup: SettingsDataCopy.errorUnreadableBackup
+        case .newerBackup: SettingsDataCopy.errorNewerBackup
+        case .unrecognizedCSV: SettingsDataCopy.errorUnrecognizedCSV
+        case .cantOpen: SettingsDataCopy.errorCantOpen
+        case .saveFailed: SettingsDataCopy.errorCantSave
         }
     }
 
-    /// The whole report as one string, for VoiceOver to announce.
     var spoken: String {
         ([heading] + lines).map { String(localized: $0) }.joined(separator: " ")
     }

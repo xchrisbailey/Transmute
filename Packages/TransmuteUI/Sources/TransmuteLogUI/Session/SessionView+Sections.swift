@@ -3,16 +3,13 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// The exercise sections, menus, sheets and names the session screen is built from.
 extension SessionView {
-    // MARK: Sections
-
     @ViewBuilder func exerciseSection(_ exercise: LoggedExercise) -> some View {
         let tracking = library.exercise(id: exercise.exerciseID)?.tracking ?? .weightReps
         let equipment = library.exercise(id: exercise.exerciseID)?.allEquipment ?? []
         Section {
             if !exercise.isSkipped {
-                // Stacked rows name their own fields, so the columns' header goes (#60).
+                // Stacked rows name their own fields, so the columns' header goes.
                 if !typeSize.isAccessibilitySize {
                     SetTableHeader(tracking: tracking, units: units)
                 }
@@ -154,8 +151,6 @@ extension SessionView {
         }
     }
 
-    // MARK: Names and notes
-
     func name(of exercise: LoggedExercise) -> String {
         name(ofID: exercise.exerciseID)
     }
@@ -191,7 +186,6 @@ extension SessionView {
         }
     }
 
-    /// Barbell and trap bar lifts get the plate calculator, when the person has one.
     func usesPlates(_ equipment: Set<Equipment>) -> Bool {
         let kit = Set(profile?.equipment ?? [])
         return !equipment.isDisjoint(with: [.barbell, .trapBar]) && !kit.isDisjoint(with: [.barbell, .trapBar])

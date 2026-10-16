@@ -2,6 +2,7 @@ import Foundation
 import SwiftData
 import Testing
 import TransmuteCore
+import TransmuteTestSupport
 
 @testable import TransmutePlanUI
 
@@ -12,7 +13,7 @@ struct PlanGridItemTests {
 
     init() throws {
         container = try TransmuteStore.makeContainer(.inMemory)
-        plan = SampleData.plan(startingOn: Date(timeIntervalSince1970: 1_790_380_800))
+        plan = SampleData.plan(startingOn: utc(2026, 9, 21))
         container.mainContext.insert(plan)
         try container.mainContext.save()
     }
@@ -48,34 +49,49 @@ struct PlanGridItemTests {
         #expect(monday.weekday == 1 && !monday.isEdited)
     }
 
-    @Test func anExerciseTakesThePlaceOfTheRowItLandsOn() throws {
+    @Test func anExerciseDraggedDownTakesThePlaceOfTheRowItLandsOn() throws {
         let monday = try #require(day(1, 1))
         let ids = monday.orderedExercises.map(\.exerciseID)
-        // Dragged down onto the third row, then back up onto the first.
-        var item = PlanGridItem(day: monday, in: plan, exercise: monday.orderedExercises[0])
+        let item = PlanGridItem(day: monday, in: plan, exercise: monday.orderedExercises[0])
         #expect(item.drop(in: plan, week: 1, weekday: 1, onto: monday.orderedExercises[2]))
         #expect(monday.orderedExercises.map(\.exerciseID) == [ids[1], ids[2], ids[0], ids[3], ids[4]])
+    }
+
+    @Test func anExerciseDraggedBackUpRestoresTheOrder() throws {
+        let monday = try #require(day(1, 1))
+        let ids = monday.orderedExercises.map(\.exerciseID)
+        var item = PlanGridItem(day: monday, in: plan, exercise: monday.orderedExercises[0])
+        #expect(item.drop(in: plan, week: 1, weekday: 1, onto: monday.orderedExercises[2]))
         item = PlanGridItem(day: monday, in: plan, exercise: monday.orderedExercises[2])
         #expect(item.drop(in: plan, week: 1, weekday: 1, onto: monday.orderedExercises[0]))
         #expect(monday.orderedExercises.map(\.exerciseID) == ids)
-        // Onto itself: nothing to do.
-        item = PlanGridItem(day: monday, in: plan, exercise: monday.orderedExercises[1])
+    }
+
+    @Test func anExerciseDroppedOntoItsOwnRowChangesNothing() throws {
+        let monday = try #require(day(1, 1))
+        let item = PlanGridItem(day: monday, in: plan, exercise: monday.orderedExercises[1])
         #expect(!item.drop(in: plan, week: 1, weekday: 1, onto: monday.orderedExercises[1]))
     }
 
-    @Test func anExerciseDropsOnAnotherDay() throws {
+    @Test func anExerciseDroppedOnARowOfAnotherDayLandsBeforeIt() throws {
         let monday = try #require(day(1, 1))
         let friday = try #require(day(2, 5))
         let squat = monday.orderedExercises[1]
-        let lunge = monday.orderedExercises[3]
-        // On a row: before it. On the card: last.
         let onRow = PlanGridItem(day: monday, in: plan, exercise: squat)
         #expect(onRow.drop(in: plan, week: 2, weekday: 5, onto: friday.orderedExercises[0]))
         #expect(friday.orderedExercises.first === squat)
+        #expect(friday.orderedExercises.map(\.order) == Array(0..<7))
+        #expect(monday.orderedExercises.map(\.order) == Array(0..<4))
+    }
+
+    @Test func anExerciseDroppedOnTheCardOfAnotherDayLandsLast() throws {
+        let monday = try #require(day(1, 1))
+        let friday = try #require(day(2, 5))
+        let lunge = monday.orderedExercises[3]
         #expect(PlanGridItem(day: monday, in: plan, exercise: lunge).drop(in: plan, week: 2, weekday: 5))
         #expect(friday.orderedExercises.last === lunge)
-        #expect(friday.orderedExercises.map(\.order) == Array(0..<8))
-        #expect(monday.orderedExercises.map(\.order) == Array(0..<3))
+        #expect(friday.orderedExercises.map(\.order) == Array(0..<7))
+        #expect(monday.orderedExercises.map(\.order) == Array(0..<4))
     }
 
     @Test func anExerciseNeedsASessionToLandOn() throws {

@@ -4,7 +4,6 @@ import TransmuteCore
 import TransmuteLogUI
 import TransmuteUI
 
-/// What Transmute does and doesn't do with your data, in a few plain sentences (#18).
 struct PrivacySection: View {
     var body: some View {
         Section {
@@ -23,7 +22,6 @@ struct PrivacySection: View {
     }
 }
 
-/// Export as CSV or a full backup, and import a backup or a Strong or Hevy export (#18).
 struct TransferSections: View {
     /// Whose weight unit a CSV without units is read in. `nil` uses the device's.
     let profile: Profile?
@@ -74,7 +72,6 @@ struct TransferSections: View {
             Text(SettingsDataCopy.importNote)
         }
         .fileImporter(isPresented: $showsImporter, allowedContentTypes: ImportKind.contentTypes) { result in
-            // Cancelling isn't a failure, and reports nothing.
             if case .success(let url) = result { importFile(at: url) }
         }
     }
@@ -123,7 +120,6 @@ struct TransferSections: View {
     }
 }
 
-/// The result of an import: a heading with a symbol, then each line.
 struct ImportReportView: View {
     let report: ImportReport
 
@@ -149,8 +145,7 @@ struct ImportReportView: View {
     }
 }
 
-/// Delete all data (#18): a destructive button, then a confirmation that names what goes and
-/// spells the action out on its own button. Without a profile the app shows onboarding again;
+/// Without a profile the app shows onboarding again;
 /// `ErasureNotice` reports there how it went.
 struct DeleteSection: View {
     @Environment(\.modelContext) private var context
@@ -167,7 +162,6 @@ struct DeleteSection: View {
                 Label {
                     Text(isDeleting ? SettingsDataCopy.deleting : SettingsDataCopy.deleteAll)
                 } icon: {
-                    // Red like its words, not the accent color.
                     Image(systemName: "trash")
                         .foregroundStyle(Color.brandText(\.alert))
                 }
@@ -221,7 +215,7 @@ struct DeleteSection: View {
 }
 
 #Preview {
-    let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
+    let container = SampleData.previewFixture().container
     return Form {
         PrivacySection()
         TransferSections(profile: nil)

@@ -1,16 +1,15 @@
 import Foundation
 import SwiftData
 
-/// The workout log (#14): finished workouts grouped by week, filtered, and kept consistent
-/// when a past set or workout is edited or deleted. Progression (#12) reads history live, so
-/// it follows edits by itself; records (#13) are derived and get recomputed here.
+/// The workout log: finished workouts grouped by week, filtered, and kept consistent
+/// when a past set or workout is edited or deleted. Progression reads history live, so
+/// it follows edits by itself; records are derived and get recomputed here.
 public enum WorkoutLog {
     /// What the log is narrowed to. Empty fields don't filter.
     public struct Filter: Equatable, Sendable {
         /// Matches the workout's title, or any exercise's name.
         public var text: String
         public var exerciseID: String?
-        /// Only workouts from this plan.
         public var planID: UUID?
         public var dates: DateInterval?
 
@@ -63,8 +62,6 @@ public enum WorkoutLog {
             .sorted { $0.start > $1.start }
     }
 
-    // MARK: Editing
-
     /// Call after changing a logged set's numbers: the exercise's records are rebuilt.
     public static func edited(_ set: LoggedSet, in context: ModelContext, library: ExerciseLibrary = .bundled) throws {
         guard let exerciseID = set.exercise?.exerciseID else { return }
@@ -90,11 +87,14 @@ public enum WorkoutLog {
     }
 
     /// Deletes a workout and everything in it, rebuilds the records of every exercise it had,
-    /// and returns the Health workout to remove, if Transmute wrote one.
+    /// and returns the Health workout to remove, if Transmute wrote one. The deletion is noted in
+    /// `defaults`, so a Health workout the watch reports later for it is removed too.
     @discardableResult
-    public static func delete(_ workout: Workout, in context: ModelContext, library: ExerciseLibrary = .bundled)
-        throws -> UUID?
-    {
+    public static func delete(
+        _ workout: Workout, in context: ModelContext, library: ExerciseLibrary = .bundled,
+        defaults: UserDefaults = .standard
+    ) throws -> UUID? {
+        let workoutID = workout.id
         let exerciseIDs = Set(workout.orderedExercises.map(\.exerciseID))
         let healthID = workout.healthKitWorkoutID
         context.delete(workout)
@@ -103,12 +103,10 @@ public enum WorkoutLog {
             _ = try book.recompute(exerciseID: exerciseID)
         }
         try context.save()
+        PendingHealthDeletes(defaults: defaults).markDeleted(workoutID)
         return healthID
     }
 
-    // MARK: Exercise history
-
-    /// One session's worth of an exercise, for its history screen.
     public struct ExerciseEntry: Identifiable {
         public var workout: Workout
         public var sets: [LoggedSet]
@@ -117,13 +115,15 @@ public enum WorkoutLog {
         public var id: PersistentIdentifier { workout.persistentModelID }
     }
 
-    /// Every finished session of an exercise, newest first, with its logged working sets.
-    public static func history(of exerciseID: String, in context: ModelContext) throws -> [ExerciseEntry] {
-        let descriptor = FetchDescriptor<LoggedExercise>(predicate: #Predicate { $0.exerciseID == exerciseID })
-        return try context.fetch(descriptor)
-            .compactMap { logged -> ExerciseEntry? in
-                guard let workout = logged.workout, workout.endedAt != nil else { return nil }
-                let sets = logged.orderedSets.filter(\.isCompleted)
+    /// Every finished session of an exercise among `workouts`, newest first, with its logged
+    /// working sets.
+    public static func history(of exerciseID: String, in workouts: [Workout]) -> [ExerciseEntry] {
+        workouts
+            .filter { $0.endedAt != nil }
+            .compactMap { workout -> ExerciseEntry? in
+                let sets = workout.orderedExercises.filter { $0.exerciseID == exerciseID }
+                    .flatMap(\.orderedSets)
+                    .filter(\.isCompleted)
                 guard !sets.isEmpty else { return nil }
                 let best = sets.filter { !$0.isWarmUp }
                     .compactMap { set in set.weightKg.flatMap { OneRepMax.estimate(weightKg: $0, reps: set.reps ?? 0) }

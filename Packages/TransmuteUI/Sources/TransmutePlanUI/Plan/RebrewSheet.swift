@@ -4,7 +4,7 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// Rebrew (#10): regenerate the plan from a chosen week on. Logged days always stay; hand-edited
+/// Regenerates the plan from a chosen week on. Logged days always stay; hand-edited
 /// days stay unless the person says otherwise.
 public struct RebrewSheet: View {
     let plan: Plan

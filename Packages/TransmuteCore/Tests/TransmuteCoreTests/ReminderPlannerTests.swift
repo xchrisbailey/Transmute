@@ -13,12 +13,11 @@ struct ReminderPlannerTests {
         calendar.timeZone = TimeZone(identifier: "Europe/London")!
         return calendar
     }()
-    /// Reminders at 18:00 and nudges, both on.
     let both = ReminderSettings(remindsOnTrainingDays: true, trainingDayMinutes: 18 * 60, nudgesAfterMissedDay: true)
     let nudgeOnly = ReminderSettings(nudgesAfterMissedDay: true)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     /// Monday 5 October 2026, the first day of the plan.
@@ -61,8 +60,6 @@ struct ReminderPlannerTests {
             plan: plan, lastWorkoutAt: lastWorkoutAt, settings: settings, now: now, calendar: calendar, limit: limit)
     }
 
-    // MARK: Off
-
     @Test func nothingIsPlannedByDefault() throws {
         #expect(ReminderSettings() == ReminderSettings(remindsOnTrainingDays: false, nudgesAfterMissedDay: false))
         #expect(reminders(try plan(), ReminderSettings(), now: time(day: 0, hour: 7)).isEmpty)
@@ -71,8 +68,6 @@ struct ReminderPlannerTests {
     @Test func nothingIsPlannedWithoutAPlan() {
         #expect(reminders(nil, both, now: time(day: 0, hour: 7)).isEmpty)
     }
-
-    // MARK: Training days
 
     @Test func remindsOnEachPlannedDayOfTheNextTwoWeeks() throws {
         let settings = ReminderSettings(remindsOnTrainingDays: true, trainingDayMinutes: 18 * 60)
@@ -121,8 +116,6 @@ struct ReminderPlannerTests {
         #expect(planned.first.map { calendar.component(.hour, from: $0.fireDate) } == 18)
     }
 
-    // MARK: Missed days
-
     @Test func nudgesTheMorningAfterAPlannedDay() throws {
         let planned = reminders(try plan(), nudgeOnly, now: time(day: 0, hour: 7))
         #expect(planned.count == 1)
@@ -135,12 +128,10 @@ struct ReminderPlannerTests {
     @Test func nudgesForYesterdayUntilTheMorningHasPassed() throws {
         let plan = try plan()
         #expect(reminders(plan, nudgeOnly, now: time(day: 1, hour: 8)).map(\.fireDate) == [time(day: 1, hour: 9)])
-        // After 09:00 Monday's nudge has gone; the next one is for Wednesday.
         #expect(reminders(plan, nudgeOnly, now: time(day: 1, hour: 9)).map(\.fireDate) == [time(day: 3, hour: 9)])
     }
 
     @Test func neverPlansMoreThanOneNudge() throws {
-        // Nothing logged for a week and a half: still one nudge, for the latest day.
         let planned = reminders(try plan(), nudgeOnly, now: time(day: 10, hour: 7))
         #expect(planned.map(\.id) == ["transmute.reminder.missedDay.2026-10-14"])
         #expect(reminders(try plan(), both, now: time(day: 0, hour: 7)).filter { $0.kind == .missedDay }.count == 1)
@@ -153,29 +144,35 @@ struct ReminderPlannerTests {
         #expect(planned.map(\.fireDate) == [time(day: 3, hour: 9)])
     }
 
-    @Test func noNudgeOnceThePersonHasTrainedSince() throws {
-        let plan = try plan()
-        // Monday's session wasn't logged, but there was a workout off the plan on Tuesday at 06:00.
-        let planned = reminders(plan, nudgeOnly, now: time(day: 1, hour: 8), lastWorkoutAt: time(day: 1, hour: 6))
+    @Test func aWorkoutOffThePlanTuesdayMorningMovesMondaysNudgeOn() throws {
+        let planned = reminders(
+            try plan(), nudgeOnly, now: time(day: 1, hour: 8), lastWorkoutAt: time(day: 1, hour: 6))
         #expect(planned.map(\.fireDate) == [time(day: 3, hour: 9)])
-        // An older workout doesn't count.
-        let before = reminders(plan, nudgeOnly, now: time(day: 1, hour: 8), lastWorkoutAt: time(day: -2, hour: 6))
-        #expect(before.map(\.fireDate) == [time(day: 1, hour: 9)])
     }
 
-    @Test func aTrainingDayReminderStandsInForTheNudge() throws {
+    @Test func aWorkoutBeforeTheMissedDayDoesNotMoveTheNudge() throws {
+        let planned = reminders(
+            try plan(), nudgeOnly, now: time(day: 1, hour: 8), lastWorkoutAt: time(day: -2, hour: 6))
+        #expect(planned.map(\.fireDate) == [time(day: 1, hour: 9)])
+    }
+
+    func planWithWednesdayMovedToTuesday() throws -> Plan {
         let plan = try plan()
         let wednesday = try #require(PlanEditor.day(of: plan, week: 1, weekday: 3))
         PlanEditor.move(wednesday, to: 2)
-        // Monday and Tuesday are both planned: Tuesday's reminder is enough for that morning.
-        let planned = reminders(plan, both, now: time(day: 0, hour: 19))
-        #expect(planned.prefix(2).map(\.kind) == [.trainingDay, .missedDay])
-        #expect(planned.prefix(2).map(\.fireDate) == [time(day: 1, hour: 18), time(day: 2, hour: 9)])
-        // With only nudges on, Monday's nudge still comes on Tuesday.
-        #expect(reminders(plan, nudgeOnly, now: time(day: 0, hour: 19)).first?.fireDate == time(day: 1, hour: 9))
+        return plan
     }
 
-    // MARK: Settings
+    @Test func aTrainingDayReminderStandsInForTheNudgeOnTheNextPlannedDay() throws {
+        let planned = reminders(try planWithWednesdayMovedToTuesday(), both, now: time(day: 0, hour: 19))
+        #expect(planned.prefix(2).map(\.kind) == [.trainingDay, .missedDay])
+        #expect(planned.prefix(2).map(\.fireDate) == [time(day: 1, hour: 18), time(day: 2, hour: 9)])
+    }
+
+    @Test func withOnlyNudgesOnMondaysNudgeStillComesOnTuesday() throws {
+        let planned = reminders(try planWithWednesdayMovedToTuesday(), nudgeOnly, now: time(day: 0, hour: 19))
+        #expect(planned.first?.fireDate == time(day: 1, hour: 9))
+    }
 
     @Test func settingsRoundTripThroughDefaults() throws {
         let name = "ReminderPlannerTests.\(UUID().uuidString)"

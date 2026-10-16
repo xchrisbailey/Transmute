@@ -1,10 +1,7 @@
 import Foundation
 
-/// Strings for the watch (#15). Everything on the wrist is plain: no alchemy verbs mid-set.
 /// Keys shared with the iPhone's session screen are the same entries in the String Catalog.
 enum WatchCopy {
-    // MARK: Today
-
     static let today = LocalizedStringResource(
         "plain.today.title", defaultValue: "Today", bundle: .main,
         comment: "plain. Tab and title of the Today screen.")
@@ -38,8 +35,6 @@ enum WatchCopy {
     static let noPlan = LocalizedStringResource(
         "plain.watch.noPlan", defaultValue: "No plan yet. Make one in Transmute on iPhone.", bundle: .main,
         comment: "plain. Watch. Nothing to show until a plan exists; the watch can't make plans.")
-
-    // MARK: Set
 
     static func setOf(_ number: Int, of total: Int) -> LocalizedStringResource {
         LocalizedStringResource(
@@ -75,8 +70,6 @@ enum WatchCopy {
         "plain.session.allLogged", defaultValue: "Every set is logged.", bundle: .main,
         comment: "plain. Nothing left to do but finish.")
 
-    // MARK: Rest
-
     static let rest = LocalizedStringResource(
         "plain.session.intervalRest", defaultValue: "Rest", bundle: .main,
         comment: "plain. Interval phase.")
@@ -94,8 +87,6 @@ enum WatchCopy {
     static let addRest = LocalizedStringResource(
         "plain.session.addRest", defaultValue: "15 seconds more rest", bundle: .main,
         comment: "plain. VoiceOver label for the +15 s button.")
-
-    // MARK: Controls
 
     static let finish = LocalizedStringResource(
         "plain.session.finish", defaultValue: "Finish", bundle: .main,
@@ -129,8 +120,6 @@ enum WatchCopy {
         "plain.watch.waterLockHint", defaultValue: "Hold the Digital Crown to unlock.", bundle: .main,
         comment: "plain. Watch. Under the lock button.")
 
-    // MARK: Exercises
-
     static let exercises = LocalizedStringResource(
         "plain.watch.exercises", defaultValue: "Exercises", bundle: .main,
         comment: "plain. Watch. Title of the list of this workout's exercises.")
@@ -144,8 +133,6 @@ enum WatchCopy {
     static let skipped = LocalizedStringResource(
         "plain.session.skipped", defaultValue: "Skipped", bundle: .main,
         comment: "plain. The exercise was passed over.")
-
-    // MARK: Finish
 
     static let workoutDone = LocalizedStringResource(
         "plain.watch.workoutDone", defaultValue: "Workout done", bundle: .main,
@@ -166,8 +153,6 @@ enum WatchCopy {
     static let done = LocalizedStringResource(
         "plain.watch.done", defaultValue: "Done", bundle: .main,
         comment: "plain. Watch. Close the finished workout's summary.")
-
-    // MARK: Health
 
     static let heartRate = LocalizedStringResource(
         "plain.watch.heartRate", defaultValue: "Heart rate", bundle: .main,
@@ -190,8 +175,6 @@ enum WatchCopy {
     static let savedToHealth = LocalizedStringResource(
         "plain.finish.savedToHealth", defaultValue: "Saved to Health", bundle: .main,
         comment: "plain. The workout was written to Health.")
-
-    // MARK: Records
 
     static let newRecord = LocalizedStringResource(
         "plain.watch.newRecord", defaultValue: "New record", bundle: .main,

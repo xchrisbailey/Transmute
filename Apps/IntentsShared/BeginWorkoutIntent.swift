@@ -3,10 +3,6 @@ import SwiftData
 import TransmuteCore
 import TransmuteUI
 
-/// "Begin today's workout" (#19), from Siri, Spotlight, the Action button and the Control
-/// Center button. Opens the app on Today and starts the session, the way the widget's button
-/// does; with nothing to start it opens Today and says why.
-///
 /// The iPhone's widget extension compiles this too, for its control, but the system always
 /// runs it in the app.
 struct BeginWorkoutIntent: AppIntent {

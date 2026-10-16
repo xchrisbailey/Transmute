@@ -2,9 +2,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// The reminder switches, for a settings `Form` (#19): a reminder on training days at a chosen
-/// time, and a nudge after a missed day. Both start off. Turning one on asks for permission,
-/// and when the system says no, the section says so with a way to its settings.
 public struct ReminderSettingsSection: View {
     @State private var settings: ReminderSettings
     @State private var permission: ReminderPermission?
@@ -93,7 +90,7 @@ public struct ReminderSettingsSection: View {
             settings.trainingDayTime()
         } set: { date in
             settings.setTrainingDayTime(date)
-            save(asks: false)
+            saveAndReschedule(requestingPermission: false)
         }
     }
 
@@ -102,14 +99,14 @@ public struct ReminderSettingsSection: View {
             settings[keyPath: keyPath]
         } set: { isOn in
             settings[keyPath: keyPath] = isOn
-            save(asks: asks && isOn)
+            saveAndReschedule(requestingPermission: asks && isOn)
         }
     }
 
-    /// Saves, which is what reschedules. When a reminder was just turned on, permission is
-    /// settled first, so the reminders are scheduled with the answer known.
-    private func save(asks: Bool) {
-        guard asks, fixedPermission == nil else {
+    /// `TrainingReminders` reschedules when the saved defaults change. When a reminder was just
+    /// turned on, permission is settled first, so the reminders are scheduled with the answer known.
+    private func saveAndReschedule(requestingPermission: Bool) {
+        guard requestingPermission, fixedPermission == nil else {
             settings.save(to: defaults)
             return
         }

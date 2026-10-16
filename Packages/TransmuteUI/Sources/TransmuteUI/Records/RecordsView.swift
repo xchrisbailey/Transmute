@@ -2,9 +2,6 @@ import SwiftData
 import SwiftUI
 import TransmuteCore
 
-/// Personal records (#13): what turned to gold since a date, such as the plan's start, and the
-/// current bests for every exercise. Gold marks records here and nowhere else.
-///
 ///     RecordsView(since: plan.startDate, units: Units(profile))
 public struct RecordsView: View {
     let since: Date?
@@ -75,7 +72,6 @@ public struct RecordsView: View {
     }
 }
 
-/// One set that turned to gold: its headline record, and any others it set alongside.
 private struct GoldRow: View {
     let records: [PersonalRecord]
     let exercise: String
@@ -119,7 +115,6 @@ private struct GoldRow: View {
     }
 }
 
-/// A current best in an exercise's table, e.g. "5RM   115 kg".
 private struct BestRow: View {
     let record: PersonalRecord
     let units: Units
@@ -141,7 +136,7 @@ private struct BestRow: View {
 }
 
 #Preview {
-    let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
+    let container = SampleData.previewFixture().container
     try? RecordBook(context: container.mainContext).recomputeAll()
     return NavigationStack {
         RecordsView(since: .now.addingTimeInterval(-14 * 86_400), units: Units(system: .metric))

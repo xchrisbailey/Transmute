@@ -5,7 +5,7 @@ import SwiftData
     import CloudKit
 #endif
 
-/// Whether the store is syncing with iCloud, as far as the app can tell, for Settings (#18).
+/// Whether the store is syncing with iCloud, as far as the app can tell, for Settings.
 public enum CloudSyncStatus: Equatable, Sendable {
     /// This build doesn't sync: it isn't signed for iCloud, or the synced store couldn't open.
     case notSyncing

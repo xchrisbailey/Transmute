@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-/// Where the workout preferences (#18) meet a session: default rests, warm-up sets and
+/// Where the workout preferences meet a session: default rests, warm-up sets and
 /// starting rest by hand.
 extension WorkoutSession {
     /// The sets a planned exercise starts with: the engine's targets, with rests filled in

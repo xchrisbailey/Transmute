@@ -2,9 +2,6 @@
     import SwiftUI
     import TransmuteCore
 
-    /// Bars, plates and the dumbbell and machine steps (#21). Edits a binding, so it works on a
-    /// `ProfileDraft` and is saved with the rest of the profile.
-    ///
     /// Weights here are in the kit's own unit, which can differ from the display unit: plates
     /// are marked in one or the other.
     public struct PlateSetupView: View {
@@ -52,8 +49,8 @@
                     Text(PlateCopy.bar)
                 }
                 Section {
-                    ForEach(inventory.plates.indices, id: \.self) { index in
-                        plateRow(index)
+                    ForEach($inventory.plates) { $plate in
+                        plateRow($plate)
                     }
                     .onDelete { inventory.plates.remove(atOffsets: $0) }
                     HStack {
@@ -96,33 +93,25 @@
             Units(system: inventory.system)
         }
 
-        private func plateRow(_ index: Int) -> some View {
-            let plate = inventory.plates[index]
-            let weight = "\(PlateText.weight(inventory.display(kg: plate.kg))) \(units.weightSymbol)"
-            return Stepper(value: pairs(index), in: 0...20) {
+        private func plateRow(_ plate: Binding<PlateInventory.Plate>) -> some View {
+            let kg = plate.wrappedValue.kg
+            let pairs = plate.wrappedValue.pairs
+            let weight = "\(PlateText.weight(inventory.display(kg: kg))) \(units.weightSymbol)"
+            return Stepper(value: plate.pairs, in: 0...20) {
                 HStack {
                     Circle()
-                        .fill(PlateStyle.color(kg: plate.kg))
+                        .fill(PlateStyle.color(kg: kg))
                         .frame(width: 14, height: 14)
                         .accessibilityHidden(true)
                     Text(verbatim: weight)
                         .brandNumberFont(size: 17)
                     Spacer()
-                    Text(PlateCopy.pairs(plate.pairs))
+                    Text(PlateCopy.pairs(pairs))
                         .foregroundStyle(Color.brandText(\.subtext))
                 }
             }
             .accessibilityElement(children: .combine)
-            .accessibilityLabel(Text(PlateCopy.plateRow(weight, pairs: plate.pairs)))
-        }
-
-        /// A plate's pair count, safe against the row outliving a delete.
-        private func pairs(_ index: Int) -> Binding<Int> {
-            Binding {
-                inventory.plates.indices.contains(index) ? inventory.plates[index].pairs : 0
-            } set: { pairs in
-                if inventory.plates.indices.contains(index) { inventory.plates[index].pairs = pairs }
-            }
+            .accessibilityLabel(Text(PlateCopy.plateRow(weight, pairs: pairs)))
         }
 
         private func addPlate() {

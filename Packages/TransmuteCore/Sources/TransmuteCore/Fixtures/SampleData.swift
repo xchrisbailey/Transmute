@@ -7,7 +7,6 @@ public enum SampleData {
     /// Every exercise id the sample uses. The exercise library must contain all of them.
     public static let exerciseIDs: Set<String> = Set(days.flatMap { $0.exercises.map(\.id) })
 
-    /// 5′9″, 175 lb, intermediate, playing tennis three times a week.
     public static func profile() -> Profile {
         let profile = Profile()
         profile.heightCm = Units.centimetres(feet: 5, inches: 9)
@@ -172,12 +171,40 @@ public enum SampleData {
         return (profile, plan)
     }
 
-    /// An in-memory container holding the sample, for SwiftUI previews.
     @MainActor
     public static func previewContainer() throws -> ModelContainer {
         let container = try TransmuteStore.makeContainer(.inMemory)
         insert(into: container.mainContext)
         try container.mainContext.save()
         return container
+    }
+
+    /// An empty in-memory container for `#Preview`, which can't throw.
+    @MainActor
+    public static func emptyPreviewContainer() -> ModelContainer {
+        do {
+            return try TransmuteStore.makeContainer(.inMemory)
+        } catch {
+            fatalError("Preview fixture: could not build an in-memory container: \(error)")
+        }
+    }
+
+    /// The sample store for `#Preview`, which can't throw, with its profile and plan.
+    @MainActor
+    public static func previewFixture() -> PreviewFixture {
+        let container = emptyPreviewContainer()
+        let (profile, plan) = insert(into: container.mainContext)
+        do {
+            try container.mainContext.save()
+        } catch {
+            fatalError("Preview fixture: could not save the sample data: \(error)")
+        }
+        return PreviewFixture(container: container, profile: profile, plan: plan)
+    }
+
+    public struct PreviewFixture {
+        public let container: ModelContainer
+        public let profile: Profile
+        public let plan: Plan
     }
 }

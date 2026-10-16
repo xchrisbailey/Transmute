@@ -7,7 +7,6 @@ import TransmutePlanUI
 import TransmuteSettingsUI
 import TransmuteUI
 
-/// Onboarding until there's a profile, then the window: a sidebar and its four panes.
 struct RootView: View {
     @Query(sort: \Profile.createdAt) private var profiles: [Profile]
     @Query(filter: #Predicate<Plan> { $0.isActive }, sort: \Plan.createdAt, order: .reverse) private var plans: [Plan]
@@ -26,7 +25,7 @@ struct RootView: View {
                 .workoutPreferences(of: profile)
         } else {
             OnboardingFlow {
-                // After delete-all (#18), this is where the person lands.
+                // After delete-all, this is where the person lands.
                 ErasureNotice()
                 LiveIntelligenceNotice(service: service)
             } onFinish: { _, _ in
@@ -36,8 +35,6 @@ struct RootView: View {
     }
 }
 
-/// The Mac window (#17): Today, Plan, Log and Progress in a sidebar, with the streak and the
-/// profile underneath. The menu bar drives it through `WindowActions`.
 struct MacShell: View {
     let profile: Profile
     let plan: Plan?
@@ -47,10 +44,8 @@ struct MacShell: View {
     let device = "Mac"
 
     @SceneStorage("sidebar.section") private var section = SidebarSection.today
-    @State private var beginsWorkout = false
-    /// Set by Open workout and Spotlight (#19): the log selects this workout.
-    @State private var openedWorkout: UUID?
-    private let router = DeepLinkRouter.shared
+    @State private var beginRequest: WorkoutBeginRequest?
+    @State private var openRequest: WorkoutOpenRequest?
     @State private var showsRebrew = false
     @State private var showsProfile = false
     @FocusState private var searchIsFocused: Bool
@@ -69,14 +64,10 @@ struct MacShell: View {
             .id(section)
         }
         .focusedSceneValue(\.windowActions, actions)
-        // A widget's tap, or its button (#19).
         .onOpenURL { url in
             if let link = DeepLink(url: url) { follow(link) }
         }
-        // An App Intent's link, which may have been waiting since before the window (#19).
-        .onChange(of: router.pending, initial: true) {
-            if let link = router.take() { follow(link) }
-        }
+        .followsDeepLinks { follow($0) }
         .trainingReminders(plan: plan) { section = .today }
         .sheet(isPresented: $showsProfile) {
             NavigationStack {
@@ -96,18 +87,19 @@ struct MacShell: View {
         }
         .sheet(isPresented: $showsRebrew) {
             if let plan {
-                RebrewSheet(plan: plan, profile: profile, service: service, currentWeek: PlanEditor.week(of: plan))
+                RebrewSheet(
+                    plan: plan, profile: profile, service: service,
+                    currentWeek: PlanCalendar(plan: plan).clampedWeek(containing: .now))
             }
         }
     }
 
-    /// The plan as the week grid, or as the same list the iPhone shows.
     @AppStorage("planGrid") private var showsPlanGrid = true
 
     @ViewBuilder private var pane: some View {
         switch section {
         case .today:
-            TodayView(plan: plan, profile: profile, beginsWorkout: $beginsWorkout)
+            TodayView(plan: plan, profile: profile, consumingBeginRequest: $beginRequest)
         case .plan:
             if let plan {
                 Group {
@@ -142,23 +134,23 @@ struct MacShell: View {
                 BrewPlanView(profile: profile, service: service, device: device)
             }
         case .log:
-            LogTableView(profile: profile, plan: plan, searchFocus: $searchIsFocused, opening: $openedWorkout)
+            LogTableView(
+                profile: profile, plan: plan, searchFocus: $searchIsFocused, consumingOpenRequest: $openRequest)
         case .progress:
             ProgressPane(plan: plan, profile: profile, service: service)
         }
     }
 
-    /// Goes where a widget, a shortcut or Spotlight pointed.
     private func follow(_ link: DeepLink) {
         switch link {
         case .today, .beginToday:
             section = .today
-            beginsWorkout = link == .beginToday
+            beginRequest = link == .beginToday ? WorkoutBeginRequest() : nil
         case .log:
             section = .log
         case .workout(let id):
             section = .log
-            openedWorkout = id
+            openRequest = WorkoutOpenRequest(workoutID: id)
         case .plan:
             section = .plan
         }
@@ -170,7 +162,7 @@ struct MacShell: View {
             show: { section = $0 },
             newWorkout: {
                 section = .today
-                beginsWorkout = true
+                beginRequest = WorkoutBeginRequest()
             },
             brewPlan: {
                 section = .plan
@@ -180,8 +172,7 @@ struct MacShell: View {
     }
 }
 
-/// The Settings window (#18), opened with ⌘, from the app menu. It has its own query, since
-/// it can be open before there's a profile and after one is deleted.
+/// Has its own query, since it can be open before there's a profile and after one is deleted.
 struct SettingsRoot: View {
     @Query(sort: \Profile.createdAt) private var profiles: [Profile]
     let service = FoundationModelsService()

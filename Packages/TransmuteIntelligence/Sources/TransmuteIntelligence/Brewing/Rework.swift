@@ -94,7 +94,7 @@ public struct ReworkTarget: Sendable {
 
 extension PlanBrewer {
     /// Rewrites one day around a note like "no barbell today", "only 30 minutes" or "knee's
-    /// sore" (#10). Returns the new exercises for the day's week of its phase; nothing changes
+    /// sore". Returns the new exercises for the day's week of its phase; nothing changes
     /// until the caller applies them.
     public func rework(_ target: ReworkTarget, note: String, brief: TrainingBrief, units: UnitSystem) async throws
         -> TemplateDay
@@ -106,11 +106,10 @@ extension PlanBrewer {
         let brief = reading.applied(to: brief)
         let assembler = PlanAssembler(brief: brief, units: units, library: library)
         let kind = DayKind.infer(from: currentIDs.compactMap(library.exercise(id:)))
-        var spec = DaySpec(
+        let spec = DaySpec(
             phase: phase, outline: .init(focus: focus, kind: kind.rawValue, intensity: "moderate"), weekday: weekday,
             kind: kind, beforeMatch: assembler.isBeforeHardCommitment(weekday))
         let current = currentIDs.compactMap(library.exercise(id:)).map(\.name).joined(separator: ", ")
-        spec.earlier = []
         var request = dayRequest(brief, spec: spec, offered: offered(for: kind, brief: brief, keeping: currentIDs))
         request.prompt =
             """

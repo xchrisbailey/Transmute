@@ -1,7 +1,6 @@
 import SwiftUI
 import TransmuteUI
 
-/// − value + with a number field in the middle: tap the buttons, or type.
 struct NumberStepper: View {
     let label: Text
     let unit: String?
@@ -12,7 +11,6 @@ struct NumberStepper: View {
 
     @Environment(\.dynamicTypeSize) private var typeSize
 
-    /// At accessibility sizes the name sits above the buttons and the number gets the width.
     private var stacks: Bool { typeSize.isAccessibilitySize }
 
     var body: some View {
@@ -46,7 +44,6 @@ struct NumberStepper: View {
             .foregroundStyle(Color.brandText(\.subtext))
     }
 
-    /// − number unit +
     @ViewBuilder private var controls: some View {
         button("minus", by: -step)
         TextField(value: $value, format: .number.precision(.fractionLength(0...fractionDigits))) {

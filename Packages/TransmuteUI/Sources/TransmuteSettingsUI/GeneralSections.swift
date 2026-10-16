@@ -3,7 +3,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// Weight, height and distance units (#18). Changes save straight away.
 struct UnitsSection: View {
     @Bindable var profile: Profile
     @Environment(\.modelContext) private var context
@@ -52,7 +51,7 @@ struct UnitsSection: View {
     }
 }
 
-/// Rows to the bar and plates setup (#21) and the progression settings (#12), which are the
+/// Rows to the bar and plates setup and the progression settings, which are the
 /// same screens the Profile links to. Here they save straight away.
 struct EquipmentLinksSection: View {
     @Bindable var profile: Profile
@@ -77,19 +76,16 @@ struct EquipmentLinksSection: View {
         }
     }
 
-    /// The profile keeps a copy of the chosen bar's weight, as saving a profile draft does.
     private var plates: Binding<PlateInventory> {
         Binding {
             profile.plates
         } set: { plates in
-            profile.plates = plates
-            profile.barbellKg = plates.barKg
+            profile.setPlates(plates)
             try? context.save()
         }
     }
 }
 
-/// System, Mocha or Latte, for this device (#18).
 struct AppearanceSection: View {
     @AppStorage(Appearance.defaultsKey) private var appearance = Appearance.system
 
@@ -112,15 +108,13 @@ struct AppearanceSection: View {
 }
 
 #Preview {
-    let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
-    // swiftlint:disable:next force_try
-    let profile = try! container.mainContext.fetch(FetchDescriptor<Profile>()).first!
+    let fixture = SampleData.previewFixture()
     return NavigationStack {
         Form {
-            UnitsSection(profile: profile)
-            EquipmentLinksSection(profile: profile)
+            UnitsSection(profile: fixture.profile)
+            EquipmentLinksSection(profile: fixture.profile)
             AppearanceSection()
         }
     }
-    .modelContainer(container)
+    .modelContainer(fixture.container)
 }

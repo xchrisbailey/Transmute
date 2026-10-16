@@ -27,7 +27,6 @@
         }
     }
 
-    /// This week's sessions as a ring around the figure. Without a week to show, the mark.
     struct CircularToday: View {
         let glance: TodayGlance
 
@@ -51,7 +50,6 @@
         }
     }
 
-    /// One line: the next lift while there's a session to do, otherwise the day.
     struct InlineToday: View {
         let glance: TodayGlance
 
@@ -66,7 +64,6 @@
         }
     }
 
-    /// The day, the next lift on one line, then the week's figure and the streak.
     struct RectangularToday: View {
         let glance: TodayGlance
 

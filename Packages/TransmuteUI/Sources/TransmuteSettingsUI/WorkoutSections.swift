@@ -4,8 +4,7 @@ import TransmuteCore
 import TransmutePlanUI
 import TransmuteUI
 
-/// How a workout runs and what its screens show (#18): rest times and alerts, RPE and % of
-/// 1RM, and warm-up sets. Changes save straight away and reach the session on its next set.
+/// Changes save straight away and reach the session on its next set.
 struct WorkoutSections: View {
     @Bindable var profile: Profile
     @Environment(\.modelContext) private var context
@@ -97,11 +96,9 @@ struct WorkoutSections: View {
 }
 
 #Preview {
-    let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
-    // swiftlint:disable:next force_try
-    let profile = try! container.mainContext.fetch(FetchDescriptor<Profile>()).first!
+    let fixture = SampleData.previewFixture()
     return Form {
-        WorkoutSections(profile: profile)
+        WorkoutSections(profile: fixture.profile)
     }
-    .modelContainer(container)
+    .modelContainer(fixture.container)
 }

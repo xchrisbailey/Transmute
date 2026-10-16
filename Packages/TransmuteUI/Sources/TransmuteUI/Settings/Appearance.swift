@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// How the app looks on this device (#18): follow the system, or stay in one of the two
+/// How the app looks on this device: follow the system, or stay in one of the two
 /// palettes. Kept in `UserDefaults` rather than the profile, since a Mac on a bright desk and
 /// a phone in a dim gym can want different things. The watch is always true black.
 ///
@@ -13,7 +13,6 @@ public enum Appearance: String, CaseIterable, Identifiable, Sendable {
     /// The light palette, always.
     case latte
 
-    /// Where the choice is kept in `UserDefaults`.
     public static let defaultsKey = "appearance"
 
     public var id: Self { self }
@@ -27,8 +26,6 @@ public enum Appearance: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
-    /// The name shown in Settings. "Dark" and "light" are spelled out, so nobody has to know
-    /// which palette is which.
     public var name: LocalizedStringResource {
         switch self {
         case .system: SettingsCopy.appearanceSystem

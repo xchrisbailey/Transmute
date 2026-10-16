@@ -2,7 +2,7 @@ import Foundation
 import OSLog
 import TransmuteCore
 
-/// Brews a plan from a brief (#9): a blueprint first, then each training day of each phase,
+/// Brews a plan from a brief: a blueprint first, then each training day of each phase,
 /// streaming progress so the screen can show the plan distilling day by day.
 public struct PlanBrewer: Sendable {
     public let service: any IntelligenceService
@@ -14,7 +14,6 @@ public struct PlanBrewer: Sendable {
     }
 
     public enum Progress: Sendable {
-        /// The outline is being written.
         case outlining
         case outlined(name: String, rationale: String, phases: [PlanPhase])
         /// A day is being written. `exercises` grows as names stream in.
@@ -23,15 +22,19 @@ public struct PlanBrewer: Sendable {
         case finished(BrewedPlan)
     }
 
-    /// One day to write, and what the prompt needs to know around it.
     struct DaySpec {
         var phase: PlanPhase
         var outline: PlanBlueprint.DayOutline
         var weekday: Weekday
         var kind: DayKind
-        /// Earlier days this week, e.g. "Monday: Back squat, Bench press".
-        var earlier: [String] = []
+        var earlier: [EarlierDay] = []
         var beforeMatch = false
+    }
+
+    /// A day already written this week, so the next one can vary its exercises.
+    struct EarlierDay {
+        var weekday: Weekday
+        var exercises: [String]
     }
 
     public func brew(_ brief: TrainingBrief, units: UnitSystem) -> AsyncThrowingStream<Progress, any Error> {
@@ -68,10 +71,7 @@ public struct PlanBrewer: Sendable {
                     phase: phase, outline: slot.outline, weekday: slot.weekday,
                     kind: PlanAssembler.kind(of: slot.outline),
                     beforeMatch: assembler.isBeforeHardCommitment(slot.weekday))
-                spec.earlier = week.map { day in
-                    "\(TrainingBrief.weekdayName(day.weekday)): \(names(day.exercises).joined(separator: ", "))"
-                }
-                // Nothing repeats within a week, so each day brings something new.
+                spec.earlier = week.map { EarlierDay(weekday: $0.weekday, exercises: names($0.exercises)) }
                 let used = Set(week.flatMap { $0.exercises.map(\.exerciseID) })
                 let day = try await writeDay(spec, brief: brief, assembler: assembler, excluding: used, report: report)
                 report(.distilled(phase: phase, focus: day.focus, exercises: names(day.exercises)))
@@ -82,7 +82,6 @@ public struct PlanBrewer: Sendable {
         return assembler.assemble(blueprint: blueprint, phases: phases, templates: templates)
     }
 
-    /// Writes and checks one day. A day that comes back short after the checks gets one more try.
     func writeDay(
         _ spec: DaySpec, brief: TrainingBrief, assembler: PlanAssembler, excluding used: Set<String>,
         report: (Progress) -> Void
@@ -93,6 +92,8 @@ public struct PlanBrewer: Sendable {
             report: report)
     }
 
+    /// Writes and checks one day. While it has too few exercises after the checks, asks again, up
+    /// to `attemptsPerDay` times, and keeps the fullest result.
     func writeDay(
         _ spec: DaySpec, brief: TrainingBrief, assembler: PlanAssembler, request: IntelligenceRequest,
         report: (Progress) -> Void
@@ -102,7 +103,7 @@ public struct PlanBrewer: Sendable {
         var best = TemplateDay(
             weekday: spec.weekday, focus: spec.outline.focus, why: "", kind: spec.kind, exercises: [])
         let enough = max(2, exerciseCount(brief, kind: spec.kind) - 2)
-        for _ in 0..<2 where best.exercises.count < enough {
+        for _ in 0..<Self.attemptsPerDay where best.exercises.count < enough {
             let draft = try await distill(request, spec: spec, report: report)
             let built = assembler.templateDay(draft, kind: spec.kind, offered: offered)
             if !built.report.dropped.isEmpty || !built.report.swapped.isEmpty {
@@ -139,8 +140,6 @@ public struct PlanBrewer: Sendable {
         exercises.map { library.exercise(id: $0.exerciseID)?.name ?? $0.exerciseID }
     }
 
-    // MARK: Prompts
-
     func blueprintRequest(_ brief: TrainingBrief, days: [Weekday]) -> IntelligenceRequest {
         let kinds = DayKind.allCases.map(\.rawValue).joined(separator: ", ")
         let required = PlanAssembler.requiredKinds(for: brief, days: days.count)
@@ -157,7 +156,7 @@ public struct PlanBrewer: Sendable {
         }
         lines.append("Split the weeks into phases that build towards the goal.")
         return IntelligenceRequest(
-            instructions: PlannerInstructions.make(experience: brief.experience),
+            instructions: PlannerInstructions.make(experience: brief.experience, exercises: .offeredList),
             prompt: lines.joined(separator: "\n"), arrayCounts: ["days": days.count], temperature: 0.6,
             maximumResponseTokens: 700)
     }
@@ -172,14 +171,17 @@ public struct PlanBrewer: Sendable {
         ]
         if spec.beforeMatch { lines.append("Tomorrow is a hard match or practice, so keep the legs fresh.") }
         if !spec.earlier.isEmpty {
-            lines.append("Earlier this week: \(spec.earlier.joined(separator: "; ")). Vary the exercises.")
+            let earlier = spec.earlier.map {
+                "\(TrainingBrief.weekdayName($0.weekday)): \($0.exercises.joined(separator: ", "))"
+            }
+            lines.append("Earlier this week: \(earlier.joined(separator: "; ")). Vary the exercises.")
         }
         lines.append(
             brief.experience == .beginner
                 ? "Use simple exercises and easy or steady effort."
                 : "Start with the most demanding exercise and finish with core or prehab work.")
         return IntelligenceRequest(
-            instructions: PlannerInstructions.make(experience: brief.experience),
+            instructions: PlannerInstructions.make(experience: brief.experience, exercises: .offeredList),
             prompt: """
                 \(lines.joined(separator: "\n"))
 
@@ -193,13 +195,13 @@ public struct PlanBrewer: Sendable {
             temperature: 0.7, maximumResponseTokens: 1_200)
     }
 
-    /// How many exercises a day gets: about one per ten minutes, at most five for beginners,
-    /// conditioning and mobility days, and three to eight in all.
     func exerciseCount(_ brief: TrainingBrief, kind: DayKind) -> Int {
         var count = brief.schedule.sessionMinutes / 10
         if brief.experience == .beginner || kind == .mobility || kind == .conditioning { count = min(count, 5) }
         return min(max(count, 3), 8)
     }
+
+    static let attemptsPerDay = 2
 
     private static let logger = Logger(subsystem: "computer.srcery.transmute", category: "brew")
 }

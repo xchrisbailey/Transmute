@@ -4,8 +4,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// One planned exercise: how to do it, and its sets to change. Steppers and number fields
-/// rather than pickers, so it's easy with big text and switch control (#22).
 struct PlannedExerciseView: View {
     @Bindable var planned: PlannedExercise
     let equipment: Set<Equipment>
@@ -112,14 +110,12 @@ struct PlannedExerciseView: View {
     }
 }
 
-/// The fields one set needs, by how the exercise is measured.
 struct SetTargetEditor: View {
-    /// The set's number for its heading; nil where the fields stand for every set (#17).
+    /// The set's number for its heading; nil where the fields stand for every set.
     let number: Int?
     let set: PlannedSet
     let tracking: TrackingType
     let units: Units
-    /// Applies a change, to this set or every set.
     let change: ((PlannedSet) -> Void) -> Void
 
     @Environment(\.effortDisplay) private var effort
@@ -215,7 +211,6 @@ struct SetTargetEditor: View {
     }
 }
 
-/// Swap for something similar (same pattern, doable with the kit), or search everything.
 struct SwapSheet: View {
     let planned: PlannedExercise
     let equipment: Set<Equipment>

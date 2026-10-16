@@ -37,7 +37,7 @@ public struct SetValues: Codable, Equatable, Sendable {
     }
 }
 
-/// A change the mirroring device asks the owner to make (#15). The owner applies it with
+/// A change the mirroring device asks the owner to make. The owner applies it with
 /// `SessionMirror.apply` and sends back a fresh snapshot; the mirror applies it to its own
 /// snapshot straight away with `SessionSnapshot.applying` so the screen doesn't wait.
 ///

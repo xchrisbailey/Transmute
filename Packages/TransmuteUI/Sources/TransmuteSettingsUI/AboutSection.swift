@@ -1,7 +1,6 @@
 import SwiftUI
 import TransmuteUI
 
-/// The version and build number the About section shows, read from a bundle's Info.plist.
 struct AboutInfo: Equatable {
     /// What stands in for a version or build number the bundle doesn't have.
     static let missing = "–"
@@ -14,7 +13,6 @@ struct AboutInfo: Equatable {
         build = Self.value("CFBundleVersion", in: infoDictionary)
     }
 
-    /// The running app's own version and build.
     static var current: AboutInfo { AboutInfo(infoDictionary: Bundle.main.infoDictionary) }
 
     private static func value(_ key: String, in infoDictionary: [String: Any]?) -> String {
@@ -24,8 +22,6 @@ struct AboutInfo: Equatable {
     }
 }
 
-/// About (#58): the version and build the app is running, where the catalog came from, and the
-/// licence for the fonts it ships.
 struct AboutSection: View {
     private let info = AboutInfo.current
     @State private var showsLicence = false
@@ -102,7 +98,6 @@ struct AboutSection: View {
     }
 }
 
-/// The licence on its own sheet, with a way to close it.
 struct FontLicenceSheet: View {
     @Environment(\.dismiss) private var dismiss
 

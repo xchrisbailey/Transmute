@@ -3,12 +3,8 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// The workout log (#14): newest first, grouped by week, with search and filters. Each row
-/// says the day, how long, how many sets and how much was moved, and wears a medal when
-/// something turned to gold.
 public struct HistoryView: View {
     let profile: Profile
-    /// The active plan, for the "This plan" filter.
     let plan: Plan?
 
     @Query(sort: \Workout.startedAt, order: .reverse) private var workouts: [Workout]
@@ -16,14 +12,15 @@ public struct HistoryView: View {
     @Query(sort: \CustomExercise.name) private var customExercises: [CustomExercise]
     @State private var filter = WorkoutLog.Filter()
     @State private var range: DateRange = .any
-    /// Set from outside to the `Workout.id` to show, as Open workout and Spotlight do (#19).
-    @Binding var opening: UUID?
+    @Binding var consumingOpenRequest: WorkoutOpenRequest?
     @State private var opened: Workout?
 
-    public init(profile: Profile, plan: Plan?, opening: Binding<UUID?> = .constant(nil)) {
+    public init(
+        profile: Profile, plan: Plan?, consumingOpenRequest: Binding<WorkoutOpenRequest?> = .constant(nil)
+    ) {
         self.profile = profile
         self.plan = plan
-        _opening = opening
+        _consumingOpenRequest = consumingOpenRequest
     }
 
     enum DateRange: CaseIterable {
@@ -64,7 +61,6 @@ public struct HistoryView: View {
         return WorkoutLog.workouts(workouts, matching: filter, library: library)
     }
 
-    /// Workouts with at least one record, for the gold medal.
     private var goldWorkouts: Set<PersistentIdentifier> {
         Set(records.compactMap { $0.set?.exercise?.workout?.persistentModelID })
     }
@@ -124,21 +120,18 @@ public struct HistoryView: View {
         .navigationDestination(item: $opened) { workout in
             WorkoutDetailView(workout: workout, profile: profile)
         }
-        .onChange(of: opening, initial: true) { _, id in
-            guard let id else { return }
-            opening = nil
-            // A workout that's since been deleted leaves the log as it is.
-            opened = workouts.first { $0.id == id && $0.endedAt != nil }
+        .onChange(of: consumingOpenRequest, initial: true) { _, request in
+            guard let request else { return }
+            consumingOpenRequest = nil
+            opened = workouts.first { $0.id == request.workoutID && $0.endedAt != nil }
         }
     }
 }
 
-/// The log's filters: this plan or all of them, and how far back to look. The icon fills in
-/// when something is filtered, so it isn't told by colour.
+/// The icon fills in when something is filtered, so it isn't told by colour.
 struct LogFilterMenu: View {
     @Binding var filter: WorkoutLog.Filter
     @Binding var range: HistoryView.DateRange
-    /// The active plan, for the "This plan" filter.
     let plan: Plan?
 
     var body: some View {
@@ -170,7 +163,6 @@ struct LogFilterMenu: View {
     }
 }
 
-/// "Lower A", its date, and "52:10 · 18 sets · 8,420 kg", with a gold medal for records.
 struct WorkoutRow: View {
     let workout: Workout
     let units: Units

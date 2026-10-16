@@ -2,20 +2,15 @@
     import SwiftUI
     import TransmuteCore
 
-    // Form sections for each part of the profile. Onboarding shows one per step; the Profile
-    // screen shows them all in one form.
-
     struct BodySection: View {
         @Binding var draft: ProfileDraft
-        /// Onboarding asks for the units here. Afterwards they're chosen in Settings (#18), so
-        /// the Profile screen leaves the picker out.
-        var showsUnits = true
+        let units: Units
+        var unitSystem: Binding<UnitSystem>?
 
         var body: some View {
-            let units = draft.units
             Section {
-                if showsUnits {
-                    Picker(selection: $draft.unitSystem) {
+                if let unitSystem {
+                    Picker(selection: unitSystem) {
                         ForEach(UnitSystem.allCases, id: \.self) { system in
                             Text(system.label).tag(system)
                         }
@@ -24,7 +19,7 @@
                     }
                     .pickerStyle(.segmented)
                 }
-                HeightField(cm: $draft.heightCm, system: draft.units.height)
+                HeightField(cm: $draft.heightCm, system: units.height)
                 WeightField(label: ProfileCopy.weight, kg: $draft.weightKg, units: units)
                 LabeledContent {
                     TextField(value: $draft.birthYear, format: .number.grouping(.never)) {
@@ -78,6 +73,7 @@
 
     struct ExperienceSection: View {
         @Binding var draft: ProfileDraft
+        let units: Units
 
         static let mainLifts = ["back-squat", "bench-press", "deadlift", "overhead-press"]
 
@@ -113,7 +109,7 @@
             if draft.experience == .advanced {
                 Section {
                     ForEach(Self.mainLifts, id: \.self) { id in
-                        KnownLiftRow(exerciseID: id, lifts: $draft.knownLifts, units: draft.units)
+                        KnownLiftRow(exerciseID: id, lifts: $draft.knownLifts, units: units)
                     }
                 } header: {
                     Text(ProfileCopy.knownLiftsTitle)

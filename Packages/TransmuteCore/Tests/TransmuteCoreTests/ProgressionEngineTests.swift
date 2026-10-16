@@ -1,11 +1,11 @@
 import Foundation
 import Testing
+import TransmuteTestSupport
 
 @testable import TransmuteCore
 
-/// Builders shared by the progression tests.
 enum Lift {
-    static let today = Date(timeIntervalSince1970: 1_790_553_600)  // Monday 2026-09-28, UTC.
+    static let today = utc(2026, 9, 28)
 
     static func daysAgo(_ days: Int) -> Date {
         today.addingTimeInterval(Double(-days) * 86_400)
@@ -64,8 +64,6 @@ struct ProgressionEngineTests {
     let range = SetTarget(reps: 6, repsMax: 8, loadKg: 100, restSeconds: 150)
     let fives = SetTarget(reps: 5, loadKg: 100, rpe: 8)
 
-    // MARK: Calibration and the estimate
-
     @Test func oneRepMaxUsesEpleyUpToTenReps() {
         #expect(OneRepMax.estimate(weightKg: 100, reps: 1) == 100)
         #expect(abs((OneRepMax.estimate(weightKg: 100, reps: 5) ?? 0) - 116.667) < 0.001)
@@ -102,8 +100,6 @@ struct ProgressionEngineTests {
             "back-squat", knownLifts: [KnownLift(exerciseID: "back-squat", weightKg: 100, reps: 5)])
         #expect(abs((ProgressionEngine.estimatedOneRepMax(history: [], context: known) ?? 0) - 116.667) < 0.001)
     }
-
-    // MARK: Double progression
 
     @Test func topOfTheRangeOnEverySetAddsLowerBodyLoad() {
         let history = [Lift.session(4, 3, kg: 100, reps: 8)]
@@ -175,8 +171,6 @@ struct ProgressionEngineTests {
             planned: Lift.plan(3, range), history: history, context: Lift.context("back-squat", settings: settings))
         #expect(result.reason.loadKg == 102.5)
     }
-
-    // MARK: Linear
 
     @Test func fixedRepsAtOrUnderTargetRPEAddLoad() {
         let history = [Lift.session(2, 5, kg: 100, reps: 5, rpe: 8)]
@@ -276,15 +270,12 @@ struct ProgressionEngineTests {
             planned: Lift.plan(3, fives), history: history, context: Lift.context("back-squat"))
         #expect(result.reason.kind == .fromEstimate)
         #expect(abs((result.reason.oneRepMaxKg ?? 0) - 80) < 0.001)
-        // 80 / (1 + 7/30) ≈ 64.9, rounded to 65.
-        #expect(Lift.working(result).map(\.loadKg) == [65, 65, 65])
+        #expect(
+            Lift.working(result).map(\.loadKg) == [65, 65, 65], "80 / (1 + 7/30) is about 64.9, which rounds to 65")
     }
 }
 
-// RPE, percentages, deloads and holds.
 extension ProgressionEngineTests {
-    // MARK: RPE
-
     @Test(arguments: [
         (6.0, ProgressionReason.Kind.rpeUp, 105.0),
         (9.5, .rpeDown, 97.5),
@@ -308,8 +299,6 @@ extension ProgressionEngineTests {
         #expect(result.reason.kind == .addLoad)
     }
 
-    // MARK: Percentages
-
     @Test func percentagesResolveFromTheEstimate() {
         let percent = SetTarget(reps: 5, percentOneRepMax: 0.75)
         let history = [Lift.session(2, 3, kg: 100, reps: 5)]
@@ -317,8 +306,8 @@ extension ProgressionEngineTests {
             planned: Lift.plan(3, percent), history: history, context: Lift.context("back-squat"))
         #expect(result.reason.kind == .percentOfMax)
         #expect(result.reason.fraction == 0.75)
-        // 0.75 × 116.7 = 87.5.
-        #expect(Lift.working(result).map(\.loadKg) == [87.5, 87.5, 87.5])
+        #expect(
+            Lift.working(result).map(\.loadKg) == [87.5, 87.5, 87.5], "0.75 of a 116.7 kg estimate rounds to 87.5")
 
         let known = Lift.context(
             "back-squat", knownLifts: [KnownLift(exerciseID: "back-squat", weightKg: 100, reps: 5)])
@@ -334,8 +323,6 @@ extension ProgressionEngineTests {
         #expect(result.reason.kind == .calibrate)
         #expect(result.reason.loadKg == nil)
     }
-
-    // MARK: Deload and holds
 
     @Test func deloadKeepsSixtyPercentOfSetsAtNinetyPercentLoad() {
         let warmUp = SetTarget(reps: 5, loadKg: 60, isWarmUp: true)

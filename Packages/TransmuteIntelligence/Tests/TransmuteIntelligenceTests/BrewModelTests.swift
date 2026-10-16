@@ -5,8 +5,8 @@ import TransmuteCore
 
 @testable import TransmuteIntelligence
 
-/// The #9 "done when": every person in the evaluation set, including both epic examples,
-/// brews a valid plan on-device in reasonable time.
+/// Every person in the evaluation set, including both epic examples, brews a valid plan on-device
+/// in reasonable time.
 @Suite(.enabled(if: ModelTesting.isEnabled), .serialized)
 struct BrewModelTests {
     @Test(arguments: TrainingBrief.evaluationSet)
@@ -38,7 +38,6 @@ struct BrewModelTests {
 }
 
 extension BrewModelTests {
-    /// #10: "Rework this day" on the real model keeps to the note.
     @Test func reworksADayAroundANote() async throws {
         let brewer = PlanBrewer(service: FoundationModelsService(settings: IntelligenceSettings()))
         let target = ReworkTarget(

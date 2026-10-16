@@ -2,8 +2,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// The set to do now: the exercise, "Set 3 of 5", one big number, and Log set. Tap a number
-/// and turn the Digital Crown to change it before logging.
 struct WatchSetView: View {
     let session: WatchSession
     let ref: SetRef
@@ -27,6 +25,18 @@ struct WatchSetView: View {
         return SetDial(
             tracking: exercise?.tracking ?? known?.tracking ?? .weightReps, equipment: known?.allEquipment ?? [],
             units: units)
+    }
+
+    /// The crown's binding writes only when the wearer turns it; `select` sets `crown` directly,
+    /// and a value equal to that write is not a turn.
+    private var turn: Binding<Double> {
+        Binding(
+            get: { crown },
+            set: { turned in
+                guard turned != crown else { return }
+                crown = turned
+                values = dial.setting(focus, to: turned, in: values)
+            })
     }
 
     private var range: ClosedRange<Double> {
@@ -73,14 +83,9 @@ struct WatchSetView: View {
         .padding(.horizontal, 4)
         .focusable()
         .digitalCrownRotation(
-            $crown, from: range.lowerBound, through: range.upperBound, by: dial.step(for: focus, in: values),
+            turn, from: range.lowerBound, through: range.upperBound, by: dial.step(for: focus, in: values),
             sensitivity: .medium, isContinuous: false, isHapticFeedbackEnabled: true
         )
-        .onChange(of: crown) { _, shown in
-            // Focusing a field sets the crown to its value; only a real turn changes the set.
-            guard abs(shown - dial.value(of: focus, in: values)) > 0.000_1 else { return }
-            values = dial.setting(focus, to: shown, in: values)
-        }
         .onAppear {
             values = set.map(SetValues.init) ?? SetValues()
             select(dial.fields.first ?? .weight)
@@ -151,7 +156,6 @@ struct WatchSetView: View {
         }
     }
 
-    /// The value as VoiceOver should say it: weight with its unit spelled out.
     private func spoken(_ field: SetField) -> String {
         guard field == .weight, let kg = values.weightKg else { return dial.text(for: field, in: values) }
         let unit: UnitMass = units.weight == .metric ? .kilograms : .pounds

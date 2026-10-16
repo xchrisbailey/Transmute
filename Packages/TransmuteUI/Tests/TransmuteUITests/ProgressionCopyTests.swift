@@ -1,19 +1,19 @@
 import Foundation
 import Testing
 import TransmuteCore
+import TransmuteTestSupport
 
 @testable import TransmuteUI
 
-/// The "From your plan" sentences built from the engine's reasons.
 struct ProgressionCopyTests {
     static let locale = Locale(identifier: "en_US")
     static let calendar: Calendar = {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "UTC")!  // swiftlint:disable:this force_unwrapping
+        calendar.timeZone = TimeZone(identifier: "UTC")!
         calendar.locale = locale
         return calendar
     }()
-    static let now = Date(timeIntervalSince1970: 1_790_553_600)  // Monday 2026-09-28, UTC.
+    static let now = utc(2026, 9, 28)
     static let thursday = now.addingTimeInterval(-4 * 86_400)
 
     func sentence(_ reason: ProgressionReason, _ system: UnitSystem = .metric) -> String {

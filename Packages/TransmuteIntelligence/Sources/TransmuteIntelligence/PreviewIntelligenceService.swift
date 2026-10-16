@@ -55,7 +55,6 @@ public struct PreviewIntelligenceService: IntelligenceService {
         return nil
     }
 
-    /// The request's first facts, each as a sentence.
     private func weekSummary(_ request: IntelligenceRequest) -> WeekSummaryDraft {
         let prefix = WeekSummaryWriter.factPrefix
         var lines = request.prompt.split(separator: "\n").filter { $0.hasPrefix(prefix) }.prefix(3)

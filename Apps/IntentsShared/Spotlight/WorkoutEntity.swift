@@ -4,8 +4,6 @@ import SwiftData
 import TransmuteCore
 import TransmuteUI
 
-/// A logged workout as Shortcuts, Spotlight and Apple Intelligence see it (#19): its name,
-/// when it was, and a line such as "6 exercises · 8,420 kg".
 struct WorkoutEntity: AppEntity, IndexedEntity {
     static let typeDisplayRepresentation = TypeDisplayRepresentation(
         name: LocalizedStringResource(
@@ -13,7 +11,6 @@ struct WorkoutEntity: AppEntity, IndexedEntity {
             comment: "plain. What a logged workout is called in Shortcuts and Spotlight."))
     static let defaultQuery = WorkoutQuery()
 
-    /// The workout's own `Workout.id`, the same on every device.
     let id: UUID
 
     @Property(
@@ -28,7 +25,6 @@ struct WorkoutEntity: AppEntity, IndexedEntity {
             comment: "plain. Shortcuts, when a workout was done."))
     var date: Date
 
-    /// Exercises and volume, e.g. "6 exercises · 8,420 kg".
     let summary: String
 
     init(_ workout: Workout, units: Units) {
@@ -38,7 +34,6 @@ struct WorkoutEntity: AppEntity, IndexedEntity {
         date = workout.startedAt
     }
 
-    /// The date, then the summary: "Mon 28 Sep · 6 exercises · 8,420 kg".
     var subtitle: String {
         "\(date.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated))) · \(summary)"
     }
@@ -62,7 +57,6 @@ struct WorkoutEntity: AppEntity, IndexedEntity {
     }
 }
 
-/// Finds logged workouts by id, and suggests the most recent ones.
 struct WorkoutQuery: EntityQuery {
     @MainActor
     func entities(for identifiers: [UUID]) async throws -> [WorkoutEntity] {
@@ -81,12 +75,11 @@ struct WorkoutQuery: EntityQuery {
         var descriptor = FetchDescriptor<Workout>(
             predicate: #Predicate { $0.endedAt != nil }, sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
         descriptor.fetchLimit = limit
-        let units = Units(system: try context.fetch(FetchDescriptor<Profile>()).first?.unitSystem)
+        let units = Units(system: try Profile.canonical(in: context)?.unitSystem)
         return try context.fetch(descriptor).map { WorkoutEntity($0, units: units) }
     }
 }
 
-/// "Open workout": brings the app to one logged workout, from Spotlight or a shortcut.
 struct OpenWorkoutIntent: OpenIntent {
     static let title = LocalizedStringResource(
         "plain.shortcut.workout.open", defaultValue: "Open workout",

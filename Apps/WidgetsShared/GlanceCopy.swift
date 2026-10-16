@@ -1,8 +1,6 @@
 import Foundation
 import TransmuteCore
 
-/// The words every widget puts around a `TodayGlance`, on the watch, the iPhone and the Mac.
-/// Plain, as everything outside the app is.
 enum GlanceCopy {
     static let today = LocalizedStringResource(
         "plain.today.title", defaultValue: "Today", bundle: .main, comment: "plain. Tab and title of the Today screen.")
@@ -97,7 +95,6 @@ enum GlanceCopy {
             comment: "plain. VoiceOver, sets of reps at a load, e.g. 5 sets of 5 at 80 kilograms.")
     }
 
-    /// The session's name, "Rest day", or the app's name when nothing is planned.
     static func title(_ glance: TodayGlance) -> String {
         switch glance.day {
         case .session(let name): name
@@ -106,13 +103,10 @@ enum GlanceCopy {
         }
     }
 
-    /// The sessions figure as it's drawn: "2/3".
     static func figure(_ week: TodayGlance.Week) -> String {
         "\(week.done)/\(week.planned)"
     }
 
-    /// What VoiceOver says of the day, e.g. "Lower A. Next: Bench press, 5 sets of 5 at 80
-    /// kilograms".
     static func spoken(_ glance: TodayGlance) -> String {
         var parts = [title(glance)]
         if glance.isDone { parts.append(String(localized: done)) }
@@ -128,7 +122,6 @@ enum GlanceCopy {
         return parts.joined(separator: ". ")
     }
 
-    /// What VoiceOver says of the week, e.g. "Sessions this week: 2 of 3. 3 weeks in a row".
     /// `nil` with no sessions this week and no streak.
     static func spokenWeek(_ glance: TodayGlance) -> String? {
         var parts: [String] = []
@@ -139,7 +132,6 @@ enum GlanceCopy {
         return parts.isEmpty ? nil : parts.joined(separator: ". ")
     }
 
-    /// The day, then the week; with no plan, the day and where to make one.
     static func spokenInFull(_ glance: TodayGlance) -> String {
         [spoken(glance), spokenWeek(glance), glance.isEmpty ? String(localized: noPlan) : nil]
             .compactMap(\.self).joined(separator: ". ")

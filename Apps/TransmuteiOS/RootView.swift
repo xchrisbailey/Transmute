@@ -7,28 +7,21 @@ import TransmutePlanUI
 import TransmuteSettingsUI
 import TransmuteUI
 
-/// Onboarding until there's a profile. Then Today, where workouts are run (#11), the log
-/// of past workouts (#14), and the plan, which is the brew screen until there is one. Every
-/// tab has the profile and Settings (#18) in its toolbar.
 struct RootView: View {
     @Query(sort: \Profile.createdAt) private var profiles: [Profile]
     @Query(filter: #Predicate<Plan> { $0.isActive }, sort: \Plan.createdAt, order: .reverse) private var plans: [Plan]
     let service = FoundationModelsService()
     let device = "iPhone"
-    /// The tab last shown, kept between launches.
     @AppStorage("rootTab") private var tab = "today"
-    /// Set by a widget's button (#19): Today begins the session once it's on screen.
-    @State private var beginsWorkout = false
-    /// Set by Open workout and Spotlight (#19): the log shows this workout once it's on screen.
-    @State private var openedWorkout: UUID?
-    private let router = DeepLinkRouter.shared
+    @State private var beginRequest: WorkoutBeginRequest?
+    @State private var openRequest: WorkoutOpenRequest?
 
     var body: some View {
         if let profile = profiles.first {
             TabView(selection: $tab) {
                 Tab(value: "today") {
                     NavigationStack {
-                        TodayView(plan: plans.first, profile: profile, beginsWorkout: $beginsWorkout)
+                        TodayView(plan: plans.first, profile: profile, consumingBeginRequest: $beginRequest)
                             .toolbar { profileItems(profile) }
                     }
                 } label: {
@@ -40,7 +33,7 @@ struct RootView: View {
                 }
                 Tab(value: "log") {
                     NavigationStack {
-                        HistoryView(profile: profile, plan: plans.first, opening: $openedWorkout)
+                        HistoryView(profile: profile, plan: plans.first, consumingOpenRequest: $openRequest)
                             .toolbar { profileItems(profile) }
                     }
                 } label: {
@@ -86,14 +79,11 @@ struct RootView: View {
             .onOpenURL { url in
                 if let link = DeepLink(url: url) { follow(link) }
             }
-            // An App Intent's link, which may have been waiting since before the window (#19).
-            .onChange(of: router.pending, initial: true) {
-                if let link = router.take() { follow(link) }
-            }
+            .followsDeepLinks { follow($0) }
             .trainingReminders(plan: plans.first) { tab = "today" }
         } else {
             OnboardingFlow {
-                // After delete-all (#18), this is where the person lands.
+                // After delete-all, this is where the person lands.
                 ErasureNotice()
                 LiveIntelligenceNotice(service: service)
             } onFinish: { _, _ in
@@ -102,17 +92,16 @@ struct RootView: View {
         }
     }
 
-    /// Goes where a widget, a shortcut or Spotlight pointed.
     private func follow(_ link: DeepLink) {
         switch link {
         case .today, .beginToday:
             tab = "today"
-            beginsWorkout = link == .beginToday
+            beginRequest = link == .beginToday ? WorkoutBeginRequest() : nil
         case .log:
             tab = "log"
         case .workout(let id):
             tab = "log"
-            openedWorkout = id
+            openRequest = WorkoutOpenRequest(workoutID: id)
         case .plan:
             tab = "plan"
         }

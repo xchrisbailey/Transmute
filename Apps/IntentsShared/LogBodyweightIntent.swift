@@ -2,10 +2,7 @@ import AppIntents
 import SwiftData
 import TransmuteCore
 import TransmuteUI
-import WidgetKit
 
-/// "Log bodyweight" (#19): stores a weight on the profile without opening the app. It's
-/// written to Health as well when the person already allowed that; a shortcut never asks.
 struct LogBodyweightIntent: AppIntent {
     static let title = LocalizedStringResource(
         "plain.shortcut.weight.title", defaultValue: "Log bodyweight",
@@ -15,7 +12,6 @@ struct LogBodyweightIntent: AppIntent {
             "plain.shortcut.weight.description", defaultValue: "Adds a bodyweight to your Transmute profile.",
             comment: "plain. Describes the Log bodyweight shortcut in the Shortcuts app."))
 
-    /// Asked for when missing, in the unit the device's region uses.
     @Parameter(
         title: LocalizedStringResource(
             "plain.shortcut.weight.parameter", defaultValue: "Weight",
@@ -47,8 +43,6 @@ struct LogBodyweightIntent: AppIntent {
             return .result(dialog: IntentDialog(ShortcutCopy.weightFailed))
         }
         let inHealth = await saveToHealth(entry, in: context)
-        // The app may not have a window to notice the save.
-        WidgetCenter.shared.reloadAllTimelines()
         let spoken = BodyweightLog.spoken(kg: entry.kg, units: Units(system: entry.profile?.unitSystem))
         return .result(dialog: IntentDialog(ShortcutCopy.logged(spoken, inHealth: inHealth)))
     }

@@ -1,19 +1,19 @@
 import Foundation
 import SwiftData
 
-/// Merges a backup into a store. See `DataTransfer.importBackup` for the rules.
 struct BackupRestore {
     let backup: Backup
     let context: ModelContext
+    let defaults: UserDefaults
     private var summary = ImportSummary(source: .backup)
-    /// Days of the backup's plans by plan id, in the backup's order, for `PlanDayRef`.
     private var days: [UUID: [PlanDay]] = [:]
-    /// Sets of the workouts this restore added, for `SetRef`.
     private var sets: [UUID: [[LoggedSet]]] = [:]
+    private var restoredWorkoutIDs: [UUID] = []
 
-    init(backup: Backup, context: ModelContext) {
+    init(backup: Backup, context: ModelContext, defaults: UserDefaults = .standard) {
         self.backup = backup
         self.context = context
+        self.defaults = defaults
     }
 
     mutating func run() throws -> ImportSummary {
@@ -24,20 +24,29 @@ struct BackupRestore {
         try restoreCustomExercises()
         try restorePlans()
         try restoreWorkouts()
-        try restoreRecords(asWritten: !hadHistory)
+        let recordsBefore = try context.fetchCount(FetchDescriptor<PersonalRecord>())
+        if hadHistory {
+            try deriveRecords()
+        } else {
+            restoreRecordsAsWritten()
+        }
+        summary.recordsAdded = max(0, try context.fetchCount(FetchDescriptor<PersonalRecord>()) - recordsBefore)
         try context.save()
+        let pending = PendingHealthDeletes(defaults: defaults)
+        for id in restoredWorkoutIDs { pending.forgetDeleted(id) }
         return summary
     }
 
     private mutating func restoreProfile() throws {
         guard let saved = backup.profile else { return }
         let profile: Profile
-        if let existing = try context.fetch(FetchDescriptor<Profile>(sortBy: [SortDescriptor(\.createdAt)])).first {
+        if let existing = try Profile.canonical(in: context) {
             profile = existing
             summary.profile = .kept
         } else {
             profile = Profile()
             saved.apply(to: profile)
+            profile.plates = profile.plates.mergingSameWeightPlates()
             context.insert(profile)
             summary.profile = .added
         }
@@ -71,7 +80,7 @@ struct BackupRestore {
         var hasActive = existing.contains(where: \.isActive)
         for saved in backup.plans {
             if let plan = known[saved.id] {
-                days[saved.id] = Self.matchingDays(of: plan, to: saved)
+                days[saved.id] = Self.unchangedDays(of: plan, since: saved)
                 summary.plans.skipped += 1
                 continue
             }
@@ -86,14 +95,14 @@ struct BackupRestore {
         }
     }
 
-    /// The days of a plan that was already in the store, lined up with the backup's. Empty when
-    /// the plan has been edited since, so workouts don't attach to the wrong day.
-    private static func matchingDays(of plan: Plan, to saved: PlanBackup) -> [PlanDay] {
+    /// The days of a plan already in the store, lined up with the backup's. `nil` once the plan
+    /// has been edited, so workouts don't attach to the wrong day.
+    private static func unchangedDays(of plan: Plan, since saved: PlanBackup) -> [PlanDay]? {
         let current = plan.backupDays
         let same =
             current.count == saved.days.count
             && zip(current, saved.days).allSatisfy { $0.week == $1.week && $0.weekday == $1.weekday }
-        return same ? current : []
+        return same ? current : nil
     }
 
     private mutating func restoreWorkouts() throws {
@@ -103,36 +112,27 @@ struct BackupRestore {
                 summary.workouts.skipped += 1
                 continue
             }
-            let planDay = saved.planDay.flatMap { ref in
-                days[ref.plan].flatMap { $0.indices.contains(ref.day) ? $0[ref.day] : nil }
-            }
+            let planDay = saved.planDay.flatMap { ref in days[ref.plan].flatMap(ref.day(in:)) }
             let (workout, workoutSets) = saved.model(planDay: planDay)
             context.insert(workout)
             sets[saved.id] = workoutSets
+            restoredWorkoutIDs.append(saved.id)
             summary.workouts.added += 1
             summary.setsAdded += workoutSets.joined().count
         }
     }
 
-    /// Into an empty history the backup's records go back exactly as they were. Into an existing
-    /// one they're derived again, since records depend on every set of an exercise.
-    private mutating func restoreRecords(asWritten: Bool) throws {
-        let before = try context.fetchCount(FetchDescriptor<PersonalRecord>())
-        if asWritten {
-            for saved in backup.records {
-                context.insert(saved.model(set: saved.set.flatMap(set(for:))))
-            }
-        } else if summary.workouts.added > 0 {
-            let library = try ExerciseLibrary.bundled.addingCustomExercises(in: context)
-            try RecordBook(context: context, library: library).recomputeAll()
+    /// Into an empty history the backup's records go back exactly as they were.
+    private func restoreRecordsAsWritten() {
+        for saved in backup.records {
+            context.insert(saved.model(set: saved.set.flatMap { sets[$0.workout].flatMap($0.set(in:)) }))
         }
-        summary.recordsAdded = max(0, try context.fetchCount(FetchDescriptor<PersonalRecord>()) - before)
     }
 
-    private func set(for ref: Backup.SetRef) -> LoggedSet? {
-        guard let exercises = sets[ref.workout], exercises.indices.contains(ref.exercise),
-            exercises[ref.exercise].indices.contains(ref.set)
-        else { return nil }
-        return exercises[ref.exercise][ref.set]
+    /// Records depend on every set of an exercise, so into an existing history they're derived again.
+    private func deriveRecords() throws {
+        guard summary.workouts.added > 0 else { return }
+        let library = try ExerciseLibrary.bundled.addingCustomExercises(in: context)
+        try RecordBook(context: context, library: library).recomputeAll()
     }
 }

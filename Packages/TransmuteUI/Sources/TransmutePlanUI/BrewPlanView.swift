@@ -4,8 +4,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// Brew a plan (#9): the profile goes in, a plan distils onto the screen day by day, and the
-/// person keeps it or brews again. Nothing is saved until they keep it.
 public struct BrewPlanView: View {
     let profile: Profile
     let device: String
@@ -55,8 +53,6 @@ public struct BrewPlanView: View {
         .alert(Text(Copy.savePlanError), isPresented: $saveFailed) {}
         .sensoryFeedback(.success, trigger: session.state.isPreview)
     }
-
-    // MARK: Start
 
     private var start: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -129,8 +125,6 @@ public struct BrewPlanView: View {
         session.start(TrainingBrief(profile, outsideLoad: outside), units: units.weight)
     }
 
-    // MARK: Progress
-
     private var progress: some View {
         VStack(alignment: .leading, spacing: 16) {
             if let name = session.planName {
@@ -161,8 +155,8 @@ public struct BrewPlanView: View {
             }
             .accessibilityElement(children: .combine)
             .accessibilityAddTraits(.updatesFrequently)
-            if !session.current.isEmpty {
-                DistilledDayRow(phase: nil, focus: nil, exercises: session.current, isDone: false)
+            if !session.streamingExercises.isEmpty {
+                DistilledDayRow(phase: nil, focus: nil, exercises: session.streamingExercises, isDone: false)
             }
             Button(role: .cancel) {
                 session.cancel()
@@ -208,7 +202,6 @@ extension BrewSession.State {
     }
 }
 
-/// One distilled day while brewing: its focus and the exercises picked so far.
 struct DistilledDayRow: View {
     let phase: String?
     let focus: String?
@@ -239,7 +232,7 @@ struct DistilledDayRow: View {
 }
 
 #Preview {
-    let container = try! TransmuteStore.makeContainer(.inMemory)  // swiftlint:disable:this force_try
+    let container = SampleData.emptyPreviewContainer()
     let profile = SampleData.profile()
     container.mainContext.insert(profile)
     return NavigationStack {

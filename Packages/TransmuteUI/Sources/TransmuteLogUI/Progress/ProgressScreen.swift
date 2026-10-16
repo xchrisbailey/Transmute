@@ -4,9 +4,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// Progress (#16): this week's figures, the weekly summary, and charts of estimated 1RM,
-/// volume, bodyweight, conditioning and plan adherence. Cards flow into as many columns as
-/// fit, so the iPhone gets one and the Mac gets the roomy version.
 public struct ProgressScreen: View {
     let plan: Plan?
     let profile: Profile
@@ -70,7 +67,6 @@ public struct ProgressScreen: View {
     }
 }
 
-/// A titled platter every Progress card sits on.
 struct ProgressCard<Content: View>: View {
     let title: LocalizedStringResource
     @ViewBuilder let content: Content
@@ -89,7 +85,6 @@ struct ProgressCard<Content: View>: View {
     }
 }
 
-/// This week at a glance: the streak, sessions, volume, bodyweight and the key lifts.
 struct FiguresCard: View {
     let sessions: ProgressStats.SessionsKPI?
     let volume: ProgressStats.VolumeKPI
@@ -122,9 +117,7 @@ struct FiguresCard: View {
                 }
                 figure(
                     ProgressCopy.volume, units.formatWeight(kg: volume.thisWeekKg),
-                    // A week that's barely begun would only read as a drop.
-                    note: volume.thisWeekKg > 0
-                        ? volume.change.map { ProgressCopy.versusLastWeek(Self.percent($0)) } : nil)
+                    note: volume.changeOnceStarted.map { ProgressCopy.versusLastWeek(Self.percent($0)) })
                 if let bodyweight {
                     figure(
                         ProgressCopy.bodyweight, units.formatWeight(kg: bodyweight.currentKg),

@@ -4,14 +4,11 @@ import TransmuteCore
 
 @testable import TransmuteUI
 
-/// What Siri says for the shortcuts, built from a glance.
 struct ShortcutCopyTests {
     static let bench = TodayGlance.NextLift(
         name: "Bench press", sets: 5, amount: "5", load: "80 kg", spokenAmount: "5", spokenLoad: "80 kilograms")
     static let plank = TodayGlance.NextLift(name: "Plank", sets: 3, amount: "0:45", spokenAmount: "45 seconds")
     static let week = TodayGlance.Week(done: 1, planned: 3)
-
-    // MARK: What's my workout today?
 
     @Test func aSessionSaysItsNameFirstLiftAndTheWeek() {
         let glance = TodayGlance(day: .session("Lower A"), nextLift: Self.bench, streakWeeks: 3, week: Self.week)
@@ -73,8 +70,6 @@ struct ShortcutCopyTests {
         #expect(ShortcutCopy.weekFigure(.init()) == nil)
     }
 
-    // MARK: Begin today's workout
-
     @Test func beginStartsASessionStillToDoOrGoesBackIntoOne() {
         let toDo = TodayGlance(day: .session("Lower A"))
         #expect(ShortcutCopy.begin(toDo) == .begin)
@@ -101,16 +96,12 @@ struct ShortcutCopyTests {
                 == "Nothing is planned for today. Transmute is open on Today.")
     }
 
-    // MARK: Log bodyweight
-
     @Test func loggingConfirmsTheWeightAndHealth() {
         #expect(String(localized: ShortcutCopy.logged("79.4 kilograms", inHealth: false)) == "Logged 79.4 kilograms.")
         #expect(
             String(localized: ShortcutCopy.logged("175 pounds", inHealth: true))
                 == "Logged 175 pounds, and saved it to Health.")
     }
-
-    // MARK: Spotlight
 
     @Test func workoutSummariesSayExercisesAndVolume() {
         let units = Units(system: .metric, locale: Locale(identifier: "en_GB"))

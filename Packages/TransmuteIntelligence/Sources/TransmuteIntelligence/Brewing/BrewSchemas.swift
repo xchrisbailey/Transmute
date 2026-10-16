@@ -1,11 +1,5 @@
 import FoundationModels
 
-// The structures the model fills in when brewing a plan (#9). Generation happens in two
-// stages to fit the on-device context: a blueprint for the whole plan, then each training day
-// of each phase. Numbers the plan depends on, such as loads and week-to-week progression, are
-// worked out by rules afterwards, not by the model.
-
-/// Stage 1: the outline of the plan.
 @Generable
 public struct PlanBlueprint: Sendable, Equatable {
     @Guide(description: "A short, motivating plan name of two to five words, e.g. Court-ready strength.")
@@ -53,9 +47,8 @@ public struct PlanBlueprint: Sendable, Equatable {
     }
 }
 
-/// Stage 2: one training day.
 @Generable
-public struct DayDraft: Sendable, Equatable {
+public struct DayDraft: Codable, Sendable, Equatable {
     @Guide(
         description:
             "One plain sentence for the person on what today is for, e.g. Build leg strength for quicker pushes off the baseline."
@@ -67,7 +60,7 @@ public struct DayDraft: Sendable, Equatable {
 }
 
 @Generable
-public struct ExerciseDraft: Sendable, Equatable {
+public struct ExerciseDraft: Codable, Sendable, Equatable {
     @Guide(description: "The exercise id from the list.")
     public var exerciseID: String
 

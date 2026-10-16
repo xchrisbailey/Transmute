@@ -51,7 +51,6 @@ enum CSV {
         if !field.isEmpty || !row.isEmpty {
             rows.append(row + [field])
         }
-        // Blank lines carry nothing.
         return rows.filter { $0 != [""] }
     }
 
@@ -62,9 +61,7 @@ enum CSV {
     }
 }
 
-/// A parsed CSV file: a header row and the rows under it, read by column name.
 struct CSVTable {
-    /// Header names, lowercased and trimmed.
     let headers: [String]
     let rows: [[String]]
 

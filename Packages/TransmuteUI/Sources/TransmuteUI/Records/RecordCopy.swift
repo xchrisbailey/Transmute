@@ -1,6 +1,5 @@
 import Foundation
 
-/// Strings for records (#13). Labels and values stay plain; the gold headings use the voice.
 enum RecordCopy {
     static let estimatedOneRepMax = LocalizedStringResource(
         "plain.records.estimatedOneRepMax", defaultValue: "Est. 1RM", bundle: .main,

@@ -1,7 +1,6 @@
 import Foundation
 
-/// Settings strings the whole app shares (#18). All plain. The Settings screen's own strings are
-/// in the TransmuteSettingsUI target.
+/// The Settings screen's own strings are in the TransmuteSettingsUI target.
 public enum SettingsCopy {
     public static let title = LocalizedStringResource(
         "plain.settings.title", defaultValue: "Settings", bundle: .main,

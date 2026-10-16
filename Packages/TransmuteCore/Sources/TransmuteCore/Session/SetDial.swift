@@ -1,6 +1,6 @@
 import Foundation
 
-/// A number on the watch's set screen that the Digital Crown turns (#15).
+/// A number on the watch's set screen that the Digital Crown turns.
 public enum SetField: String, Sendable, CaseIterable {
     case weight, reps, seconds, meters
 }

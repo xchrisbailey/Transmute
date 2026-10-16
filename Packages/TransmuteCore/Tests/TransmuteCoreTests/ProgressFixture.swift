@@ -11,11 +11,10 @@ struct ProgressFixture {
     let container: ModelContainer
     var context: ModelContext { container.mainContext }
     let calendar: Calendar
-    /// A Monday at midnight.
     let monday: Date
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
         var calendar = Calendar(identifier: .iso8601)
         calendar.timeZone = TimeZone(identifier: "UTC")!
         self.calendar = calendar

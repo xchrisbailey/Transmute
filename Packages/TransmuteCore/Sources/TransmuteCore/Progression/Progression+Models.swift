@@ -1,11 +1,7 @@
 import Foundation
 import SwiftData
 
-// Adapters between the stored models and the engine's plain values, so the session screen
-// makes one call and the engine itself never touches SwiftData.
-
 extension SetTarget {
-    /// A planned set's targets.
     public init(_ planned: PlannedSet) {
         self.init(
             order: planned.order, reps: planned.targetReps, repsMax: planned.targetRepsMax,
@@ -103,7 +99,6 @@ extension ProgressionEngine {
             context: context)
     }
 
-    /// Whether a plan day falls in a deload phase.
     public static func isDeload(_ day: PlanDay?) -> Bool {
         guard let day else { return false }
         return day.plan?.phase(forWeek: day.week)?.isDeload ?? false

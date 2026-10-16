@@ -3,7 +3,6 @@
     import HealthKit
     import OSLog
 
-    /// `HealthService` over HealthKit, for iPhone and Apple Watch.
     public final class HealthKitService: HealthService {
         private let store = HKHealthStore()
         private let calendar = Calendar(identifier: .gregorian)
@@ -13,8 +12,6 @@
         public var isAvailable: Bool {
             HKHealthStore.isHealthDataAvailable()
         }
-
-        // MARK: Access
 
         public func requestAccess(_ scope: HealthAccessScope) async throws {
             guard isAvailable else { return }
@@ -38,7 +35,6 @@
             case .workouts:
                 return (
                     [HKObjectType.workoutType(), HKQuantityType(.activeEnergyBurned), HKQuantityType(.heartRate)],
-                    // The live workout only reports the heart rate and energy it's allowed to read.
                     [HKObjectType.workoutType(), HKQuantityType(.activeEnergyBurned), HKQuantityType(.heartRate)]
                 )
             }
@@ -76,8 +72,6 @@
             @unknown default: .unknown
             }
         }
-
-        // MARK: Reading
 
         public func bodyMetrics() async -> HealthBodyMetrics {
             var metrics = HealthBodyMetrics()
@@ -130,7 +124,12 @@
         /// Written by this app, or carrying our workout id from another Transmute device.
         static func isFromTransmute(_ sample: HKSample) -> Bool {
             sample.sourceRevision.source.bundleIdentifier.hasPrefix(Transmute.bundlePrefix)
-                || sample.metadata?[HealthWorkoutRecord.workoutIDKey] != nil
+                || carriesWorkoutID(sample)
+        }
+
+        /// Only workouts Transmute saved carry its id, so nothing from another app matches.
+        static func carriesWorkoutID(_ sample: HKSample) -> Bool {
+            sample.metadata?[HealthWorkoutRecord.workoutIDKey] != nil
         }
 
         private func latest(_ identifier: HKQuantityTypeIdentifier, unit: HKUnit) async -> Double? {
@@ -149,8 +148,6 @@
                 sortDescriptors: [SortDescriptor(\.endDate)])
             return (try? await descriptor.result(for: store)) ?? []
         }
-
-        // MARK: Writing
 
         public func save(_ record: HealthWorkoutRecord) async throws -> UUID {
             guard isAvailable else { throw HealthServiceError.unavailable }
@@ -209,9 +206,7 @@
             let descriptor = HKSampleQueryDescriptor(
                 predicates: [.workout(predicate)], sortDescriptors: [], limit: 1)
             do {
-                // Only Transmute's own workouts carry its id, so nothing from another app goes.
-                for workout in try await descriptor.result(for: store)
-                where workout.metadata?[HealthWorkoutRecord.workoutIDKey] != nil {
+                for workout in try await descriptor.result(for: store) where Self.carriesWorkoutID(workout) {
                     try await store.delete(workout)
                 }
             } catch let error as HKError where error.code == .errorAuthorizationDenied {

@@ -12,7 +12,7 @@ struct WorkoutSessionTests {
     let calendar = Calendar(identifier: .iso8601)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     /// The sample plan with three weeks logged, and this week's Monday session.
@@ -54,7 +54,7 @@ struct WorkoutSessionTests {
         let history = try ProgressionEngine.history(of: "back-squat", in: context, excluding: workout)
         let expected = ProgressionEngine.next(for: planned, history: history, profile: profile)
 
-        // The ramp of warm-ups comes first (#18); the working sets are the engine's.
+        // The ramp of warm-ups comes first; the working sets are the engine's.
         let working = squat.orderedSets.filter { !$0.isWarmUp }
         #expect(working.count < squat.orderedSets.count)
         #expect(working.map(\.targetLoadKg) == expected.targets.map(\.loadKg))
@@ -70,8 +70,7 @@ struct WorkoutSessionTests {
         }
         let workout = WorkoutSession.start(day, at: now, in: context)
         let squat = try #require(workout.orderedExercises.first { $0.exerciseID == "back-squat" })
-        // Week 3 squatted 90 × 1.05, rounded to the half kilogram.
-        #expect(squat.orderedSets.first?.weightKg == 94.5)
+        #expect(squat.orderedSets.first?.weightKg == 94.5, "Week 3 squatted 90 kg × 1.05, rounded to 0.5 kg")
         let jump = try #require(workout.orderedExercises.first { $0.exerciseID == "box-jump" })
         #expect(jump.orderedSets.first?.weightKg == nil)
     }
@@ -145,7 +144,6 @@ struct WorkoutSessionTests {
         #expect(squat.orderedSets.count == 1)
         #expect(replacement.exerciseID == "front-squat")
         #expect(replacement.substitutedFromID == "back-squat")
-        // Week 4 is a deload with three sets: one logged, two moved across.
         #expect(replacement.orderedSets.map(\.order) == [0, 1])
         #expect(replacement.orderedSets.allSatisfy { $0.weightKg == nil && $0.reps == 5 })
         #expect(workout.orderedExercises.map(\.exerciseID).prefix(3) == ["box-jump", "back-squat", "front-squat"])
@@ -204,8 +202,6 @@ struct WorkoutSessionTests {
         #expect(try WorkoutSession.current(in: context) == nil)
         #expect(day.workouts?.contains { $0.endedAt == nil } != true)
     }
-
-    // MARK: Today
 
     @Test func todayFindsThePlannedSession() throws {
         let (plan, _) = try monday()

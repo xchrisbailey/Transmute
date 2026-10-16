@@ -13,8 +13,6 @@ struct ProgressStatsTests {
         fixture = try ProgressFixture()
     }
 
-    // MARK: Estimated one-rep max
-
     @Test func maxTrendTakesTheBestWorkingSetOfEachFinishedSession() throws {
         let first = fixture.workout(
             day: 0,
@@ -49,15 +47,21 @@ struct ProgressStatsTests {
         #expect(Stats.maxTrend(of: "deadlift", workouts: [first, second], records: records).isEmpty)
     }
 
-    // MARK: Key lifts
-
-    @Test func keyLiftsRankThePlansWeightedExercisesByPlannedSets() {
-        let plan = fixture.plan(
+    func plannedLifts() -> Plan {
+        fixture.plan(
             weeks: 1, [("dumbbell-curl", 2), ("pull-up", 5), ("bench-press", 4), ("deadlift", 3), ("back-squat", 4)])
-        // A planned warm-up isn't a working set, which leaves the deadlift level with the curl.
-        fixture.planDay(plan, week: 1).orderedExercises[3].orderedSets[0].isWarmUp = true
+    }
 
-        // Ties go in library order; the pull-up is reps only.
+    @Test func keyLiftsRankByPlannedSetsBreakTiesInLibraryOrderAndLeaveOutRepsOnlyLifts() {
+        let plan = plannedLifts()
+        #expect(
+            Stats.keyLifts(of: plan, workouts: []) == ["back-squat", "bench-press", "deadlift", "dumbbell-curl"])
+        #expect(Stats.keyLifts(of: plan, workouts: [], limit: 2) == ["back-squat", "bench-press"])
+    }
+
+    @Test func aPlannedWarmUpIsNotAWorkingSetSoTheDeadliftTiesTheCurl() {
+        let plan = plannedLifts()
+        fixture.planDay(plan, week: 1).orderedExercises[3].orderedSets[0].isWarmUp = true
         #expect(
             Stats.keyLifts(of: plan, workouts: []) == ["back-squat", "bench-press", "deadlift", "dumbbell-curl"])
         #expect(Stats.keyLifts(of: plan, workouts: [], limit: 2) == ["back-squat", "bench-press"])
@@ -75,7 +79,6 @@ struct ProgressStatsTests {
 
         #expect(Stats.keyLifts(of: nil, workouts: [logged, running]) == ["dumbbell-curl", "back-squat"])
         #expect(Stats.keyLifts(of: nil, workouts: []).isEmpty)
-        // A plan with no weighted exercise falls back to the log too.
         let plan = fixture.plan(weeks: 1, [("pull-up", 3)])
         #expect(Stats.keyLifts(of: plan, workouts: [logged], limit: 1) == ["dumbbell-curl"])
     }
@@ -103,8 +106,6 @@ struct ProgressStatsTests {
             ])
         #expect(Stats.liftKPIs(plan: nil, workouts: [], records: []).isEmpty)
     }
-
-    // MARK: Volume
 
     func volumeLog() -> [Workout] {
         [
@@ -145,7 +146,6 @@ struct ProgressStatsTests {
             ])
         #expect(byCategory.map(\.totalKg) == [1_100, 0, 600])
 
-        // Volume goes to the first primary muscle, in the order `Muscle` lists them.
         let byMuscle = Stats.weeklyVolume(log, by: .muscle, now: now, calendar: fixture.calendar)
         #expect(
             byMuscle.map(\.slices) == [
@@ -160,7 +160,6 @@ struct ProgressStatsTests {
             log, by: .category, weeks: 2, now: fixture.evening(17), calendar: fixture.calendar)
         #expect(recent.map(\.weekStart) == [fixture.day(14)])
 
-        // Later weeks aren't counted either, and nothing in the window means no weeks at all.
         let earlier = Stats.weeklyVolume(log, by: .category, now: fixture.evening(3), calendar: fixture.calendar)
         #expect(earlier.map(\.weekStart) == [fixture.day(0)])
         #expect(Stats.weeklyVolume(log, by: .category, weeks: 0, now: fixture.evening(17)).isEmpty)
@@ -175,10 +174,13 @@ struct ProgressStatsTests {
                 == Stats.VolumeKPI(thisWeekKg: 600, lastWeekKg: 0))
         #expect(Stats.volumeKPI(log, now: fixture.evening(17), calendar: calendar).change == nil)
         #expect(Stats.volumeKPI(log, now: fixture.evening(10), calendar: calendar).change == -1)
+        #expect(Stats.volumeKPI(log, now: fixture.evening(10), calendar: calendar).changeOnceStarted == nil)
+        #expect(Stats.volumeKPI(log, now: fixture.evening(17), calendar: calendar).changeOnceStarted == nil)
 
         log.append(fixture.workout(day: 22, [("back-squat", [fixture.set(kg: 75, reps: 10)])]))
         let kpi = Stats.volumeKPI(log, now: fixture.day(27), calendar: calendar)
         #expect(kpi.thisWeekKg == 750 && kpi.lastWeekKg == 600 && kpi.change == 0.25)
+        #expect(kpi.changeOnceStarted == 0.25)
         #expect(
             Stats.volumeKPI([], now: fixture.day(0), calendar: calendar)
                 == Stats.VolumeKPI(thisWeekKg: 0, lastWeekKg: 0))

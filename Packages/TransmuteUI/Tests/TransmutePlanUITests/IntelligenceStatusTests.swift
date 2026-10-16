@@ -8,7 +8,7 @@ import TransmuteUI
 @MainActor
 struct IntelligenceStatusTests {
     @Test func picksUpTheModelOnceItFinishesDownloading() async {
-        let service = FlippingService()
+        let service = ModelFinishesDownloadingService()
         let status = IntelligenceStatus(service: service)
         #expect(status.availability == .modelNotReady)
         await status.watch(every: .milliseconds(1))
@@ -27,8 +27,7 @@ struct IntelligenceStatusTests {
     }
 }
 
-/// Reports the model as downloading for the first few checks, then available.
-final class FlippingService: IntelligenceService, @unchecked Sendable {
+final class ModelFinishesDownloadingService: IntelligenceService, @unchecked Sendable {
     let providerName = "Stub"
     private var checks = 0
 

@@ -2,7 +2,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// Rest: a mauve ring draining around the time left, with the next set underneath.
 struct WatchRestView: View {
     let session: WatchSession
     let end: Date
@@ -69,7 +68,6 @@ struct WatchRestView: View {
         .padding(.horizontal, 4)
     }
 
-    /// A small round button for the corners under the ring.
     private func cornerButton(
         _ name: LocalizedStringResource, action: @escaping () -> Void, @ViewBuilder label: () -> some View
     ) -> some View {

@@ -21,6 +21,8 @@
         private let store = HKHealthStore()
         private var session: HKWorkoutSession?
         private var builder: HKLiveWorkoutBuilder?
+        /// Waits in `stop` for the session to report `.stopped`.
+        private var stopWaiter: CheckedContinuation<Void, Never>?
 
         private nonisolated static let logger = Logger(subsystem: Transmute.bundlePrefix, category: "health")
 
@@ -28,8 +30,6 @@
             (incoming, inbox) = AsyncStream.makeStream(of: Data.self)
             super.init()
         }
-
-        // MARK: Starting
 
         /// Starts an indoor session for the activity. Does nothing if a workout is already going.
         public func start(activity: HealthActivity, at date: Date) async throws {
@@ -62,7 +62,7 @@
                 adopt(recovered, builder)
                 state = LiveWorkoutState(recovered.state)
                 refreshMetrics(from: builder)
-                await startMirroring()
+                await ensureMirroring()
                 return true
             } catch {
                 Self.logger.error(
@@ -71,10 +71,8 @@
             }
         }
 
-        /// Connects the session to the iPhone. Called on start and recover; call it again to
-        /// reconnect after `isMirroring` went false. Failing is fine: the workout carries on
-        /// unmirrored.
-        public func startMirroring() async {
+        /// Failing is fine: the workout carries on unmirrored.
+        public func ensureMirroring() async {
             guard let session, !isMirroring else { return }
             do {
                 try await session.startMirroringToCompanionDevice()
@@ -102,7 +100,7 @@
                 }
                 throw Self.mapped(error)
             }
-            await startMirroring()
+            await ensureMirroring()
         }
 
         private func adopt(_ session: HKWorkoutSession, _ builder: HKLiveWorkoutBuilder) {
@@ -125,8 +123,6 @@
             isMirroring = false
         }
 
-        // MARK: Running
-
         public func pause() {
             session?.pause()
         }
@@ -144,9 +140,28 @@
             }
         }
 
-        // MARK: Ending
-
         public func finish(workoutID: UUID, title: String, at date: Date) async throws -> UUID? {
+            try await finish(workoutID: workoutID, title: title, at: date, beforeEnding: nil)
+        }
+
+        /// Like `finish(workoutID:title:at:)`, and with `beforeEnding` calls it once with the
+        /// Health workout's id (nil if nothing was saved) while the session is stopped but not yet
+        /// ended. The iPhone's mirror sends through the session, so a message sent after `end()`
+        /// would be dropped; this is the last point the Health id can still go out.
+        ///
+        /// The two paths end the session in different orders:
+        /// - With `beforeEnding`, the order is the one in Apple's "Running workout sessions"
+        ///   article: `stopActivity(with:)`, wait for `.stopped`, `endCollection`, `finishWorkout`,
+        ///   then `end()`, with `beforeEnding` between the last two. Whether
+        ///   `sendToRemoteWorkoutSession(data:)` still works after `end()` isn't documented, so
+        ///   ending last doesn't depend on it. If collection or the finish fails, `discardWorkout()`
+        ///   isn't called, the iPhone is told `nil` and the session ends. Unless `finishWorkout`
+        ///   ran, no `HKWorkout` exists then; only the samples collected so far stay in Health.
+        /// - Without it, `end()` comes first, then `endCollection` and `finishWorkout`. That is the
+        ///   order of Apple's 2018 sample, and what the watch-owned path has always done.
+        public func finish(
+            workoutID: UUID, title: String, at date: Date, beforeEnding: (@MainActor (UUID?) async -> Void)?
+        ) async throws -> UUID? {
             guard let session, let builder else { return nil }
             defer {
                 if session === self.session {
@@ -154,19 +169,54 @@
                     state = .ended
                 }
             }
+            let workout: HKWorkout?
             do {
                 try await builder.addMetadata(HealthWorkoutRecord.metadata(workoutID: workoutID, title: title))
-                session.end()
+                if beforeEnding == nil {
+                    session.end()
+                } else {
+                    await stop(session, at: date)
+                }
                 try await builder.endCollection(at: date)
-                let workout = try await builder.finishWorkout()
-                refreshMetrics(from: builder)
-                return workout?.uuid
+                workout = try await builder.finishWorkout()
             } catch {
                 // Ending twice is harmless, and the watch mustn't be left in a session.
+                if let beforeEnding {
+                    await beforeEnding(nil)
+                    session.end()
+                    throw Self.mapped(error)
+                }
                 session.end()
                 builder.discardWorkout()
                 throw Self.mapped(error)
             }
+            if let beforeEnding {
+                await beforeEnding(workout?.uuid)
+                session.end()
+            }
+            refreshMetrics(from: builder)
+            return workout?.uuid
+        }
+
+        /// Stops the session and returns once Health reports it stopped, or after a few seconds
+        /// if it never does.
+        private func stop(_ session: HKWorkoutSession, at date: Date) async {
+            guard session.state != .stopped, session.state != .ended else { return }
+            let timeout = Task {
+                try? await Task.sleep(for: .seconds(5))
+                guard !Task.isCancelled else { return }
+                self.resumeStopWaiter()
+            }
+            await withCheckedContinuation { continuation in
+                stopWaiter = continuation
+                session.stopActivity(with: date)
+            }
+            timeout.cancel()
+        }
+
+        private func resumeStopWaiter() {
+            stopWaiter?.resume()
+            stopWaiter = nil
         }
 
         public func discard() async {
@@ -186,11 +236,10 @@
             return error
         }
 
-        // MARK: Delegate updates
-
         private func syncState(of session: HKWorkoutSession) {
             guard session === self.session else { return }
             state = LiveWorkoutState(session.state)
+            if session.state == .stopped || session.state == .ended { resumeStopWaiter() }
         }
 
         private func disconnected(_ session: HKWorkoutSession) {
@@ -221,7 +270,10 @@
 
         public nonisolated func workoutSession(_ workoutSession: HKWorkoutSession, didFailWithError error: any Error) {
             Self.logger.error("Workout session failed: \(error.localizedDescription, privacy: .public)")
-            Task { @MainActor in self.syncState(of: workoutSession) }
+            Task { @MainActor in
+                self.syncState(of: workoutSession)
+                self.resumeStopWaiter()
+            }
         }
 
         public nonisolated func workoutSession(

@@ -6,8 +6,6 @@ import Testing
 struct ExerciseLibraryTests {
     let library = ExerciseLibrary.bundled
 
-    // MARK: Catalog integrity
-
     @Test func catalogSizeIsInRange() {
         #expect((250...400).contains(library.exercises.count))
         #expect(library.catalogVersion == 1)
@@ -53,8 +51,6 @@ struct ExerciseLibraryTests {
         #expect(Set(library.exercises.map(\.tracking)) == Set(TrackingType.allCases))
     }
 
-    // MARK: Tennis coverage, from the "done when" in #5
-
     @Test func tennisFilterCanFillAFourDayPlan() {
         func count(_ category: ExerciseCategory) -> Int {
             library.search(ExerciseQuery(categories: [category], sports: ["tennis"])).count
@@ -65,8 +61,6 @@ struct ExerciseLibraryTests {
         #expect(count(.strength) >= 40)
         #expect(count(.mobility) >= 20)
     }
-
-    // MARK: Search
 
     @Test func exactNameRanksFirst() {
         #expect(library.search(ExerciseQuery(text: "back squat")).first?.id == "back-squat")
@@ -140,8 +134,6 @@ struct ExerciseLibraryTests {
         // Ten keystrokes' worth of searches should feel instant.
         #expect(elapsed < .milliseconds(100))
     }
-
-    // MARK: Custom exercises
 
     @Test func customExercisesJoinTheLibrary() {
         let custom = CustomExercise(name: "Serve shadow swings", category: .power, pattern: .rotation, tracking: .reps)

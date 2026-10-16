@@ -5,8 +5,6 @@ import SwiftUI
 import TransmuteCore
 import WidgetKit
 
-/// Today at a glance: the mark as a circular complication, the day's name in a corner, the
-/// next lift inline, and both in the rectangular one the Smart Stack shows.
 struct TodayWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: TodayGlance.watchWidgetKind, provider: TodayProvider()) { entry in
@@ -50,7 +48,6 @@ struct TodayProvider: TimelineProvider {
         completion(Timeline(entries: [Self.entry(at: now), Self.entry(at: midnight)], policy: .after(midnight)))
     }
 
-    /// A workout in progress brings the widget up in the Smart Stack.
     func relevance() async -> WidgetRelevance<Void> {
         WidgetRelevance([WidgetRelevanceAttribute(context: .fitness(.workoutActive))])
     }

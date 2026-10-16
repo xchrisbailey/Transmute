@@ -4,9 +4,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// The whole plan as a week grid (#17): a row for each week, a column for each weekday.
-/// Exercises drag within a day or onto another, days drag to another weekday, and every move
-/// is also in a menu and an accessibility action (#22). Rebrew is in the toolbar.
 public struct PlanGridView: View {
     let plan: Plan
     let profile: Profile
@@ -20,6 +17,15 @@ public struct PlanGridView: View {
 
     static let spacing: CGFloat = 8
     static let padding: CGFloat = 12
+    static let weekdayCount = 7
+
+    /// Columns share the window when it's wide and keep a readable width when it isn't.
+    /// The fixed space is the gutter, the gaps between it and the columns, and one more gap
+    /// plus the padding at each end.
+    static func columnWidth(windowWidth: CGFloat, gutterWidth: CGFloat, minimum: CGFloat) -> CGFloat {
+        let fixed = gutterWidth + spacing * CGFloat(weekdayCount + 2) + padding * 2
+        return max(minimum, ((windowWidth - fixed) / CGFloat(weekdayCount)).rounded(.down))
+    }
 
     public init(plan: Plan, profile: Profile, service: any IntelligenceService, device: String) {
         self.plan = plan
@@ -29,14 +35,13 @@ public struct PlanGridView: View {
     }
 
     private var currentWeek: Int {
-        PlanEditor.week(of: plan)
+        PlanCalendar(plan: plan).clampedWeek(containing: .now)
     }
 
     public var body: some View {
         GeometryReader { proxy in
-            // Columns share the window when it's wide and keep a readable width when it isn't.
-            let fixed = gutterWidth + Self.spacing * 9 + Self.padding * 2
-            let column = max(columnWidth, ((proxy.size.width - fixed) / 7).rounded(.down))
+            let column = Self.columnWidth(
+                windowWidth: proxy.size.width, gutterWidth: gutterWidth, minimum: columnWidth)
             ScrollView(.horizontal) {
                 VStack(alignment: .leading, spacing: 0) {
                     weekdayHeader(column: column)
@@ -77,7 +82,7 @@ public struct PlanGridView: View {
     private func weekdayHeader(column: CGFloat) -> some View {
         HStack(spacing: Self.spacing) {
             Color.clear.frame(width: gutterWidth, height: 1)
-            ForEach(1...7, id: \.self) { weekday in
+            ForEach(1...Self.weekdayCount, id: \.self) { weekday in
                 Text(verbatim: PlanGridCopy.weekdayName(weekday))
                     .brandFont(.label)
                     .foregroundStyle(Color.brandText(\.subtext))
@@ -86,7 +91,6 @@ public struct PlanGridView: View {
         }
         .padding(.horizontal, Self.padding + Self.spacing)
         .padding(.vertical, 8)
-        // The cells say their own weekday, so VoiceOver skips the column headings.
         .accessibilityHidden(true)
     }
 
@@ -124,7 +128,6 @@ extension View {
     }
 }
 
-/// One week: its number, phase and markers, then a cell for each weekday.
 struct PlanGridWeekRow: View {
     let plan: Plan
     let week: Int
@@ -138,7 +141,7 @@ struct PlanGridWeekRow: View {
         HStack(alignment: .top, spacing: PlanGridView.spacing) {
             label
                 .frame(width: gutterWidth, alignment: .leading)
-            ForEach(1...7, id: \.self) { weekday in
+            ForEach(1...PlanGridView.weekdayCount, id: \.self) { weekday in
                 PlanGridCell(
                     plan: plan, week: week, weekday: weekday,
                     day: PlanEditor.day(of: plan, week: week, weekday: weekday), units: units, rework: rework
@@ -148,7 +151,6 @@ struct PlanGridWeekRow: View {
         }
         .fixedSize(horizontal: false, vertical: true)
         .padding(PlanGridView.spacing)
-        // The current week has an outline as well as its "This week" badge (#22).
         .overlay {
             if isCurrent {
                 RoundedRectangle(cornerRadius: 16)
@@ -180,14 +182,11 @@ struct PlanGridWeekRow: View {
 }
 
 #Preview {
-    let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
-    let plan = try? container.mainContext.fetch(FetchDescriptor<Plan>()).first
-    let profile = try? container.mainContext.fetch(FetchDescriptor<Profile>()).first
+    let fixture = SampleData.previewFixture()
     return NavigationStack {
-        if let plan, let profile {
-            PlanGridView(plan: plan, profile: profile, service: PreviewIntelligenceService(), device: "Mac")
-        }
+        PlanGridView(
+            plan: fixture.plan, profile: fixture.profile, service: PreviewIntelligenceService(), device: "Mac")
     }
-    .modelContainer(container)
+    .modelContainer(fixture.container)
     .frame(minWidth: 900, minHeight: 600)
 }

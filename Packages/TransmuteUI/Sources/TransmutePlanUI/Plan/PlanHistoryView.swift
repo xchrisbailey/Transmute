@@ -4,8 +4,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// Every plan (#10): the active one, and earlier ones kept with their history. Any can be made
-/// active again, or a new one brewed.
 struct PlanHistoryView: View {
     let profile: Profile
     let service: any IntelligenceService

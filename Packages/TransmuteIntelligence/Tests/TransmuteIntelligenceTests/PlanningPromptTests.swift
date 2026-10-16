@@ -5,16 +5,63 @@ import TransmuteCore
 
 struct PlanningPromptTests {
     @Test func instructionsCarryTheGuardrails() {
-        let text = PlannerInstructions.make(experience: .intermediate)
+        let text = PlannerInstructions.make(experience: .intermediate, exercises: .offeredList)
         #expect(text.contains("not a doctor or dietitian"))
-        #expect(text.contains("findExercises"))
         #expect(text.contains("hard constraints"))
         #expect(text.contains("nutrition to professionals"))
     }
 
+    @Test func instructionsNameFindExercisesOnlyWhenTheToolIsPassed() {
+        let withTool = PlannerInstructions.make(experience: .intermediate, exercises: .lookupTool)
+        let withList = PlannerInstructions.make(experience: .intermediate, exercises: .offeredList)
+        #expect(withTool.contains("findExercises"))
+        #expect(!withList.contains("findExercises"))
+        #expect(withList.contains("exact ids"))
+    }
+
+    @Test func brewRequestsPassNoToolAndDontNameOne() {
+        let brewer = PlanBrewer(service: PreviewIntelligenceService())
+        let brief = TrainingBrief.tennisPlayer
+        let spec = PlanBrewer.DaySpec(
+            phase: PlanPhase(name: "Build", focus: "Base", firstWeek: 1, lastWeek: 3),
+            outline: .init(focus: "Day", kind: DayKind.fullBody.rawValue, intensity: "hard"), weekday: 1,
+            kind: .fullBody)
+        let requests = [
+            brewer.blueprintRequest(brief, days: [1, 3, 5]),
+            brewer.dayRequest(brief, spec: spec, offered: DayShortlist.candidates(for: .fullBody, brief: brief)),
+        ]
+        for request in requests {
+            #expect(request.makeTools().isEmpty)
+            #expect(!request.instructions.contains("findExercises"))
+        }
+    }
+
+    @Test func dayRequestListsEarlierDaysInOneLine() {
+        let brewer = PlanBrewer(service: PreviewIntelligenceService())
+        let spec = PlanBrewer.DaySpec(
+            phase: PlanPhase(name: "Build", focus: "Base", firstWeek: 1, lastWeek: 3),
+            outline: .init(focus: "Day", kind: DayKind.fullBody.rawValue, intensity: "hard"), weekday: 3,
+            kind: .fullBody,
+            earlier: [
+                .init(weekday: 1, exercises: ["Back squat", "Bench press"]), .init(weekday: 2, exercises: ["Pull-up"]),
+            ])
+        let request = brewer.dayRequest(.tennisPlayer, spec: spec, offered: ExerciseCandidates([]))
+        #expect(
+            request.prompt.contains(
+                "\nEarlier this week: Monday: Back squat, Bench press; Tuesday: Pull-up. Vary the exercises.\n"))
+    }
+
+    @Test func warmUpProbePassesTheLookupToolAndNamesIt() {
+        let request = WarmUpProbe.request(focus: "legs")
+        #expect(request.makeTools().map(\.name) == ["findExercises"])
+        #expect(request.instructions.contains("findExercises"))
+    }
+
     @Test func beginnersGetPlainTargets() {
-        #expect(PlannerInstructions.make(experience: .beginner).contains("Do not use percentages"))
-        #expect(!PlannerInstructions.make(experience: .advanced).contains("Do not use percentages"))
+        let beginner = PlannerInstructions.make(experience: .beginner, exercises: .offeredList)
+        let advanced = PlannerInstructions.make(experience: .advanced, exercises: .offeredList)
+        #expect(beginner.contains("Do not use percentages"))
+        #expect(!advanced.contains("Do not use percentages"))
     }
 
     @Test func briefDescribesTheTennisPlayer() {
@@ -42,7 +89,8 @@ struct PlanningPromptTests {
 
     @Test(arguments: TrainingBrief.evaluationSet.map(\.brief))
     func everyEvaluationPromptFitsOnDevice(_ brief: TrainingBrief) {
-        let prompt = PlannerInstructions.make(experience: brief.experience) + brief.promptDescription
+        let instructions = PlannerInstructions.make(experience: brief.experience, exercises: .offeredList)
+        let prompt = instructions + brief.promptDescription
         #expect(ContextBudget.onDevice.fits(promptTokens: ContextBudget.estimatedTokens(in: prompt)))
     }
 }

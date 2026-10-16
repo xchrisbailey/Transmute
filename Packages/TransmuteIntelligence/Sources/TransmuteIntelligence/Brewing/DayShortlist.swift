@@ -1,7 +1,6 @@
 import TransmuteCore
 
 extension DayKind {
-    /// What each kind of day draws on: the categories and, for strength days, the patterns.
     var categories: Set<ExerciseCategory> {
         switch self {
         case .lowerStrength, .upperStrength, .fullBody: [.strength, .mobility]
@@ -49,25 +48,36 @@ public enum DayShortlist {
         let usable = library.search(query).filter {
             !excluded.contains($0.id) && !LimitationRules.excludes($0, areas: brief.limitationAreas)
         }
-        // Sport-specific first, then the day's main category, then the rest, keeping catalog order.
         let main = kind.categories.first { $0 != .mobility && $0 != .strength } ?? .strength
         let ranked = usable.enumerated().sorted { lhs, rhs in
-            (rank(lhs.element, sports: sports, main: main), lhs.offset) < (
-                rank(rhs.element, sports: sports, main: main), rhs.offset
-            )
+            RankKey(lhs.element, catalogIndex: lhs.offset, sports: sports, main: main)
+                < RankKey(rhs.element, catalogIndex: rhs.offset, sports: sports, main: main)
         }
         let mobility = ranked.filter { $0.element.category == .mobility }.prefix(kind == .mobility ? limit : 8)
         let rest = ranked.filter { $0.element.category != .mobility }.prefix(limit - mobility.count)
         return ExerciseCandidates((rest + mobility).sorted { $0.offset < $1.offset }.map(\.element))
     }
 
-    private static func rank(_ exercise: LibraryExercise, sports: Set<String>, main: ExerciseCategory) -> Int {
-        let sport = sports.isDisjoint(with: exercise.sports) ? 1 : 0
-        let category = exercise.category == main ? 0 : 1
-        return sport * 2 + category
+    /// Sport-specific exercises first, then the day's main category, then the rest, each group
+    /// in catalog order.
+    private struct RankKey: Comparable {
+        let isOffSport: Bool
+        let isOffCategory: Bool
+        let catalogIndex: Int
+
+        init(_ exercise: LibraryExercise, catalogIndex: Int, sports: Set<String>, main: ExerciseCategory) {
+            isOffSport = sports.isDisjoint(with: exercise.sports)
+            isOffCategory = exercise.category != main
+            self.catalogIndex = catalogIndex
+        }
+
+        static func < (lhs: RankKey, rhs: RankKey) -> Bool {
+            if lhs.isOffSport != rhs.isOffSport { return rhs.isOffSport }
+            if lhs.isOffCategory != rhs.isOffCategory { return rhs.isOffCategory }
+            return lhs.catalogIndex < rhs.catalogIndex
+        }
     }
 
-    /// The library's sport tag for a sport in the person's words, e.g. "tennis, 4.0 NTRP" → tennis.
     static func sportTag(for sport: String) -> String? {
         let lowered = sport.lowercased()
         let tags = [

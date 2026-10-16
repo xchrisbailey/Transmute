@@ -37,10 +37,8 @@ public struct SetTarget: Codable, Hashable, Sendable {
         self.isWarmUp = isWarmUp
     }
 
-    /// The top of the range, or the fixed rep count.
     var topReps: Int? { repsMax ?? reps }
 
-    /// Whether this is a rep range rather than a fixed count.
     var isRange: Bool {
         guard let reps, let repsMax else { return false }
         return repsMax > reps
@@ -79,7 +77,6 @@ public struct SetPerformance: Hashable, Sendable {
     }
 }
 
-/// One exercise in one past workout.
 public struct ExercisePerformance: Hashable, Sendable {
     public var date: Date
     public var sets: [SetPerformance]
@@ -107,7 +104,6 @@ public struct ProgressionContext: Sendable {
     /// The library entry, for tracking, body region and equipment. `nil` for an unknown id,
     /// which is treated as an upper-body weight × reps lift.
     public var exercise: LibraryExercise?
-    /// The plan phase this day falls in is a deload.
     public var isDeload: Bool
     /// The profile's equipment, for rounding to what's loadable.
     public var equipment: Set<Equipment>
@@ -115,7 +111,7 @@ public struct ProgressionContext: Sendable {
     public var settings: ProgressionSettings
     /// Lifts the person entered, used for percentage targets before there's any history.
     public var knownLifts: [KnownLift]
-    /// The person's bar and plates (#21). When set, loads round to what they can actually
+    /// The person's bar and plates. When set, loads round to what they can actually
     /// load; otherwise to the usual step for the kit.
     public var plates: PlateInventory?
 
@@ -145,7 +141,6 @@ public struct ProgressionContext: Sendable {
     }
 }
 
-/// The next targets for one exercise, and why.
 public struct ProgressionResult: Hashable, Sendable {
     /// One per set to do, in order. A deload returns fewer working sets than the plan has.
     public var targets: [SetTarget]

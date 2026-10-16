@@ -13,7 +13,7 @@ struct BodyweightLogTests {
     let imperial = Units(system: .imperial, locale: Locale(identifier: "en_US"))
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     func profile() throws -> Profile {
@@ -87,6 +87,22 @@ struct IndexChangesTests {
         let changes = IndexChanges(indexed: [Self.first: "Lower A", Self.second: "Upper A"], current: [:])
         #expect(changes.updated.isEmpty)
         #expect(changes.removed == [Self.first, Self.second])
+    }
+
+    @Test func theFirstIndexIsAFullReset() {
+        #expect(IndexChanges(indexed: nil, current: [Self.first: "Lower A"]).isFullReset)
+        #expect(IndexChanges(indexed: nil, current: [:]).isFullReset)
+    }
+
+    @Test func anOrdinaryDiffIsNotAFullReset() {
+        let changes = IndexChanges(
+            indexed: [Self.first: "Lower A", Self.second: "Upper A"], current: [Self.first: "Lower B"])
+        #expect(!changes.isFullReset)
+        #expect(!IndexChanges(indexed: [:], current: [:]).isFullReset)
+    }
+
+    @Test func removingTheLastItemIsAFullReset() {
+        #expect(IndexChanges(indexed: [Self.first: "Lower A"], current: [:]).isFullReset)
     }
 
     @Test func nothingChangedIsEmpty() {

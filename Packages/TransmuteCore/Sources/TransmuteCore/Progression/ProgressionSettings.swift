@@ -1,4 +1,4 @@
-/// How progression adds load, and which exercises it leaves alone (#12). Stored on the profile.
+/// How progression adds load, and which exercises it leaves alone. Stored on the profile.
 ///
 /// Increments are kept in each unit system's own unit, so 2.5 kg and 5 lb stay round numbers
 /// whichever the person switches to.
@@ -53,7 +53,7 @@ public struct ProgressionSettings: Codable, Hashable, Sendable {
     /// The increment in kilograms, for the engine.
     public func incrementKg(for region: BodyRegion, system: UnitSystem) -> Double {
         let value = increment(for: region, system: system)
-        return system == .metric ? value : value / Units.poundsPerKilogram
+        return system.kilograms(fromDisplay: value)
     }
 
     public func isHeld(_ exerciseID: String) -> Bool {

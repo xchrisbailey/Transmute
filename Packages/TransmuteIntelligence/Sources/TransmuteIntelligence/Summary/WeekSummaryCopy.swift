@@ -1,5 +1,3 @@
-/// Every sentence the template summary can say, in one place so it can move to a String
-/// Catalog later. A light week is described by what was done, never as a shortfall.
 enum WeekSummaryCopy {
     /// How many items of a list a sentence names before it says "and N more".
     static let listLimit = 3

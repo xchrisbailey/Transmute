@@ -29,7 +29,6 @@ extension SchemaV1 {
             self.weekCount = weekCount
         }
 
-        /// The phase a week falls in.
         public func phase(forWeek week: Int) -> PlanPhase? {
             phases.first { $0.weeks.contains(week) }
         }
@@ -47,7 +46,7 @@ extension SchemaV1 {
         /// Short name, e.g. "Lower A" or "Speed and agility".
         public var focus = ""
         public var notes = ""
-        /// Set when the person changes the day by hand, so a rebrew leaves it alone (#10).
+        /// Set when the person changes the day by hand, so a rebrew leaves it alone.
         public var isEdited = false
         public var plan: Plan?
 

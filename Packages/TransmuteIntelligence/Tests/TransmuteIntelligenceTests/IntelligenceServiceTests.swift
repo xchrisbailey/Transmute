@@ -41,6 +41,14 @@ struct IntelligenceServiceTests {
         }
     }
 
+    @Test func retriesSilentlyOnlyBeforeAnythingShowedAndOnlyOnce() {
+        typealias Service = FoundationModelsService
+        #expect(Service.retriesSilently(.malformedOutput, attempt: 1, yieldedPartial: false))
+        #expect(!Service.retriesSilently(.malformedOutput, attempt: 1, yieldedPartial: true))
+        #expect(!Service.retriesSilently(.malformedOutput, attempt: Service.maxAttempts, yieldedPartial: false))
+        #expect(!Service.retriesSilently(.guardrail, attempt: 1, yieldedPartial: false))
+    }
+
     @Test func routeDefaultsToOnDeviceAndRoundTrips() throws {
         let defaults = try #require(UserDefaults(suiteName: "IntelligenceServiceTests.\(UUID())"))
         #expect(IntelligenceSettings.load(from: defaults).route == .onDeviceOnly)
@@ -63,9 +71,15 @@ struct IntelligenceServiceTests {
         #expect(
             try await service.respond(WarmUpProbe.request(focus: "legs"), generating: WarmUpProbe.self).title == "Warm")
     }
+
+    @Test func stubServiceFailsWhenAskedForAnotherType() async {
+        let service = StubService(result: WarmUpProbe(title: "Warm", moves: []))
+        await #expect(throws: IntelligenceError.malformedOutput) {
+            try await service.respond(WarmUpProbe.request(focus: "legs"), generating: DayDraft.self)
+        }
+    }
 }
 
-/// Plays back a fixed result, the way tests and previews stand in for the model.
 struct StubService: IntelligenceService {
     let providerName = "Stub"
     let availability = IntelligenceAvailability.available
@@ -75,7 +89,10 @@ struct StubService: IntelligenceService {
         -> AsyncThrowingStream<GenerationUpdate<Content>, any Error>
     {
         AsyncThrowingStream { continuation in
-            let content = result as! Content  // swiftlint:disable:this force_cast
+            guard let content = result as? Content else {
+                continuation.finish(throwing: IntelligenceError.malformedOutput)
+                return
+            }
             continuation.yield(.partial(content.asPartiallyGenerated()))
             continuation.yield(.complete(content))
             continuation.finish()

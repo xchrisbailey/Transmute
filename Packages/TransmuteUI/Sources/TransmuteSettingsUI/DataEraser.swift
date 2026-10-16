@@ -36,12 +36,14 @@ public enum ErasureOutcome: String, Sendable {
     }
 }
 
-/// Transmute's own keys in `UserDefaults`, which delete-all puts back to their defaults (#18).
+/// Transmute's own keys in `UserDefaults`, which delete-all puts back to their defaults.
 /// The store holds everything else.
 enum DefaultsReset {
-    /// The tab and layout last shown, the appearance and the AI route.
-    static let keys = [Appearance.defaultsKey, IntelligenceSettings.routeKey, "rootTab", "planGrid"]
-    /// Reminder settings (#19) all start with this.
+    /// The tab and layout last shown, the appearance, the AI route, and the Health deletes the
+    /// session link still has pending, which refer to workouts delete-all has just removed.
+    static let keys =
+        [Appearance.defaultsKey, IntelligenceSettings.routeKey, "rootTab", "planGrid"] + SessionLink.defaultsKeys
+    /// Reminder settings all start with this.
     static let prefixes = ["reminders."]
 
     static func run(in defaults: UserDefaults = .standard) {
@@ -52,8 +54,6 @@ enum DefaultsReset {
     }
 }
 
-/// Delete-all (#18): everything in the store, here and in iCloud, and what the app keeps
-/// outside it.
 @MainActor
 enum DataEraser {
     /// Runs every step in order and returns how the iCloud step went, which is also recorded
@@ -63,8 +63,7 @@ enum DataEraser {
         in container: ModelContainer, link: SessionLink?, defaults: UserDefaults = .standard,
         clearsNotifications: Bool = true
     ) async throws -> ErasureOutcome {
-        // A workout in progress goes with the rest: end its Live Activity and tell the watch.
-        await SessionTeardown.run(link: link)
+        await SessionTeardown.endActiveWorkout(link: link)
         let context = container.mainContext
         do {
             try DataTransfer.deleteAll(in: context)
@@ -83,7 +82,6 @@ enum DataEraser {
         return outcome
     }
 
-    /// Tries the iCloud step again after it failed.
     static func retryCloud(for container: ModelContainer, defaults: UserDefaults = .standard) async {
         let outcome = ErasureOutcome(await DataTransfer.deleteCloudRecords(for: container))
         defaults.set(outcome.rawValue, forKey: ErasureOutcome.defaultsKey)

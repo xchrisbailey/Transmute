@@ -12,7 +12,7 @@ public struct WeekSummaryDraft: Sendable, Equatable {
     public var lines: [String]
 }
 
-/// Writes "This week, distilled" (#16): by the model when it's available, by a template when it
+/// Writes "This week, distilled": by the model when it's available, by a template when it
 /// isn't, the week is empty, or the model's draft doesn't hold up.
 public struct WeekSummaryWriter: Sendable {
     public var service: any IntelligenceService
@@ -25,10 +25,8 @@ public struct WeekSummaryWriter: Sendable {
     static let minLines = 2
     static let maxHeadlineLength = 80
     static let maxLineLength = 160
-    /// How many items of each list go in the prompt, to keep it short.
     static let maxFactItems = 5
     static let maxGoalLength = 200
-    /// Words that read as guilt about a light week. A draft using one is dropped.
     static let guiltWords = ["missed", "failed", "only", "should have"]
 
     /// The summary for the week. Never fails: anything that goes wrong gives the template.
@@ -37,7 +35,6 @@ public struct WeekSummaryWriter: Sendable {
         return (try? await writeWithModel(input)) ?? Self.template(input)
     }
 
-    /// The model's summary, checked. Throws when the model fails or its draft is rejected.
     func writeWithModel(_ input: WeekSummaryInput) async throws -> WeekSummary {
         let request = Self.request(input)
         let draft = try await service.respond(request, generating: WeekSummaryDraft.self)
@@ -55,20 +52,31 @@ public struct WeekSummaryWriter: Sendable {
                 headline: Copy.quietHeadline, lines: [Copy.nothingLogged, Copy.readyWhenYouAre],
                 suggestsRework: input.suggestsRework, isFromAI: false)
         }
-        // In reading order. When there are too many, the lowest ranks are the ones kept.
-        var candidates = [(rank: 0, text: Copy.adherence(done: input.sessionsDone, planned: input.sessionsPlanned))]
+        var candidates: [(line: SummaryLine, text: String)] = [
+            (.adherence, Copy.adherence(done: input.sessionsDone, planned: input.sessionsPlanned))
+        ]
         if let volume = input.volume?.trimmingCharacters(in: .whitespaces), !volume.isEmpty {
-            candidates.append((4, Copy.volume(volume, changePercent: input.volumeChangePercent)))
+            candidates.append((.volume, Copy.volume(volume, changePercent: input.volumeChangePercent)))
         }
-        if !input.records.isEmpty { candidates.append((1, Copy.records(input.records))) }
-        if !input.wentUp.isEmpty { candidates.append((3, Copy.wentUp(input.wentUp))) }
-        if !input.stalled.isEmpty { candidates.append((2, Copy.stalled(input.stalled))) }
-        if input.streakWeeks >= 2 { candidates.append((5, Copy.streak(weeks: input.streakWeeks))) }
-        let kept = Set(candidates.map(\.rank).sorted().prefix(maxLines))
-        var lines = candidates.filter { kept.contains($0.rank) }.map(\.text)
+        if !input.records.isEmpty { candidates.append((.records, Copy.records(input.records))) }
+        if !input.wentUp.isEmpty { candidates.append((.wentUp, Copy.wentUp(input.wentUp))) }
+        if !input.stalled.isEmpty { candidates.append((.stalled, Copy.stalled(input.stalled))) }
+        if input.streakWeeks >= 2 { candidates.append((.streak, Copy.streak(weeks: input.streakWeeks))) }
+        let kept = Set(candidates.map(\.line).sorted().prefix(maxLines))
+        var lines = candidates.filter { kept.contains($0.line) }.map(\.text)
         if lines.count < minLines { lines.append(Copy.keepGoing) }
         return WeekSummary(
             headline: headline(input), lines: lines, suggestsRework: input.suggestsRework, isFromAI: false)
+    }
+
+    /// The lines a template summary can hold, in the order they're kept when there are more
+    /// than `maxLines`. The summary reads in the order they're appended, not this one.
+    enum SummaryLine: Int, Comparable, CaseIterable {
+        case adherence, records, stalled, wentUp, volume, streak
+
+        static func < (lhs: SummaryLine, rhs: SummaryLine) -> Bool {
+            lhs.rawValue < rhs.rawValue
+        }
     }
 
     static func headline(_ input: WeekSummaryInput) -> String {
@@ -80,11 +88,9 @@ public struct WeekSummaryWriter: Sendable {
     }
 }
 
-// MARK: - The model's request
-
 extension WeekSummaryWriter {
-    /// Written in plain English with no provider-specific syntax, and as what to do rather than
-    /// what to avoid: prohibitions made the on-device model refuse ordinary requests.
+    /// Written as what to do rather than what to avoid: prohibitions made the on-device model
+    /// refuse ordinary requests.
     static let instructions = """
         You write the weekly training summary in Transmute, a workout log, for one person.
 
@@ -95,7 +101,6 @@ extension WeekSummaryWriter {
         - The sentences stay plain. The headline may carry one light touch of alchemy.
         """
 
-    /// Marks a fact line in the prompt.
     static let factPrefix = "- "
 
     static func request(_ input: WeekSummaryInput) -> IntelligenceRequest {
@@ -119,7 +124,6 @@ extension WeekSummaryWriter {
             : "For the headline, the new records can be turned to gold, e.g. A week turned to gold."
     }
 
-    /// The week as short labelled lines. These hold the only numbers the model may use.
     static func facts(_ input: WeekSummaryInput) -> [String] {
         var facts = [
             input.sessionsPlanned > 0
@@ -149,11 +153,7 @@ extension WeekSummaryWriter {
     }
 }
 
-// MARK: - Checking the draft
-
 extension WeekSummaryWriter {
-    /// The draft as a summary, or nil when it breaks a rule: a number that isn't in the facts,
-    /// a blank or overlong headline, too few lines, an overlong line, or guilt wording.
     static func validated(_ draft: WeekSummaryDraft, facts: String, input: WeekSummaryInput) -> WeekSummary? {
         let headline = draft.headline.trimmingCharacters(in: .whitespacesAndNewlines)
         let lines = draft.lines.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.filter { !$0.isEmpty }
@@ -162,15 +162,16 @@ extension WeekSummaryWriter {
             lines.allSatisfy({ $0.count <= maxLineLength })
         else { return nil }
         let text = ([headline] + lines).joined(separator: "\n")
-        guard numbers(in: text).isSubset(of: numbers(in: facts)), !soundsGuilty(text) else { return nil }
+        guard numberLiterals(in: text).isSubset(of: numberLiterals(in: facts)), !soundsGuilty(text) else { return nil }
         return WeekSummary(
             headline: headline, lines: Array(lines), suggestsRework: input.suggestsRework, isFromAI: true)
     }
 
     /// Every number in the text, as written: digits, with any separators between them, so
     /// "8,420" and "92.5" each count as one number and "420" on its own doesn't match "8,420".
-    static func numbers(in text: String) -> Set<String> {
-        Set(text.matches(of: /\d+(?:[.,]\d+)*/).map { String($0.output) })
+    static func numberLiterals(in text: String) -> Set<String> {
+        let numberLiteral = /\d+(?:[.,]\d+)*/
+        return Set(text.matches(of: numberLiteral).map { String($0.output) })
     }
 
     static func soundsGuilty(_ text: String) -> Bool {

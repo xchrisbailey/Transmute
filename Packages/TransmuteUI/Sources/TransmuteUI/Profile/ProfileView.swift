@@ -3,8 +3,6 @@
     import SwiftUI
     import TransmuteCore
 
-    /// Everything from onboarding, editable later, plus bodyweight history from manual entries
-    /// and Health (#6, #7).
     public struct ProfileView: View {
         @Bindable var profile: Profile
         @Environment(\.modelContext) private var context
@@ -19,14 +17,14 @@
 
         public var body: some View {
             Form {
-                BodySection(draft: $draft, showsUnits: false)
-                ExperienceSection(draft: $draft)
+                BodySection(draft: $draft, units: units)
+                ExperienceSection(draft: $draft, units: units)
                 GoalSection(draft: $draft)
                 if draft.suggestsSport || !draft.sport.isEmpty {
                     SportSection(draft: $draft)
                 }
                 ScheduleSection(draft: $draft)
-                EquipmentSection(draft: $draft, linksPlateSetup: true)
+                EquipmentSection(draft: $draft, kit: .plateSetup(plates))
                 LimitationsSection(draft: $draft)
                 Section {
                     NavigationLink {
@@ -38,11 +36,6 @@
                 bodyweightHistory
             }
             .navigationTitle(Text(ProfileCopy.profile))
-            // Units and kit can change in Settings while this screen is open (#18); saving
-            // here mustn't put the old ones back.
-            .onChange(of: SettingsOwned(profile)) { _, owned in
-                owned.apply(to: &draft)
-            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
@@ -56,7 +49,16 @@
         }
 
         private var units: Units {
-            draft.units
+            Units(profile)
+        }
+
+        private var plates: Binding<PlateInventory> {
+            Binding {
+                profile.plates
+            } set: {
+                profile.setPlates($0)
+                try? context.save()
+            }
         }
 
         private var bodyweightHistory: some View {
@@ -140,38 +142,11 @@
         }
     }
 
-    /// The parts of a profile that Settings edits directly, as the draft carries them.
-    private struct SettingsOwned: Equatable {
-        var unitSystem: UnitSystem?
-        var weightUnit: UnitSystem?
-        var heightUnit: UnitSystem?
-        var distanceUnit: UnitSystem?
-        var plates: PlateInventory
-
-        init(_ profile: Profile) {
-            unitSystem = profile.unitSystem
-            weightUnit = profile.weightUnit
-            heightUnit = profile.heightUnit
-            distanceUnit = profile.distanceUnit
-            plates = profile.plates
-        }
-
-        func apply(to draft: inout ProfileDraft) {
-            draft.unitSystem = unitSystem ?? .preferred()
-            draft.weightUnit = weightUnit
-            draft.heightUnit = heightUnit
-            draft.distanceUnit = distanceUnit
-            draft.plates = plates
-        }
-    }
-
     #Preview {
-        let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
-        // swiftlint:disable:next force_try
-        let profile = try! container.mainContext.fetch(FetchDescriptor<Profile>()).first!
+        let fixture = SampleData.previewFixture()
         return NavigationStack {
-            ProfileView(profile: profile)
+            ProfileView(profile: fixture.profile)
         }
-        .modelContainer(container)
+        .modelContainer(fixture.container)
     }
 #endif

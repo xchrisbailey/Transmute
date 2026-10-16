@@ -3,7 +3,6 @@ import Observation
 import SwiftData
 import TransmuteCore
 
-/// A record just set, for the toast.
 struct RecordNotice: Equatable, Identifiable {
     let id = UUID()
     let mark: RecordMark
@@ -17,11 +16,17 @@ enum WatchLive {
     static let link = SessionLink(live: workout, device: .watch)
 }
 
-/// The workout running on the watch (#15). Screens draw its snapshot and send it commands, so
+/// The workout running on the watch. Screens draw its snapshot and send it commands, so
 /// they don't care whether the workout lives in this watch's store or is mirrored from the
 /// iPhone.
 @MainActor @Observable
 final class WatchSession: Identifiable {
+    /// Who runs the workout: this watch, which has it in its store, or the iPhone.
+    private enum Ownership {
+        case owned(Workout)
+        case mirrored
+    }
+
     let id: UUID
     /// Set once the workout is finished, for the summary.
     private(set) var summary: WorkoutSummary?
@@ -30,27 +35,23 @@ final class WatchSession: Identifiable {
     /// A logged set far beyond the previous best, waiting for a yes or a fix.
     var suspicious: SetRef?
 
-    /// The Health workout running alongside: heart rate and energy while it lasts.
     let live: WatchLiveWorkout
     let link: SessionLink
-    /// True once the finished workout is in Health.
     private(set) var isSavedToHealth = false
 
     let library: ExerciseLibrary
-    /// The workout in this watch's store, or `nil` when the iPhone is running it.
-    private let workout: Workout?
+    private let ownership: Ownership
     private let context: ModelContext
     private let health: any HealthService
     private var own: SessionSnapshot
     private var isEnding = false
 
-    /// A workout this watch runs and saves.
     init(
         workout: Workout, context: ModelContext, library: ExerciseLibrary, link: SessionLink = WatchLive.link,
         live: WatchLiveWorkout = WatchLive.workout, health: any HealthService
     ) {
         id = workout.id
-        self.workout = workout
+        ownership = .owned(workout)
         self.context = context
         self.library = library
         self.live = live
@@ -69,7 +70,7 @@ final class WatchSession: Identifiable {
         link: SessionLink = WatchLive.link, live: WatchLiveWorkout = WatchLive.workout, health: any HealthService
     ) {
         id = snapshot.workoutID
-        workout = nil
+        ownership = .mirrored
         self.context = context
         self.library = library
         self.live = live
@@ -78,9 +79,12 @@ final class WatchSession: Identifiable {
         own = snapshot
     }
 
-    /// The session as it stands: this watch's own workout, or the iPhone's latest snapshot.
+    private var ownedWorkout: Workout? {
+        if case .owned(let workout) = ownership { workout } else { nil }
+    }
+
     var snapshot: SessionSnapshot {
-        if workout == nil, let mirrored = link.mirrored, mirrored.workoutID == id { return mirrored }
+        if case .mirrored = ownership, let mirrored = link.mirrored, mirrored.workoutID == id { return mirrored }
         return own
     }
 
@@ -96,7 +100,7 @@ final class WatchSession: Identifiable {
     }
 
     func perform(_ command: SessionCommand) {
-        guard let workout else {
+        guard let workout = ownedWorkout else {
             link.send(command)
             return
         }
@@ -105,9 +109,8 @@ final class WatchSession: Identifiable {
         if outcome == .discarded {
             link.discarded()
         } else {
-            // Reconnects first if the iPhone dropped off; a no-op while it's connected.
             Task {
-                await live.startMirroring()
+                await live.ensureMirroring()
                 link.publish()
             }
         }
@@ -116,7 +119,7 @@ final class WatchSession: Identifiable {
     /// The iPhone's session moved on. Finishing or discarding there ends the Health workout
     /// here, since the watch is the one recording it.
     func mirrorChanged() {
-        guard workout == nil, !isEnding else { return }
+        guard case .mirrored = ownership, !isEnding else { return }
         guard let mirrored = link.mirrored, mirrored.workoutID == id else {
             isEnding = true
             isDiscarded = true
@@ -128,19 +131,21 @@ final class WatchSession: Identifiable {
         isEnding = true
         summary = WorkoutSummary(mirrored)
         Task {
+            // The iPhone hears the Health id before this watch's session ends, while the mirror
+            // can still carry it.
             let healthID = try? await live.finish(
-                workoutID: mirrored.workoutID, title: mirrored.title, at: mirrored.endedAt ?? .now)
+                workoutID: mirrored.workoutID, title: mirrored.title, at: mirrored.endedAt ?? .now,
+                beforeEnding: { [link] healthID in
+                    await link.ended(workoutID: mirrored.workoutID, healthWorkoutID: healthID)
+                })
             isSavedToHealth = healthID != nil
-            link.ended(workoutID: mirrored.workoutID, healthWorkoutID: healthID)
         }
     }
 
-    /// Closes the summary of a workout the iPhone ran.
     func close() {
-        if workout == nil { link.dismissMirrored() }
+        if case .mirrored = ownership { link.dismissMirrored() }
     }
 
-    /// The person said the big jump is real: record it.
     func confirmSuspicious() {
         guard let ref = suspicious, let set = set(at: ref) else { return }
         suspicious = nil
@@ -149,7 +154,6 @@ final class WatchSession: Identifiable {
         record = check.gold.first.map { RecordNotice(mark: $0.mark) }
     }
 
-    /// The person said it was a slip: open the set back up to correct it.
     func fixSuspicious() {
         guard let ref = suspicious else { return }
         suspicious = nil
@@ -157,10 +161,8 @@ final class WatchSession: Identifiable {
         perform(.reopenSet(ref))
     }
 
-    // MARK: Owning
-
     private func applied(_ command: SessionCommand, _ outcome: SessionMirror.Outcome, fromPhone: Bool) {
-        guard let workout else { return }
+        guard let workout = ownedWorkout else { return }
         switch outcome {
         case .ignored:
             break
@@ -210,7 +212,7 @@ final class WatchSession: Identifiable {
     }
 
     private func set(at ref: SetRef) -> LoggedSet? {
-        workout?.orderedExercises.first { $0.order == ref.exerciseOrder }?
+        ownedWorkout?.orderedExercises.first { $0.order == ref.exerciseOrder }?
             .orderedSets.first { $0.order == ref.setOrder }
     }
 }
@@ -222,7 +224,6 @@ extension SessionSnapshot {
 }
 
 extension WorkoutSummary {
-    /// The summary of a workout the iPhone ran, from its last snapshot.
     init(_ snapshot: SessionSnapshot) {
         let logged = snapshot.exercises.flatMap(\.sets).filter(\.isCompleted)
         self.init(

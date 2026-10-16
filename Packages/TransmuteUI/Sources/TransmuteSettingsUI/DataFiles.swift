@@ -4,7 +4,6 @@ import SwiftUI
 import TransmuteCore
 import UniformTypeIdentifiers
 
-/// The two files Settings can export (#18).
 enum ExportKind: Sendable {
     /// Every logged set as CSV.
     case workouts
@@ -41,7 +40,6 @@ enum ExportKind: Sendable {
     }
 }
 
-/// An export ready for the file exporter.
 struct ExportedFile: FileDocument {
     static let readableContentTypes: [UTType] = [.json, .commaSeparatedText]
 
@@ -67,13 +65,12 @@ struct ExportedFile: FileDocument {
     }
 }
 
-/// What kind of file was picked to import (#18). Told apart by the contents, so a backup
+/// What kind of file was picked to import. Told apart by the contents, so a backup
 /// renamed to .txt still imports.
 enum ImportKind: Equatable {
     case backup
     case csv
 
-    /// The types the file importer offers.
     static let contentTypes: [UTType] = [.json, .commaSeparatedText, .plainText]
 
     /// JSON backups start with a brace; anything else is read as CSV, which reports its own
@@ -90,29 +87,27 @@ extension DataTransfer {
     /// Reads a file the person picked and imports it as whichever kind it is.
     ///
     /// Picked files are outside the sandbox, so access is opened for the read and closed again.
-    /// Throws `ImportFailure.cantOpen` when the file can't be read; otherwise what the
-    /// importers throw.
+    /// Throws `DataTransferError.cantOpen` when the file can't be read.
     static func importFile(
         at url: URL, into context: ModelContext, fallbackUnits: UnitSystem
-    ) throws -> ImportSummary {
+    ) throws(DataTransferError) -> ImportSummary {
         let scoped = url.startAccessingSecurityScopedResource()
         defer { if scoped { url.stopAccessingSecurityScopedResource() } }
-        guard let data = try? Data(contentsOf: url) else { throw ImportFailure.cantOpen }
+        guard let data = try? Data(contentsOf: url) else { throw .cantOpen }
         return try importFile(data, into: context, fallbackUnits: fallbackUnits)
     }
 
     static func importFile(
         _ data: Data, into context: ModelContext, fallbackUnits: UnitSystem
-    ) throws -> ImportSummary {
-        guard !data.isEmpty else { throw DataTransferError.emptyFile }
-        switch ImportKind(data) {
-        case .backup: return try importBackup(data, into: context)
-        case .csv: return try importCSV(data, into: context, fallbackUnits: fallbackUnits)
+    ) throws(DataTransferError) -> ImportSummary {
+        guard !data.isEmpty else { throw .emptyFile }
+        do {
+            switch ImportKind(data) {
+            case .backup: return try importBackup(data, into: context)
+            case .csv: return try importCSV(data, into: context, fallbackUnits: fallbackUnits)
+            }
+        } catch {
+            throw DataTransferError(wrapping: error)
         }
     }
-}
-
-/// Why an import failed before the importers saw the file.
-enum ImportFailure: Error {
-    case cantOpen
 }

@@ -19,39 +19,19 @@ final class WatchAppDelegate: NSObject, WKApplicationDelegate {
 @main
 struct TransmuteWatchApp: App {
     @WKApplicationDelegateAdaptor private var delegate: WatchAppDelegate
-    /// Shared with the App Intents, which run in this process (#19).
+    /// Shared with the App Intents, which run in this process.
     let container = TransmuteStore.shared
     let health = HealthKitService()
 
     init() {
-        #if DEBUG
-            // `-seedSample` fills an empty store with the sample tennis player, plan and log, so
-            // the watch has something to run in the simulator without iCloud.
-            let context = container.mainContext
-            if ProcessInfo.processInfo.arguments.contains("-seedSample"),
-                (try? context.fetchCount(FetchDescriptor<Profile>())) == 0
-            {
-                let (profile, plan) = SampleData.insert(into: context)
-                // `-sampleSession` also starts this week's first session, to see the set screen;
-                // `-sampleRest` logs its first set too, to see the rest ring.
-                if ProcessInfo.processInfo.arguments.contains("-sampleSession"),
-                    let day = plan.orderedDays.first(where: { $0.week == PlanEditor.week(of: plan) })
-                {
-                    let workout = WorkoutSession.start(day, profile: profile, in: context)
-                    if ProcessInfo.processInfo.arguments.contains("-sampleRest"),
-                        let first = WorkoutSession.currentSet(of: workout)
-                    {
-                        WorkoutSession.complete(first, in: workout)
-                    }
-                }
-                try? context.save()
-            }
-        #endif
+        WidgetReload.listen()
+        DebugLaunch.apply(to: container)
     }
 
     var body: some Scene {
         WindowGroup {
             WatchRootView()
+                .reloadsWidgetsOnLeavingForeground()
         }
         .modelContainer(container)
         .environment(\.health, health)

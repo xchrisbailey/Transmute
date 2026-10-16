@@ -38,7 +38,7 @@ extension PlanAssembler {
                     note: item.note.trimmingCharacters(in: .whitespacesAndNewlines),
                     sets: targets(for: exercise, item)))
         }
-        report.trimmedSets = fit(&exercises)
+        report.trimmedSets = trimToSession(&exercises)
         return (exercises, report)
     }
 
@@ -64,8 +64,6 @@ extension PlanAssembler {
             && exercise.difficulty.isAtMost(brief.experience)
     }
 
-    // MARK: Targets
-
     func targets(for exercise: LibraryExercise, _ item: ExerciseDraft) -> [BrewedSet] {
         let effort = Effort(rawValue: item.effort) ?? .steady
         let rest = Double(min(max(item.restSeconds, 15), 300))
@@ -79,8 +77,8 @@ extension PlanAssembler {
             let reps = min(item.reps > 0 ? item.reps : 8, isPower ? 6 : 20)
             target.reps = reps
             target.rpe = showsEffort ? effort.rpe : nil
-            if let oneRepMax = startingOneRepMax(for: exercise) {
-                let percent = Self.percentOfMax(reps: reps, rpe: isPower ? Effort.steady.rpe : effort.rpe)
+            if case .known(let oneRepMax) = startingLoad(for: exercise) {
+                let percent = Self.epleyPercent(reps: reps, rpe: isPower ? Effort.steady.rpe : effort.rpe)
                 target.loadKg = LoadableWeight.round(oneRepMax * percent, for: exercise.allEquipment, system: units)
                 if brief.experience == .advanced { target.percentOneRepMax = (percent * 100).rounded() / 100 }
             }
@@ -105,26 +103,24 @@ extension PlanAssembler {
 
     /// Fraction of a one-rep max for a set of `reps` that should feel like `rpe`: Epley's
     /// formula with the reps left in reserve added on.
-    static func percentOfMax(reps: Int, rpe: Double) -> Double {
+    static func epleyPercent(reps: Int, rpe: Double) -> Double {
         let inReserve = max(0, 10 - rpe)
         return 1 / (1 + (Double(reps) + inReserve) / 30)
     }
 
-    /// From a known lift on the same exercise, or a conservative 80% of one on the same barbell
-    /// pattern. `nil` means the first session calibrates (#12).
-    func startingOneRepMax(for exercise: LibraryExercise) -> Double? {
+    /// Where an exercise's load starts. A known lift on the same exercise gives its estimated
+    /// one-rep max; so does a conservative 80% of one on the same barbell pattern.
+    func startingLoad(for exercise: LibraryExercise) -> StartingLoad {
         if let lift = brief.knownLifts.first(where: { $0.exerciseID == exercise.id }) {
-            return lift.estimatedOneRepMaxKg
+            return .known(oneRepMaxKg: lift.estimatedOneRepMaxKg)
         }
-        guard exercise.allEquipment.contains(.barbell) else { return nil }
+        guard exercise.allEquipment.contains(.barbell) else { return .calibrate }
         let related = brief.knownLifts.first { lift in
             guard let known = library.exercise(id: lift.exerciseID) else { return false }
             return known.pattern == exercise.pattern && known.allEquipment.contains(.barbell)
         }
-        return related.map { $0.estimatedOneRepMaxKg * 0.8 }
+        return related.map { .known(oneRepMaxKg: $0.estimatedOneRepMaxKg * 0.8) } ?? .calibrate
     }
-
-    // MARK: Session length
 
     /// Rough minutes for a day: warm-up, the sets, the rests and moving between exercises.
     public static func estimatedMinutes(_ exercises: [BrewedExercise]) -> Double {
@@ -143,7 +139,7 @@ extension PlanAssembler {
 
     /// Trims sets, last exercises first, until the day fits the session with a little slack.
     /// Returns how many sets went.
-    func fit(_ exercises: inout [BrewedExercise]) -> Int {
+    func trimToSession(_ exercises: inout [BrewedExercise]) -> Int {
         let budget = Double(brief.schedule.sessionMinutes) * 1.1
         var trimmed = 0
         while Self.estimatedMinutes(exercises) > budget {
@@ -158,6 +154,13 @@ extension PlanAssembler {
         }
         return trimmed
     }
+}
+
+/// Where a lift's weight starts: from a lift the person has done, or left empty so the first
+/// session finds it.
+enum StartingLoad: Equatable {
+    case known(oneRepMaxKg: Double)
+    case calibrate
 }
 
 extension ExperienceLevel {

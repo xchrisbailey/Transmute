@@ -3,7 +3,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// One line of the Mac's log table: a finished workout with the figures its columns sort by.
 struct LogTableRow: Identifiable {
     let workout: Workout
     let date: Date
@@ -11,7 +10,6 @@ struct LogTableRow: Identifiable {
     let duration: TimeInterval
     let sets: Int
     let volumeKg: Double
-    /// Personal records set in this workout.
     let records: Int
 
     var id: PersistentIdentifier { workout.persistentModelID }
@@ -27,7 +25,6 @@ struct LogTableRow: Identifiable {
         self.records = records
     }
 
-    /// A row for each workout, counting the records that belong to it.
     static func rows(_ workouts: [Workout], records: [PersonalRecord]) -> [LogTableRow] {
         var counts: [PersistentIdentifier: Int] = [:]
         for record in records {
@@ -40,17 +37,12 @@ struct LogTableRow: Identifiable {
 }
 
 #if os(macOS)
-    /// The workout log on the Mac (#17): a table with sortable columns, the same search and
-    /// filters as the iPhone's log, and an inspector for the selected workout. Edits and deletes
-    /// go through `WorkoutLog`, so records are rebuilt exactly as they are on the iPhone.
     public struct LogTableView: View {
         let profile: Profile
-        /// The active plan, for the "This plan" filter.
         let plan: Plan?
         /// Focus for the search field, so a Find command can put the cursor there.
         let searchFocus: FocusState<Bool>.Binding?
-        /// Set from outside to the `Workout.id` to select, as Open workout and Spotlight do (#19).
-        @Binding var opening: UUID?
+        @Binding var consumingOpenRequest: WorkoutOpenRequest?
 
         @Environment(\.modelContext) private var context
         @Query(sort: \Workout.startedAt, order: .reverse) private var workouts: [Workout]
@@ -66,12 +58,12 @@ struct LogTableRow: Identifiable {
 
         public init(
             profile: Profile, plan: Plan?, searchFocus: FocusState<Bool>.Binding? = nil,
-            opening: Binding<UUID?> = .constant(nil)
+            consumingOpenRequest: Binding<WorkoutOpenRequest?> = .constant(nil)
         ) {
             self.profile = profile
             self.plan = plan
             self.searchFocus = searchFocus
-            _opening = opening
+            _consumingOpenRequest = consumingOpenRequest
         }
 
         private var library: ExerciseLibrary {
@@ -136,12 +128,11 @@ struct LogTableRow: Identifiable {
                 }
             }
             .alert(Text(HistoryCopy.healthDeleteFailed), isPresented: $healthKeepsCopy) {}
-            .onChange(of: opening, initial: true) { _, id in
-                guard let id else { return }
-                opening = nil
-                // A workout that's since been deleted leaves the log as it is.
-                guard let workout = workouts.first(where: { $0.id == id && $0.endedAt != nil }) else { return }
-                // Filters could be hiding it.
+            .onChange(of: consumingOpenRequest, initial: true) { _, request in
+                guard let request else { return }
+                consumingOpenRequest = nil
+                guard let workout = workouts.first(where: { $0.id == request.workoutID && $0.endedAt != nil })
+                else { return }
                 filter = WorkoutLog.Filter()
                 range = .any
                 selection = workout.persistentModelID
@@ -149,7 +140,6 @@ struct LogTableRow: Identifiable {
             }
         }
 
-        /// The same plain question the iPhone asks before deleting a workout.
         private var deleteQuestion: LocalizedStringResource {
             Copy.deleteWorkout(
                 deleting?.title ?? "", date: (deleting?.startedAt ?? .now).formatted(.dateTime.month().day()))
@@ -288,7 +278,6 @@ struct LogTableRow: Identifiable {
         }
     }
 
-    /// Ties the search field to a focus binding when the host passed one.
     private struct SearchFocus: ViewModifier {
         let focus: FocusState<Bool>.Binding?
 
@@ -302,12 +291,10 @@ struct LogTableRow: Identifiable {
     }
 
     #Preview {
-        let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
-        // swiftlint:disable:next force_try
-        let profile = try! container.mainContext.fetch(FetchDescriptor<Profile>()).first!
+        let fixture = SampleData.previewFixture()
         return NavigationStack {
-            LogTableView(profile: profile, plan: nil)
+            LogTableView(profile: fixture.profile, plan: nil)
         }
-        .modelContainer(container)
+        .modelContainer(fixture.container)
     }
 #endif

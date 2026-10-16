@@ -11,7 +11,7 @@ struct BackupTests {
     let now = Date(timeIntervalSince1970: 1_790_000_000)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     /// The sample, plus one of everything it leaves out: a custom exercise, records, notes,
@@ -69,7 +69,7 @@ struct BackupTests {
         try fill(context)
         let first = try DataTransfer.exportBackup(from: context, exportedAt: now, appVersion: "1.0")
 
-        let other = try TransmuteStore.makeContainer(.inMemory)
+        let other = try TransmuteStore.makeTestContainer()
         let summary = try DataTransfer.importBackup(first, into: other.mainContext)
         let second = try DataTransfer.exportBackup(
             from: ModelContext(other), exportedAt: now.addingTimeInterval(3_600), appVersion: "1.0")
@@ -81,7 +81,6 @@ struct BackupTests {
         #expect(original == restored)
         #expect(try original.encoded() == second)
 
-        // The backup holds something of every model, with the relationships that cross the tree.
         #expect(try counts(in: context) == counts(in: other.mainContext))
         #expect(try counts(in: context).allSatisfy { $0 > 0 })
         #expect(original.workouts.count { $0.planDay != nil } == 10)
@@ -98,7 +97,7 @@ struct BackupTests {
 
     @Test func restoredRelationshipsPointAtTheSameThings() throws {
         try fill(context)
-        let other = try TransmuteStore.makeContainer(.inMemory)
+        let other = try TransmuteStore.makeTestContainer()
         try DataTransfer.importBackup(try DataTransfer.exportBackup(from: context), into: other.mainContext)
 
         let fresh = ModelContext(other)
@@ -141,7 +140,7 @@ struct BackupTests {
         try fill(context)
         let data = try DataTransfer.exportBackup(from: context)
 
-        let other = try TransmuteStore.makeContainer(.inMemory)
+        let other = try TransmuteStore.makeTestContainer()
         let target = other.mainContext
         let mine = Profile()
         mine.goalText = "Mine"
@@ -171,7 +170,6 @@ struct BackupTests {
         #expect(summary.plans == .init(added: 1))
         #expect(summary.workouts == .init(added: 10))
         #expect(try target.fetchCount(FetchDescriptor<Workout>()) == 11)
-        // The plan that was here stays the active one.
         let plans = try target.fetch(FetchDescriptor<Plan>())
         #expect(plans.filter(\.isActive).map(\.name) == ["Already here"])
         // Records are derived again from the merged history. The backup's squat estimates beat
@@ -211,7 +209,6 @@ struct BackupTests {
         #expect(try counts(in: context).allSatisfy { $0 == 0 })
     }
 
-    /// An older backup won't have settings added since. They keep their defaults.
     @Test func missingKeysKeepDefaults() throws {
         let json = """
             {

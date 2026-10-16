@@ -33,7 +33,7 @@ public enum IntelligenceError: Error, Equatable, Sendable {
 }
 
 extension IntelligenceError: LocalizedError {
-    /// For logs and test reports. People see plain copy chosen by the screen instead (#3).
+    /// For logs and test reports. People see plain copy chosen by the screen instead.
     public var errorDescription: String? {
         String(describing: self)
     }

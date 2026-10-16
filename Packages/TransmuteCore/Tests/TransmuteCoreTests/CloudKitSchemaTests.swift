@@ -7,7 +7,7 @@
 
     struct CloudKitSchemaTests {
         /// `-initCloudKitSchema` pushes this model to CloudKit, so a model it left out would
-        /// have no record type in Production. This needs no CloudKit and no entitlements.
+        /// have no record type in Production.
         @Test func theSchemaModelCoversEveryModelInTheSchema() throws {
             let model = try TransmuteStore.cloudKitSchemaModel()
             let schemaNames = Set(TransmuteStore.schema.entities.map(\.name))

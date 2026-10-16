@@ -13,7 +13,7 @@ public enum BarKind: String, Codable, CaseIterable, Sendable {
 }
 
 /// What someone can actually load: their bars, plates with how many pairs of each, and the
-/// steps their dumbbells and machine stacks go up in (#21).
+/// steps their dumbbells and machine stacks go up in.
 ///
 /// Weights are stored in kilograms like everything else, but the kit itself is in one unit: a
 /// 2.5 lb plate is 2.5 lb, not 1.134 kg. `system` is that unit, and the calculator works in it
@@ -32,11 +32,13 @@ public struct PlateInventory: Codable, Hashable, Sendable {
         }
     }
 
-    public struct Plate: Codable, Hashable, Sendable {
-        /// One plate's weight.
+    public struct Plate: Codable, Hashable, Sendable, Identifiable {
         public var kg: Double
         /// How many pairs there are; plates go on in pairs, one each side.
         public var pairs: Int
+
+        /// A kit holds one entry per weight, so the weight tells plates apart.
+        public var id: Double { kg }
 
         public init(kg: Double, pairs: Int) {
             self.kg = kg
@@ -48,7 +50,6 @@ public struct PlateInventory: Codable, Hashable, Sendable {
     public var system: UnitSystem
     /// One of each kind of bar, with its weight.
     public var bars: [Bar]
-    /// The bar barbell work is loaded on.
     public var barKind: BarKind
     public var plates: [Plate]
     /// Dumbbells go up in this step, from one step to `heaviestDumbbellKg`.
@@ -69,8 +70,6 @@ public struct PlateInventory: Codable, Hashable, Sendable {
         self.heaviestDumbbellKg = heaviestDumbbellKg
         self.machineStepKg = machineStepKg
     }
-
-    // MARK: Bars
 
     /// The chosen bar. A kind missing from `bars` falls back to a standard bar in this unit.
     public var bar: Bar {
@@ -95,34 +94,18 @@ public struct PlateInventory: Codable, Hashable, Sendable {
         }
     }
 
-    // MARK: Units
-
     /// A weight in this kit's unit, e.g. 20.41 kg → 45 lb.
     public func display(kg: Double) -> Double {
-        Double(hundredths(kg: kg)) / 100
+        Hundredths(kg: kg, in: system).inUnit
     }
 
     /// A weight in this kit's unit, converted to kilograms.
     public func kilograms(fromDisplay value: Double) -> Double {
-        system == .metric ? value : value / Units.poundsPerKilogram
-    }
-
-    /// The weight in hundredths of this kit's unit. Every real plate is a whole number of these,
-    /// so sums are exact integers, and rounding here absorbs the float error of the kg round trip.
-    func hundredths(kg: Double) -> Int {
-        let value = system == .metric ? kg : kg * Units.poundsPerKilogram
-        return Int((value * 100).rounded())
-    }
-
-    func kilograms(hundredths: Int) -> Double {
-        kilograms(fromDisplay: Double(hundredths) / 100)
+        system.kilograms(fromDisplay: value)
     }
 }
 
-// MARK: Presets
-
 extension PlateInventory {
-    /// Quick starts for the equipment setup.
     public enum Preset: String, CaseIterable, Sendable {
         /// A full commercial gym: plenty of every plate, dumbbells to 50 kg or 120 lb.
         case commercialGym
@@ -130,10 +113,8 @@ extension PlateInventory {
         case home
     }
 
-    /// A preset in kilograms or pounds.
     public init(_ preset: Preset, system: UnitSystem) {
-        // Plates as (weight, pairs) in the unit, heaviest first.
-        let plates: [(Double, Int)]
+        let plates: [(weight: Double, pairs: Int)]
         let dumbbells: (step: Double, heaviest: Double)
         let machine: Double
         switch (preset, system) {
@@ -154,12 +135,31 @@ extension PlateInventory {
             dumbbells = (5, 50)
             machine = 5
         }
-        let kg = { (value: Double) in system == .metric ? value : value / Units.poundsPerKilogram }
         self.init(
             system: system, bars: Self.defaultBars(system),
-            plates: plates.map { Plate(kg: kg($0.0), pairs: $0.1) },
-            dumbbellStepKg: kg(dumbbells.step), heaviestDumbbellKg: kg(dumbbells.heaviest),
-            machineStepKg: kg(machine))
+            plates: plates.map { Plate(kg: system.kilograms(fromDisplay: $0.weight), pairs: $0.pairs) },
+            dumbbellStepKg: system.kilograms(fromDisplay: dumbbells.step),
+            heaviestDumbbellKg: system.kilograms(fromDisplay: dumbbells.heaviest),
+            machineStepKg: system.kilograms(fromDisplay: machine))
+    }
+
+    /// The kit with plates of the same weight merged into one row, adding their pairs. A hand-edited
+    /// or third-party backup can list a weight twice; the kit holds one row per weight.
+    func mergingSameWeightPlates() -> PlateInventory {
+        var merged = self
+        merged.plates = []
+        for plate in plates {
+            if let index = merged.plates.firstIndex(where: { sameWeight($0.kg, plate.kg) }) {
+                merged.plates[index].pairs += plate.pairs
+            } else {
+                merged.plates.append(plate)
+            }
+        }
+        return merged
+    }
+
+    private func sameWeight(_ lhs: Double, _ rhs: Double) -> Bool {
+        Hundredths(kg: lhs, in: system) == Hundredths(kg: rhs, in: system)
     }
 
     /// The commercial-gym preset in the locale's unit, which new profiles start with.
@@ -182,6 +182,6 @@ extension PlateInventory {
             system == .metric
             ? [(.standard, 20), (.light, 15), (.ezCurl, 10), (.trap, 25)]
             : [(.standard, 45), (.light, 35), (.ezCurl, 25), (.trap, 55)]
-        return weights.map { Bar($0.0, kg: system == .metric ? $0.1 : $0.1 / Units.poundsPerKilogram) }
+        return weights.map { Bar($0.0, kg: system.kilograms(fromDisplay: $0.1)) }
     }
 }
