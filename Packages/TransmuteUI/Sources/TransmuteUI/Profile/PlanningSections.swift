@@ -105,9 +105,7 @@
 
     struct EquipmentSection: View {
         @Binding var draft: ProfileDraft
-        /// On the Profile screen, a row to the full bar and plates setup stands in for the
-        /// bar weight; onboarding keeps just the bar weight.
-        var linksPlateSetup = false
+        let kit: Kit
         @State private var showsEverything = false
 
         var body: some View {
@@ -131,22 +129,29 @@
                     Text(ProfileCopy.everything)
                 }
             }
-            if linksPlateSetup {
+            switch kit {
+            case .plateSetup(let plates):
                 Section {
                     NavigationLink {
-                        PlateSetupView(inventory: $draft.plates)
+                        PlateSetupView(inventory: plates)
                     } label: {
                         Text(PlateCopy.setup)
                     }
                 } footer: {
                     Text(PlateCopy.setupNote)
                 }
-            } else if draft.equipment.contains(.barbell) {
-                Section {
-                    WeightField(
-                        label: ProfileCopy.barbellWeight, kg: barbell, units: draft.units)
+            case .barWeight(let kg, let units):
+                if draft.equipment.contains(.barbell) {
+                    Section {
+                        WeightField(label: ProfileCopy.barbellWeight, kg: kg, units: units)
+                    }
                 }
             }
+        }
+
+        enum Kit {
+            case plateSetup(Binding<PlateInventory>)
+            case barWeight(Binding<Double?>, Units)
         }
 
         private var preset: Binding<EquipmentPreset?> {
@@ -154,14 +159,6 @@
                 EquipmentPreset.matching(draft.equipment)
             } set: { preset in
                 if let preset { draft.equipment = preset.equipment }
-            }
-        }
-
-        private var barbell: Binding<Double?> {
-            Binding {
-                draft.barbellKg
-            } set: {
-                draft.barbellKg = $0 ?? 20
             }
         }
 

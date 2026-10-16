@@ -2,9 +2,6 @@
     import SwiftUI
     import TransmuteCore
 
-    /// Edits a binding, so it works on a
-    /// `ProfileDraft` and is saved with the rest of the profile.
-    ///
     /// Weights here are in the kit's own unit, which can differ from the display unit: plates
     /// are marked in one or the other.
     public struct PlateSetupView: View {
