@@ -140,6 +140,10 @@ struct SessionMirrorTests {
         #expect(workout.isOwned(by: .phone))
         #expect(workout.isOwned(by: .mac))
         #expect(!workout.isOwned(by: .watch))
+        workout.startedOn = .mac
+        #expect(workout.isOwned(by: .mac))
+        #expect(workout.isOwned(by: .phone))
+        #expect(!workout.isOwned(by: .watch))
     }
 
     @Test func claimingMarksOnlyAnUnmarkedWorkout() throws {

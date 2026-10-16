@@ -42,7 +42,7 @@ extension SchemaV1 {
         /// nobody marked belongs to every device; the Mac counts as the iPhone.
         public func isOwned(by device: SessionDevice) -> Bool {
             switch device {
-            case .watch: startedOn != .phone
+            case .watch: startedOn != .phone && startedOn != .mac
             case .phone, .mac: startedOn != .watch
             }
         }
