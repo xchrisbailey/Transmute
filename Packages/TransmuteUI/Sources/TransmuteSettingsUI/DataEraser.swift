@@ -61,8 +61,7 @@ enum DataEraser {
         in container: ModelContainer, link: SessionLink?, defaults: UserDefaults = .standard,
         clearsNotifications: Bool = true
     ) async throws -> ErasureOutcome {
-        // A workout in progress goes with the rest: end its Live Activity and tell the watch.
-        await SessionTeardown.run(link: link)
+        await SessionTeardown.endActiveWorkout(link: link)
         let context = container.mainContext
         do {
             try DataTransfer.deleteAll(in: context)

@@ -31,6 +31,14 @@ struct UnitsTests {
         #expect(imperial.weightSymbol == "lb")
     }
 
+    @Test func formatsAnIncrementToTwoDecimalsWithoutRoundingToTheHalf() {
+        #expect(metric.formatIncrement(1.25) == "1.25 kg")
+        #expect(metric.formatIncrement(2) == "2 kg")
+        #expect(imperial.formatIncrement(2.5) == "2.5 lb")
+        #expect(imperial.formatIncrement(0.126) == "0.13 lb")
+        #expect(Units(system: .metric, locale: Locale(identifier: "de_DE")).formatIncrement(1.25) == "1,25 kg")
+    }
+
     @Test func heightConversions() {
         let cm = Units.centimetres(feet: 5, inches: 9)
         #expect(abs(cm - 175.26) < 1e-9)

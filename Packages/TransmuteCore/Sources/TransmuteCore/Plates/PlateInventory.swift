@@ -32,10 +32,13 @@ public struct PlateInventory: Codable, Hashable, Sendable {
         }
     }
 
-    public struct Plate: Codable, Hashable, Sendable {
+    public struct Plate: Codable, Hashable, Sendable, Identifiable {
         public var kg: Double
         /// How many pairs there are; plates go on in pairs, one each side.
         public var pairs: Int
+
+        /// A kit holds one entry per weight, so the weight tells plates apart.
+        public var id: Double { kg }
 
         public init(kg: Double, pairs: Int) {
             self.kg = kg
