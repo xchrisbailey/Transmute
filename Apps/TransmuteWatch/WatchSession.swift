@@ -122,10 +122,14 @@ final class WatchSession: Identifiable {
         isEnding = true
         summary = WorkoutSummary(mirrored)
         Task {
+            // The iPhone hears the Health id before this watch's session ends, while the mirror
+            // can still carry it.
             let healthID = try? await live.finish(
-                workoutID: mirrored.workoutID, title: mirrored.title, at: mirrored.endedAt ?? .now)
+                workoutID: mirrored.workoutID, title: mirrored.title, at: mirrored.endedAt ?? .now,
+                beforeEnding: { [link] healthID in
+                    await link.ended(workoutID: mirrored.workoutID, healthWorkoutID: healthID)
+                })
             isSavedToHealth = healthID != nil
-            link.ended(workoutID: mirrored.workoutID, healthWorkoutID: healthID)
         }
     }
 

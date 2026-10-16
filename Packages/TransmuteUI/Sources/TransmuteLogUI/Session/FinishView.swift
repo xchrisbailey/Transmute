@@ -102,27 +102,15 @@ struct FinishView: View {
 
     /// Writes the workout to Health once, then closes. A failure is shown but doesn't block.
     private func save() async {
-        // With the watch on the workout, the watch saves it to Health, heart rate and all, and
-        // sends back its id. Give that a moment to arrive rather than saving a second one.
-        if link?.live.isMirroring == true {
-            healthStatus = .saving
-            for _ in 0..<50 where workout.healthKitWorkoutID == nil {
-                try? await Task.sleep(for: .milliseconds(100))
-            }
-            healthStatus = .idle
-        }
-        guard health.isAvailable, workout.healthKitWorkoutID == nil, healthStatus != .failed,
-            let record = HealthWorkoutRecord(workout)
-        else {
+        guard healthStatus != .saving else { return }
+        guard let link, health.isAvailable, workout.healthKitWorkoutID == nil, healthStatus != .failed else {
             onSave()
             return
         }
         healthStatus = .saving
         do {
-            try await health.requestAccess(.workouts)
-            workout.healthKitWorkoutID = try await health.save(record)
-            try? workout.modelContext?.save()
-            healthStatus = .saved
+            try await link.saveToHealth(workout, with: health)
+            healthStatus = workout.healthKitWorkoutID == nil ? .idle : .saved
             onSave()
         } catch {
             healthStatus = .failed

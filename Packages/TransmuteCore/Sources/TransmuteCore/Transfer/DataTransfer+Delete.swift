@@ -18,8 +18,9 @@ extension DataTransfer {
     /// Deletes every object of every model and saves, so the deletions sync to iCloud like any
     /// other change. Returns how many objects went.
     ///
-    /// Transmute keeps no user data outside the store: its user defaults hold only view state
-    /// and the AI route, so there's nothing else to clear here.
+    /// Transmute keeps no user data outside the store: its user defaults hold view state, the AI
+    /// route and the session link's pending Health deletes, all of which `DefaultsReset` clears,
+    /// so there's nothing else to clear here.
     @discardableResult
     public static func deleteAll(in context: ModelContext) throws -> Int {
         // Not undoable. With the apps' undo manager attached, SwiftData stops in `save()` with

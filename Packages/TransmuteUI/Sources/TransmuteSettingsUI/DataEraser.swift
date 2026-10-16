@@ -39,8 +39,10 @@ public enum ErasureOutcome: String, Sendable {
 /// Transmute's own keys in `UserDefaults`, which delete-all puts back to their defaults.
 /// The store holds everything else.
 enum DefaultsReset {
-    /// The tab and layout last shown, the appearance and the AI route.
-    static let keys = [Appearance.defaultsKey, IntelligenceSettings.routeKey, "rootTab", "planGrid"]
+    /// The tab and layout last shown, the appearance, the AI route, and the Health deletes the
+    /// session link still has pending, which refer to workouts delete-all has just removed.
+    static let keys =
+        [Appearance.defaultsKey, IntelligenceSettings.routeKey, "rootTab", "planGrid"] + SessionLink.defaultsKeys
     /// Reminder settings all start with this.
     static let prefixes = ["reminders."]
 

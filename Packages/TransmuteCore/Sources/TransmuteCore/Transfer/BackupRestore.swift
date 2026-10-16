@@ -4,13 +4,16 @@ import SwiftData
 struct BackupRestore {
     let backup: Backup
     let context: ModelContext
+    let defaults: UserDefaults
     private var summary = ImportSummary(source: .backup)
     private var days: [UUID: [PlanDay]] = [:]
     private var sets: [UUID: [[LoggedSet]]] = [:]
+    private var restoredWorkoutIDs: [UUID] = []
 
-    init(backup: Backup, context: ModelContext) {
+    init(backup: Backup, context: ModelContext, defaults: UserDefaults = .standard) {
         self.backup = backup
         self.context = context
+        self.defaults = defaults
     }
 
     mutating func run() throws -> ImportSummary {
@@ -29,6 +32,8 @@ struct BackupRestore {
         }
         summary.recordsAdded = max(0, try context.fetchCount(FetchDescriptor<PersonalRecord>()) - recordsBefore)
         try context.save()
+        let pending = PendingHealthDeletes(defaults: defaults)
+        for id in restoredWorkoutIDs { pending.forgetDeleted(id) }
         return summary
     }
 
@@ -111,6 +116,7 @@ struct BackupRestore {
             let (workout, workoutSets) = saved.model(planDay: planDay)
             context.insert(workout)
             sets[saved.id] = workoutSets
+            restoredWorkoutIDs.append(saved.id)
             summary.workouts.added += 1
             summary.setsAdded += workoutSets.joined().count
         }
