@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
+import TransmuteTestSupport
 
 @testable import TransmuteCore
 
@@ -9,7 +10,12 @@ struct PlanEditorTests {
     let container: ModelContainer
     let plan: Plan
     var context: ModelContext { container.mainContext }
-    let start = Date(timeIntervalSince1970: 1_790_380_800)  // Saturday 2026-09-26, UTC.
+    let start = utc(2026, 9, 21)
+    let calendar: Calendar = {
+        var calendar = Calendar(identifier: .iso8601)
+        calendar.timeZone = .gmt
+        return calendar
+    }()
 
     init() throws {
         container = try TransmuteStore.makeTestContainer()
@@ -21,22 +27,23 @@ struct PlanEditorTests {
     var monday: PlanDay { plan.orderedDays.first { $0.week == 1 && $0.weekday == 1 }! }
 
     @Test func weekFollowsTheCalendarAndClamps() {
-        #expect(PlanEditor.week(of: plan, on: start) == 1)
-        #expect(PlanEditor.week(of: plan, on: start.addingTimeInterval(8 * 86_400)) == 2)
-        #expect(PlanEditor.week(of: plan, on: start.addingTimeInterval(100 * 86_400)) == 4)
-        #expect(PlanEditor.week(of: plan, on: start.addingTimeInterval(-86_400)) == 1)
+        #expect(PlanEditor.week(of: plan, on: start, calendar: calendar) == 1)
+        #expect(PlanEditor.week(of: plan, on: start.addingTimeInterval(8 * 86_400), calendar: calendar) == 2)
+        #expect(PlanEditor.week(of: plan, on: start.addingTimeInterval(100 * 86_400), calendar: calendar) == 4)
+        #expect(PlanEditor.week(of: plan, on: start.addingTimeInterval(-86_400), calendar: calendar) == 1)
     }
 
     @Test func weekTwoOfAPlanStartedOnASaturdayBeginsOnTheNextMonday() {
-        var utc = Calendar(identifier: .iso8601)
-        utc.timeZone = TimeZone(identifier: "UTC")!
-        let sunday = start.addingTimeInterval(86_400)
-        let nextMonday = sunday.addingTimeInterval(86_400)
-        #expect(PlanEditor.week(of: plan, on: sunday, calendar: utc) == 1)
-        #expect(PlanEditor.week(of: plan, on: nextMonday, calendar: utc) == 2)
-        #expect(TodayPlan(plan: plan, on: nextMonday, calendar: utc).week == 2)
-        // Week 1 begins on the Monday before the start date, so its first day is dated then.
-        #expect(PlanEditor.date(of: monday, in: plan, calendar: utc) == start.addingTimeInterval(-5 * 86_400))
+        let saturday = utc(2026, 9, 26)
+        let sunday = utc(2026, 9, 27)
+        let nextMonday = utc(2026, 9, 28)
+        plan.startDate = saturday
+        #expect(PlanEditor.week(of: plan, on: sunday, calendar: calendar) == 1)
+        #expect(PlanEditor.week(of: plan, on: nextMonday, calendar: calendar) == 2)
+        #expect(TodayPlan(plan: plan, on: nextMonday, calendar: calendar).week == 2)
+        #expect(
+            PlanEditor.date(of: monday, in: plan, calendar: calendar) == utc(2026, 9, 21),
+            "Week 1 begins on the Monday before the start date")
     }
 
     @Test func movingOntoAnotherSessionSwapsThem() {
@@ -79,13 +86,30 @@ struct PlanEditorTests {
         #expect(plan.orderedDays.filter { $0.week == 1 }.count == 3)
     }
 
-    @Test func movingAnExerciseWithinItsDay() {
+    @Test func movingAnExerciseDownWithinItsDay() {
         let day = monday
         let ids = day.orderedExercises.map(\.exerciseID)
         PlanEditor.move(day.orderedExercises[0], to: day, at: 2)
         #expect(day.orderedExercises.map(\.exerciseID) == [ids[1], ids[2], ids[0], ids[3], ids[4]])
+        #expect(day.orderedExercises.map(\.order) == Array(0..<5))
+        #expect(day.exercises?.count == 5)
+        #expect(day.isEdited)
+    }
+
+    @Test func movingAnExerciseBackUpWithinItsDayRestoresTheOrder() {
+        let day = monday
+        let ids = day.orderedExercises.map(\.exerciseID)
+        PlanEditor.move(day.orderedExercises[0], to: day, at: 2)
         PlanEditor.move(day.orderedExercises[2], to: day, at: 0)
         #expect(day.orderedExercises.map(\.exerciseID) == ids)
+        #expect(day.orderedExercises.map(\.order) == Array(0..<5))
+        #expect(day.exercises?.count == 5)
+        #expect(day.isEdited)
+    }
+
+    @Test func movingAnExercisePastTheEndOfItsDayPutsItLast() {
+        let day = monday
+        let ids = day.orderedExercises.map(\.exerciseID)
         PlanEditor.move(day.orderedExercises[1], to: day, at: 99)
         #expect(day.orderedExercises.map(\.exerciseID) == [ids[0], ids[2], ids[3], ids[4], ids[1]])
         #expect(day.orderedExercises.map(\.order) == Array(0..<5))
@@ -178,63 +202,6 @@ struct PlanEditorTests {
         #expect(!options.contains { $0.exercise.id == "back-squat" })
     }
 
-    /// Bodyweight squats `other`, `high`, `low`, `mid`, `solo` and `capped` in catalog order, plus a
-    /// lunge and a barbell squat that the filter leaves out. `capped` links to both of those.
-    private static let ladder = ExerciseLibrary(
-        catalogVersion: 1,
-        exercises: [
-            ladderExercise("other"),
-            ladderExercise("high", easier: "mid"),
-            ladderExercise("low", harder: "mid"),
-            ladderExercise("mid", easier: "low", harder: "high"),
-            ladderExercise("solo"),
-            ladderExercise("lunge", pattern: .lunge),
-            ladderExercise("heavy", equipment: [[.barbell]]),
-            ladderExercise("capped", easier: "heavy", harder: "lunge"),
-        ])
-
-    private static func ladderExercise(
-        _ id: String, pattern: MovementPattern = .squat, equipment: [[Equipment]] = [[.bodyweight]],
-        easier: String? = nil, harder: String? = nil
-    ) -> LibraryExercise {
-        LibraryExercise(
-            id: id, name: id, category: .strength, pattern: pattern, primaryMuscles: [.quads],
-            equipment: equipment, tracking: .reps, easier: easier, harder: harder)
-    }
-
-    private func relations(to id: String) -> [String: PlanEditor.Alternative.Relation?] {
-        let options = PlanEditor.alternatives(to: id, equipment: [.bodyweight], library: Self.ladder)
-        return Dictionary(uniqueKeysWithValues: options.map { ($0.exercise.id, $0.relation) })
-    }
-
-    @Test func alternativesSayWhichIsEasierAndHarder() {
-        #expect(
-            relations(to: "mid") == ["low": .easier, "high": .harder, "other": nil, "solo": nil, "capped": nil])
-    }
-
-    @Test func alternativesLabelOnlyTheVariantThatExists() {
-        #expect(relations(to: "high") == ["mid": .easier, "other": nil, "low": nil, "solo": nil, "capped": nil])
-        #expect(relations(to: "low") == ["mid": .harder, "other": nil, "high": nil, "solo": nil, "capped": nil])
-    }
-
-    @Test func alternativesWithoutVariantsAreUnlabelled() {
-        let options = PlanEditor.alternatives(to: "solo", equipment: [.bodyweight], library: Self.ladder)
-        #expect(options.map(\.exercise.id) == ["other", "high", "low", "mid", "capped"])
-        #expect(options.allSatisfy { $0.relation == nil })
-    }
-
-    @Test func alternativesKeepTheirOrderWithVariantsFirst() {
-        let options = PlanEditor.alternatives(to: "mid", equipment: [.bodyweight], library: Self.ladder)
-        #expect(options.map(\.exercise.id) == ["high", "low", "other", "solo", "capped"])
-    }
-
-    @Test func aVariantTheFilterLeavesOutStaysOut() {
-        // `capped` links to a barbell squat and a lunge; neither passes the filter, so neither shows.
-        let options = PlanEditor.alternatives(to: "capped", equipment: [.bodyweight], library: Self.ladder)
-        #expect(!options.contains { ["heavy", "lunge"].contains($0.exercise.id) })
-        #expect(options.allSatisfy { $0.relation == nil })
-    }
-
     @Test func setsCopyTheLastAndKeepOne() throws {
         let squat = try #require(monday.orderedExercises.first { $0.exerciseID == "back-squat" })
         let count = squat.orderedSets.count
@@ -264,5 +231,66 @@ struct PlanEditorTests {
         #expect(day.weekday == 2)
         context.undoManager?.undo()
         #expect(day.weekday == 1)
+    }
+}
+
+extension PlanEditorTests {
+    private static let squatVariants = ExerciseLibrary(
+        catalogVersion: 1,
+        exercises: [
+            squatVariant("other"),
+            squatVariant("high", easier: "mid"),
+            squatVariant("low", harder: "mid"),
+            squatVariant("mid", easier: "low", harder: "high"),
+            squatVariant("solo"),
+            squatVariant("lunge", pattern: .lunge),
+            squatVariant("heavy", equipment: [[.barbell]]),
+            squatVariant("linksFilteredOut", easier: "heavy", harder: "lunge"),
+        ])
+
+    private static func squatVariant(
+        _ id: String, pattern: MovementPattern = .squat, equipment: [[Equipment]] = [[.bodyweight]],
+        easier: String? = nil, harder: String? = nil
+    ) -> LibraryExercise {
+        LibraryExercise(
+            id: id, name: id, category: .strength, pattern: pattern, primaryMuscles: [.quads],
+            equipment: equipment, tracking: .reps, easier: easier, harder: harder)
+    }
+
+    private func relations(to id: String) -> [String: PlanEditor.Alternative.Relation?] {
+        let options = PlanEditor.alternatives(to: id, equipment: [.bodyweight], library: Self.squatVariants)
+        return Dictionary(uniqueKeysWithValues: options.map { ($0.exercise.id, $0.relation) })
+    }
+
+    @Test func alternativesSayWhichIsEasierAndHarder() {
+        #expect(
+            relations(to: "mid") == [
+                "low": .easier, "high": .harder, "other": nil, "solo": nil, "linksFilteredOut": nil,
+            ])
+    }
+
+    @Test func alternativesLabelOnlyTheVariantThatExists() {
+        #expect(
+            relations(to: "high") == ["mid": .easier, "other": nil, "low": nil, "solo": nil, "linksFilteredOut": nil])
+        #expect(
+            relations(to: "low") == ["mid": .harder, "other": nil, "high": nil, "solo": nil, "linksFilteredOut": nil])
+    }
+
+    @Test func alternativesWithoutVariantsAreUnlabelled() {
+        let options = PlanEditor.alternatives(to: "solo", equipment: [.bodyweight], library: Self.squatVariants)
+        #expect(options.map(\.exercise.id) == ["other", "high", "low", "mid", "linksFilteredOut"])
+        #expect(options.allSatisfy { $0.relation == nil })
+    }
+
+    @Test func alternativesKeepTheirOrderWithVariantsFirst() {
+        let options = PlanEditor.alternatives(to: "mid", equipment: [.bodyweight], library: Self.squatVariants)
+        #expect(options.map(\.exercise.id) == ["high", "low", "other", "solo", "linksFilteredOut"])
+    }
+
+    @Test func aVariantTheFilterLeavesOutStaysOut() {
+        let options = PlanEditor.alternatives(
+            to: "linksFilteredOut", equipment: [.bodyweight], library: Self.squatVariants)
+        #expect(!options.contains { ["heavy", "lunge"].contains($0.exercise.id) })
+        #expect(options.allSatisfy { $0.relation == nil })
     }
 }

@@ -127,4 +127,28 @@ struct WorkoutLogTests {
         #expect(WorkoutLog.history(of: "back-squat", in: []).isEmpty)
         #expect(WorkoutLog.history(of: "back-squat", in: all.filter { $0.title == "Upper and rotation" }).isEmpty)
     }
+
+    @Test func historyMergesARepeatedExerciseIntoOneEntry() throws {
+        let workout = Workout(title: "Squat twice", startedAt: now)
+        workout.endedAt = now.addingTimeInterval(3_600)
+        let blocks: [(id: String, weights: [Double])] = [
+            ("back-squat", [100, 100]), ("bench-press", [60]), ("back-squat", [80]),
+        ]
+        workout.exercises = blocks.enumerated().map { order, block in
+            let exercise = LoggedExercise(exerciseID: block.id, order: order)
+            exercise.sets = block.weights.enumerated().map { index, kg in
+                let set = LoggedSet(order: index, weightKg: kg, reps: 5)
+                set.complete(at: now)
+                return set
+            }
+            return exercise
+        }
+        context.insert(workout)
+        try context.save()
+
+        let history = WorkoutLog.history(of: "back-squat", in: [workout])
+
+        #expect(history.count == 1)
+        #expect(history.first?.sets.map(\.weightKg) == [100, 100, 80])
+    }
 }

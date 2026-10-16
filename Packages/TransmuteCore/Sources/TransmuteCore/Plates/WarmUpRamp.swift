@@ -12,16 +12,16 @@ extension PlateCalculator {
     ///
     /// Empty when the working weight is the bar or lighter.
     public func warmUps(to workingKg: Double) -> [WarmUpSet] {
-        let working = inventory.hundredths(kg: workingKg)
+        let working = Hundredths(kg: workingKg, in: inventory.system)
         let barOnly = solve(kg: bar.kg).exact
-        guard let barOnly, working > inventory.hundredths(kg: bar.kg) else { return [] }
+        guard let barOnly, working > Hundredths(kg: bar.kg, in: inventory.system) else { return [] }
         var sets = [WarmUpSet(reps: 10, loading: barOnly)]
         for (fraction, reps) in [(0.4, 5), (0.6, 3), (0.8, 2)] {
             let solution = solve(kg: workingKg * fraction)
             guard let loading = solution.exact ?? solution.below,
                 let previous = sets.last?.loading.total,
                 loading.total > previous,
-                inventory.hundredths(kg: loading.totalKg) < working
+                Hundredths(kg: loading.totalKg, in: inventory.system) < working
             else { continue }
             sets.append(WarmUpSet(reps: reps, loading: loading))
         }

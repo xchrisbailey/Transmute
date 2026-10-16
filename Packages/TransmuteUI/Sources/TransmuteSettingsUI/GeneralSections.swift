@@ -76,13 +76,11 @@ struct EquipmentLinksSection: View {
         }
     }
 
-    /// The profile keeps a copy of the chosen bar's weight, as saving a profile draft does.
     private var plates: Binding<PlateInventory> {
         Binding {
             profile.plates
         } set: { plates in
-            profile.plates = plates
-            profile.barbellKg = plates.barKg
+            profile.setPlates(plates)
             try? context.save()
         }
     }

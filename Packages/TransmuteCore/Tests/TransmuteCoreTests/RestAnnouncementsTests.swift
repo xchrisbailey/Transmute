@@ -59,9 +59,10 @@ struct RestAnnouncementsTests {
     }
 
     @Test func aRestExtendedMidWayIsPlannedAgainFromWhatIsLeft() {
-        // 45 seconds into a 90 second rest, 15 more seconds make it 60 left.
-        #expect(RestAnnouncements.marks(remaining: 60) == [60, 30, 10, 0])
-        // Taking 15 off 40 left leaves 25, already past the 30 mark.
-        #expect(RestAnnouncements.marks(remaining: 25) == [25, 10, 0])
+        #expect(RestAnnouncements.marks(remaining: 90 - 45 + 15) == [60, 30, 10, 0])
+    }
+
+    @Test func aRestShortenedMidWayIsPlannedAgainFromWhatIsLeft() {
+        #expect(RestAnnouncements.marks(remaining: 40 - 15) == [25, 10, 0])
     }
 }

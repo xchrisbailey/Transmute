@@ -41,8 +41,10 @@ struct ModelTests {
         let first = try #require(workouts.first)
         #expect(first.planDay?.focus == "Lower and power")
         #expect(first.orderedExercises.allSatisfy { $0.orderedSets.allSatisfy(\.isCompleted) })
-        // 4 × 5 × 90 + 3 × 8 × 70 + 3 × 8 × 16 back squat, RDL and split squat.
-        #expect(first.volumeKg == 1_800 + 1_680 + 384)
+        let backSquat = 4.0 * 5 * 90
+        let romanianDeadlift = 3.0 * 8 * 70
+        let splitSquat = 3.0 * 8 * 16
+        #expect(first.volumeKg == backSquat + romanianDeadlift + splitSquat)
         #expect(try #require(first.duration) > 0)
     }
 
@@ -125,8 +127,7 @@ struct CloudKitCompatibilityTests {
 }
 
 extension CloudKitCompatibilityTests {
-    /// Guards the rule check above against passing vacuously.
-    @Test func schemaReflectsDefaultsAndOptionals() throws {
+    @Test func cloudKitRuleCheckSeesDefaultsAndOptionals() throws {
         let plan = try #require(TransmuteStore.schema.entities.first { $0.name == "Plan" })
         let name = try #require(plan.attributes.first { $0.name == "name" })
         #expect(!name.isOptional)

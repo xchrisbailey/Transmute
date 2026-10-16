@@ -119,31 +119,22 @@ struct WorkoutPreferencesTests {
         #expect(units.formatWeight(kg: 100) == "100 kg")
     }
 
-    @Test func theDraftKeepsUnitsChosenOnTheirOwn() {
+    @Test func savingADraftKeepsUnitsChosenOnTheirOwn() {
         let profile = Profile()
         profile.unitSystem = .metric
         profile.weightUnit = .imperial
-        var draft = ProfileDraft(profile, locale: Locale(identifier: "en_GB"))
-        #expect(draft.units.weight == .imperial)
-        #expect(draft.units.height == .metric)
-        draft.unitSystem = .imperial
-        draft.apply(to: profile)
-        #expect(profile.unitSystem == .imperial)
+        let units = Units(profile, locale: Locale(identifier: "en_GB"))
+        #expect(units.weight == .imperial)
+        #expect(units.height == .metric)
+        ProfileDraft(profile).apply(to: profile)
+        #expect(profile.unitSystem == .metric)
         #expect(profile.weightUnit == .imperial)
         #expect(profile.heightUnit == nil)
     }
 
     @Test func savingADraftDoesNotPinTheDeviceSystem() {
-        let american = Locale(identifier: "en_US")
         let profile = Profile()
-        var draft = ProfileDraft(profile, locale: american)
-        draft.apply(to: profile, locale: american)
+        ProfileDraft(profile).apply(to: profile)
         #expect(profile.unitSystem == nil)
-        draft.unitSystem = .metric
-        draft.apply(to: profile, locale: american)
-        #expect(profile.unitSystem == .metric)
-        draft.unitSystem = .imperial
-        draft.apply(to: profile, locale: american)
-        #expect(profile.unitSystem == .imperial)
     }
 }

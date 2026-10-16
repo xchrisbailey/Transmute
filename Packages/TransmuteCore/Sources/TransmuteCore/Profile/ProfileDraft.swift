@@ -10,12 +10,6 @@ public struct ProfileDraft: Equatable, Sendable {
     public var weightKg: Double?
     public var birthYear: Int?
     public var sex: Sex?
-    public var unitSystem: UnitSystem
-    /// Units chosen on their own in Settings. The draft carries them so its screens show
-    /// the same units as the rest of the app; `nil` follows `unitSystem`.
-    public var weightUnit: UnitSystem?
-    public var heightUnit: UnitSystem?
-    public var distanceUnit: UnitSystem?
     public var experience: ExperienceLevel
     public var knownLifts: [KnownLift]
     public var goalText: String
@@ -24,16 +18,14 @@ public struct ProfileDraft: Equatable, Sendable {
     public var sport: String
     public var schedule: Schedule
     public var equipment: Set<Equipment>
-    public var plates: PlateInventory
     public var limitations: String
     public var limitationAreas: Set<BodyArea>
 
-    public init(locale: Locale = .current) {
+    public init() {
         heightCm = nil
         weightKg = nil
         birthYear = nil
         sex = nil
-        unitSystem = .preferred(for: locale)
         experience = .beginner
         knownLifts = []
         goalText = ""
@@ -41,21 +33,16 @@ public struct ProfileDraft: Equatable, Sendable {
         sport = ""
         schedule = Schedule(daysPerWeek: 3, preferredWeekdays: [1, 3, 5], sessionMinutes: 45, weeks: 8)
         equipment = EquipmentPreset.homeDumbbells.equipment
-        plates = PlateInventory(.commercialGym, system: unitSystem)
         limitations = ""
         limitationAreas = []
     }
 
-    public init(_ profile: Profile, locale: Locale = .current) {
-        self.init(locale: locale)
+    public init(_ profile: Profile) {
+        self.init()
         heightCm = profile.heightCm
         weightKg = profile.latestBodyweightKg
         birthYear = profile.birthYear
         sex = profile.sex
-        unitSystem = profile.unitSystem ?? .preferred(for: locale)
-        weightUnit = profile.weightUnit
-        heightUnit = profile.heightUnit
-        distanceUnit = profile.distanceUnit
         experience = profile.experience
         knownLifts = profile.knownLifts
         goalText = profile.goalText
@@ -63,19 +50,8 @@ public struct ProfileDraft: Equatable, Sendable {
         sport = profile.sports.first ?? ""
         schedule = profile.schedule
         equipment = Set(profile.equipment)
-        plates = profile.plates
         limitations = profile.limitations
         limitationAreas = Set(profile.limitationAreas)
-    }
-
-    public var units: Units {
-        Units(system: unitSystem, weight: weightUnit, height: heightUnit, distance: distanceUnit)
-    }
-
-    /// The chosen bar's weight; setting it changes that bar in `plates`.
-    public var barbellKg: Double {
-        get { plates.barKg }
-        set { plates.setBarKg(newValue) }
     }
 
     public static let heightRange = 120.0...230.0
@@ -160,18 +136,10 @@ public struct ProfileDraft: Equatable, Sendable {
 
     /// Writes the draft onto a profile. A changed weight is added as a new bodyweight entry,
     /// dated `date`; earlier entries are kept as history.
-    public func apply(to profile: Profile, on date: Date = .now, locale: Locale = .current) {
+    public func apply(to profile: Profile, on date: Date = .now) {
         profile.heightCm = heightCm
         profile.birthYear = birthYear
         profile.sex = sex
-        // A profile with no system of its own follows the device. It stays that way
-        // unless the draft asks for something else.
-        if profile.unitSystem != nil || unitSystem != .preferred(for: locale) {
-            profile.unitSystem = unitSystem
-        }
-        profile.weightUnit = weightUnit
-        profile.heightUnit = heightUnit
-        profile.distanceUnit = distanceUnit
         profile.experience = experience
         profile.knownLifts = experience == .beginner ? [] : knownLifts
         profile.goalText = goalText.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -186,8 +154,6 @@ public struct ProfileDraft: Equatable, Sendable {
         }
         profile.schedule = schedule
         profile.equipment = Equipment.allCases.filter(equipment.contains)
-        profile.plates = plates
-        profile.barbellKg = plates.barKg
         profile.limitations = limitations.trimmingCharacters(in: .whitespacesAndNewlines)
         profile.limitationAreas = BodyArea.allCases.filter(limitationAreas.contains)
         if let weightKg, profile.latestBodyweightKg.map({ abs($0 - weightKg) > 0.05 }) ?? true {

@@ -70,8 +70,7 @@ struct WorkoutSessionTests {
         }
         let workout = WorkoutSession.start(day, at: now, in: context)
         let squat = try #require(workout.orderedExercises.first { $0.exerciseID == "back-squat" })
-        // Week 3 squatted 90 × 1.05, rounded to the half kilogram.
-        #expect(squat.orderedSets.first?.weightKg == 94.5)
+        #expect(squat.orderedSets.first?.weightKg == 94.5, "Week 3 squatted 90 kg × 1.05, rounded to 0.5 kg")
         let jump = try #require(workout.orderedExercises.first { $0.exerciseID == "box-jump" })
         #expect(jump.orderedSets.first?.weightKg == nil)
     }

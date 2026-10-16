@@ -47,13 +47,21 @@ struct ProgressStatsTests {
         #expect(Stats.maxTrend(of: "deadlift", workouts: [first, second], records: records).isEmpty)
     }
 
-    @Test func keyLiftsRankThePlansWeightedExercisesByPlannedSets() {
-        let plan = fixture.plan(
+    func plannedLifts() -> Plan {
+        fixture.plan(
             weeks: 1, [("dumbbell-curl", 2), ("pull-up", 5), ("bench-press", 4), ("deadlift", 3), ("back-squat", 4)])
-        // A planned warm-up isn't a working set, which leaves the deadlift level with the curl.
-        fixture.planDay(plan, week: 1).orderedExercises[3].orderedSets[0].isWarmUp = true
+    }
 
-        // Ties go in library order; the pull-up is reps only.
+    @Test func keyLiftsRankByPlannedSetsBreakTiesInLibraryOrderAndLeaveOutRepsOnlyLifts() {
+        let plan = plannedLifts()
+        #expect(
+            Stats.keyLifts(of: plan, workouts: []) == ["back-squat", "bench-press", "deadlift", "dumbbell-curl"])
+        #expect(Stats.keyLifts(of: plan, workouts: [], limit: 2) == ["back-squat", "bench-press"])
+    }
+
+    @Test func aPlannedWarmUpIsNotAWorkingSetSoTheDeadliftTiesTheCurl() {
+        let plan = plannedLifts()
+        fixture.planDay(plan, week: 1).orderedExercises[3].orderedSets[0].isWarmUp = true
         #expect(
             Stats.keyLifts(of: plan, workouts: []) == ["back-squat", "bench-press", "deadlift", "dumbbell-curl"])
         #expect(Stats.keyLifts(of: plan, workouts: [], limit: 2) == ["back-squat", "bench-press"])

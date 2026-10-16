@@ -1,10 +1,11 @@
 import Foundation
 import Testing
+import TransmuteTestSupport
 
 @testable import TransmuteCore
 
 enum Lift {
-    static let today = Date(timeIntervalSince1970: 1_790_553_600)  // Monday 2026-09-28, UTC.
+    static let today = utc(2026, 9, 28)
 
     static func daysAgo(_ days: Int) -> Date {
         today.addingTimeInterval(Double(-days) * 86_400)
@@ -269,8 +270,8 @@ struct ProgressionEngineTests {
             planned: Lift.plan(3, fives), history: history, context: Lift.context("back-squat"))
         #expect(result.reason.kind == .fromEstimate)
         #expect(abs((result.reason.oneRepMaxKg ?? 0) - 80) < 0.001)
-        // 80 / (1 + 7/30) ≈ 64.9, rounded to 65.
-        #expect(Lift.working(result).map(\.loadKg) == [65, 65, 65])
+        #expect(
+            Lift.working(result).map(\.loadKg) == [65, 65, 65], "80 / (1 + 7/30) is about 64.9, which rounds to 65")
     }
 }
 
@@ -305,8 +306,8 @@ extension ProgressionEngineTests {
             planned: Lift.plan(3, percent), history: history, context: Lift.context("back-squat"))
         #expect(result.reason.kind == .percentOfMax)
         #expect(result.reason.fraction == 0.75)
-        // 0.75 × 116.7 = 87.5.
-        #expect(Lift.working(result).map(\.loadKg) == [87.5, 87.5, 87.5])
+        #expect(
+            Lift.working(result).map(\.loadKg) == [87.5, 87.5, 87.5], "0.75 of a 116.7 kg estimate rounds to 87.5")
 
         let known = Lift.context(
             "back-squat", knownLifts: [KnownLift(exerciseID: "back-squat", weightKg: 100, reps: 5)])

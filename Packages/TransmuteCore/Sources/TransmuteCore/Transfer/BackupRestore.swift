@@ -41,6 +41,7 @@ struct BackupRestore {
         } else {
             profile = Profile()
             saved.apply(to: profile)
+            profile.plates = profile.plates.mergingSameWeightPlates()
             context.insert(profile)
             summary.profile = .added
         }

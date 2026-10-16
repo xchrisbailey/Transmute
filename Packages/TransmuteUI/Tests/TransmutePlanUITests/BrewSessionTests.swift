@@ -3,6 +3,7 @@ import SwiftData
 import Testing
 import TransmuteCore
 import TransmuteIntelligence
+import TransmuteTestSupport
 
 @testable import TransmutePlanUI
 
@@ -32,8 +33,8 @@ struct BrewSessionTests {
         #expect(session.planName == preview.name)
         #expect(try context.fetchCount(FetchDescriptor<Plan>()) == 1, "Nothing is saved before keeping")
 
-        let monday = Date(timeIntervalSince1970: 1_790_640_000)  // A Wednesday in 2026.
-        let plan = try #require(try session.keep(in: context, startDate: monday, device: "iPhone"))
+        let tuesday = utc(2026, 9, 29)
+        let plan = try #require(try session.keep(in: context, startDate: tuesday, device: "iPhone"))
         #expect(plan.isActive)
         #expect(!old.isActive)
         #expect(plan.brewedBy == "Apple Intelligence on iPhone")
