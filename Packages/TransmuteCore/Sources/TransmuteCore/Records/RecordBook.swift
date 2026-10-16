@@ -40,11 +40,8 @@ public struct RecordBook {
         guard let exerciseID = set.exercise?.exerciseID else { return RecordCheck() }
         let previousVolumeSessions = volumeRecordWorkouts(for: exerciseID)
         let outcome = try apply(exerciseID: exerciseID)
-        let gold = outcome.inserted.filter { record in
-            guard record.set === set else { return false }
-            // Session volume turns gold once a session, however many sets raise it after.
-            guard record.kind == .sessionVolume, let workout = set.exercise?.workout else { return true }
-            return !previousVolumeSessions.contains(workout.persistentModelID)
+        let gold = outcome.inserted.filter {
+            Self.turnsGold($0, by: set, volumeSessionsBefore: previousVolumeSessions)
         }
         let order = RecordDetector.headlineFirst(gold.map(\.mark))
         return RecordCheck(
@@ -181,6 +178,16 @@ public struct RecordBook {
 
     private func records(for exerciseID: String) throws -> [PersonalRecord] {
         try context.fetch(FetchDescriptor<PersonalRecord>(predicate: #Predicate { $0.exerciseID == exerciseID }))
+    }
+
+    /// Whether a record just inserted is gold for `set`: the set's own, and for session volume
+    /// only the first in its session, however many sets raise it after.
+    private static func turnsGold(
+        _ record: PersonalRecord, by set: LoggedSet, volumeSessionsBefore: Set<PersistentIdentifier>
+    ) -> Bool {
+        guard record.set === set else { return false }
+        guard record.kind == .sessionVolume, let workout = set.exercise?.workout else { return true }
+        return !volumeSessionsBefore.contains(workout.persistentModelID)
     }
 
     private func volumeRecordWorkouts(for exerciseID: String) -> Set<PersistentIdentifier> {

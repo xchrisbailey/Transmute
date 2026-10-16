@@ -124,7 +124,12 @@
         /// Written by this app, or carrying our workout id from another Transmute device.
         static func isFromTransmute(_ sample: HKSample) -> Bool {
             sample.sourceRevision.source.bundleIdentifier.hasPrefix(Transmute.bundlePrefix)
-                || sample.metadata?[HealthWorkoutRecord.workoutIDKey] != nil
+                || carriesWorkoutID(sample)
+        }
+
+        /// Only workouts Transmute saved carry its id, so nothing from another app matches.
+        static func carriesWorkoutID(_ sample: HKSample) -> Bool {
+            sample.metadata?[HealthWorkoutRecord.workoutIDKey] != nil
         }
 
         private func latest(_ identifier: HKQuantityTypeIdentifier, unit: HKUnit) async -> Double? {
@@ -201,9 +206,7 @@
             let descriptor = HKSampleQueryDescriptor(
                 predicates: [.workout(predicate)], sortDescriptors: [], limit: 1)
             do {
-                // Only Transmute's own workouts carry its id, so nothing from another app goes.
-                for workout in try await descriptor.result(for: store)
-                where workout.metadata?[HealthWorkoutRecord.workoutIDKey] != nil {
+                for workout in try await descriptor.result(for: store) where Self.carriesWorkoutID(workout) {
                     try await store.delete(workout)
                 }
             } catch let error as HKError where error.code == .errorAuthorizationDenied {
