@@ -6,9 +6,11 @@ public enum DebugLaunch {
     @MainActor
     public static func apply(to container: ModelContainer, arguments: Set<LaunchArgument> = LaunchArgument.passed()) {
         #if DEBUG
-            if arguments.contains(.initCloudKitSchema) {
-                TransmuteStore.initializeCloudKitSchemaForLaunch()
-            }
+            #if os(iOS) || os(macOS)
+                if arguments.contains(.initCloudKitSchema) {
+                    TransmuteStore.initializeCloudKitSchemaForLaunch()
+                }
+            #endif
             let context = container.mainContext
             guard arguments.contains(.seedSample), (try? context.fetchCount(FetchDescriptor<Profile>())) == 0
             else { return }
