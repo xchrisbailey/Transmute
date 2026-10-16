@@ -42,8 +42,7 @@ struct LogTableRow: Identifiable {
         let plan: Plan?
         /// Focus for the search field, so a Find command can put the cursor there.
         let searchFocus: FocusState<Bool>.Binding?
-        /// Set from outside to the `Workout.id` to select, as Open workout and Spotlight do.
-        @Binding var opening: UUID?
+        @Binding var consumingOpenRequest: WorkoutOpenRequest?
 
         @Environment(\.modelContext) private var context
         @Query(sort: \Workout.startedAt, order: .reverse) private var workouts: [Workout]
@@ -59,12 +58,12 @@ struct LogTableRow: Identifiable {
 
         public init(
             profile: Profile, plan: Plan?, searchFocus: FocusState<Bool>.Binding? = nil,
-            opening: Binding<UUID?> = .constant(nil)
+            consumingOpenRequest: Binding<WorkoutOpenRequest?> = .constant(nil)
         ) {
             self.profile = profile
             self.plan = plan
             self.searchFocus = searchFocus
-            _opening = opening
+            _consumingOpenRequest = consumingOpenRequest
         }
 
         private var library: ExerciseLibrary {
@@ -129,10 +128,11 @@ struct LogTableRow: Identifiable {
                 }
             }
             .alert(Text(HistoryCopy.healthDeleteFailed), isPresented: $healthKeepsCopy) {}
-            .onChange(of: opening, initial: true) { _, id in
-                guard let id else { return }
-                opening = nil
-                guard let workout = workouts.first(where: { $0.id == id && $0.endedAt != nil }) else { return }
+            .onChange(of: consumingOpenRequest, initial: true) { _, request in
+                guard let request else { return }
+                consumingOpenRequest = nil
+                guard let workout = workouts.first(where: { $0.id == request.workoutID && $0.endedAt != nil })
+                else { return }
                 filter = WorkoutLog.Filter()
                 range = .any
                 selection = workout.persistentModelID

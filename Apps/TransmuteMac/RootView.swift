@@ -44,9 +44,8 @@ struct MacShell: View {
     let device = "Mac"
 
     @SceneStorage("sidebar.section") private var section = SidebarSection.today
-    @State private var beginsWorkout = false
-    /// Set by Open workout and Spotlight: the log selects this workout.
-    @State private var openedWorkout: UUID?
+    @State private var beginRequest: WorkoutBeginRequest?
+    @State private var openRequest: WorkoutOpenRequest?
     @State private var showsRebrew = false
     @State private var showsProfile = false
     @FocusState private var searchIsFocused: Bool
@@ -99,7 +98,7 @@ struct MacShell: View {
     @ViewBuilder private var pane: some View {
         switch section {
         case .today:
-            TodayView(plan: plan, profile: profile, beginsWorkout: $beginsWorkout)
+            TodayView(plan: plan, profile: profile, consumingBeginRequest: $beginRequest)
         case .plan:
             if let plan {
                 Group {
@@ -134,7 +133,8 @@ struct MacShell: View {
                 BrewPlanView(profile: profile, service: service, device: device)
             }
         case .log:
-            LogTableView(profile: profile, plan: plan, searchFocus: $searchIsFocused, opening: $openedWorkout)
+            LogTableView(
+                profile: profile, plan: plan, searchFocus: $searchIsFocused, consumingOpenRequest: $openRequest)
         case .progress:
             ProgressPane(plan: plan, profile: profile, service: service)
         }
@@ -144,12 +144,12 @@ struct MacShell: View {
         switch link {
         case .today, .beginToday:
             section = .today
-            beginsWorkout = link == .beginToday
+            beginRequest = link == .beginToday ? WorkoutBeginRequest() : nil
         case .log:
             section = .log
         case .workout(let id):
             section = .log
-            openedWorkout = id
+            openRequest = WorkoutOpenRequest(workoutID: id)
         case .plan:
             section = .plan
         }
@@ -161,7 +161,7 @@ struct MacShell: View {
             show: { section = $0 },
             newWorkout: {
                 section = .today
-                beginsWorkout = true
+                beginRequest = WorkoutBeginRequest()
             },
             brewPlan: {
                 section = .plan
