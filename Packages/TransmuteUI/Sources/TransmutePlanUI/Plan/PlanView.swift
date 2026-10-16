@@ -22,7 +22,7 @@ public struct PlanView: View {
     }
 
     private var currentWeek: Int {
-        PlanEditor.week(of: plan)
+        PlanCalendar(plan: plan).clampedWeek(containing: .now)
     }
 
     private var units: Units {
@@ -41,7 +41,7 @@ public struct PlanView: View {
                             NavigationLink {
                                 PlanDayView(day: day, plan: plan, profile: profile, service: service)
                             } label: {
-                                PlanDayRow(day: day, date: PlanEditor.date(of: day, in: plan))
+                                PlanDayRow(day: day, date: PlanCalendar(plan: plan).date(of: day))
                             }
                         }
                     } label: {

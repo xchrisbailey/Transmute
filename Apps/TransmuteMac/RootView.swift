@@ -64,7 +64,6 @@ struct MacShell: View {
             .id(section)
         }
         .focusedSceneValue(\.windowActions, actions)
-        // A widget's tap, or its button.
         .onOpenURL { url in
             if let link = DeepLink(url: url) { follow(link) }
         }
@@ -88,7 +87,7 @@ struct MacShell: View {
         }
         .sheet(isPresented: $showsRebrew) {
             if let plan {
-                RebrewSheet(plan: plan, profile: profile, service: service, currentWeek: PlanEditor.week(of: plan))
+                RebrewSheet(plan: plan, profile: profile, service: service, currentWeek: PlanCalendar(plan: plan).clampedWeek(containing: .now))
             }
         }
     }

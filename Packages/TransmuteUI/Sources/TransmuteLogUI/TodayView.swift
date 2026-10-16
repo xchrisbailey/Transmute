@@ -249,7 +249,7 @@ extension TodayView {
         Text(
             LogCopy.next(
                 day.focus,
-                on: PlanEditor.date(of: day, in: plan).formatted(.dateTime.weekday(.wide)))
+                on: PlanCalendar(plan: plan).date(of: day).formatted(.dateTime.weekday(.wide)))
         )
         .brandFont(.body)
         .foregroundStyle(Color.brand(\.ink))

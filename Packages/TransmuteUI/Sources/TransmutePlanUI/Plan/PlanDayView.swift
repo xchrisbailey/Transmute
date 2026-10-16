@@ -28,7 +28,7 @@ struct PlanDayView: View {
                         .brandFont(.largeTitle)
                         .foregroundStyle(Color.brand(\.ink))
                         .accessibilityAddTraits(.isHeader)
-                    Text(PlanEditor.date(of: day, in: plan), format: .dateTime.weekday(.wide).day().month())
+                    Text(PlanCalendar(plan: plan).date(of: day), format: .dateTime.weekday(.wide).day().month())
                         .brandFont(.label)
                         .foregroundStyle(Color.brandText(\.subtext))
                     if !day.notes.isEmpty {

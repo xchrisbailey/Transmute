@@ -86,7 +86,7 @@ struct WatchTodayView: View {
     }
 
     private func nextLine(_ day: PlanDay, in plan: Plan) -> LocalizedStringResource {
-        WatchCopy.next(day.focus, on: PlanEditor.date(of: day, in: plan).formatted(.dateTime.weekday(.wide)))
+        WatchCopy.next(day.focus, on: PlanCalendar(plan: plan).date(of: day).formatted(.dateTime.weekday(.wide)))
     }
 
     private func exerciseRow(_ planned: PlannedExercise) -> some View {

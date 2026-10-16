@@ -35,7 +35,7 @@ public struct PlanGridView: View {
     }
 
     private var currentWeek: Int {
-        PlanEditor.week(of: plan)
+        PlanCalendar(plan: plan).clampedWeek(containing: .now)
     }
 
     public var body: some View {

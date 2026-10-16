@@ -25,12 +25,13 @@ struct PlanEditorTests {
     }
 
     var monday: PlanDay { plan.orderedDays.first { $0.week == 1 && $0.weekday == 1 }! }
+    var planCalendar: PlanCalendar { PlanCalendar(plan: plan, calendar: calendar) }
 
     @Test func weekFollowsTheCalendarAndClamps() {
-        #expect(PlanEditor.week(of: plan, on: start, calendar: calendar) == 1)
-        #expect(PlanEditor.week(of: plan, on: start.addingTimeInterval(8 * 86_400), calendar: calendar) == 2)
-        #expect(PlanEditor.week(of: plan, on: start.addingTimeInterval(100 * 86_400), calendar: calendar) == 4)
-        #expect(PlanEditor.week(of: plan, on: start.addingTimeInterval(-86_400), calendar: calendar) == 1)
+        #expect(planCalendar.clampedWeek(containing: start) == 1)
+        #expect(planCalendar.clampedWeek(containing: start.addingTimeInterval(8 * 86_400)) == 2)
+        #expect(planCalendar.clampedWeek(containing: start.addingTimeInterval(100 * 86_400)) == 4)
+        #expect(planCalendar.clampedWeek(containing: start.addingTimeInterval(-86_400)) == 1)
     }
 
     @Test func weekTwoOfAPlanStartedOnASaturdayBeginsOnTheNextMonday() {
@@ -38,11 +39,11 @@ struct PlanEditorTests {
         let sunday = utc(2026, 9, 27)
         let nextMonday = utc(2026, 9, 28)
         plan.startDate = saturday
-        #expect(PlanEditor.week(of: plan, on: sunday, calendar: calendar) == 1)
-        #expect(PlanEditor.week(of: plan, on: nextMonday, calendar: calendar) == 2)
+        #expect(planCalendar.clampedWeek(containing: sunday) == 1)
+        #expect(planCalendar.clampedWeek(containing: nextMonday) == 2)
         #expect(TodayPlan(plan: plan, on: nextMonday, calendar: calendar).week == 2)
         #expect(
-            PlanEditor.date(of: monday, in: plan, calendar: calendar) == utc(2026, 9, 21),
+            planCalendar.date(of: monday) == utc(2026, 9, 21),
             "Week 1 begins on the Monday before the start date")
     }
 

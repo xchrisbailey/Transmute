@@ -58,7 +58,7 @@ public enum ReminderPlanner {
 
         // Planned days nobody has trained on yet, by the same dates the plan screen shows.
         let open = plan.orderedDays.filter { ($0.workouts ?? []).isEmpty }.map {
-            (date: calendar.startOfDay(for: PlanEditor.date(of: $0, in: plan, calendar: calendar)), name: $0.focus)
+            (date: calendar.startOfDay(for: PlanCalendar(plan: plan, calendar: calendar).date(of: $0)), name: $0.focus)
         }
         .filter { $0.date >= yesterday && $0.date < end }
         .sorted { $0.date < $1.date }
