@@ -74,14 +74,17 @@ struct ProfileBackup: Codable, Equatable {
         let write: (ProfileBackup, Profile) -> Void
 
         /// A setting the profile always has; a backup without it leaves the profile's default.
-        init<Value>(_ backup: WritableKeyPath<ProfileBackup, Value?>, _ profile: ReferenceWritableKeyPath<Profile, Value>) {
+        init<Value>(
+            _ backup: WritableKeyPath<ProfileBackup, Value?>, _ profile: ReferenceWritableKeyPath<Profile, Value>
+        ) {
             read = { $1[keyPath: backup] = $0[keyPath: profile] }
             write = { if let value = $0[keyPath: backup] { $1[keyPath: profile] = value } }
         }
 
         /// A setting that is `nil` on the profile until chosen; a backup without it clears it.
         init<Value>(
-            _ backup: WritableKeyPath<ProfileBackup, Value?>, optional profile: ReferenceWritableKeyPath<Profile, Value?>
+            _ backup: WritableKeyPath<ProfileBackup, Value?>,
+            optional profile: ReferenceWritableKeyPath<Profile, Value?>
         ) {
             read = { $1[keyPath: backup] = $0[keyPath: profile] }
             write = { $1[keyPath: profile] = $0[keyPath: backup] }

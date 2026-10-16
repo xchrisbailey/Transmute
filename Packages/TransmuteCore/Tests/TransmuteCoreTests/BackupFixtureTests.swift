@@ -84,7 +84,7 @@ struct BackupFixtureTests {
         #expect(workouts.allSatisfy { $0.planDay == nil })
     }
 
-    @Test func everyProfileSettingKeepsItsOwnKey() throws {
+    private func everySettingChosen() -> Profile {
         let profile = Profile()
         profile.id = UUID()
         profile.createdAt = Date(timeIntervalSince1970: 1_700_000_000)
@@ -108,7 +108,11 @@ struct BackupFixtureTests {
         profile.heightUnit = .imperial
         profile.distanceUnit = .metric
         profile.preferences.workingRestSeconds = 95
-        context.insert(profile)
+        return profile
+    }
+
+    @Test func everyProfileSettingIsWrittenUnderItsOwnKey() throws {
+        context.insert(everySettingChosen())
 
         let data = try DataTransfer.exportBackup(from: context)
         let json = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
@@ -130,6 +134,12 @@ struct BackupFixtureTests {
         #expect(written["distanceUnit"] as? String == "metric")
         #expect(Set(written.keys).isSuperset(of: ["id", "createdAt", "schedule", "progression", "knownLifts"]))
         #expect(Set(written.keys).isSuperset(of: ["plates", "preferences", "bodyweights"]))
+    }
+
+    @Test func everyProfileSettingIsRestoredToItsOwnProperty() throws {
+        let profile = everySettingChosen()
+        context.insert(profile)
+        let data = try DataTransfer.exportBackup(from: context)
 
         let other = try TransmuteStore.makeContainer(.inMemory)
         try DataTransfer.importBackup(data, into: other.mainContext)
