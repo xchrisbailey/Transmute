@@ -9,6 +9,8 @@ let package = Package(
     ],
     targets: [
         .target(name: "TransmuteCore", resources: [.process("Resources")]),
-        .testTarget(name: "TransmuteCoreTests", dependencies: ["TransmuteCore"]),
+        .testTarget(
+            name: "TransmuteCoreTests", dependencies: ["TransmuteCore"],
+            resources: [.copy("Fixtures")]),
     ]
 )
