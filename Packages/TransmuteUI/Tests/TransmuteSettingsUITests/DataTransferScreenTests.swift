@@ -51,7 +51,7 @@ struct DataTransferScreenTests {
         #expect(throws: DataTransferError.emptyFile) {
             try DataTransfer.importFile(Data(), into: fresh.mainContext, fallbackUnits: .metric)
         }
-        #expect(throws: ImportFailure.cantOpen) {
+        #expect(throws: DataTransferError.cantOpen) {
             try DataTransfer.importFile(
                 at: URL(fileURLWithPath: "/nonexistent/\(UUID()).json"), into: fresh.mainContext,
                 fallbackUnits: .metric)
@@ -109,10 +109,9 @@ struct DataTransferScreenTests {
     }
 
     @Test func everyFailureHasItsOwnPlainWords() {
-        let errors: [any Error] = [
-            DataTransferError.emptyFile, DataTransferError.unreadableBackup(detail: "x"),
-            DataTransferError.newerBackup(formatVersion: 9, supported: 1), DataTransferError.unrecognizedCSV,
-            ImportFailure.cantOpen, CocoaError(.fileWriteUnknown),
+        let errors: [DataTransferError] = [
+            .emptyFile, .unreadableBackup(detail: "x"), .newerBackup(formatVersion: 9, supported: 1),
+            .unrecognizedCSV, .cantOpen, .saveFailed(detail: "disk full"),
         ]
         let messages = errors.map { ImportReport.message(for: $0) }
         #expect(Set(messages.map(\.key)).count == errors.count)
@@ -120,9 +119,19 @@ struct DataTransferScreenTests {
             #expect(message.key.hasPrefix("plain.settings.import.error."))
             #expect(String(localized: message).hasSuffix("Nothing was changed."))
         }
-        let report = ImportReport(DataTransferError.newerBackup(formatVersion: 9, supported: 1))
+        let report = ImportReport(.newerBackup(formatVersion: 9, supported: 1))
         #expect(!report.succeeded)
         #expect(text(report.lines).first?.contains("newer version of Transmute") == true)
+    }
+
+    @Test func whateverTheStoreThrowsBecomesASaveFailure() throws {
+        #expect(DataTransferError(wrapping: DataTransferError.emptyFile) == .emptyFile)
+        let wrapped = DataTransferError(wrapping: CocoaError(.fileWriteUnknown))
+        guard case .saveFailed = wrapped else {
+            Issue.record("expected a save failure, got \(wrapped)")
+            return
+        }
+        #expect(String(localized: ImportReport.message(for: wrapped)).hasSuffix("Nothing was changed."))
     }
 
     @Test func resetClearsTransmutesKeysAndNothingElse() throws {

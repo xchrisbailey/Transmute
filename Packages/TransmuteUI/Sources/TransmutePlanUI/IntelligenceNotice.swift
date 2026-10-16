@@ -26,7 +26,7 @@ public struct IntelligenceNotice: View {
                             .foregroundStyle(Color.brandText(\.subtext))
                     }
                 }
-                if availability == .turnedOff, let settingsURL {
+                if availability == .turnedOff, let settingsURL = Self.settingsURL {
                     Button {
                         openURL(settingsURL)
                     } label: {
@@ -50,7 +50,9 @@ public struct IntelligenceNotice: View {
         }
     }
 
-    private var settingsURL: URL? {
+    /// Where the person can turn Apple Intelligence on: the app's page in Settings on iPhone,
+    /// System Settings on Mac.
+    public static var settingsURL: URL? {
         #if os(iOS)
             URL(string: UIApplication.openSettingsURLString)
         #else

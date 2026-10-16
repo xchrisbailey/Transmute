@@ -9,12 +9,10 @@ struct ExerciseHistoryView: View {
     let name: String
     let units: Units
 
-    @Environment(\.modelContext) private var context
     @Query private var workouts: [Workout]
 
     private var entries: [WorkoutLog.ExerciseEntry] {
-        _ = workouts.count  // Re-read when the log changes.
-        return (try? WorkoutLog.history(of: exerciseID, in: context)) ?? []
+        WorkoutLog.history(of: exerciseID, in: workouts)
     }
 
     var body: some View {

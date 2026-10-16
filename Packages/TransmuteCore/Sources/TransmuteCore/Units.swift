@@ -75,6 +75,12 @@ public struct Units: Sendable {
         return "\(value.formatted(.number.precision(.fractionLength(0...1)).locale(locale))) \(weightSymbol)"
     }
 
+    /// e.g. "1.25 kg" or "2.5 lb". Takes a value already in this unit and keeps two decimals,
+    /// since an increment is often a quarter or an eighth of a unit.
+    public func formatIncrement(_ displayValue: Double) -> String {
+        "\(displayValue.formatted(.number.precision(.fractionLength(0...2)).locale(locale))) \(weightSymbol)"
+    }
+
     /// Feet and whole inches, e.g. 175.26 cm → (5, 9).
     public static func feetAndInches(cm: Double) -> (feet: Int, inches: Int) {
         let totalInches = Int((cm / centimetresPerInch).rounded())

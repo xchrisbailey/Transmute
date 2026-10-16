@@ -27,8 +27,7 @@ public final class BrewSession {
     public private(set) var rationale: String?
     public private(set) var phases: [PlanPhase] = []
     public private(set) var distilled: [DistilledDay] = []
-    /// Exercises of the day being written, as they stream in.
-    public private(set) var current: [String] = []
+    public private(set) var streamingExercises: [String] = []
 
     let brewer: PlanBrewer
     private var task: Task<Void, Never>?
@@ -92,10 +91,10 @@ public final class BrewSession {
             self.phases = phases
         case .distilling(let phase, let focus, let exercises):
             status = phase.firstWeek == 1 ? BrewCopy.distillingDay(focus) : Copy.distilling(week: phase.firstWeek)
-            current = exercises
+            streamingExercises = exercises
         case .distilled(let phase, let focus, let exercises):
             distilled.append(DistilledDay(id: distilled.count, phase: phase.name, focus: focus, exercises: exercises))
-            current = []
+            streamingExercises = []
         case .finished(let plan):
             state = .preview(plan)
         }
@@ -108,6 +107,6 @@ public final class BrewSession {
         rationale = nil
         phases = []
         distilled = []
-        current = []
+        streamingExercises = []
     }
 }

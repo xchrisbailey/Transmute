@@ -84,6 +84,12 @@ extension ProgressStats {
             self.lastWeekKg = lastWeekKg
             self.change = lastWeekKg > 0 ? (thisWeekKg - lastWeekKg) / lastWeekKg : nil
         }
+
+        /// `change`, left out while this week has no volume, since a week that hasn't begun
+        /// would only read as a drop of 100%.
+        public var changeOnceStarted: Double? {
+            thisWeekKg > 0 ? change : nil
+        }
     }
 
     public static func volumeKPI(

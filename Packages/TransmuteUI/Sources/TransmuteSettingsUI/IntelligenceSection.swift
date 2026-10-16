@@ -21,7 +21,7 @@ struct IntelligenceSection: View {
                 IntelligenceNotice(availability: status.availability)
             }
             // The notice has its own button when Apple Intelligence is turned off.
-            if status.availability != .turnedOff, let settingsURL {
+            if status.availability != .turnedOff, let settingsURL = IntelligenceNotice.settingsURL {
                 Button {
                     openURL(settingsURL)
                 } label: {
@@ -50,15 +50,6 @@ struct IntelligenceSection: View {
         } set: {
             route = $0 ? .allowPrivateCloudCompute : .onDeviceOnly
         }
-    }
-
-    /// The same places `IntelligenceNotice` opens.
-    private var settingsURL: URL? {
-        #if os(iOS)
-            URL(string: UIApplication.openSettingsURLString)
-        #else
-            URL(string: "x-apple.systempreferences:")
-        #endif
     }
 }
 

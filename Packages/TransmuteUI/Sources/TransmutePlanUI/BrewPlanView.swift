@@ -155,8 +155,8 @@ public struct BrewPlanView: View {
             }
             .accessibilityElement(children: .combine)
             .accessibilityAddTraits(.updatesFrequently)
-            if !session.current.isEmpty {
-                DistilledDayRow(phase: nil, focus: nil, exercises: session.current, isDone: false)
+            if !session.streamingExercises.isEmpty {
+                DistilledDayRow(phase: nil, focus: nil, exercises: session.streamingExercises, isDone: false)
             }
             Button(role: .cancel) {
                 session.cancel()

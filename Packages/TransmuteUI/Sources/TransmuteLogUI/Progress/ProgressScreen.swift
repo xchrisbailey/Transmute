@@ -117,9 +117,7 @@ struct FiguresCard: View {
                 }
                 figure(
                     ProgressCopy.volume, units.formatWeight(kg: volume.thisWeekKg),
-                    // A week that's barely begun would only read as a drop.
-                    note: volume.thisWeekKg > 0
-                        ? volume.change.map { ProgressCopy.versusLastWeek(Self.percent($0)) } : nil)
+                    note: volume.changeOnceStarted.map { ProgressCopy.versusLastWeek(Self.percent($0)) })
                 if let bodyweight {
                     figure(
                         ProgressCopy.bodyweight, units.formatWeight(kg: bodyweight.currentKg),

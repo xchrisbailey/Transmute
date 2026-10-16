@@ -166,10 +166,13 @@ struct ProgressStatsTests {
                 == Stats.VolumeKPI(thisWeekKg: 600, lastWeekKg: 0))
         #expect(Stats.volumeKPI(log, now: fixture.evening(17), calendar: calendar).change == nil)
         #expect(Stats.volumeKPI(log, now: fixture.evening(10), calendar: calendar).change == -1)
+        #expect(Stats.volumeKPI(log, now: fixture.evening(10), calendar: calendar).changeOnceStarted == nil)
+        #expect(Stats.volumeKPI(log, now: fixture.evening(17), calendar: calendar).changeOnceStarted == nil)
 
         log.append(fixture.workout(day: 22, [("back-squat", [fixture.set(kg: 75, reps: 10)])]))
         let kpi = Stats.volumeKPI(log, now: fixture.day(27), calendar: calendar)
         #expect(kpi.thisWeekKg == 750 && kpi.lastWeekKg == 600 && kpi.change == 0.25)
+        #expect(kpi.changeOnceStarted == 0.25)
         #expect(
             Stats.volumeKPI([], now: fixture.day(0), calendar: calendar)
                 == Stats.VolumeKPI(thisWeekKg: 0, lastWeekKg: 0))
