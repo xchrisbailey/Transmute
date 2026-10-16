@@ -173,7 +173,7 @@ extension TodayGlance {
 extension TodayGlance.Week {
     /// The plan week a date falls in, as the Progress screen counts it.
     init(plan: Plan, on date: Date, calendar: Calendar) {
-        let current = ProgressStats.planWeek(of: plan, on: date, calendar: calendar)
+        let current = PlanCalendar(plan: plan, calendar: calendar).week(containing: date)
         guard (1...max(plan.weekCount, 1)).contains(current) else {
             self.init()
             return

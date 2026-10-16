@@ -8,10 +8,11 @@ public struct TodayPlan {
 
     /// Looks up a date in a plan, by the same calendar dates the plan screen shows.
     public init(plan: Plan, on date: Date = .now, calendar: Calendar = .init(identifier: .iso8601)) {
-        week = PlanEditor.week(of: plan, on: date, calendar: calendar)
+        let planCalendar = PlanCalendar(plan: plan, calendar: calendar)
+        week = planCalendar.clampedWeek(containing: date)
         let today = calendar.startOfDay(for: date)
         let dated = plan.orderedDays.map {
-            (day: $0, date: calendar.startOfDay(for: PlanEditor.date(of: $0, in: plan)))
+            (day: $0, date: planCalendar.date(of: $0))
         }
         day = dated.first { $0.date == today }?.day
         next = dated.first { $0.date > today && ($0.day.workouts ?? []).isEmpty }?.day

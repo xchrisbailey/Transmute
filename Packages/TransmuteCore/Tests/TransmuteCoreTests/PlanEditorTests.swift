@@ -9,7 +9,7 @@ struct PlanEditorTests {
     let container: ModelContainer
     let plan: Plan
     var context: ModelContext { container.mainContext }
-    let start = Date(timeIntervalSince1970: 1_790_380_800)  // Monday 2026-09-21, UTC.
+    let start = Date(timeIntervalSince1970: 1_790_380_800)  // Saturday 2026-09-26, UTC.
 
     init() throws {
         container = try TransmuteStore.makeContainer(.inMemory)
@@ -25,6 +25,18 @@ struct PlanEditorTests {
         #expect(PlanEditor.week(of: plan, on: start.addingTimeInterval(8 * 86_400)) == 2)
         #expect(PlanEditor.week(of: plan, on: start.addingTimeInterval(100 * 86_400)) == 4)
         #expect(PlanEditor.week(of: plan, on: start.addingTimeInterval(-86_400)) == 1)
+    }
+
+    @Test func weekTwoOfAPlanStartedOnASaturdayBeginsOnTheNextMonday() {
+        var utc = Calendar(identifier: .iso8601)
+        utc.timeZone = TimeZone(identifier: "UTC")!
+        let sunday = start.addingTimeInterval(86_400)
+        let nextMonday = sunday.addingTimeInterval(86_400)
+        #expect(PlanEditor.week(of: plan, on: sunday, calendar: utc) == 1)
+        #expect(PlanEditor.week(of: plan, on: nextMonday, calendar: utc) == 2)
+        #expect(TodayPlan(plan: plan, on: nextMonday, calendar: utc).week == 2)
+        // Week 1 begins on the Monday before the start date, so its first day is dated then.
+        #expect(PlanEditor.date(of: monday, in: plan, calendar: utc) == start.addingTimeInterval(-5 * 86_400))
     }
 
     @Test func movingOntoAnotherSessionSwapsThem() {
