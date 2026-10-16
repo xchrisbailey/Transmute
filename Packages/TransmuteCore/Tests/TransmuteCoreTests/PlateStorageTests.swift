@@ -8,18 +8,57 @@ import Testing
 /// people's data. The literals were captured from the code at `97dedb2`, before `Hundredths`.
 struct PlateStorageTests {
     static let poundKitJSON = """
-        {"barKind":"standard","bars":[{"kg":20.411656650451594,"kind":"standard"},{"kg":15.87573295035124,"kind":"light"},{"kg":11.339809250250886,"kind":"ezCurl"},{"kg":24.94758035055195,"kind":"trap"}],"dumbbellStepKg":2.267961850050177,"heaviestDumbbellKg":54.43108440120425,"machineStepKg":4.535923700100354,"plates":[{"kg":20.411656650451594,"pairs":6},{"kg":15.87573295035124,"pairs":2},{"kg":11.339809250250886,"pairs":3},{"kg":4.535923700100354,"pairs":3},{"kg":2.267961850050177,"pairs":3},{"kg":1.1339809250250885,"pairs":3}],"system":"imperial"}
+        {"barKind":"standard","bars":[{"kg":20.411656650451594,"kind":"standard"},\
+        {"kg":15.87573295035124,"kind":"light"},\
+        {"kg":11.339809250250886,"kind":"ezCurl"},\
+        {"kg":24.94758035055195,"kind":"trap"}],\
+        "dumbbellStepKg":2.267961850050177,\
+        "heaviestDumbbellKg":54.43108440120425,\
+        "machineStepKg":4.535923700100354,\
+        "plates":[{"kg":20.411656650451594,"pairs":6},\
+        {"kg":15.87573295035124,"pairs":2},\
+        {"kg":11.339809250250886,"pairs":3},\
+        {"kg":4.535923700100354,"pairs":3},\
+        {"kg":2.267961850050177,"pairs":3},\
+        {"kg":1.1339809250250885,"pairs":3}],\
+        "system":"imperial"}
         """
-    static let poundKitPlist = "YnBsaXN0MDDXAQIDBAUGBwgJDRgjJiFWc3lzdGVtVGJhcnNXYmFyS2luZFZwbGF0ZXNeZHVtYmJlbGxTdGVwS2dfEBJoZWF2aWVzdER1bWJiZWxsS2ddbWFjaGluZVN0ZXBLZ1hpbXBlcmlhbKQKDxIV0gsMDQ5Ua2luZFJrZ1hzdGFuZGFyZCNANGliVIre2dILDBARVWxpZ2h0I0AvwGARu5OL0gsMExRWZXpDdXJsI0Amrft6YWlj0gsMFhdUdHJhcCNAOPKUoDfz7aYZHB4gIiTSDBoOG1VwYWlycxAG0gwaER0QAtIMGhQfEAPSDBohHyNAEiTJLrRUT9IMGiMfI0ACJMkutFRP0gwaJR8jP/IkyS60VE8jQEs3LcYOfncACAAXAB4AIwArADIAQQBWAGQAbQByAHcAfAB/AIgAkQCWAJwApQCqALEAugC/AMQAzQDUANkA3wDhAOYA6ADtAO8A9AD9AQIBCwEQARkAAAAAAAACAQAAAAAAAAAnAAAAAAAAAAAAAAAAAAABIg=="
+    static let poundKitPlist = """
+        YnBsaXN0MDDXAQIDBAUGBwgJDRgjJiFWc3lzdGVtVGJhcnNXYmFyS2luZFZwbGF0ZXNeZHVtYmJlbGxTdGVwS2dfEB\
+        JoZWF2aWVzdER1bWJiZWxsS2ddbWFjaGluZVN0ZXBLZ1hpbXBlcmlhbKQKDxIV0gsMDQ5Ua2luZFJrZ1hzdGFuZGFy\
+        ZCNANGliVIre2dILDBARVWxpZ2h0I0AvwGARu5OL0gsMExRWZXpDdXJsI0Amrft6YWlj0gsMFhdUdHJhcCNAOPKUoD\
+        fz7aYZHB4gIiTSDBoOG1VwYWlycxAG0gwaER0QAtIMGhQfEAPSDBohHyNAEiTJLrRUT9IMGiMfI0ACJMkutFRP0gwa\
+        JR8jP/IkyS60VE8jQEs3LcYOfncACAAXAB4AIwArADIAQQBWAGQAbQByAHcAfAB/AIgAkQCWAJwApQCqALEAugC/AM\
+        QAzQDUANkA3wDhAOYA6ADtAO8A9AD9AQIBCwEQARkAAAAAAAACAQAAAAAAAAAnAAAAAAAAAAAAAAAAAAABIg==
+        """
     static let kilogramKitJSON = """
-        {"barKind":"standard","bars":[{"kg":20,"kind":"standard"},{"kg":15,"kind":"light"},{"kg":10,"kind":"ezCurl"},{"kg":25,"kind":"trap"}],"dumbbellStepKg":2,"heaviestDumbbellKg":24,"machineStepKg":2.5,"plates":[{"kg":20,"pairs":1},{"kg":10,"pairs":2},{"kg":5,"pairs":2},{"kg":2.5,"pairs":2},{"kg":1.25,"pairs":1}],"system":"metric"}
+        {"barKind":"standard","bars":[{"kg":20,"kind":"standard"},\
+        {"kg":15,"kind":"light"},\
+        {"kg":10,"kind":"ezCurl"},\
+        {"kg":25,"kind":"trap"}],\
+        "dumbbellStepKg":2,\
+        "heaviestDumbbellKg":24,\
+        "machineStepKg":2.5,\
+        "plates":[{"kg":20,"pairs":1},\
+        {"kg":10,"pairs":2},\
+        {"kg":5,"pairs":2},\
+        {"kg":2.5,"pairs":2},\
+        {"kg":1.25,"pairs":1}],\
+        "system":"metric"}
         """
-    static let kilogramKitPlist = "YnBsaXN0MDDXAQIDBAUGBwgJDRgkJSFWc3lzdGVtVGJhcnNXYmFyS2luZFZwbGF0ZXNeZHVtYmJlbGxTdGVwS2dfEBJoZWF2aWVzdER1bWJiZWxsS2ddbWFjaGluZVN0ZXBLZ1ZtZXRyaWOkCg8SFdILDA0OVGtpbmRSa2dYc3RhbmRhcmQjQDQAAAAAAADSCwwQEVVsaWdodCNALgAAAAAAANILDBMUVmV6Q3VybCNAJAAAAAAAANILDBYXVHRyYXAjQDkAAAAAAAClGRweICLSDBoOG1VwYWlycxAB0gwaFB0QAtIMGh8dI0AUAAAAAAAA0gwaIR0jQAQAAAAAAADSDBojGyM/9AAAAAAAACNAAAAAAAAAACNAOAAAAAAAAAAIABcAHgAjACsAMgBBAFYAZABrAHAAdQB6AH0AhgCPAJQAmgCjAKgArwC4AL0AwgDLANEA1gDcAN4A4wDlAOoA8wD4AQEBBgEPARgAAAAAAAACAQAAAAAAAAAmAAAAAAAAAAAAAAAAAAABIQ=="
+    static let kilogramKitPlist = """
+        YnBsaXN0MDDXAQIDBAUGBwgJDRgkJSFWc3lzdGVtVGJhcnNXYmFyS2luZFZwbGF0ZXNeZHVtYmJlbGxTdGVwS2dfEB\
+        JoZWF2aWVzdER1bWJiZWxsS2ddbWFjaGluZVN0ZXBLZ1ZtZXRyaWOkCg8SFdILDA0OVGtpbmRSa2dYc3RhbmRhcmQj\
+        QDQAAAAAAADSCwwQEVVsaWdodCNALgAAAAAAANILDBMUVmV6Q3VybCNAJAAAAAAAANILDBYXVHRyYXAjQDkAAAAAAA\
+        ClGRweICLSDBoOG1VwYWlycxAB0gwaFB0QAtIMGh8dI0AUAAAAAAAA0gwaIR0jQAQAAAAAAADSDBojGyM/9AAAAAAA\
+        ACNAAAAAAAAAACNAOAAAAAAAAAAIABcAHgAjACsAMgBBAFYAZABrAHAAdQB6AH0AhgCPAJQAmgCjAKgArwC4AL0Awg\
+        DLANEA1gDcAN4A4wDlAOoA8wD4AQEBBgEPARgAAAAAAAACAQAAAAAAAAAmAAAAAAAAAAAAAAAAAAABIQ==
+        """
 
     private func json(_ kit: PlateInventory) throws -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
-        return String(decoding: try encoder.encode(kit), as: UTF8.self)
+        return try #require(String(bytes: try encoder.encode(kit), encoding: .utf8))
     }
 
     private func plist(_ kit: PlateInventory) throws -> String {

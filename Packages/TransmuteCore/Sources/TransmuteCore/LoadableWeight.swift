@@ -52,7 +52,8 @@ public enum LoadableWeight {
         let step = Hundredths(kg: step, in: system)
         guard step > .zero else { return kg }
         let most = heaviest.map { max(1, Hundredths(kg: $0, in: system) / step) } ?? .max
-        let count = min(most, max(1, Int((Double(Hundredths(kg: kg, in: system).count) / Double(step.count)).rounded())))
+        let target = Hundredths(kg: kg, in: system)
+        let count = min(most, max(1, Int((Double(target.count) / Double(step.count)).rounded())))
         return (count * step).kg(in: system)
     }
 }
