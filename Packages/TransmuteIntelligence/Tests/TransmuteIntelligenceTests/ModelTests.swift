@@ -40,7 +40,8 @@ struct ModelTests {
         let brief = TrainingBrief.tennisPlayer
         let service = FoundationModelsService(settings: IntelligenceSettings())
         let tokens = try await service.tokenCount(
-            instructions: PlannerInstructions.make(experience: brief.experience), prompt: brief.promptDescription,
+            instructions: PlannerInstructions.make(experience: brief.experience, exercises: .lookupTool),
+            prompt: brief.promptDescription,
             tools: [ExerciseLookupTool()])
         #expect(tokens > 100)
         #expect(ContextBudget.onDevice.fits(promptTokens: tokens))
@@ -98,7 +99,7 @@ struct SessionSketchEvaluation: Evaluation {
         let brief = sample.brief
         let candidates = ExerciseCandidates(scope: brief.exerciseScope)
         let request = IntelligenceRequest(
-            instructions: PlannerInstructions.make(experience: brief.experience),
+            instructions: PlannerInstructions.make(experience: brief.experience, exercises: .offeredList),
             prompt: """
                 Sketch the first training session of a plan for this person.
 
