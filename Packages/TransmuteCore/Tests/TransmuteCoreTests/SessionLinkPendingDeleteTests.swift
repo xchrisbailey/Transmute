@@ -16,10 +16,15 @@ struct SessionLinkPendingDeleteTests {
         rig = try LinkRig()
     }
 
+    struct Left {
+        let workout: Workout
+        let phonesID: UUID
+        let watchID: UUID
+    }
+
     /// The state a failed delete leaves: the iPhone saved P after the timeout, the watch's W
     /// arrived and linked the workout, and the delete of P failed. The entry waits in defaults.
-    func pendingAfterFailedDelete(_ health: FakeHealth) async throws -> (workout: Workout, phonesID: UUID, watchID: UUID)
-    {
+    func pendingAfterFailedDelete(_ health: FakeHealth) async throws -> Left {
         let workout = try rig.finishedOnPhone()
         let phone = rig.phone
         let saving = Task { try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(5)) }
@@ -34,7 +39,7 @@ struct SessionLinkPendingDeleteTests {
         health.failDeletes(false)
         #expect(workout.healthKitWorkoutID == watchID)
         #expect(health.workouts == [phonesID, watchID])
-        return (workout, phonesID, watchID)
+        return Left(workout: workout, phonesID: phonesID, watchID: watchID)
     }
 
     /// A new launch: a fresh link over the same defaults.
@@ -45,7 +50,8 @@ struct SessionLinkPendingDeleteTests {
 
     @Test(.timeLimit(.minutes(1))) func aLaunchOnAStoreWithoutTheWorkoutLeavesBothHealthWorkoutsAlone() async throws {
         let health = FakeHealth()
-        let (_, phonesID, watchID) = try await pendingAfterFailedDelete(health)
+        let left = try await pendingAfterFailedDelete(health)
+        let (phonesID, watchID) = (left.phonesID, left.watchID)
 
         // The persistent store failed to open, so the app launched on an empty fallback store.
         let fallback = try TransmuteStore.makeTestContainer()
@@ -57,7 +63,7 @@ struct SessionLinkPendingDeleteTests {
 
     @Test(.timeLimit(.minutes(1))) func aWorkoutDeletedInHistoryLosesBothHealthWorkoutsAtTheNextLaunch() async throws {
         let health = FakeHealth()
-        let (workout, _, _) = try await pendingAfterFailedDelete(health)
+        let workout = try await pendingAfterFailedDelete(health).workout
         try WorkoutLog.delete(workout, in: context, defaults: defaults)
 
         await relaunch(with: health, in: context)
@@ -76,7 +82,8 @@ struct SessionLinkPendingDeleteTests {
 
     @Test(.timeLimit(.minutes(1))) func theIPhonesOwnCopyGoesBeforeTheWatchsAndIsNotHeldUpByIt() async throws {
         let health = FakeHealth()
-        let (workout, phonesID, _) = try await pendingAfterFailedDelete(health)
+        let left = try await pendingAfterFailedDelete(health)
+        let (workout, phonesID) = (left.workout, left.phonesID)
         // The iPhone can't delete a workout the watch app wrote.
         let watchID = try #require(workout.healthKitWorkoutID)
         health.failDeletes(of: [watchID])
@@ -97,7 +104,8 @@ struct SessionLinkPendingDeleteTests {
 
     @Test(.timeLimit(.minutes(1))) func aFailedDeleteDoesNotStopTheOthersAndOnlyItStaysPending() async throws {
         let health = FakeHealth()
-        let (workout, phonesID, _) = try await pendingAfterFailedDelete(health)
+        let left = try await pendingAfterFailedDelete(health)
+        let (workout, phonesID) = (left.workout, left.phonesID)
         health.failDeletes(of: [phonesID])
         try WorkoutLog.delete(workout, in: context, defaults: defaults)
 
