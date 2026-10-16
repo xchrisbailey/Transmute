@@ -68,7 +68,8 @@ struct WatchRootView: View {
         // Begin today's workout, from Siri or a shortcut. With a workout already on
         // screen, or nothing to start today, the watch just shows what it has.
         .onChange(of: router.pending, initial: true) {
-            guard router.take() == .beginToday, session == nil, watchOwnedWorkout == nil, let plan = plans.first else { return }
+            guard router.take() == .beginToday, session == nil, watchOwnedWorkout == nil, let plan = plans.first
+            else { return }
             let today = TodayPlan(plan: plan)
             if let day = today.day, !today.isDone { start(day) }
         }
