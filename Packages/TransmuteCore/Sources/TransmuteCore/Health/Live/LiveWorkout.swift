@@ -6,7 +6,7 @@ import Observation
 #endif
 
 /// A workout while it's happening: heart rate and energy from the watch, and a data channel
-/// between the watch and the iPhone so either can log and both stay in sync (#15).
+/// between the watch and the iPhone so either can log and both stay in sync.
 ///
 /// The watch always runs the Health workout session, whichever device started the workout.
 /// `WatchLiveWorkout` is that end and `PhoneLiveWorkout` is the mirrored end on the iPhone. The

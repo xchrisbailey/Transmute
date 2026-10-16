@@ -1,6 +1,6 @@
 import Foundation
 
-/// Decides an exercise's next targets from its logged history (#12). Deterministic and pure: the
+/// Decides an exercise's next targets from its logged history. Deterministic and pure: the
 /// same plan, history and settings always give the same numbers, and nothing is written back.
 /// The AI only explains the result.
 ///
@@ -17,7 +17,6 @@ import Foundation
 ///
 /// Warm-ups are never judged. Loads are rounded to what's loadable for the person's kit.
 public enum ProgressionEngine {
-    /// How many past sessions the estimated one-rep max looks at.
     public static let recentSessions = 3
     /// A deload keeps this share of the working sets…
     public static let deloadVolume = 0.6
@@ -59,13 +58,11 @@ public enum ProgressionEngine {
     }
 }
 
-/// One past session's working sets paired with what each was aiming for.
 struct Judgement {
     let date: Date
     let pairs: [(set: SetPerformance, target: SetTarget)]
     let tracking: TrackingType
 
-    /// Any working set skipped or short of its target.
     var missed: Bool {
         pairs.contains { !$0.set.isCompleted || Self.isShort($0.set, of: $0.target, tracking: tracking) }
     }
@@ -75,7 +72,6 @@ struct Judgement {
         pairs.allSatisfy { $0.set.isCompleted && ($0.set.reps ?? 0) >= ($0.target.topReps ?? 0) }
     }
 
-    /// Some set was logged harder than its target RPE.
     var effortHigh: Bool {
         pairs.contains { pair in
             guard let rpe = pair.set.rpe, let target = pair.target.rpe else { return false }
@@ -92,7 +88,6 @@ struct Judgement {
         pairs.lazy.compactMap(\.target.rpe).first
     }
 
-    /// The rep scheme the session was aiming for, to match it with today's.
     var scheme: RepScheme {
         RepScheme(pairs.first?.target)
     }
@@ -142,7 +137,6 @@ struct RepScheme: Equatable {
     }
 }
 
-/// One call's worth of state, so each rule reads as a short method.
 struct ProgressionRun {
     let planned: [SetTarget]
     let history: [ExercisePerformance]
@@ -183,8 +177,6 @@ struct ProgressionRun {
         }
     }
 
-    // MARK: Judging
-
     func judge(_ session: ExercisePerformance) -> Judgement {
         let today = todaysWorking
         let pairs = session.workingSets.enumerated().map { index, set in
@@ -207,8 +199,6 @@ struct ProgressionRun {
     func consecutiveMisses(_ judged: [Judgement]) -> Int {
         judged.prefix { $0.missed }.count
     }
-
-    // MARK: Building targets
 
     /// Today's plan with each working set changed, warm-ups left as planned.
     func mapWorking(_ transform: (Int, SetTarget) -> SetTarget) -> [SetTarget] {
@@ -297,10 +287,6 @@ struct ProgressionRun {
         return ProgressionResult(targets: targets, reason: why)
     }
 
-    // MARK: Loads
-
-    /// The nearest loadable weight. The one place rounding happens, so an inventory-aware
-    /// rounding is a one-line swap.
     func loadable(_ kg: Double) -> Double {
         if let plates = context.plates {
             return LoadableWeight.round(kg, for: context.roundingEquipment, inventory: plates)
@@ -330,7 +316,6 @@ struct ProgressionRun {
     }
 }
 
-/// Pairs two optionals, when both are there.
 func both<A, B>(_ first: A?, _ second: B?) -> (A, B)? {
     guard let first, let second else { return nil }
     return (first, second)

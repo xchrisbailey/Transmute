@@ -1,7 +1,7 @@
 import Foundation
 import Observation
 
-/// Where a `transmute://` URL takes the app (#19). Widgets build these and the apps read
+/// Where a `transmute://` URL takes the app. Widgets build these and the apps read
 /// them, so the URLs are spelled in one place. App Intents send the same places through
 /// `DeepLinkRouter`.
 public enum DeepLink: Hashable, Sendable {
@@ -18,7 +18,6 @@ public enum DeepLink: Hashable, Sendable {
     /// `transmute://plan`: the plan.
     case plan
 
-    /// The URL scheme the iPhone and Mac apps register.
     public static let scheme = "transmute"
 
     /// Reads a URL. The scheme and the words are matched whatever their case, and a trailing
@@ -56,7 +55,7 @@ public enum DeepLink: Hashable, Sendable {
     }
 }
 
-/// Hands a `DeepLink` from an App Intent to the window (#19). An intent runs in the app's
+/// Hands a `DeepLink` from an App Intent to the window. An intent runs in the app's
 /// process, sometimes before there's a window, so the link waits here until a root view
 /// takes it.
 @MainActor @Observable public final class DeepLinkRouter {

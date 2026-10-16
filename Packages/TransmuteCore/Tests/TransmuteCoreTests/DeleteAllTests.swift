@@ -59,7 +59,7 @@ struct DeleteAllTests {
         #expect(await DataTransfer.deleteCloudRecords(for: container) == .notSyncing)
     }
 
-    /// The apps give the main context an undo manager for plan edits (#10). Delete-all isn't
+    /// The apps give the main context an undo manager for plan edits. Delete-all isn't
     /// undoable and mustn't trip over it.
     @Test func deleteAllWorksWithAnUndoManagerAndLeavesNothingToUndo() throws {
         let undo = UndoManager()

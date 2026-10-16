@@ -13,7 +13,6 @@ public typealias LoggedExercise = SchemaV1.LoggedExercise
 public typealias LoggedSet = SchemaV1.LoggedSet
 public typealias PersonalRecord = SchemaV1.PersonalRecord
 
-/// Every schema version in order, and how to move between them.
 public enum TransmuteMigrationPlan: SchemaMigrationPlan {
     public static var schemas: [any VersionedSchema.Type] {
         [SchemaV1.self]

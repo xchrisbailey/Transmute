@@ -1,4 +1,3 @@
-/// What an import did, for the screen to report back.
 public struct ImportSummary: Equatable, Sendable {
     /// How many of one kind of thing were added, and how many were already in the store.
     public struct Count: Equatable, Sendable {
@@ -11,13 +10,11 @@ public struct ImportSummary: Equatable, Sendable {
         }
     }
 
-    /// Where the data came from.
     public enum Source: String, Equatable, Sendable {
         case backup, strong, hevy
     }
 
     public enum ProfileOutcome: Equatable, Sendable {
-        /// The file had no profile.
         case absent
         /// The store had none, so the file's profile was added.
         case added
@@ -45,7 +42,6 @@ public struct ImportSummary: Equatable, Sendable {
         self.source = source
     }
 
-    /// Whether the import changed the store at all.
     public var addedAnything: Bool {
         profile == .added || setsAdded > 0 || recordsAdded > 0
             || [bodyweights, customExercises, plans, workouts].contains { $0.added > 0 }

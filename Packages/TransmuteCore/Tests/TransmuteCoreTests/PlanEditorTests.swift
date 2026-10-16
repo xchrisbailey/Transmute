@@ -70,10 +70,8 @@ struct PlanEditorTests {
     @Test func movingAnExerciseWithinItsDay() {
         let day = monday
         let ids = day.orderedExercises.map(\.exerciseID)
-        // Down: the first exercise lands where the third was.
         PlanEditor.move(day.orderedExercises[0], to: day, at: 2)
         #expect(day.orderedExercises.map(\.exerciseID) == [ids[1], ids[2], ids[0], ids[3], ids[4]])
-        // Up, and past the end clamps to last.
         PlanEditor.move(day.orderedExercises[2], to: day, at: 0)
         #expect(day.orderedExercises.map(\.exerciseID) == ids)
         PlanEditor.move(day.orderedExercises[1], to: day, at: 99)
@@ -106,7 +104,6 @@ struct PlanEditorTests {
         #expect(squat.orderedSets.count == sets)
         #expect(day.isEdited && wednesday.isEdited)
 
-        // Without an index it goes last, and it leaves its superset partner behind.
         let press = try #require(wednesday.orderedExercises.first { $0.supersetGroup == 1 })
         PlanEditor.move(press, to: day)
         #expect(day.orderedExercises.last === press)

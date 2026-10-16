@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-/// How a workout runs and what its screens show (#18). Stored on the profile, so it syncs
+/// How a workout runs and what its screens show. Stored on the profile, so it syncs
 /// with everything else.
 public struct WorkoutPreferences: Codable, Hashable, Sendable {
     /// Rest after a working set that has no rest of its own, in seconds.
@@ -63,7 +63,7 @@ public struct WorkoutPreferences: Codable, Hashable, Sendable {
     }
 }
 
-/// Which of the effort terms a screen shows next to a set: RPE and %1RM (#18).
+/// Which of the effort terms a screen shows next to a set: RPE and %1RM.
 public struct EffortDisplay: Hashable, Sendable {
     public var showsRPE: Bool
     public var showsPercentOfMax: Bool
@@ -82,6 +82,5 @@ public struct EffortDisplay: Hashable, Sendable {
             showsPercentOfMax: preferences.showsPercentOfMax(for: experience))
     }
 
-    /// Both shown.
     public static let everything = EffortDisplay(showsRPE: true, showsPercentOfMax: true)
 }

@@ -53,8 +53,6 @@ struct TodayGlanceTests {
         return plan
     }
 
-    // MARK: The day
-
     @Test func noPlanHasNothingToShow() throws {
         let empty = glance(nil)
         #expect(empty == TodayGlance())
@@ -104,8 +102,6 @@ struct TodayGlanceTests {
         #expect(today.nextLift == nil)
     }
 
-    // MARK: A running workout
-
     @Test func aRunningWorkoutShowsTheCurrentSet() throws {
         let plan = try plan()
         let monday = try #require(plan.orderedDays.first { $0.week == 4 && $0.weekday == 1 })
@@ -125,7 +121,6 @@ struct TodayGlanceTests {
         today = glance(plan, workout: workout)
         #expect(today.nextLift?.text == "Back squat 3×5 · 80 kg")
 
-        // Everything logged but the workout not ended: there's no lift left to show.
         for set in workout.orderedExercises.flatMap(\.orderedSets) {
             WorkoutSession.complete(set, in: workout, at: date(weekday: 1))
         }
@@ -158,8 +153,6 @@ struct TodayGlanceTests {
         #expect(today.day == .session("Speed, agility and conditioning"))
         #expect(today.nextLift?.text == "Split-step reaction 3×0:10")
     }
-
-    // MARK: The streak and the week
 
     @Test func theStreakAndTheWeekComeFromThePlan() throws {
         let plan = try plan()
@@ -212,7 +205,6 @@ struct TodayGlanceTests {
         let later = calendar.date(byAdding: .weekOfYear, value: 3, to: now)!
         let after = TodayGlance(plan: plan, units: metric, on: later, calendar: calendar)
         #expect(after.week == .init())
-        // Week 4 went unlogged, so the streak ended with it.
         #expect(after.streakWeeks == 0)
 
         let before = TodayGlance(plan: plan, units: metric, on: plan.startDate.addingTimeInterval(-86_400 * 8))
@@ -222,8 +214,6 @@ struct TodayGlanceTests {
 }
 
 extension TodayGlanceTests {
-    // MARK: Formatting
-
     @Test func weightAndRepsReadSetsByRepsThenTheLoad() throws {
         let plan = try plan(of: "bench-press", sets: 5) {
             $0.targetReps = 5

@@ -4,7 +4,6 @@ import Testing
 
 @testable import TransmuteCore
 
-/// The adapters from stored plans and logs, and the one call the session makes.
 @MainActor
 struct ProgressionModelTests {
     let container: ModelContainer
@@ -86,7 +85,6 @@ struct ProgressionModelTests {
         #expect(result.reason.kind == .addLoad)
         #expect(result.reason.loadKg == 102.5)
         #expect(result.reason.sourceDate == Lift.daysAgo(3))
-        // The plan itself isn't touched.
         #expect(squat.orderedSets.map(\.targetLoadKg) == [100, 100, 100])
     }
 

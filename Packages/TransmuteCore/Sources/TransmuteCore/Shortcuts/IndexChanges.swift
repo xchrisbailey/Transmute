@@ -1,6 +1,6 @@
 import Foundation
 
-/// What to change in Spotlight after the store is saved (#19). The apps keep the text they
+/// What to change in Spotlight after the store is saved. The apps keep the text they
 /// last indexed for each workout and plan; comparing it with the text now says which items
 /// to index again and which to take out.
 public struct IndexChanges: Equatable, Sendable {

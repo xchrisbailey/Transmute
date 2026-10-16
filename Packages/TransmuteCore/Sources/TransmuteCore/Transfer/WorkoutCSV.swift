@@ -1,6 +1,6 @@
 import Foundation
 
-/// The CSV export: one row per logged set, for spreadsheets and other apps (#18).
+/// The CSV export: one row per logged set, for spreadsheets and other apps.
 ///
 /// Quantities are metric as stored, the date is the workout's start in ISO 8601 (UTC), and
 /// `set_order` counts from 1 within the exercise. Empty cells mean the set doesn't track that

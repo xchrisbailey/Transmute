@@ -29,8 +29,6 @@
             super.init()
         }
 
-        // MARK: Starting
-
         /// Starts an indoor session for the activity. Does nothing if a workout is already going.
         public func start(activity: HealthActivity, at date: Date) async throws {
             let configuration = HKWorkoutConfiguration()
@@ -125,8 +123,6 @@
             isMirroring = false
         }
 
-        // MARK: Running
-
         public func pause() {
             session?.pause()
         }
@@ -143,8 +139,6 @@
                 Self.logger.debug("Workout message not sent: \(error.localizedDescription, privacy: .public)")
             }
         }
-
-        // MARK: Ending
 
         public func finish(workoutID: UUID, title: String, at date: Date) async throws -> UUID? {
             guard let session, let builder else { return nil }
@@ -185,8 +179,6 @@
             }
             return error
         }
-
-        // MARK: Delegate updates
 
         private func syncState(of session: HKWorkoutSession) {
             guard session === self.session else { return }

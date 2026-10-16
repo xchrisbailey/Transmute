@@ -1,6 +1,6 @@
 import Foundation
 
-/// Which training reminders this device sends (#19). Both are off until the person turns them
+/// Which training reminders this device sends. Both are off until the person turns them
 /// on. Kept in user defaults, so each device decides for itself; the watch mirrors the iPhone's.
 public struct ReminderSettings: Equatable, Sendable {
     /// Bool. A reminder on each planned training day.
@@ -44,8 +44,6 @@ public struct ReminderSettings: Equatable, Sendable {
         defaults.set(trainingDayMinutes, forKey: Self.trainingDayMinutesKey)
         defaults.set(nudgesAfterMissedDay, forKey: Self.missedDayKey)
     }
-
-    // MARK: Time of day
 
     /// The reminder time as a date on `day`, for a time picker.
     public func trainingDayTime(on day: Date = .now, calendar: Calendar = .current) -> Date {

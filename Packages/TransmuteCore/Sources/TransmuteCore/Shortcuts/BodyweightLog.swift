@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-/// Logging a bodyweight from outside the profile screen (#19): the Log bodyweight shortcut
+/// Logging a bodyweight from outside the profile screen: the Log bodyweight shortcut
 /// hands over a measurement in whatever unit the person said.
 public enum BodyweightLog {
     /// What a person can weigh. Anything else is a slip of the tongue or the wrong unit.

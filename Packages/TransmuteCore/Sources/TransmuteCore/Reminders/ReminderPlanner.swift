@@ -1,6 +1,5 @@
 import Foundation
 
-/// One notification to schedule (#19).
 public struct PlannedReminder: Hashable, Identifiable, Sendable {
     public enum Kind: String, Sendable {
         /// Today has a session, at the time the person chose.

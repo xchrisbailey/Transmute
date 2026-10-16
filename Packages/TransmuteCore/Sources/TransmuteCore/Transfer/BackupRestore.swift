@@ -1,14 +1,11 @@
 import Foundation
 import SwiftData
 
-/// Merges a backup into a store. See `DataTransfer.importBackup` for the rules.
 struct BackupRestore {
     let backup: Backup
     let context: ModelContext
     private var summary = ImportSummary(source: .backup)
-    /// Days of the backup's plans by plan id, in the backup's order, for `PlanDayRef`.
     private var days: [UUID: [PlanDay]] = [:]
-    /// Sets of the workouts this restore added, for `SetRef`.
     private var sets: [UUID: [[LoggedSet]]] = [:]
 
     init(backup: Backup, context: ModelContext) {

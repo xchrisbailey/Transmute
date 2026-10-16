@@ -1,6 +1,6 @@
 import Foundation
 
-/// Plates as short text, for the watch (#15) and anywhere a drawn bar won't fit.
+/// Plates as short text, for the watch and anywhere a drawn bar won't fit.
 public enum PlateText {
     /// A plate's weight without trailing zeros, e.g. 20, 2.5, 1.25.
     public static func weight(_ value: Double, locale: Locale = .current) -> String {

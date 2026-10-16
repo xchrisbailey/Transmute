@@ -1,16 +1,15 @@
 import Foundation
 import SwiftData
 
-/// The workout log (#14): finished workouts grouped by week, filtered, and kept consistent
-/// when a past set or workout is edited or deleted. Progression (#12) reads history live, so
-/// it follows edits by itself; records (#13) are derived and get recomputed here.
+/// The workout log: finished workouts grouped by week, filtered, and kept consistent
+/// when a past set or workout is edited or deleted. Progression reads history live, so
+/// it follows edits by itself; records are derived and get recomputed here.
 public enum WorkoutLog {
     /// What the log is narrowed to. Empty fields don't filter.
     public struct Filter: Equatable, Sendable {
         /// Matches the workout's title, or any exercise's name.
         public var text: String
         public var exerciseID: String?
-        /// Only workouts from this plan.
         public var planID: UUID?
         public var dates: DateInterval?
 
@@ -63,8 +62,6 @@ public enum WorkoutLog {
             .sorted { $0.start > $1.start }
     }
 
-    // MARK: Editing
-
     /// Call after changing a logged set's numbers: the exercise's records are rebuilt.
     public static func edited(_ set: LoggedSet, in context: ModelContext, library: ExerciseLibrary = .bundled) throws {
         guard let exerciseID = set.exercise?.exerciseID else { return }
@@ -106,9 +103,6 @@ public enum WorkoutLog {
         return healthID
     }
 
-    // MARK: Exercise history
-
-    /// One session's worth of an exercise, for its history screen.
     public struct ExerciseEntry: Identifiable {
         public var workout: Workout
         public var sets: [LoggedSet]

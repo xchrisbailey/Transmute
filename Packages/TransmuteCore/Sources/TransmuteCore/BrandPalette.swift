@@ -28,7 +28,7 @@ public struct BrandColor: Hashable, Sendable {
     }
 }
 
-/// The roles every screen draws from. See the brand book in #3.
+/// The roles every screen draws from.
 ///
 /// Rules: one `magic` action per screen; `gold` only for records; `now` means the current
 /// set, the rest timer or a streak.
@@ -59,7 +59,7 @@ public struct BrandPalette: Hashable, Sendable {
     public let sparklePink: BrandColor
     public let sparkleLavender: BrandColor
     /// Shades of the accent roles for use as text. Latte's accents are too light to read as
-    /// small text on its base and cards, so these are darkened to pass WCAG AA (#22).
+    /// small text on its base and cards, so these are darkened to pass WCAG AA.
     public let text: TextTones
 
     public struct TextTones: Hashable, Sendable {

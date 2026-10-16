@@ -4,7 +4,6 @@ import Testing
 
 @testable import TransmuteCore
 
-/// The workout preferences (#18) taking effect in a session.
 @MainActor
 struct SessionPreferencesTests {
     let container: ModelContainer
@@ -53,8 +52,6 @@ struct SessionPreferencesTests {
     func squat(_ workout: Workout) throws -> LoggedExercise {
         try #require(workout.orderedExercises.first { $0.exerciseID == "back-squat" })
     }
-
-    // MARK: Rest
 
     @Test func setsWithoutARestGetTheDefault() throws {
         let (profile, day) = try fixture()
@@ -111,7 +108,6 @@ struct SessionPreferencesTests {
         let snapshot = SessionSnapshot(workout)
         let ref = try #require(snapshot.current)
         let command = SessionCommand.logSet(ref, SetValues(weightKg: 100, reps: 5), at: now)
-        // What the mirroring device shows straight away, and what the owner then does.
         #expect(snapshot.applying(command).restEndsAt == nil)
         #expect(SessionMirror.apply(command, to: workout, in: context) == .applied)
         #expect(workout.restEndsAt == nil)
@@ -132,15 +128,12 @@ struct SessionPreferencesTests {
         #expect(WorkoutSession.restToStart(in: workout, at: now) == 150)
         WorkoutSession.startRest(150, in: workout, at: now)
         #expect(WorkoutSession.restToStart(in: workout, at: now) == nil)
-        // Nothing to rest for once every set is in.
         WorkoutSession.startRest(nil, in: workout)
         for set in workout.orderedExercises.flatMap(\.orderedSets) where !set.isCompleted {
             WorkoutSession.complete(set, in: workout, at: now.addingTimeInterval(300))
         }
         #expect(WorkoutSession.restToStart(in: workout, at: now.addingTimeInterval(600)) == nil)
     }
-
-    // MARK: Warm-ups
 
     @Test func barbellLiftsGetARamp() throws {
         let (profile, day) = try fixture(rest: 150)

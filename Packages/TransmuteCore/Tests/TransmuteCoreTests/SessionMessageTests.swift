@@ -23,8 +23,6 @@ struct SessionMessageTests {
         return WorkoutSession.start(day, at: now, in: context)
     }
 
-    // MARK: Ending
-
     @Test func finishingKeepsOnlyWhatWasLogged() throws {
         let workout = try session()
         let values = SetValues(weightKg: 60, reps: 5)
@@ -67,15 +65,12 @@ struct SessionMessageTests {
         let workout = try session()
         let id = workout.id
         let before = SessionSnapshot(workout)
-        // The mirror keeps what it has until the owner says the session ended.
         #expect(before.applying(.discard) == before)
 
         #expect(SessionMirror.apply(.discard, to: workout, in: context) == .discarded)
         #expect(try WorkoutSession.current(in: context) == nil)
         #expect(try context.fetchCount(FetchDescriptor<Workout>(predicate: #Predicate { $0.id == id })) == 0)
     }
-
-    // MARK: Messages
 
     @Test func everyMessageRoundTrips() throws {
         let workout = try session()

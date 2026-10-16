@@ -57,28 +57,25 @@ public enum Muscle: String, Codable, CaseIterable, Sendable {
 }
 
 public enum RecordKind: String, Codable, CaseIterable, Sendable {
-    /// Estimated one-rep max from a weight × reps set.
     case estimatedOneRepMax
     /// Heaviest load for a given number of reps (the record's `reps`).
     case repMax
-    /// Most reps in a set.
     case maxReps
     /// Fastest time for a given distance (the record's `meters`).
     case bestTime
     /// Longest hold or effort, for time-tracked work.
     case longestTime
-    /// Furthest distance in one set.
     case longestDistance
     /// Most kilograms moved (load × reps) for one exercise in one session.
     case sessionVolume
 }
 
-/// Parts of the body a limitation can name. Plans treat a named area as a hard constraint (#9).
+/// Parts of the body a limitation can name. Plans treat a named area as a hard constraint.
 public enum BodyArea: String, Codable, CaseIterable, Sendable {
     case neck, shoulder, elbow, wrist, upperBack, lowerBack, hip, knee, ankle
 }
 
-/// A lift an experienced person already knows their numbers for, used for starting loads (#9).
+/// A lift an experienced person already knows their numbers for, used for starting loads.
 public struct KnownLift: Codable, Hashable, Sendable {
     public var exerciseID: String
     public var weightKg: Double

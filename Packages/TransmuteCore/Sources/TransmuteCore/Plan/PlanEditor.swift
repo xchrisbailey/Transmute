@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 
-/// Hand edits to a plan (#10). Each marks the day edited so a rebrew keeps it, and leaves the
+/// Hand edits to a plan. Each marks the day edited so a rebrew keeps it, and leaves the
 /// plan ordered and consistent. Undo comes from the model context's undo manager.
 public enum PlanEditor {
     /// The week a date falls in, counting from the plan's start, clamped to the plan.
@@ -17,8 +17,6 @@ public enum PlanEditor {
         let start = calendar.dateInterval(of: .weekOfYear, for: plan.startDate)?.start ?? plan.startDate
         return calendar.date(byAdding: .day, value: (day.week - 1) * 7 + day.weekday - 1, to: start) ?? start
     }
-
-    // MARK: Days
 
     /// The session on a weekday of a week, if there is one.
     public static func day(of plan: Plan, week: Int, weekday: Weekday) -> PlanDay? {
@@ -36,8 +34,6 @@ public enum PlanEditor {
         day.weekday = weekday
         day.isEdited = true
     }
-
-    // MARK: Exercises
 
     /// Adds an exercise at the end with sets copied from a sensible default for its tracking.
     @discardableResult
@@ -116,9 +112,7 @@ public enum PlanEditor {
         planned.day?.isEdited = true
     }
 
-    /// An exercise that could stand in for another, and how it relates to it.
     public struct Alternative: Hashable, Identifiable, Sendable {
-        /// How an alternative compares to the exercise it replaces, when the library says.
         public enum Relation: Hashable, Sendable {
             case easier, harder
         }
@@ -149,8 +143,6 @@ public enum PlanEditor {
                 (lhs.relation == nil ? 1 : 0) < (rhs.relation == nil ? 1 : 0)
             }
     }
-
-    // MARK: Sets
 
     /// Adds a set copying the last one's targets.
     public static func addSet(to planned: PlannedExercise) {
@@ -198,16 +190,12 @@ public enum PlanEditor {
         planned.day?.isEdited = true
     }
 
-    // MARK: Plans
-
     /// Makes one plan active and archives the rest.
     public static func activate(_ plan: Plan, in context: ModelContext) throws {
         for other in try context.fetch(FetchDescriptor<Plan>()) {
             other.isActive = other === plan
         }
     }
-
-    // MARK: Helpers
 
     static func defaultSet(for tracking: TrackingType, order: Int) -> PlannedSet {
         let set = PlannedSet(order: order)

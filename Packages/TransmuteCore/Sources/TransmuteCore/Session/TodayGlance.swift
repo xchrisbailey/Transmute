@@ -1,14 +1,13 @@
 import Foundation
 import SwiftData
 
-/// What a complication or widget shows at a glance (#15, #19): today's session, whether it's
+/// What a complication or widget shows at a glance: today's session, whether it's
 /// done, the next lift, the streak and this week's sessions. A plain value, so a timeline can
 /// hold it after the store is closed.
 ///
 /// Only exercise names, numbers and unit symbols are formatted here; words such as "Rest day"
 /// belong to whoever draws it.
 public struct TodayGlance: Hashable, Sendable {
-    /// What the plan has today.
     public enum Day: Hashable, Sendable {
         /// No active plan, or the plan has run out.
         case nothingPlanned
@@ -27,9 +26,7 @@ public struct TodayGlance: Hashable, Sendable {
     public static let widgetKind = "\(Transmute.bundlePrefix).today"
 
     public var day: Day
-    /// Today's session already has a finished workout.
     public var isDone: Bool
-    /// A workout is going right now.
     public var isRunning: Bool
     /// During a workout, the current set's exercise. Otherwise the first exercise of today's
     /// session, or of the next session on a rest day or once today's is done.
@@ -50,7 +47,6 @@ public struct TodayGlance: Hashable, Sendable {
             self.planned = planned
         }
 
-        /// Every planned session was done.
         public var isHit: Bool {
             planned > 0 && done >= planned
         }
@@ -112,8 +108,6 @@ public struct TodayGlance: Hashable, Sendable {
         }
     }
 }
-
-// MARK: - Building one
 
 extension TodayGlance {
     /// The glance for a date.
@@ -190,7 +184,6 @@ extension TodayGlance.Week {
 }
 
 extension TodayGlance.NextLift {
-    /// The exercise of the set being done, at that set's numbers.
     init(current set: LoggedSet, of exercise: LoggedExercise, units: Units, library: ExerciseLibrary) {
         let working = exercise.orderedSets.filter { !$0.isWarmUp }
         self.init(
@@ -200,7 +193,6 @@ extension TodayGlance.NextLift {
             units: units, library: library)
     }
 
-    /// A planned exercise, by its first working set.
     init(planned: PlannedExercise, profile: Profile?, units: Units, library: ExerciseLibrary, before date: Date) {
         let context = planned.modelContext
         var targets = planned.orderedSets.map(SetTarget.init)
@@ -256,8 +248,6 @@ extension TodayGlance.NextLift {
             self.init(name: name, sets: sets)
         }
     }
-
-    // MARK: Spoken forms
 
     /// e.g. "80 kilograms" or "176.5 pounds", rounded as `Units.formatWeight` rounds.
     static func spoken(kg: Double, units: Units) -> String {

@@ -136,7 +136,6 @@ struct RecordBookTests {
         try book.recompute(exerciseID: "back-squat")
         #expect(try records().filter { $0.kind == .repMax && $0.reps == 5 }.map(\.value).sorted() == [105, 107.5])
 
-        // Last week was really 110, so this week's 107.5 is no longer a record.
         middle.weightKg = 110
         try book.recompute(exerciseID: "back-squat")
         try context.save()
@@ -197,7 +196,6 @@ struct RecordBookTests {
         #expect(gold.allSatisfy { group in group.allSatisfy { $0.date >= lastWeek && $0.set === group[0].set } })
         let dates = gold.compactMap { $0.first?.date }
         #expect(dates == dates.sorted(by: >))
-        // Week 3's first set of 94.5 kg leads with its 5RM; its estimate and lighter maxes follow.
         let squatGroup = try #require(
             gold.first { group in group.contains { $0.exerciseID == "back-squat" && $0.value == 94.5 } })
         #expect(squatGroup.first?.kind == .repMax)

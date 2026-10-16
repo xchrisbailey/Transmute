@@ -3,7 +3,6 @@ import Testing
 
 @testable import TransmuteCore
 
-/// Builders shared by the progression tests.
 enum Lift {
     static let today = Date(timeIntervalSince1970: 1_790_553_600)  // Monday 2026-09-28, UTC.
 
@@ -64,8 +63,6 @@ struct ProgressionEngineTests {
     let range = SetTarget(reps: 6, repsMax: 8, loadKg: 100, restSeconds: 150)
     let fives = SetTarget(reps: 5, loadKg: 100, rpe: 8)
 
-    // MARK: Calibration and the estimate
-
     @Test func oneRepMaxUsesEpleyUpToTenReps() {
         #expect(OneRepMax.estimate(weightKg: 100, reps: 1) == 100)
         #expect(abs((OneRepMax.estimate(weightKg: 100, reps: 5) ?? 0) - 116.667) < 0.001)
@@ -102,8 +99,6 @@ struct ProgressionEngineTests {
             "back-squat", knownLifts: [KnownLift(exerciseID: "back-squat", weightKg: 100, reps: 5)])
         #expect(abs((ProgressionEngine.estimatedOneRepMax(history: [], context: known) ?? 0) - 116.667) < 0.001)
     }
-
-    // MARK: Double progression
 
     @Test func topOfTheRangeOnEverySetAddsLowerBodyLoad() {
         let history = [Lift.session(4, 3, kg: 100, reps: 8)]
@@ -175,8 +170,6 @@ struct ProgressionEngineTests {
             planned: Lift.plan(3, range), history: history, context: Lift.context("back-squat", settings: settings))
         #expect(result.reason.loadKg == 102.5)
     }
-
-    // MARK: Linear
 
     @Test func fixedRepsAtOrUnderTargetRPEAddLoad() {
         let history = [Lift.session(2, 5, kg: 100, reps: 5, rpe: 8)]
@@ -281,10 +274,7 @@ struct ProgressionEngineTests {
     }
 }
 
-// RPE, percentages, deloads and holds.
 extension ProgressionEngineTests {
-    // MARK: RPE
-
     @Test(arguments: [
         (6.0, ProgressionReason.Kind.rpeUp, 105.0),
         (9.5, .rpeDown, 97.5),
@@ -307,8 +297,6 @@ extension ProgressionEngineTests {
             planned: Lift.plan(3, SetTarget(reps: 5, rpe: 8)), history: history, context: Lift.context("back-squat"))
         #expect(result.reason.kind == .addLoad)
     }
-
-    // MARK: Percentages
 
     @Test func percentagesResolveFromTheEstimate() {
         let percent = SetTarget(reps: 5, percentOneRepMax: 0.75)
@@ -334,8 +322,6 @@ extension ProgressionEngineTests {
         #expect(result.reason.kind == .calibrate)
         #expect(result.reason.loadKg == nil)
     }
-
-    // MARK: Deload and holds
 
     @Test func deloadKeepsSixtyPercentOfSetsAtNinetyPercentLoad() {
         let warmUp = SetTarget(reps: 5, loadKg: 60, isWarmUp: true)

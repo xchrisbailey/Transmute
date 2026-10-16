@@ -1,6 +1,6 @@
 import Foundation
 
-/// Finds the personal records a set sets (#13). Gold is only spent on records, so the rules
+/// Finds the personal records a set sets. Gold is only spent on records, so the rules
 /// lean towards missing a doubtful record rather than gilding a non-record.
 ///
 /// - **Which sets count**: completed working sets. Warm-ups and unfinished sets never do.
@@ -27,7 +27,6 @@ import Foundation
 ///   (or a time that much faster) needs the person to confirm it before anything from the set
 ///   counts.
 public enum RecordDetector {
-    /// The rep counts rep maxes are kept for.
     public static let repCounts = [1, 3, 5, 8, 10]
 
     /// How many times better than the previous best a value can be before it's asked about.
@@ -139,8 +138,6 @@ extension RecordMark {
     }
 }
 
-// MARK: - Replay
-
 /// One session's sets for one exercise, in the order they were done.
 public struct RecordSession: Hashable, Sendable {
     public var sets: [RecordSet]
@@ -150,7 +147,6 @@ public struct RecordSession: Hashable, Sendable {
     }
 }
 
-/// A record and the set that set it.
 public struct RecordEvent: Hashable, Sendable {
     public let setID: Int
     public let mark: RecordMark
@@ -161,13 +157,11 @@ public struct RecordEvent: Hashable, Sendable {
     }
 }
 
-/// Every record an exercise's history holds, from replaying it in order.
 public struct RecordReplay: Hashable, Sendable {
     /// In the order they were set.
     public var records: [RecordEvent] = []
     /// Sets still waiting for confirmation, with what they'd set.
     public var needsConfirmation: [RecordEvent] = []
-    /// The bests after the last session.
     public var bests = RecordBests()
 
     public init() {}

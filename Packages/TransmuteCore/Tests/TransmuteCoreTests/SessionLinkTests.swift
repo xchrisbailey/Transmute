@@ -83,7 +83,6 @@ struct SessionLinkTests {
         watch.onCommand = { command, _ in applied.append(command) }
 
         phone.send(.logSet(ref, SetValues(weightKg: 82.5, reps: 5), at: now))
-        // The mirror shows it at once, before the owner has answered.
         #expect(phone.mirrored?.set(at: ref)?.isCompleted == true)
 
         await settle { !applied.isEmpty }

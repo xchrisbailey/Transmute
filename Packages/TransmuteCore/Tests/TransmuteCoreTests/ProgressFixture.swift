@@ -11,7 +11,6 @@ struct ProgressFixture {
     let container: ModelContainer
     var context: ModelContext { container.mainContext }
     let calendar: Calendar
-    /// A Monday at midnight.
     let monday: Date
 
     init() throws {

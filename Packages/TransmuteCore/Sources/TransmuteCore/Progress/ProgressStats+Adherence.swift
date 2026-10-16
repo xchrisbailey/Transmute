@@ -1,13 +1,11 @@
 import Foundation
 
 extension ProgressStats {
-    /// How one plan week went.
     public struct WeekAdherence: Identifiable, Equatable, Sendable {
         /// 1-based week of the plan.
         public var week: Int
         /// The Monday the week starts on, as the plan screen dates it.
         public var weekStart: Date
-        /// Sessions the plan has in the week.
         public var planned: Int
         /// Planned sessions with a finished workout.
         public var done: Int
@@ -27,7 +25,6 @@ extension ProgressStats {
             self.isCurrent = isCurrent
         }
 
-        /// Every planned session was done.
         public var isHit: Bool {
             planned > 0 && done >= planned
         }
@@ -45,7 +42,6 @@ extension ProgressStats {
         }
     }
 
-    /// Sessions done and planned in one plan week.
     public struct SessionsKPI: Equatable, Sendable {
         public var done: Int
         public var planned: Int
@@ -81,8 +77,6 @@ extension ProgressStats {
         }
         return count
     }
-
-    // MARK: Helpers
 
     /// The Monday a plan week starts on, matching `PlanEditor.date(of:in:)`.
     static func weekStart(of plan: Plan, week: Int, calendar: Calendar) -> Date {

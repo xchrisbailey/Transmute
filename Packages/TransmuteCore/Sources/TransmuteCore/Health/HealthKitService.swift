@@ -3,7 +3,6 @@
     import HealthKit
     import OSLog
 
-    /// `HealthService` over HealthKit, for iPhone and Apple Watch.
     public final class HealthKitService: HealthService {
         private let store = HKHealthStore()
         private let calendar = Calendar(identifier: .gregorian)
@@ -13,8 +12,6 @@
         public var isAvailable: Bool {
             HKHealthStore.isHealthDataAvailable()
         }
-
-        // MARK: Access
 
         public func requestAccess(_ scope: HealthAccessScope) async throws {
             guard isAvailable else { return }
@@ -38,7 +35,6 @@
             case .workouts:
                 return (
                     [HKObjectType.workoutType(), HKQuantityType(.activeEnergyBurned), HKQuantityType(.heartRate)],
-                    // The live workout only reports the heart rate and energy it's allowed to read.
                     [HKObjectType.workoutType(), HKQuantityType(.activeEnergyBurned), HKQuantityType(.heartRate)]
                 )
             }
@@ -76,8 +72,6 @@
             @unknown default: .unknown
             }
         }
-
-        // MARK: Reading
 
         public func bodyMetrics() async -> HealthBodyMetrics {
             var metrics = HealthBodyMetrics()
@@ -149,8 +143,6 @@
                 sortDescriptors: [SortDescriptor(\.endDate)])
             return (try? await descriptor.result(for: store)) ?? []
         }
-
-        // MARK: Writing
 
         public func save(_ record: HealthWorkoutRecord) async throws -> UUID {
             guard isAvailable else { throw HealthServiceError.unavailable }

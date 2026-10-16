@@ -81,7 +81,6 @@ struct BackupTests {
         #expect(original == restored)
         #expect(try original.encoded() == second)
 
-        // The backup holds something of every model, with the relationships that cross the tree.
         #expect(try counts(in: context) == counts(in: other.mainContext))
         #expect(try counts(in: context).allSatisfy { $0 > 0 })
         #expect(original.workouts.count { $0.planDay != nil } == 10)
@@ -171,7 +170,6 @@ struct BackupTests {
         #expect(summary.plans == .init(added: 1))
         #expect(summary.workouts == .init(added: 10))
         #expect(try target.fetchCount(FetchDescriptor<Workout>()) == 11)
-        // The plan that was here stays the active one.
         let plans = try target.fetch(FetchDescriptor<Plan>())
         #expect(plans.filter(\.isActive).map(\.name) == ["Already here"])
         // Records are derived again from the merged history. The backup's squat estimates beat
@@ -211,7 +209,6 @@ struct BackupTests {
         #expect(try counts(in: context).allSatisfy { $0 == 0 })
     }
 
-    /// An older backup won't have settings added since. They keep their defaults.
     @Test func missingKeysKeepDefaults() throws {
         let json = """
             {

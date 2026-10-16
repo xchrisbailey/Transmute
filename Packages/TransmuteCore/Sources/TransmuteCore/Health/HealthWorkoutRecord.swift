@@ -48,7 +48,6 @@ extension ExerciseCategory {
     }
 }
 
-/// A finished workout, ready to save to Health.
 public struct HealthWorkoutRecord: Equatable, Sendable {
     /// The Transmute workout's id, stored as metadata so it can be recognised when reading back.
     public var workoutID: UUID
@@ -57,7 +56,7 @@ public struct HealthWorkoutRecord: Equatable, Sendable {
     public var start: Date
     public var end: Date
     public var energyKcal: Double?
-    /// Heart rate samples in beats per minute, when the watch recorded them (#15).
+    /// Heart rate samples in beats per minute, when the watch recorded them.
     public var heartRate: [HeartRateSample]
 
     public init(

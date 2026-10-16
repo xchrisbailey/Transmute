@@ -1,17 +1,17 @@
 import Foundation
 
-/// The profile while it's being entered or edited, as a plain value. Onboarding (#6) and the
+/// The profile while it's being entered or edited, as a plain value. Onboarding and the
 /// Profile screen both work on a draft and only write it to the stored `Profile` when saved.
 ///
 /// Only height, weight and days per week are required; everything else has a sensible default
-/// so every later step can be skipped (#22).
+/// so every later step can be skipped.
 public struct ProfileDraft: Equatable, Sendable {
     public var heightCm: Double?
     public var weightKg: Double?
     public var birthYear: Int?
     public var sex: Sex?
     public var unitSystem: UnitSystem
-    /// Units chosen on their own in Settings (#18). The draft carries them so its screens show
+    /// Units chosen on their own in Settings. The draft carries them so its screens show
     /// the same units as the rest of the app; `nil` follows `unitSystem`.
     public var weightUnit: UnitSystem?
     public var heightUnit: UnitSystem?
@@ -46,7 +46,6 @@ public struct ProfileDraft: Equatable, Sendable {
         limitationAreas = []
     }
 
-    /// A draft of a stored profile, for editing.
     public init(_ profile: Profile, locale: Locale = .current) {
         self.init(locale: locale)
         heightCm = profile.heightCm
@@ -69,7 +68,6 @@ public struct ProfileDraft: Equatable, Sendable {
         limitationAreas = Set(profile.limitationAreas)
     }
 
-    /// The units the draft's screens show values in.
     public var units: Units {
         Units(system: unitSystem, weight: weightUnit, height: heightUnit, distance: distanceUnit)
     }
@@ -79,8 +77,6 @@ public struct ProfileDraft: Equatable, Sendable {
         get { plates.barKg }
         set { plates.setBarKg(newValue) }
     }
-
-    // MARK: Validation
 
     public static let heightRange = 120.0...230.0
     public static let weightRange = 30.0...300.0
@@ -128,8 +124,6 @@ public struct ProfileDraft: Equatable, Sendable {
         bodyIssues.isEmpty && scheduleIssues.isEmpty
     }
 
-    // MARK: Derived
-
     /// Whether to show the sport step: a sport goal was picked, or the goal names a sport.
     public var suggestsSport: Bool {
         goalTags.contains(.sportPerformance) || Self.mentionedSport(in: goalText) != nil
@@ -157,7 +151,6 @@ public struct ProfileDraft: Equatable, Sendable {
         let busy = Set(commitments.map(\.weekday))
         let free = (1...7).filter { !busy.contains($0) }
         let preferred = (spreads[count] ?? []).filter { !busy.contains($0) }
-        // Fill from the remaining free days, then from commitment days if the week is full.
         var picked = preferred
         for day in free + Array(busy).sorted() where picked.count < count && !picked.contains(day) {
             picked.append(day)
@@ -165,15 +158,13 @@ public struct ProfileDraft: Equatable, Sendable {
         return picked.sorted()
     }
 
-    // MARK: Saving
-
     /// Writes the draft onto a profile. A changed weight is added as a new bodyweight entry,
     /// dated `date`; earlier entries are kept as history.
     public func apply(to profile: Profile, on date: Date = .now, locale: Locale = .current) {
         profile.heightCm = heightCm
         profile.birthYear = birthYear
         profile.sex = sex
-        // A profile with no system of its own follows the device (#18). It stays that way
+        // A profile with no system of its own follows the device. It stays that way
         // unless the draft asks for something else.
         if profile.unitSystem != nil || unitSystem != .preferred(for: locale) {
             profile.unitSystem = unitSystem
@@ -213,7 +204,6 @@ public struct ProfileDraft: Equatable, Sendable {
     }
 }
 
-/// Quick starts for the equipment step.
 public enum EquipmentPreset: String, CaseIterable, Sendable {
     case fullGym, homeDumbbells, bodyweightOnly
 

@@ -19,7 +19,6 @@ public struct LibraryExercise: Codable, Hashable, Identifiable, Sendable {
     public var difficulty: ExperienceLevel
     /// Plain setup and movement cues, written for a beginner.
     public var cues: [String]
-    /// Common mistakes to watch for.
     public var mistakes: [String]
     /// A simpler alternative's id.
     public var easier: String?
@@ -54,7 +53,6 @@ public struct LibraryExercise: Codable, Hashable, Identifiable, Sendable {
         self.sports = sports
     }
 
-    /// Every piece of equipment the exercise can use.
     public var allEquipment: Set<Equipment> {
         Set(equipment.joined())
     }
@@ -67,7 +65,6 @@ public struct LibraryExercise: Codable, Hashable, Identifiable, Sendable {
 }
 
 extension LibraryExercise {
-    /// A custom exercise as the library sees it.
     public init(_ custom: CustomExercise) {
         self.init(
             id: custom.exerciseID, name: custom.name, aliases: custom.aliases, category: custom.category,

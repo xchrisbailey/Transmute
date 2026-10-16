@@ -1,4 +1,4 @@
-/// Estimated one-rep max from a weight × reps set, shared by progression (#12) and records (#13).
+/// Estimated one-rep max from a weight × reps set, shared by progression and records.
 public enum OneRepMax {
     /// Sets above this many reps say little about a single, so they aren't used to estimate.
     public static let maxReps = 10
