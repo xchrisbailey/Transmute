@@ -20,14 +20,7 @@ struct SessionLinkHealthTests {
     func settle(until done: () -> Bool = { false }) async { await rig.settle(until: done) }
     func flush() async { await rig.flush() }
 
-    /// A workout the iPhone owns and has finished, as it is when the watch starts to answer.
-    func finishedOnPhone() throws -> Workout {
-        let workout = try rig.session()
-        phone.own(workout, in: context)
-        WorkoutSession.finish(workout, at: rig.now.addingTimeInterval(600))
-        phone.publish()
-        return workout
-    }
+    func finishedOnPhone() throws -> Workout { try rig.finishedOnPhone() }
 
     /// Starts saving and returns once the iPhone is waiting on the watch.
     func startSaving(_ workout: Workout, with health: any HealthService, timeout: Duration = .seconds(5)) async
@@ -240,7 +233,7 @@ struct SessionLinkHealthTests {
         let phonesID = try #require(workout.healthKitWorkoutID)
 
         // What History does when the person deletes the workout.
-        let removed = try WorkoutLog.delete(workout, in: context)
+        let removed = try WorkoutLog.delete(workout, in: context, defaults: defaults)
         try await health.deleteWorkout(id: try #require(removed))
         #expect(removed == phonesID)
         let watchID = health.recordOnWatch()
@@ -264,5 +257,17 @@ struct SessionLinkHealthTests {
         #expect(health.saves == 0)
         #expect(health.workouts == [watchID])
         #expect(workout.healthKitWorkoutID == watchID)
+    }
+
+    @Test(.timeLimit(.minutes(1))) func theWatchStopsWaitingForAStuckChannelAfterTheTimeout() async throws {
+        let stuck = StuckWorkout()
+        let link = SessionLink(live: stuck, device: .watch, clock: clock, defaults: defaults)
+        let returned = Task { await link.ended(workoutID: UUID(), healthWorkoutID: UUID(), timeout: .seconds(3)) }
+        await clock.sleeperArrived()
+
+        clock.advance(by: .seconds(3))
+        await returned.value
+
+        stuck.release()
     }
 }

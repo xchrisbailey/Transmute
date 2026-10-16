@@ -77,6 +77,9 @@ public final class SessionLink {
         }
     }
 
+    /// The `UserDefaults` keys the link keeps Health deletes in, for delete-all to clear.
+    public nonisolated static let defaultsKeys = PendingHealthDeletes.keys
+
     public var ownedID: UUID? {
         owned?.workout.id
     }
@@ -180,14 +183,20 @@ public final class SessionLink {
 
     /// The watch saved the workout to Health (or ended it without saving): tells the iPhone, so
     /// it keeps the Health id and doesn't save a second workout. Returns once the message has
-    /// gone, so the sender can end its session after.
-    public func ended(workoutID: UUID, healthWorkoutID: UUID?) async {
+    /// gone, so the sender can end its session after, or after `timeout` on the clock if the
+    /// channel is stuck: the watch ends its session either way.
+    public func ended(workoutID: UUID, healthWorkoutID: UUID?, timeout: Duration = .seconds(3)) async {
         guard let data = try? SessionMessage.ended(workoutID: workoutID, healthWorkoutID: healthWorkoutID).encoded()
         else { return }
-        await withCheckedContinuation { continuation in
-            let result = outbox.yield(Outgoing(data: data, sent: { continuation.resume() }))
-            if case .enqueued = result { return }
-            continuation.resume()
+        let (sent, sentSignal) = AsyncStream.makeStream(of: Void.self)
+        let result = outbox.yield(Outgoing(data: data, sent: { sentSignal.finish() }))
+        guard case .enqueued = result else { return }
+        let clock = clock
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { for await _ in sent {} }
+            group.addTask { try? await clock.sleep(for: timeout) }
+            await group.next()
+            group.cancelAll()
         }
     }
 
@@ -249,29 +258,37 @@ public final class SessionLink {
         }
     }
 
-    /// Makes the workout point at `entry.keep`, then deletes what `entry` says to. The entry stays
-    /// until every delete has gone through. A workout deleted from History in the meantime leaves
-    /// nothing for the watch's Health workout to belong to, so that goes too.
+    /// Makes the workout point at `entry.keep`, then deletes what `entry` says to, the iPhone's own
+    /// copy first. If a delete fails the entry stays, holding only the ids still to delete.
+    ///
+    /// A workout that isn't in `context` is gone for one of two reasons. If the person deleted it in
+    /// History, nothing is left for the watch's Health workout to belong to, so that goes too. If it
+    /// isn't known to be deleted, `context` may simply not be the store it lives in, so nothing is
+    /// deleted and the entry waits.
     private func resolve(
         _ entry: PendingHealthDeletes.Entry, with health: (any HealthService)?, in context: ModelContext
     ) async {
         let workoutID = entry.workoutID
         let descriptor = FetchDescriptor<Workout>(predicate: #Predicate { $0.id == workoutID })
         var doomed = [UUID]()
+        var keepsRemain = true
         if let workout = try? context.fetch(descriptor).first {
             let current = workout.healthKitWorkoutID
             guard current == nil || current == entry.keep || current == entry.remove else {
                 pending.remove(entry)
                 return
             }
-            if current != entry.keep {
-                workout.healthKitWorkoutID = entry.keep
+            if let keep = entry.keep, current != keep {
+                workout.healthKitWorkoutID = keep
                 try? context.save()
             }
+            doomed = entry.remove.map { [$0] } ?? []
         } else {
-            doomed.append(entry.keep)
+            guard pending.wasDeleted(workoutID) else { return }
+            doomed = [entry.remove, entry.keep].compactMap { $0 }
+            keepsRemain = false
         }
-        doomed.append(contentsOf: entry.remove.map { [$0] } ?? [])
+        var failed = Set<UUID>()
         if !doomed.isEmpty {
             guard let health else { return }
             for id in doomed {
@@ -280,11 +297,20 @@ public final class SessionLink {
                 } catch {
                     Self.logger.notice(
                         "Couldn't delete a Health workout: \(String(describing: error), privacy: .public)")
-                    return
+                    failed.insert(id)
                 }
             }
         }
-        pending.remove(entry)
+        guard !failed.isEmpty else {
+            pending.remove(entry)
+            pending.forgetDeleted(workoutID)
+            return
+        }
+        let keep = entry.keep.flatMap { keepsRemain || failed.contains($0) ? $0 : nil }
+        pending.replace(
+            entry,
+            with: PendingHealthDeletes.Entry(
+                workoutID: workoutID, keep: keep, remove: entry.remove.flatMap { failed.contains($0) ? $0 : nil }))
     }
 
     private func post(_ message: SessionMessage) {

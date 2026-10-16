@@ -87,11 +87,14 @@ public enum WorkoutLog {
     }
 
     /// Deletes a workout and everything in it, rebuilds the records of every exercise it had,
-    /// and returns the Health workout to remove, if Transmute wrote one.
+    /// and returns the Health workout to remove, if Transmute wrote one. The deletion is noted in
+    /// `defaults`, so a Health workout the watch reports later for it is removed too.
     @discardableResult
-    public static func delete(_ workout: Workout, in context: ModelContext, library: ExerciseLibrary = .bundled)
-        throws -> UUID?
-    {
+    public static func delete(
+        _ workout: Workout, in context: ModelContext, library: ExerciseLibrary = .bundled,
+        defaults: UserDefaults = .standard
+    ) throws -> UUID? {
+        let workoutID = workout.id
         let exerciseIDs = Set(workout.orderedExercises.map(\.exerciseID))
         let healthID = workout.healthKitWorkoutID
         context.delete(workout)
@@ -100,6 +103,7 @@ public enum WorkoutLog {
             _ = try book.recompute(exerciseID: exerciseID)
         }
         try context.save()
+        PendingHealthDeletes(defaults: defaults).markDeleted(workoutID)
         return healthID
     }
 

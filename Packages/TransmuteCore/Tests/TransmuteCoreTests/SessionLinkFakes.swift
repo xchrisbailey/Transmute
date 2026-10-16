@@ -40,6 +40,8 @@ final class FakeHealth: HealthService, @unchecked Sendable {
     private var holds = false
     private var deleteFailures = false
     private var deleteCount = 0
+    private var failingIDs: Set<UUID> = []
+    private var deleteLog: [UUID] = []
 
     var isAvailable: Bool { true }
     var canSaveBodyweight: Bool { true }
@@ -69,6 +71,12 @@ final class FakeHealth: HealthService, @unchecked Sendable {
 
     /// How many times `deleteWorkout` was called.
     var deleteAttempts: Int { lock.withLock { deleteCount } }
+
+    /// Every id `deleteWorkout` was called with, in order.
+    var deleteAttemptIDs: [UUID] { lock.withLock { deleteLog } }
+
+    /// Makes `deleteWorkout` throw for these ids, and only these, until it's called with none.
+    func failDeletes(of ids: Set<UUID>) { lock.withLock { failingIDs = ids } }
 
     /// Makes `deleteWorkout` throw until it's turned off.
     func failDeletes(_ fails: Bool) { lock.withLock { deleteFailures = fails } }
@@ -108,8 +116,12 @@ final class FakeHealth: HealthService, @unchecked Sendable {
     }
 
     func deleteWorkout(id: UUID) async throws {
-        lock.withLock { deleteCount += 1 }
-        if lock.withLock({ deleteFailures }) { throw HealthServiceError.notAuthorized }
+        let fails = lock.withLock {
+            deleteCount += 1
+            deleteLog.append(id)
+            return deleteFailures || failingIDs.contains(id)
+        }
+        if fails { throw HealthServiceError.notAuthorized }
         lock.withLock { _ = stored.remove(id) }
     }
 }
@@ -199,6 +211,15 @@ final class LinkRig {
         Task { await phone.run() }
     }
 
+    /// A workout the iPhone owns and has finished, as it is when the watch starts to answer.
+    func finishedOnPhone() throws -> Workout {
+        let workout = try session()
+        phone.own(workout, in: context)
+        WorkoutSession.finish(workout, at: now.addingTimeInterval(600))
+        phone.publish()
+        return workout
+    }
+
     func session() throws -> Workout {
         let (_, plan) = SampleData.insert(into: context, now: now)
         try context.save()
@@ -220,5 +241,32 @@ final class LinkRig {
         let bpm = Double(beats)
         watch.sendHeartRate(bpm)
         await settle { phone.remoteHeartRate == bpm }
+    }
+}
+
+/// A channel whose `send` never returns until `release()`, as when the iPhone is out of reach.
+@MainActor
+@Observable
+final class StuckWorkout: LiveWorkout {
+    let state = LiveWorkoutState.running
+    let heartRate: Double? = nil
+    let averageHeartRate: Double? = nil
+    let activeEnergyKcal: Double? = nil
+    var isMirroring = true
+    let incoming = AsyncStream<Data> { _ in }
+    private var held: CheckedContinuation<Void, Never>?
+
+    func start(activity: HealthActivity, at date: Date) async throws {}
+    func pause() {}
+    func resume() {}
+    func send(_ data: Data) async {
+        await withCheckedContinuation { held = $0 }
+    }
+    func finish(workoutID: UUID, title: String, at date: Date) async throws -> UUID? { nil }
+    func discard() async {}
+
+    func release() {
+        held?.resume()
+        held = nil
     }
 }
