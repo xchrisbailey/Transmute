@@ -25,13 +25,18 @@ public enum DataTransfer {
     /// history yet; otherwise they're recomputed from the merged sets. A plan stays active only
     /// if the store has no active plan already.
     ///
+    /// A workout that comes back under an id the person had deleted is no longer deleted, so its
+    /// tombstone in `defaults` goes.
+    ///
     /// Throws `DataTransferError` for a file that isn't a readable backup, and the store's own
     /// error if saving fails. Nothing is kept when it throws.
     @discardableResult
-    public static func importBackup(_ data: Data, into context: ModelContext) throws -> ImportSummary {
+    public static func importBackup(
+        _ data: Data, into context: ModelContext, defaults: UserDefaults = .standard
+    ) throws -> ImportSummary {
         let backup = try Backup(data: data)
         return try rollingBack(context) {
-            var restore = BackupRestore(backup: backup, context: context)
+            var restore = BackupRestore(backup: backup, context: context, defaults: defaults)
             return try restore.run()
         }
     }

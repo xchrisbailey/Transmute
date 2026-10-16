@@ -48,6 +48,15 @@ struct SessionLinkPendingDeleteTests {
         await relaunched.retryPendingDeletes(with: health, in: context)
     }
 
+    func fetch(_ id: UUID) throws -> Workout? {
+        try context.fetch(FetchDescriptor<Workout>(predicate: #Predicate { $0.id == id })).first
+    }
+
+    /// A backup of the store as it is now, to restore the workout from once it's deleted.
+    func backup() throws -> Data {
+        try DataTransfer.exportBackup(from: context)
+    }
+
     @Test(.timeLimit(.minutes(1))) func aLaunchOnAStoreWithoutTheWorkoutLeavesBothHealthWorkoutsAlone() async throws {
         let health = FakeHealth()
         let left = try await pendingAfterFailedDelete(health)
@@ -114,5 +123,26 @@ struct SessionLinkPendingDeleteTests {
         #expect(health.workouts == [phonesID])
         #expect(pending.entries == [.init(workoutID: workout.id, keep: nil, remove: phonesID)])
         #expect(pending.wasDeleted(workout.id))
+    }
+
+    @Test(.timeLimit(.minutes(1))) func aRestoredWorkoutIsNoLongerDeletedAndKeepsTheWatchsCopyOnAFallbackLaunch() async throws {
+        let health = FakeHealth()
+        let left = try await pendingAfterFailedDelete(health)
+        let (workoutID, phonesID, watchID) = (left.workout.id, left.phonesID, left.watchID)
+        let saved = try backup()
+        try WorkoutLog.delete(left.workout, in: context, defaults: defaults)
+        #expect(pending.wasDeleted(workoutID))
+
+        try DataTransfer.importBackup(saved, into: context, defaults: defaults)
+
+        #expect(try fetch(workoutID)?.healthKitWorkoutID == watchID)
+        #expect(!pending.wasDeleted(workoutID))
+
+        // The next launch falls back to an empty store, which doesn't have the workout.
+        let fallback = try TransmuteStore.makeTestContainer()
+        await relaunch(with: health, in: fallback.mainContext)
+
+        #expect(health.workouts == [phonesID, watchID])
+        #expect(try fetch(workoutID)?.healthKitWorkoutID == watchID)
     }
 }
