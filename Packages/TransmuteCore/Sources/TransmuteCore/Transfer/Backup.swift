@@ -21,8 +21,10 @@ import Foundation
 /// the two relationships that cross the tree are written as references: a workout's plan day
 /// (`PlanDayRef`) and a record's set (`SetRef`).
 ///
-/// These types are the format. Changing a key's name or meaning needs a new `formatVersion`;
-/// adding an optional key doesn't, because missing keys decode as `nil`.
+/// These types are the format. Changing a key's name or meaning needs a new `formatVersion`.
+/// Adding a key doesn't: a missing top-level key decodes as `nil` (or empty, for the lists), and
+/// a missing member of `profile.schedule`, `profile.progression` or `profile.preferences` keeps
+/// its default.
 struct Backup: Codable, Equatable {
     /// The version this build writes, and the newest it reads.
     static let currentFormatVersion = 1
