@@ -35,7 +35,7 @@ public enum PlannerInstructions {
         case .lookupTool:
             "Search it with the findExercises tool and use the exact ids it returns."
         case .offeredList:
-            "Choose only from the exercises the prompt offers and use their exact ids."
+            "When the prompt lists exercises, use only those and their exact ids."
         }
     }
 
