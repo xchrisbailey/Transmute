@@ -178,4 +178,33 @@ public enum SampleData {
         try container.mainContext.save()
         return container
     }
+
+    /// An empty in-memory container for `#Preview`, which can't throw.
+    @MainActor
+    public static func emptyPreviewContainer() -> ModelContainer {
+        do {
+            return try TransmuteStore.makeContainer(.inMemory)
+        } catch {
+            fatalError("Preview fixture: could not build an in-memory container: \(error)")
+        }
+    }
+
+    /// The sample store for `#Preview`, which can't throw, with its profile and plan.
+    @MainActor
+    public static func previewFixture() -> PreviewFixture {
+        let container = emptyPreviewContainer()
+        let (profile, plan) = insert(into: container.mainContext)
+        do {
+            try container.mainContext.save()
+        } catch {
+            fatalError("Preview fixture: could not save the sample data: \(error)")
+        }
+        return PreviewFixture(container: container, profile: profile, plan: plan)
+    }
+
+    public struct PreviewFixture {
+        public let container: ModelContainer
+        public let profile: Profile
+        public let plan: Plan
+    }
 }

@@ -157,11 +157,9 @@ struct CloudSection: View {
 }
 
 #Preview {
-    // swiftlint:disable:next force_try
-    let container = try! TransmuteStore.makeContainer(.inMemory)
-    return Form {
+    Form {
         HealthSections()
         CloudSection()
     }
-    .modelContainer(container)
+    .modelContainer(SampleData.emptyPreviewContainer())
 }

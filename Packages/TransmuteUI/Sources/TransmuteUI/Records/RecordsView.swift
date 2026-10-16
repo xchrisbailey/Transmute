@@ -136,7 +136,7 @@ private struct BestRow: View {
 }
 
 #Preview {
-    let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
+    let container = SampleData.previewFixture().container
     try? RecordBook(context: container.mainContext).recomputeAll()
     return NavigationStack {
         RecordsView(since: .now.addingTimeInterval(-14 * 86_400), units: Units(system: .metric))

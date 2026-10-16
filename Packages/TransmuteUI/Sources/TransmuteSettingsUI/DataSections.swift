@@ -215,7 +215,7 @@ struct DeleteSection: View {
 }
 
 #Preview {
-    let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
+    let container = SampleData.previewFixture().container
     return Form {
         PrivacySection()
         TransferSections(profile: nil)

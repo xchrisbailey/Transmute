@@ -189,20 +189,16 @@ private struct SettingsPickerStyle: ViewModifier {
 }
 
 #Preview("iPhone") {
-    let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
-    // swiftlint:disable:next force_try
-    let profile = try! container.mainContext.fetch(FetchDescriptor<Profile>()).first!
+    let fixture = SampleData.previewFixture()
     return NavigationStack {
-        SettingsView(profile: profile, service: PreviewIntelligenceService())
+        SettingsView(profile: fixture.profile, service: PreviewIntelligenceService())
     }
-    .modelContainer(container)
+    .modelContainer(fixture.container)
 }
 
 #Preview("No profile yet") {
-    // swiftlint:disable:next force_try
-    let container = try! TransmuteStore.makeContainer(.inMemory)
-    return NavigationStack {
+    NavigationStack {
         SettingsView(profile: nil, service: PreviewIntelligenceService())
     }
-    .modelContainer(container)
+    .modelContainer(SampleData.emptyPreviewContainer())
 }

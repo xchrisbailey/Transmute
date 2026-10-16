@@ -232,7 +232,7 @@ struct DistilledDayRow: View {
 }
 
 #Preview {
-    let container = try! TransmuteStore.makeContainer(.inMemory)  // swiftlint:disable:this force_try
+    let container = SampleData.emptyPreviewContainer()
     let profile = SampleData.profile()
     container.mainContext.insert(profile)
     return NavigationStack {
