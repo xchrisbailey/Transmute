@@ -47,39 +47,28 @@ struct ModelTests {
         #expect(ContextBudget.onDevice.fits(promptTokens: tokens))
     }
 
-    @Test(.evaluates(SessionSketchEvaluation()))
-    func sessionSketchesRespectEveryPerson() async throws {
+    @Test(.evaluates(DayDraftEvaluation()))
+    func dayDraftsRespectEveryPerson() async throws {
         let result = EvaluationContext.current.result
         #expect(!result.errors.hasFailures, "\(result.errors)\n\(result.detailed)")
-        for metric in SessionSketchEvaluation.metrics {
+        for metric in DayDraftEvaluation.metrics {
             let passRate = result.aggregateValue(.mean(of: metric))
             #expect(passRate >= 0.8, "\(metric.name) passed \(passRate)")
         }
     }
 }
 
-/// One training session, sketched. The evaluation's stand-in for a plan day until #9 brings
-/// the full plan schema.
-@Generable
-struct SessionSketch: Codable, Sendable {
-    @Guide(description: "A short name for the session's focus.")
-    var focus: String
-
-    @Guide(description: "Exercise ids from the list, in the order they are done.", .count(4...7))
-    var exerciseIDs: [String]
-}
-
 struct BriefSample: SampleProtocol {
     var name: String
     var brief: TrainingBrief
     var forbiddenPatterns: Set<MovementPattern>
-    var expected: SessionSketch? { nil }
+    var expected: DayDraft? { nil }
     var input: String { name }
 }
 
-/// The evaluation: for each person, sketch a session and check the schema held, every id is
-/// real, the kit fits, limitations are respected and nothing repeats.
-struct SessionSketchEvaluation: Evaluation {
+/// The evaluation: for each person, write a full-body day the way `PlanBrewer` does and check the
+/// schema held, every id is real, the kit fits, limitations are respected and nothing repeats.
+struct DayDraftEvaluation: Evaluation {
     static let validIDs = Metric("validIDs")
     static let equipmentFits = Metric("equipmentFits")
     static let limitationsRespected = Metric("limitationsRespected")
@@ -95,28 +84,23 @@ struct SessionSketchEvaluation: Evaluation {
             })
     }
 
-    func subject(from sample: BriefSample) async throws -> ModelSubject<SessionSketch> {
+    func subject(from sample: BriefSample) async throws -> ModelSubject<DayDraft> {
         let brief = sample.brief
-        let candidates = ExerciseCandidates(scope: brief.exerciseScope)
-        let request = IntelligenceRequest(
-            instructions: PlannerInstructions.make(experience: brief.experience, exercises: .offeredList),
-            prompt: """
-                Sketch the first training session of a plan for this person.
-
-                \(brief.promptDescription)
-
-                Choose exercises from this list:
-                \(candidates.promptList)
-                """,
-            allowedValues: candidates.constraint, maximumResponseTokens: 600)
-        let sketch = try await FoundationModelsService(settings: IntelligenceSettings())
-            .respond(request, generating: SessionSketch.self)
-        return ModelSubject(value: sketch)
+        let brewer = PlanBrewer(service: PreviewIntelligenceService())
+        let spec = PlanBrewer.DaySpec(
+            phase: PlanPhase(name: "Build", focus: "Base", firstWeek: 1, lastWeek: 3),
+            outline: .init(focus: "Full body", kind: DayKind.fullBody.rawValue, intensity: "moderate"),
+            weekday: 1, kind: .fullBody)
+        let request = brewer.dayRequest(
+            brief, spec: spec, offered: DayShortlist.candidates(for: .fullBody, brief: brief))
+        let draft = try await FoundationModelsService(settings: IntelligenceSettings())
+            .respond(request, generating: DayDraft.self)
+        return ModelSubject(value: draft)
     }
 
     var evaluators: Evaluators {
         Evaluator<BriefSample> { _, subject in
-            let unknown = subject.value.exerciseIDs.filter { ExerciseLibrary.bundled.exercise(id: $0) == nil }
+            let unknown = ids(subject).filter { ExerciseLibrary.bundled.exercise(id: $0) == nil }
             return unknown.isEmpty ? Self.validIDs.passing() : Self.validIDs.failing(rationale: "\(unknown)")
         }
         Evaluator<BriefSample> { sample, subject in
@@ -129,7 +113,7 @@ struct SessionSketchEvaluation: Evaluation {
                 ? Self.limitationsRespected.passing() : Self.limitationsRespected.failing(rationale: "\(broken)")
         }
         Evaluator<BriefSample> { _, subject in
-            let ids = subject.value.exerciseIDs
+            let ids = ids(subject)
             return Set(ids).count == ids.count ? Self.variety.passing() : Self.variety.failing(rationale: "\(ids)")
         }
     }
@@ -140,7 +124,11 @@ struct SessionSketchEvaluation: Evaluation {
         }
     }
 
-    private func exercises(_ subject: ModelSubject<SessionSketch>) -> [LibraryExercise] {
-        subject.value.exerciseIDs.compactMap(ExerciseLibrary.bundled.exercise(id:))
+    private func ids(_ subject: ModelSubject<DayDraft>) -> [String] {
+        subject.value.exercises.map(\.exerciseID)
+    }
+
+    private func exercises(_ subject: ModelSubject<DayDraft>) -> [LibraryExercise] {
+        ids(subject).compactMap(ExerciseLibrary.bundled.exercise(id:))
     }
 }
