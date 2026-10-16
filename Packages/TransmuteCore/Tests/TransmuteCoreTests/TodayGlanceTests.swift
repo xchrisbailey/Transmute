@@ -14,7 +14,7 @@ struct TodayGlanceTests {
     let imperial = Units(system: .imperial, locale: Locale(identifier: "en_US"))
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     /// The sample plan with three weeks logged. Week 4, this week, has sessions on Monday,

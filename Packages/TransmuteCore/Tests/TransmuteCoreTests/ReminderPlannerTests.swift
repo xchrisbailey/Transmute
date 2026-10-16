@@ -17,7 +17,7 @@ struct ReminderPlannerTests {
     let nudgeOnly = ReminderSettings(nudgesAfterMissedDay: true)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     /// Monday 5 October 2026, the first day of the plan.

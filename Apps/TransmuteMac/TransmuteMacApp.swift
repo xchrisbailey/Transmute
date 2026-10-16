@@ -13,6 +13,7 @@ struct TransmuteMacApp: App {
     @AppStorage(Appearance.defaultsKey) private var appearance = Appearance.system
 
     init() {
+        WidgetReload.listen()
         container.mainContext.undoManager = UndoManager()
         // From launch: a tapped reminder is delivered as the app opens.
         ReminderTaps.shared.listen()
@@ -24,7 +25,7 @@ struct TransmuteMacApp: App {
             RootView()
                 .frame(minWidth: 900, idealWidth: 1180, minHeight: 600, idealHeight: 760)
                 .appearance(appearance)
-                .reloadsWidgets()
+                .reloadsWidgetsOnLeavingForeground()
                 .indexesSpotlight()
                 // A widget's link comes to the window that's open rather than a new one.
                 .handlesExternalEvents(preferring: ["*"], allowing: ["*"])

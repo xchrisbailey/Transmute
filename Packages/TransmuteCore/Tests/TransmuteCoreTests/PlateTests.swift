@@ -169,7 +169,7 @@ struct PlateTests {
     }
 
     @MainActor @Test func profileStoresPlatesAndKeepsTheBarInSync() throws {
-        let container = try TransmuteStore.makeContainer(.inMemory)
+        let container = try TransmuteStore.makeTestContainer()
         let profile = Profile()
         container.mainContext.insert(profile)
         var draft = ProfileDraft(profile, locale: Locale(identifier: "en_US"))

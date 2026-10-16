@@ -14,7 +14,7 @@ struct ProgressionModelTests {
     var context: ModelContext { container.mainContext }
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
         plan.phases = [
             PlanPhase(name: "Build", focus: "", firstWeek: 1, lastWeek: 3),
             PlanPhase(name: "Deload", focus: "", firstWeek: 4, lastWeek: 4, isDeload: true),

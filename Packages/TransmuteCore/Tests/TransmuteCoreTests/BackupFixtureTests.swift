@@ -12,7 +12,7 @@ struct BackupFixtureTests {
     var context: ModelContext { container.mainContext }
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     private func fixture() throws -> Data {
@@ -141,7 +141,7 @@ struct BackupFixtureTests {
         context.insert(profile)
         let data = try DataTransfer.exportBackup(from: context)
 
-        let other = try TransmuteStore.makeContainer(.inMemory)
+        let other = try TransmuteStore.makeTestContainer()
         try DataTransfer.importBackup(data, into: other.mainContext)
         let restored = try #require(try Profile.canonical(in: other.mainContext))
         #expect(restored.id == profile.id)

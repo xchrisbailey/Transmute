@@ -188,7 +188,7 @@ final class LinkRig {
     private var beats = 0
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
         ends = (LoopbackWorkout(), LoopbackWorkout())
         ends.watch.peer = ends.phone
         ends.phone.peer = ends.watch

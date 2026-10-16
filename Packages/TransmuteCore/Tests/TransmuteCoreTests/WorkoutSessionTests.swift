@@ -12,7 +12,7 @@ struct WorkoutSessionTests {
     let calendar = Calendar(identifier: .iso8601)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     /// The sample plan with three weeks logged, and this week's Monday session.

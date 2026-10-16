@@ -53,7 +53,7 @@
         private func incrementPicker(_ region: BodyRegion, label: LocalizedStringResource) -> some View {
             Picker(selection: increment(region)) {
                 ForEach(ProgressionSettings.incrementChoices(for: system), id: \.self) { value in
-                    Text(verbatim: format(value))
+                    Text(verbatim: Units(system: system).formatIncrement(value))
                         .brandNumberFont(size: 17)
                         .tag(value)
                 }
@@ -96,13 +96,6 @@
             library.exercise(id: exerciseID)?.name
                 ?? customExercises.first { $0.exerciseID == exerciseID }?.name
                 ?? exerciseID
-        }
-
-        /// e.g. "1.25 kg" or "2.5 lb". Not `Units.formatWeight`, which rounds to the half.
-        private func format(_ value: Double) -> String {
-            let units = Units(system: system)
-            let number = value.formatted(.number.precision(.fractionLength(0...2)).locale(units.locale))
-            return "\(number) \(units.weightSymbol)"
         }
     }
 

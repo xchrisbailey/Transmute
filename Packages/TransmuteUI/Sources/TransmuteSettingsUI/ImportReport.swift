@@ -40,7 +40,7 @@ struct ImportReport: Equatable {
     }
 
     /// A failed import. Every case says that nothing was changed, which the importers promise.
-    init(_ error: any Error) {
+    init(_ error: DataTransferError) {
         succeeded = false
         heading = SettingsDataCopy.importFailed
         lines = [Self.message(for: error)]
@@ -54,15 +54,14 @@ struct ImportReport: Equatable {
         }
     }
 
-    static func message(for error: any Error) -> LocalizedStringResource {
+    static func message(for error: DataTransferError) -> LocalizedStringResource {
         switch error {
-        case DataTransferError.emptyFile: SettingsDataCopy.errorEmptyFile
-        case DataTransferError.unreadableBackup: SettingsDataCopy.errorUnreadableBackup
-        case DataTransferError.newerBackup: SettingsDataCopy.errorNewerBackup
-        case DataTransferError.unrecognizedCSV: SettingsDataCopy.errorUnrecognizedCSV
-        case ImportFailure.cantOpen: SettingsDataCopy.errorCantOpen
-        // Anything else came from saving to the store.
-        default: SettingsDataCopy.errorCantSave
+        case .emptyFile: SettingsDataCopy.errorEmptyFile
+        case .unreadableBackup: SettingsDataCopy.errorUnreadableBackup
+        case .newerBackup: SettingsDataCopy.errorNewerBackup
+        case .unrecognizedCSV: SettingsDataCopy.errorUnrecognizedCSV
+        case .cantOpen: SettingsDataCopy.errorCantOpen
+        case .saveFailed: SettingsDataCopy.errorCantSave
         }
     }
 

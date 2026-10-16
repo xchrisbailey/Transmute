@@ -70,14 +70,16 @@ struct VolumeChartCard: View {
         var id: String { "\(weekStart.timeIntervalSince1970)-\(group)" }
     }
 
+    /// The biggest groups the legend names; the rest are merged into one "other".
+    private static let legendLimit = 5
+
     private var segments: [Segment] {
         let weeks = ProgressStats.weeklyVolume(workouts, by: grouping)
-        // Keep the legend readable: the five biggest groups, and the rest together.
         var totals: [String: Double] = [:]
         for slice in weeks.flatMap(\.slices) {
             totals[slice.group, default: 0] += slice.kg
         }
-        let top = Set(totals.sorted { $0.value > $1.value }.prefix(5).map(\.key))
+        let top = Set(totals.sorted { $0.value > $1.value }.prefix(Self.legendLimit).map(\.key))
         let other = String(localized: ProgressCopy.other)
         return weeks.flatMap { week in
             var merged: [String: Double] = [:]

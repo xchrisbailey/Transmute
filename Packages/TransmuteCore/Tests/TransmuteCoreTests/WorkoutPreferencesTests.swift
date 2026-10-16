@@ -67,9 +67,11 @@ struct WorkoutPreferencesTests {
         let chosen = WorkoutPreferences(
             workingRestSeconds: 180, restSound: false, autoStartRest: false, showRPE: true, warmUpSets: false)
         func open() throws -> ModelContainer {
-            try ModelContainer(
+            let container = try ModelContainer(
                 for: TransmuteStore.schema, migrationPlan: TransmuteMigrationPlan.self,
                 configurations: ModelConfiguration(schema: TransmuteStore.schema, url: url, cloudKitDatabase: .none))
+            container.mainContext.autosaveEnabled = false
+            return container
         }
         do {
             let container = try open()

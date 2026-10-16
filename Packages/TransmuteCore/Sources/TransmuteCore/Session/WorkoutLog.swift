@@ -111,13 +111,15 @@ public enum WorkoutLog {
         public var id: PersistentIdentifier { workout.persistentModelID }
     }
 
-    /// Every finished session of an exercise, newest first, with its logged working sets.
-    public static func history(of exerciseID: String, in context: ModelContext) throws -> [ExerciseEntry] {
-        let descriptor = FetchDescriptor<LoggedExercise>(predicate: #Predicate { $0.exerciseID == exerciseID })
-        return try context.fetch(descriptor)
-            .compactMap { logged -> ExerciseEntry? in
-                guard let workout = logged.workout, workout.endedAt != nil else { return nil }
-                let sets = logged.orderedSets.filter(\.isCompleted)
+    /// Every finished session of an exercise among `workouts`, newest first, with its logged
+    /// working sets.
+    public static func history(of exerciseID: String, in workouts: [Workout]) -> [ExerciseEntry] {
+        workouts
+            .filter { $0.endedAt != nil }
+            .compactMap { workout -> ExerciseEntry? in
+                let sets = workout.orderedExercises.filter { $0.exerciseID == exerciseID }
+                    .flatMap(\.orderedSets)
+                    .filter(\.isCompleted)
                 guard !sets.isEmpty else { return nil }
                 let best = sets.filter { !$0.isWarmUp }
                     .compactMap { set in set.weightKg.flatMap { OneRepMax.estimate(weightKg: $0, reps: set.reps ?? 0) }

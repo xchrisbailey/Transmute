@@ -13,7 +13,7 @@ struct BodyweightLogTests {
     let imperial = Units(system: .imperial, locale: Locale(identifier: "en_US"))
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     func profile() throws -> Profile {

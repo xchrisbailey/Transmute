@@ -11,7 +11,7 @@ struct WorkoutLogTests {
     let now = Date(timeIntervalSince1970: 1_790_000_000)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     func sample() throws -> [Workout] {
@@ -104,11 +104,27 @@ struct WorkoutLogTests {
     }
 
     @Test func exerciseHistoryTracksTheEstimatedMax() throws {
-        _ = try sample()
-        let history = try WorkoutLog.history(of: "back-squat", in: context)
+        let all = try sample()
+        let history = WorkoutLog.history(of: "back-squat", in: all)
         #expect(history.count == 3)
         #expect(history[0].workout.startedAt > history[1].workout.startedAt)
         let best = try #require(history[0].estimatedOneRepMaxKg)
         #expect(abs(best - 94.5 * (1 + 5.0 / 30)) < 1e-9)
+    }
+
+    @Test func exerciseHistoryComesFromTheWorkoutsItIsGivenAndSkipsOneInProgress() throws {
+        let all = try sample()
+        let running = WorkoutSession.startAdHoc(title: "Still going", at: now, in: context)
+        let squat = LoggedExercise(exerciseID: "back-squat", order: 0)
+        squat.workout = running
+        let set = LoggedSet(order: 0, weightKg: 200, reps: 5)
+        set.complete(at: now)
+        set.exercise = squat
+        context.insert(squat)
+        context.insert(set)
+
+        #expect(WorkoutLog.history(of: "back-squat", in: all + [running]).count == 3)
+        #expect(WorkoutLog.history(of: "back-squat", in: []).isEmpty)
+        #expect(WorkoutLog.history(of: "back-squat", in: all.filter { $0.title == "Upper and rotation" }).isEmpty)
     }
 }

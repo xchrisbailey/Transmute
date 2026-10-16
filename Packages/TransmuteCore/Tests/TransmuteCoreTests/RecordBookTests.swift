@@ -12,7 +12,7 @@ struct RecordBookTests {
     let day = Date(timeIntervalSince1970: 1_790_000_000)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     /// A finished workout `daysAgo` before `day` with one exercise and these sets.

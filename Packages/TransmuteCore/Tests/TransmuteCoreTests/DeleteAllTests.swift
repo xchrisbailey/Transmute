@@ -10,7 +10,7 @@ struct DeleteAllTests {
     var context: ModelContext { container.mainContext }
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     private func count<Model: PersistentModel>(_ model: Model.Type, in context: ModelContext) throws -> Int {

@@ -6,7 +6,7 @@ import TransmuteCore
 public enum SessionTeardown {
     /// Call it before the workouts are deleted, while the link still knows which one it owns.
     @MainActor
-    public static func run(link: SessionLink?) async {
+    public static func endActiveWorkout(link: SessionLink?) async {
         SessionActivity().end()
         link?.discarded()
         await link?.live.discard()

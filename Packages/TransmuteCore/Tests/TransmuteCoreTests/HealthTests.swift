@@ -10,7 +10,7 @@ struct HealthTests {
     let library = ExerciseLibrary.bundled
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     func exercises(_ ids: String...) -> [LibraryExercise] {
