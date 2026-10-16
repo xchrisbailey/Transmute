@@ -2,15 +2,15 @@
 
 ## Problem Statement
 
-The codebase carries about 2,000 comment blocks. An audit at `d9dbad2` found that about 1,100 of them only restate the code next to them, record ticket history, narrate test steps, or have gone stale. About 85 more apologise for a workaround in our own code: a name that hides what a symbol does, an Optional or Int that secretly carries meaning, a magic number, copied logic kept in sync by hand, or a view that owns work it outlives.
+The codebase carries about 2,000 comment blocks. An audit at `d9dbad2` found that about 1,100 of them only restate the code next to them, record ticket history, narrate test steps, or have gone stale. About 85 more apologise for a workaround in our own code: a name that hides what a symbol does, an Optional or Int that secretly carries meaning, a magic number, or copied logic kept in sync by hand.
 
 The audit also turned up defects that the comments were covering for:
 
 - The brew and rework prompts tell the model to call `findExercises`, but those requests pass no tools.
 - `IntelligenceDebugView` compiles into Release builds.
-- The iPhone's mirrored session bar may stay on the rest view after rest ends.
-- Delete-all runs in a `Task` owned by a view that disappears while it runs.
 - Two test fixtures name the wrong weekday.
+- Plan weeks are counted two ways. `PlanEditor.week(of:)` counts 7-day blocks from the start date, while Progress, the digest and the week glance count ISO Mondays. A plan that starts mid-week shows different weeks on Today and Progress.
+- Two unsorted profile fetches (`TodayGlance`, `WorkoutEntity`) can pick a different profile from the rest of the app after a sync duplicate.
 - `PlaceholderRoot` and `ContextBudget` have no production callers.
 
 A reader can't tell which comments matter, and the ones that apologise keep the workaround alive.
@@ -41,6 +41,13 @@ A comment stays only when it is one of these:
 ### What gets refactored
 
 Each refactor ticket names the comment and the symbol. The comment goes in the same change as the refactor. The delete-pass tickets leave those comments alone, so the coder doing the refactor still sees what it is for.
+
+### Decisions
+
+- A plan week starts on the ISO Monday of the week containing the plan's start date. Every screen counts weeks this way (#79).
+- When the iPhone owns a workout and the watch records it to Health, a `nil` ID from the watch ends the wait and the iPhone saves its own. If the watch's ID arrives after the iPhone saved, the iPhone deletes its own Health workout and adopts the watch's (#83).
+- Stored shapes don't change outside SchemaV2. That covers `Codable` attributes such as `PlateInventory` and the backup format, as well as the model schema.
+- The two suspected defects in the mirrored rest bar (#70) and delete-all (#71) were checked and closed. The comments that explain them stay.
 
 ### Out of scope until SchemaV2
 
