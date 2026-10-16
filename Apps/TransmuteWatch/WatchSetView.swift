@@ -27,11 +27,13 @@ struct WatchSetView: View {
             units: units)
     }
 
-    /// The crown's binding writes only when the wearer turns it; `select` sets `crown` directly.
+    /// The crown's binding writes only when the wearer turns it; `select` sets `crown` directly,
+    /// and a value equal to that write is not a turn.
     private var turn: Binding<Double> {
         Binding(
             get: { crown },
             set: { turned in
+                guard turned != crown else { return }
                 crown = turned
                 values = dial.setting(focus, to: turned, in: values)
             })
