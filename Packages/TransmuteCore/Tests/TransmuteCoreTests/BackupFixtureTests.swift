@@ -84,6 +84,80 @@ struct BackupFixtureTests {
         #expect(workouts.allSatisfy { $0.planDay == nil })
     }
 
+    @Test func everyProfileSettingKeepsItsOwnKey() throws {
+        let profile = Profile()
+        profile.id = UUID()
+        profile.createdAt = Date(timeIntervalSince1970: 1_700_000_000)
+        profile.heightCm = 181
+        profile.birthYear = 1985
+        profile.sex = .male
+        profile.experience = .advanced
+        profile.sports = ["tennis"]
+        profile.goalText = "Serve harder"
+        profile.goalTags = [.power]
+        profile.schedule = Schedule(daysPerWeek: 5, sessionMinutes: 45, weeks: 6)
+        profile.equipment = [.kettlebell]
+        profile.limitations = "Left knee"
+        profile.limitationAreas = [.knee]
+        profile.progression = ProgressionSettings(upperBodyKg: 2, heldExerciseIDs: ["back-squat"])
+        profile.knownLifts = [KnownLift(exerciseID: "bench-press", weightKg: 80, reps: 5)]
+        profile.barbellKg = 15
+        profile.plates = PlateInventory(.home, system: .imperial)
+        profile.unitSystem = .imperial
+        profile.weightUnit = .metric
+        profile.heightUnit = .imperial
+        profile.distanceUnit = .metric
+        profile.preferences.workingRestSeconds = 95
+        context.insert(profile)
+
+        let data = try DataTransfer.exportBackup(from: context)
+        let json = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        let written = try #require(json["profile"] as? [String: Any])
+        #expect(written["heightCm"] as? Double == 181)
+        #expect(written["birthYear"] as? Int == 1985)
+        #expect(written["sex"] as? String == "male")
+        #expect(written["experience"] as? String == "advanced")
+        #expect(written["sports"] as? [String] == ["tennis"])
+        #expect(written["goalText"] as? String == "Serve harder")
+        #expect(written["goalTags"] as? [String] == ["power"])
+        #expect(written["equipment"] as? [String] == ["kettlebell"])
+        #expect(written["limitations"] as? String == "Left knee")
+        #expect(written["limitationAreas"] as? [String] == ["knee"])
+        #expect(written["barbellKg"] as? Double == 15)
+        #expect(written["unitSystem"] as? String == "imperial")
+        #expect(written["weightUnit"] as? String == "metric")
+        #expect(written["heightUnit"] as? String == "imperial")
+        #expect(written["distanceUnit"] as? String == "metric")
+        #expect(Set(written.keys).isSuperset(of: ["id", "createdAt", "schedule", "progression", "knownLifts"]))
+        #expect(Set(written.keys).isSuperset(of: ["plates", "preferences", "bodyweights"]))
+
+        let other = try TransmuteStore.makeContainer(.inMemory)
+        try DataTransfer.importBackup(data, into: other.mainContext)
+        let restored = try #require(try Profile.canonical(in: other.mainContext))
+        #expect(restored.id == profile.id)
+        #expect(restored.createdAt == profile.createdAt)
+        #expect(restored.heightCm == 181)
+        #expect(restored.birthYear == 1985)
+        #expect(restored.sex == .male)
+        #expect(restored.experience == .advanced)
+        #expect(restored.sports == ["tennis"])
+        #expect(restored.goalText == "Serve harder")
+        #expect(restored.goalTags == [.power])
+        #expect(restored.schedule == profile.schedule)
+        #expect(restored.equipment == [.kettlebell])
+        #expect(restored.limitations == "Left knee")
+        #expect(restored.limitationAreas == [.knee])
+        #expect(restored.progression == profile.progression)
+        #expect(restored.knownLifts == profile.knownLifts)
+        #expect(restored.barbellKg == 15)
+        #expect(restored.plates == profile.plates)
+        #expect(restored.unitSystem == .imperial)
+        #expect(restored.weightUnit == .metric)
+        #expect(restored.heightUnit == .imperial)
+        #expect(restored.distanceUnit == .metric)
+        #expect(restored.preferences == profile.preferences)
+    }
+
     private func deleteHistory() throws {
         for record in try context.fetch(FetchDescriptor<PersonalRecord>()) { context.delete(record) }
         for workout in try context.fetch(FetchDescriptor<Workout>()) { context.delete(workout) }
