@@ -73,6 +73,28 @@ struct WeekSummaryTests {
         #expect(WeekSummaryWriter.template(WeekSummaryInput(sessionsDone: 1, sessionsPlanned: 0)).lines.count == 2)
     }
 
+    @Test func numberLiteralsKeepTheirSeparators() {
+        #expect(
+            WeekSummaryWriter.numberLiterals(in: "Lifted 8,420 kg, up 6% from 92.5 and 3 sets")
+                == ["8,420", "6", "92.5", "3"])
+        #expect(WeekSummaryWriter.numberLiterals(in: "No digits here").isEmpty)
+    }
+
+    @Test func templateDropsLinesInPriorityOrder() {
+        var week = Self.strongWeek
+        week.stalled = ["Overhead press"]
+        week.records = ["A"]
+        let kept = WeekSummaryWriter.template(week).lines
+        #expect(kept.count == WeekSummaryWriter.maxLines)
+        #expect(
+            WeekSummaryWriter.SummaryLine.allCases == [.adherence, .records, .stalled, .wentUp, .volume, .streak])
+        #expect(!kept.contains { $0.contains("Total volume") }, "Volume goes before the lines above it")
+        #expect(!kept.contains(WeekSummaryCopy.streak(weeks: 5)), "The streak goes first")
+        #expect(kept.contains { $0.contains("Moving up") })
+        #expect(kept.contains { $0.contains("Overhead press") })
+        #expect(kept.contains { $0.contains("New record") })
+    }
+
     @Test func modelWritesTheSummaryWhenAvailable() async {
         let summary = await WeekSummaryWriter(service: PreviewIntelligenceService()).write(Self.stalledWeek)
         #expect(summary.isFromAI)

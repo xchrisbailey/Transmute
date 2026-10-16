@@ -47,7 +47,6 @@ struct MacShell: View {
     @State private var beginsWorkout = false
     /// Set by Open workout and Spotlight: the log selects this workout.
     @State private var openedWorkout: UUID?
-    private let router = DeepLinkRouter.shared
     @State private var showsRebrew = false
     @State private var showsProfile = false
     @FocusState private var searchIsFocused: Bool
@@ -70,10 +69,7 @@ struct MacShell: View {
         .onOpenURL { url in
             if let link = DeepLink(url: url) { follow(link) }
         }
-        // An App Intent's link, which may have been waiting since before the window.
-        .onChange(of: router.pending, initial: true) {
-            if let link = router.take() { follow(link) }
-        }
+        .followsDeepLinks { follow($0) }
         .trainingReminders(plan: plan) { section = .today }
         .sheet(isPresented: $showsProfile) {
             NavigationStack {

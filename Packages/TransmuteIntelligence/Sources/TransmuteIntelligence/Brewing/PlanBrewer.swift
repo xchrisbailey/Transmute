@@ -27,9 +27,14 @@ public struct PlanBrewer: Sendable {
         var outline: PlanBlueprint.DayOutline
         var weekday: Weekday
         var kind: DayKind
-        /// Earlier days this week, e.g. "Monday: Back squat, Bench press".
-        var earlier: [String] = []
+        var earlier: [EarlierDay] = []
         var beforeMatch = false
+    }
+
+    /// A day already written this week, so the next one can vary its exercises.
+    struct EarlierDay {
+        var weekday: Weekday
+        var exercises: [String]
     }
 
     public func brew(_ brief: TrainingBrief, units: UnitSystem) -> AsyncThrowingStream<Progress, any Error> {
@@ -66,9 +71,7 @@ public struct PlanBrewer: Sendable {
                     phase: phase, outline: slot.outline, weekday: slot.weekday,
                     kind: PlanAssembler.kind(of: slot.outline),
                     beforeMatch: assembler.isBeforeHardCommitment(slot.weekday))
-                spec.earlier = week.map { day in
-                    "\(TrainingBrief.weekdayName(day.weekday)): \(names(day.exercises).joined(separator: ", "))"
-                }
+                spec.earlier = week.map { EarlierDay(weekday: $0.weekday, exercises: names($0.exercises)) }
                 let used = Set(week.flatMap { $0.exercises.map(\.exerciseID) })
                 let day = try await writeDay(spec, brief: brief, assembler: assembler, excluding: used, report: report)
                 report(.distilled(phase: phase, focus: day.focus, exercises: names(day.exercises)))
@@ -79,7 +82,6 @@ public struct PlanBrewer: Sendable {
         return assembler.assemble(blueprint: blueprint, phases: phases, templates: templates)
     }
 
-    /// Writes and checks one day. A day that comes back short after the checks gets one more try.
     func writeDay(
         _ spec: DaySpec, brief: TrainingBrief, assembler: PlanAssembler, excluding used: Set<String>,
         report: (Progress) -> Void
@@ -90,6 +92,8 @@ public struct PlanBrewer: Sendable {
             report: report)
     }
 
+    /// Writes and checks one day. While it has too few exercises after the checks, asks again, up
+    /// to `attemptsPerDay` times, and keeps the fullest result.
     func writeDay(
         _ spec: DaySpec, brief: TrainingBrief, assembler: PlanAssembler, request: IntelligenceRequest,
         report: (Progress) -> Void
@@ -99,7 +103,7 @@ public struct PlanBrewer: Sendable {
         var best = TemplateDay(
             weekday: spec.weekday, focus: spec.outline.focus, why: "", kind: spec.kind, exercises: [])
         let enough = max(2, exerciseCount(brief, kind: spec.kind) - 2)
-        for _ in 0..<2 where best.exercises.count < enough {
+        for _ in 0..<Self.attemptsPerDay where best.exercises.count < enough {
             let draft = try await distill(request, spec: spec, report: report)
             let built = assembler.templateDay(draft, kind: spec.kind, offered: offered)
             if !built.report.dropped.isEmpty || !built.report.swapped.isEmpty {
@@ -167,7 +171,10 @@ public struct PlanBrewer: Sendable {
         ]
         if spec.beforeMatch { lines.append("Tomorrow is a hard match or practice, so keep the legs fresh.") }
         if !spec.earlier.isEmpty {
-            lines.append("Earlier this week: \(spec.earlier.joined(separator: "; ")). Vary the exercises.")
+            let earlier = spec.earlier.map {
+                "\(TrainingBrief.weekdayName($0.weekday)): \($0.exercises.joined(separator: ", "))"
+            }
+            lines.append("Earlier this week: \(earlier.joined(separator: "; ")). Vary the exercises.")
         }
         lines.append(
             brief.experience == .beginner
@@ -193,6 +200,8 @@ public struct PlanBrewer: Sendable {
         if brief.experience == .beginner || kind == .mobility || kind == .conditioning { count = min(count, 5) }
         return min(max(count, 3), 8)
     }
+
+    static let attemptsPerDay = 2
 
     private static let logger = Logger(subsystem: "computer.srcery.transmute", category: "brew")
 }

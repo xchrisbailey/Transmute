@@ -17,30 +17,7 @@ struct TransmuteApp: App {
         // Also from launch: a tapped reminder is delivered as the app opens.
         ReminderTaps.shared.listen()
         container.mainContext.undoManager = UndoManager()
-        #if DEBUG
-            // `-initCloudKitSchema` creates every record type and field in CloudKit's Development
-            // environment, then the app carries on launching.
-            if ProcessInfo.processInfo.arguments.contains("-initCloudKitSchema") {
-                TransmuteStore.initializeCloudKitSchemaForLaunch()
-            }
-            // `-seedSample` fills an empty store with the sample tennis player, plan and log.
-            let context = container.mainContext
-            if ProcessInfo.processInfo.arguments.contains("-seedSample"),
-                (try? context.fetchCount(FetchDescriptor<Profile>())) == 0
-            {
-                let (profile, plan) = SampleData.insert(into: context)
-                // `-sampleSession` also starts this week's first session, to see the session screen.
-                if ProcessInfo.processInfo.arguments.contains("-sampleSession"),
-                    let day = plan.orderedDays.first(where: { $0.week == PlanEditor.week(of: plan) })
-                {
-                    let workout = WorkoutSession.start(day, profile: profile, in: context)
-                    if let first = WorkoutSession.currentSet(of: workout) {
-                        WorkoutSession.complete(first, in: workout)
-                    }
-                }
-                try? context.save()
-            }
-        #endif
+        DebugLaunch.apply(to: container)
     }
     let health = HealthKitService()
     /// The iPhone's end of a workout the watch is recording, and the link that keeps the two
