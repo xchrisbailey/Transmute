@@ -37,7 +37,8 @@ struct LaunchArgumentTests {
         let id = UUID(uuidString: "0F8FAD5B-D9CB-469F-A165-70867728950E")!
         #expect(LaunchArgument.deepLink(in: ["Transmute", "-openLink", "transmute://plan"]) == .plan)
         #expect(LaunchArgument.deepLink(in: ["Transmute", "-openLink", "transmute://log/\(id)"]) == .workout(id))
-        #expect(LaunchArgument.deepLink(in: ["Transmute", "-seedSample", "-openLink", "transmute://today/begin"]) == .beginToday)
+        let withSeed = ["Transmute", "-seedSample", "-openLink", "transmute://today/begin"]
+        #expect(LaunchArgument.deepLink(in: withSeed) == .beginToday)
     }
 
     @Test func openLinkIgnoresAMissingOrUnknownLink() {
