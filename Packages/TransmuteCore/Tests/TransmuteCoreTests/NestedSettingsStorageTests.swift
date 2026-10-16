@@ -89,7 +89,8 @@ struct NestedSettingsStorageTests {
         #expect(progression == Self.progression)
         #expect(try json(progression) == Self.progressionJSON)
         for (stored, expected) in [
-            (Self.defaultPreferencesJSON, Self.defaultPreferences), (Self.chosenPreferencesJSON, Self.chosenPreferences),
+            (Self.defaultPreferencesJSON, Self.defaultPreferences),
+            (Self.chosenPreferencesJSON, Self.chosenPreferences),
         ] {
             let preferences = try JSONDecoder().decode(WorkoutPreferences.self, from: Data(stored.utf8))
             #expect(preferences == expected)
@@ -108,7 +109,8 @@ struct NestedSettingsStorageTests {
         #expect(progression == Self.progression)
         #expect(try plist(progression) == Self.progressionPlist)
         for (stored, expected) in [
-            (Self.defaultPreferencesPlist, Self.defaultPreferences), (Self.chosenPreferencesPlist, Self.chosenPreferences),
+            (Self.defaultPreferencesPlist, Self.defaultPreferences),
+            (Self.chosenPreferencesPlist, Self.chosenPreferences),
         ] {
             let preferences = try decode(WorkoutPreferences.self, stored)
             #expect(preferences == expected)
