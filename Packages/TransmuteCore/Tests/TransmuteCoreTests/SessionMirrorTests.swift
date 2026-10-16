@@ -123,6 +123,33 @@ struct SessionMirrorTests {
         #expect(workout.startedOn == nil)
     }
 
+    @Test func anUnmarkedWorkoutBelongsToEveryDevice() throws {
+        let workout = try session()
+        #expect(workout.isOwned(by: .phone))
+        #expect(workout.isOwned(by: .watch))
+        #expect(workout.isOwned(by: .mac))
+    }
+
+    @Test func aMarkedWorkoutIsMirroredOnTheOtherDevice() throws {
+        let workout = try session()
+        workout.startedOn = .watch
+        #expect(workout.isOwned(by: .watch))
+        #expect(!workout.isOwned(by: .phone))
+        #expect(!workout.isOwned(by: .mac))
+        workout.startedOn = .phone
+        #expect(workout.isOwned(by: .phone))
+        #expect(workout.isOwned(by: .mac))
+        #expect(!workout.isOwned(by: .watch))
+    }
+
+    @Test func claimingMarksOnlyAnUnmarkedWorkout() throws {
+        let workout = try session()
+        #expect(workout.claim(for: .watch))
+        #expect(workout.startedOn == .watch)
+        #expect(!workout.claim(for: .phone))
+        #expect(workout.startedOn == .watch)
+    }
+
     @Test func loggingASetWritesItsValuesAndStartsTheRest() throws {
         let workout = try session()
         let values = SetValues(weightKg: 42.5, reps: 7, rpe: 8)

@@ -76,7 +76,7 @@ struct WatchRootView: View {
     }
 
     private var watchOwnedWorkout: Workout? {
-        running.first { $0.startedOn != .phone }
+        running.first { $0.isOwned(by: .watch) }
     }
 
     private func start(_ day: PlanDay) {

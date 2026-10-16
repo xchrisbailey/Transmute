@@ -112,9 +112,7 @@ public struct TodayView: View {
         .background(Color.brand(\.base))
         .navigationTitle(Text(LogCopy.today))
         .onAppear {
-            // A workout still running at launch was cut off; pick it straight back up.
-            // One the watch is running stays the watch's: it shows up through the link.
-            if !didResume, let workout = running.first, workout.startedOn != .watch {
+            if !didResume, let workout = running.first, workout.isOwned(by: link?.device ?? .phone) {
                 didResume = true
                 open(workout)
             }
@@ -317,7 +315,7 @@ extension TodayView {
     /// mirror the session. Without a watch or Health access the workout runs as before.
     private func open(_ workout: Workout) {
         session = workout
-        guard let link, workout.startedOn != .watch else { return }
+        guard let link, workout.isOwned(by: link.device) else { return }
         link.own(workout, in: context, library: library)
         guard health.isAvailable, !link.live.isMirroring else { return }
         let exercises = workout.orderedExercises.compactMap { library.exercise(id: $0.exerciseID) }
