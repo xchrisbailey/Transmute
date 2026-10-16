@@ -23,3 +23,11 @@ identifier_name:
 
 nesting:
   type_level: 2
+
+custom_rules:
+  use_make_test_container:
+    name: "Use makeTestContainer()"
+    regex: 'makeContainer\(\s*\.inMemory\s*\)'
+    included: 'Packages/[^/]+/Tests/.*\.swift'
+    message: "use makeTestContainer() from TransmuteTestSupport: it turns autosave off, whose timer traps when a container is released on another thread"
+    severity: error

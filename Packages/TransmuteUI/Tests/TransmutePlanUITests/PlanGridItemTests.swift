@@ -12,7 +12,7 @@ struct PlanGridItemTests {
     let plan: Plan
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
         plan = SampleData.plan(startingOn: utc(2026, 9, 21))
         container.mainContext.insert(plan)
         try container.mainContext.save()

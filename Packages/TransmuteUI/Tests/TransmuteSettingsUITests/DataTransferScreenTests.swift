@@ -39,7 +39,7 @@ struct DataTransferScreenTests {
         let backup = try DataTransfer.exportBackup(from: source.mainContext)
         let csv = try DataTransfer.exportCSV(from: source.mainContext)
 
-        let fresh = try TransmuteStore.makeContainer(.inMemory)
+        let fresh = try TransmuteStore.makeTestContainer()
         let summary = try DataTransfer.importFile(backup, into: fresh.mainContext, fallbackUnits: .metric)
         #expect(summary.source == .backup)
         #expect(summary.profile == .added)

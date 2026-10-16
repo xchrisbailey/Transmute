@@ -16,7 +16,7 @@ struct BrewSessionTests {
     }
 
     @Test func brewsPreviewsAndKeepsAsTheOnlyActivePlan() async throws {
-        let container = try TransmuteStore.makeContainer(.inMemory)
+        let container = try TransmuteStore.makeTestContainer()
         let context = container.mainContext
         let (_, old) = SampleData.insert(into: context)
         try context.save()
