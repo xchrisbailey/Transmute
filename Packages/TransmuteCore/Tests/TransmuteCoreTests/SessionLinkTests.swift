@@ -40,7 +40,7 @@ struct SessionLinkTests {
     let ends: (watch: LoopbackWorkout, phone: LoopbackWorkout)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
         ends = (LoopbackWorkout(), LoopbackWorkout())
         ends.watch.peer = ends.phone
         ends.phone.peer = ends.watch

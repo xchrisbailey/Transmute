@@ -11,7 +11,7 @@ struct SessionPreferencesTests {
     let now = Date(timeIntervalSince1970: 1_790_000_000)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     /// A profile with a bar and kilo plates, and a day of squats at 100 kg then planks.

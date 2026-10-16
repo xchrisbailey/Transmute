@@ -13,7 +13,7 @@ struct SessionMessageTests {
     let first = SetRef(exerciseOrder: 0, setOrder: 0)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     func session() throws -> Workout {

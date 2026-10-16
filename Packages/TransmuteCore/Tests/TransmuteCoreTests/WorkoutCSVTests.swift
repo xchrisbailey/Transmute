@@ -10,7 +10,7 @@ struct WorkoutCSVTests {
     var context: ModelContext { container.mainContext }
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     @Test func exportsOneRowPerSet() throws {

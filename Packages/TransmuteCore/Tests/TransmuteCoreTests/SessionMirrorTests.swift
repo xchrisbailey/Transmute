@@ -12,7 +12,7 @@ struct SessionMirrorTests {
     let first = SetRef(exerciseOrder: 0, setOrder: 0)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     /// This week's Monday session from the sample plan, just started.

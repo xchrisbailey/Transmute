@@ -10,7 +10,7 @@ struct ProfileDraftTests {
     let usLocale = Locale(identifier: "en_US")
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     @Test func onlyHeightWeightAndDaysBlock() {

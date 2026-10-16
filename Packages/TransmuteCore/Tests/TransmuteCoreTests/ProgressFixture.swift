@@ -14,7 +14,7 @@ struct ProgressFixture {
     let monday: Date
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
         var calendar = Calendar(identifier: .iso8601)
         calendar.timeZone = TimeZone(identifier: "UTC")!
         self.calendar = calendar

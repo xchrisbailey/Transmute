@@ -12,7 +12,7 @@ struct PlanEditorTests {
     let start = Date(timeIntervalSince1970: 1_790_380_800)  // Saturday 2026-09-26, UTC.
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
         plan = SampleData.plan(startingOn: start)
         container.mainContext.insert(plan)
         try container.mainContext.save()

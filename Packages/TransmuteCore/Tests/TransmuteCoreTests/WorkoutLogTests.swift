@@ -11,7 +11,7 @@ struct WorkoutLogTests {
     let now = Date(timeIntervalSince1970: 1_790_000_000)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     func sample() throws -> [Workout] {

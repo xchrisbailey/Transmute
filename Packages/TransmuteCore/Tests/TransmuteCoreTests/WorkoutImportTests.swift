@@ -12,7 +12,7 @@ struct WorkoutImportTests {
     let utc = TimeZone(identifier: "UTC")!
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     static let strong = """
@@ -103,7 +103,7 @@ struct WorkoutImportTests {
         #expect(abs(try #require(bench.orderedSets[1].weightKg) - 80 / Units.poundsPerKilogram) < 1e-9)
 
         // A newer layout: semicolons, a unit column, a distance, and seconds for the duration.
-        let other = try TransmuteStore.makeContainer(.inMemory)
+        let other = try TransmuteStore.makeTestContainer()
         let newer = """
             Workout #;Date;Workout Name;Duration (sec);Exercise Name;Set Order;Weight;Weight Unit;Reps;RPE;Distance;Distance Unit;Seconds;Notes;Workout Notes
             1;2026-09-14 18:05:00;Mixed;1800;Bench Press (Dumbbell);1;62,5;lbs;10;;0;;0;;
