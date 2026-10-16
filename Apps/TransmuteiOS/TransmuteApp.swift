@@ -18,6 +18,10 @@ struct TransmuteApp: App {
         ReminderTaps.shared.listen()
         // Also from launch: an App Intent can save in a process that never opens a window.
         WidgetReload.listen()
+        // A Health delete that failed, or was cut short by a kill, is left in the link's pending list.
+        Task { [link, health, context = container.mainContext] in
+            await link.retryPendingDeletes(with: health, in: context)
+        }
         container.mainContext.undoManager = UndoManager()
         DebugLaunch.apply(to: container)
     }
