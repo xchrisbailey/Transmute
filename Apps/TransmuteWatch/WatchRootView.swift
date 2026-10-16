@@ -2,7 +2,6 @@ import SwiftData
 import SwiftUI
 import TransmuteCore
 import TransmuteUI
-import WidgetKit
 
 /// A workout left running, even by a relaunched app, opens straight back up.
 struct WatchRootView: View {
@@ -60,10 +59,6 @@ struct WatchRootView: View {
         .onChange(of: live.heartRate) { _, bpm in
             if let bpm { link.sendHeartRate(bpm) }
         }
-        .onChange(of: session?.snapshot) {
-            WidgetCenter.shared.reloadTimelines(ofKind: TodayGlance.watchWidgetKind)
-            WidgetCenter.shared.reloadTimelines(ofKind: TodayGlance.watchWeekWidgetKind)
-        }
         // Begin today's workout, from Siri or a shortcut. With a workout already on
         // screen, or nothing to start today, the watch just shows what it has.
         .followsDeepLinks { link in
@@ -76,7 +71,7 @@ struct WatchRootView: View {
     }
 
     private var watchOwnedWorkout: Workout? {
-        running.first { $0.startedOn != .phone }
+        running.first { $0.isOwned(by: .watch) }
     }
 
     private func start(_ day: PlanDay) {

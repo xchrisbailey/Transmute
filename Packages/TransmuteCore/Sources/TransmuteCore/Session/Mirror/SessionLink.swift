@@ -86,8 +86,7 @@ public final class SessionLink {
 
     /// Takes a running workout as this device's own, marks it so, and tells the other device.
     public func own(_ workout: Workout, in context: ModelContext, library: ExerciseLibrary = .bundled) {
-        if workout.startedOn == nil {
-            workout.startedOn = device
+        if workout.claim(for: device) {
             try? context.save()
         }
         owned = Owned(workout: workout, context: context, library: library)

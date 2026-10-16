@@ -27,6 +27,18 @@ struct WatchSetView: View {
             units: units)
     }
 
+    /// The crown's binding writes only when the wearer turns it; `select` sets `crown` directly,
+    /// and a value equal to that write is not a turn.
+    private var turn: Binding<Double> {
+        Binding(
+            get: { crown },
+            set: { turned in
+                guard turned != crown else { return }
+                crown = turned
+                values = dial.setting(focus, to: turned, in: values)
+            })
+    }
+
     private var range: ClosedRange<Double> {
         dial.range(for: focus)
     }
@@ -71,14 +83,9 @@ struct WatchSetView: View {
         .padding(.horizontal, 4)
         .focusable()
         .digitalCrownRotation(
-            $crown, from: range.lowerBound, through: range.upperBound, by: dial.step(for: focus, in: values),
+            turn, from: range.lowerBound, through: range.upperBound, by: dial.step(for: focus, in: values),
             sensitivity: .medium, isContinuous: false, isHapticFeedbackEnabled: true
         )
-        .onChange(of: crown) { _, shown in
-            // Focusing a field sets the crown to its value; only a real turn changes the set.
-            guard abs(shown - dial.value(of: focus, in: values)) > 0.000_1 else { return }
-            values = dial.setting(focus, to: shown, in: values)
-        }
         .onAppear {
             values = set.map(SetValues.init) ?? SetValues()
             select(dial.fields.first ?? .weight)

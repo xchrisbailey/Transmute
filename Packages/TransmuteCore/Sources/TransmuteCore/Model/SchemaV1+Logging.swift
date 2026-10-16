@@ -38,6 +38,23 @@ extension SchemaV1 {
             set { startedOnRaw = newValue?.rawValue }
         }
 
+        /// Whether `device` runs this workout, rather than mirroring another device's. A workout
+        /// nobody marked belongs to every device; the Mac counts as the iPhone.
+        public func isOwned(by device: SessionDevice) -> Bool {
+            switch device {
+            case .watch: startedOn != .phone && startedOn != .mac
+            case .phone, .mac: startedOn != .watch
+            }
+        }
+
+        /// Marks an unmarked workout as `device`'s. Returns whether it changed.
+        @discardableResult
+        public func claim(for device: SessionDevice) -> Bool {
+            guard startedOn == nil else { return false }
+            startedOn = device
+            return true
+        }
+
         public var orderedExercises: [LoggedExercise] {
             (exercises ?? []).sorted { $0.order < $1.order }
         }

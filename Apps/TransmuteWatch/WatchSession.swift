@@ -21,6 +21,12 @@ enum WatchLive {
 /// iPhone.
 @MainActor @Observable
 final class WatchSession: Identifiable {
+    /// Who runs the workout: this watch, which has it in its store, or the iPhone.
+    private enum Ownership {
+        case owned(Workout)
+        case mirrored
+    }
+
     let id: UUID
     /// Set once the workout is finished, for the summary.
     private(set) var summary: WorkoutSummary?
@@ -34,8 +40,7 @@ final class WatchSession: Identifiable {
     private(set) var isSavedToHealth = false
 
     let library: ExerciseLibrary
-    /// The workout in this watch's store, or `nil` when the iPhone is running it.
-    private let workout: Workout?
+    private let ownership: Ownership
     private let context: ModelContext
     private let health: any HealthService
     private var own: SessionSnapshot
@@ -46,7 +51,7 @@ final class WatchSession: Identifiable {
         live: WatchLiveWorkout = WatchLive.workout, health: any HealthService
     ) {
         id = workout.id
-        self.workout = workout
+        ownership = .owned(workout)
         self.context = context
         self.library = library
         self.live = live
@@ -65,7 +70,7 @@ final class WatchSession: Identifiable {
         link: SessionLink = WatchLive.link, live: WatchLiveWorkout = WatchLive.workout, health: any HealthService
     ) {
         id = snapshot.workoutID
-        workout = nil
+        ownership = .mirrored
         self.context = context
         self.library = library
         self.live = live
@@ -75,7 +80,7 @@ final class WatchSession: Identifiable {
     }
 
     var snapshot: SessionSnapshot {
-        if workout == nil, let mirrored = link.mirrored, mirrored.workoutID == id { return mirrored }
+        if case .mirrored = ownership, let mirrored = link.mirrored, mirrored.workoutID == id { return mirrored }
         return own
     }
 
@@ -91,7 +96,7 @@ final class WatchSession: Identifiable {
     }
 
     func perform(_ command: SessionCommand) {
-        guard let workout else {
+        guard case .owned(let workout) = ownership else {
             link.send(command)
             return
         }
@@ -110,7 +115,7 @@ final class WatchSession: Identifiable {
     /// The iPhone's session moved on. Finishing or discarding there ends the Health workout
     /// here, since the watch is the one recording it.
     func mirrorChanged() {
-        guard workout == nil, !isEnding else { return }
+        guard case .mirrored = ownership, !isEnding else { return }
         guard let mirrored = link.mirrored, mirrored.workoutID == id else {
             isEnding = true
             isDiscarded = true
@@ -134,7 +139,7 @@ final class WatchSession: Identifiable {
     }
 
     func close() {
-        if workout == nil { link.dismissMirrored() }
+        if case .mirrored = ownership { link.dismissMirrored() }
     }
 
     func confirmSuspicious() {
@@ -153,7 +158,7 @@ final class WatchSession: Identifiable {
     }
 
     private func applied(_ command: SessionCommand, _ outcome: SessionMirror.Outcome, fromPhone: Bool) {
-        guard let workout else { return }
+        guard case .owned(let workout) = ownership else { return }
         switch outcome {
         case .ignored:
             break
@@ -203,7 +208,8 @@ final class WatchSession: Identifiable {
     }
 
     private func set(at ref: SetRef) -> LoggedSet? {
-        workout?.orderedExercises.first { $0.order == ref.exerciseOrder }?
+        guard case .owned(let workout) = ownership else { return nil }
+        return workout.orderedExercises.first { $0.order == ref.exerciseOrder }?
             .orderedSets.first { $0.order == ref.setOrder }
     }
 }
