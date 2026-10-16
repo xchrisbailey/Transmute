@@ -25,7 +25,7 @@ extension WarmUpProbe {
     /// The request the debug screen sends.
     public static func request(focus: String, library: ExerciseLibrary = .bundled) -> IntelligenceRequest {
         IntelligenceRequest(
-            instructions: PlannerInstructions.make(experience: .beginner),
+            instructions: PlannerInstructions.make(experience: .beginner, exercises: .lookupTool),
             prompt: "Build a short warm-up of three moves before a session focused on \(focus).",
             tools: [ExerciseLookupTool(library: library, scope: ExerciseQuery(categories: [.mobility, .power]))],
             maximumResponseTokens: 400)

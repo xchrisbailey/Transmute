@@ -152,7 +152,7 @@ public struct PlanBrewer: Sendable {
         }
         lines.append("Split the weeks into phases that build towards the goal.")
         return IntelligenceRequest(
-            instructions: PlannerInstructions.make(experience: brief.experience),
+            instructions: PlannerInstructions.make(experience: brief.experience, exercises: .offeredList),
             prompt: lines.joined(separator: "\n"), arrayCounts: ["days": days.count], temperature: 0.6,
             maximumResponseTokens: 700)
     }
@@ -174,7 +174,7 @@ public struct PlanBrewer: Sendable {
                 ? "Use simple exercises and easy or steady effort."
                 : "Start with the most demanding exercise and finish with core or prehab work.")
         return IntelligenceRequest(
-            instructions: PlannerInstructions.make(experience: brief.experience),
+            instructions: PlannerInstructions.make(experience: brief.experience, exercises: .offeredList),
             prompt: """
                 \(lines.joined(separator: "\n"))
 

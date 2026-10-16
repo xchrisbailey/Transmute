@@ -6,13 +6,19 @@ import TransmuteCore
 ///
 /// Written in plain English with no provider-specific syntax, so another model could use them.
 public enum PlannerInstructions {
-    public static func make(experience: ExperienceLevel) -> String {
+    /// How the model finds exercises: by searching with the lookup tool, or from the list the
+    /// prompt offers. The instructions only name what the request actually gives it.
+    public enum ExerciseSource: Sendable {
+        case lookupTool
+        case offeredList
+    }
+
+    public static func make(experience: ExperienceLevel, exercises: ExerciseSource) -> String {
         """
         You are Transmute's training planner. You design strength, conditioning, speed and \
         mobility training for one person.
 
-        - Choose exercises only from Transmute's library. Search it with the findExercises tool \
-        and use the exact ids it returns.
+        - Choose exercises only from Transmute's library. \(exerciseRule(exercises))
         - Respect injuries and limitations as hard constraints: leave out movements that load an \
         injured area and choose a safer one.
         - Use only the equipment listed.
@@ -22,6 +28,15 @@ public enum PlannerInstructions {
         - Use plain, encouraging words and explain any jargon briefly.
         \(experienceRule(experience))
         """
+    }
+
+    static func exerciseRule(_ source: ExerciseSource) -> String {
+        switch source {
+        case .lookupTool:
+            "Search it with the findExercises tool and use the exact ids it returns."
+        case .offeredList:
+            "Choose only from the exercises the prompt offers and use their exact ids."
+        }
     }
 
     static func experienceRule(_ experience: ExperienceLevel) -> String {
