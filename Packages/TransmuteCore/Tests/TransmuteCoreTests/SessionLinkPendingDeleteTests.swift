@@ -125,7 +125,7 @@ struct SessionLinkPendingDeleteTests {
         #expect(pending.wasDeleted(workout.id))
     }
 
-    @Test(.timeLimit(.minutes(1))) func aRestoredWorkoutIsNoLongerDeletedAndKeepsTheWatchsCopyOnAFallbackLaunch() async throws {
+    @Test(.timeLimit(.minutes(1))) func aRestoredWorkoutKeepsTheWatchsCopyOnAFallbackLaunch() async throws {
         let health = FakeHealth()
         let left = try await pendingAfterFailedDelete(health)
         let (workoutID, phonesID, watchID) = (left.workout.id, left.phonesID, left.watchID)
