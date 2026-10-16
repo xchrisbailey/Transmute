@@ -108,15 +108,13 @@ struct AppearanceSection: View {
 }
 
 #Preview {
-    let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
-    // swiftlint:disable:next force_try
-    let profile = try! container.mainContext.fetch(FetchDescriptor<Profile>()).first!
+    let fixture = SampleData.previewFixture()
     return NavigationStack {
         Form {
-            UnitsSection(profile: profile)
-            EquipmentLinksSection(profile: profile)
+            UnitsSection(profile: fixture.profile)
+            EquipmentLinksSection(profile: fixture.profile)
             AppearanceSection()
         }
     }
-    .modelContainer(container)
+    .modelContainer(fixture.container)
 }

@@ -291,12 +291,10 @@ struct LogTableRow: Identifiable {
     }
 
     #Preview {
-        let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
-        // swiftlint:disable:next force_try
-        let profile = try! container.mainContext.fetch(FetchDescriptor<Profile>()).first!
+        let fixture = SampleData.previewFixture()
         return NavigationStack {
-            LogTableView(profile: profile, plan: nil)
+            LogTableView(profile: fixture.profile, plan: nil)
         }
-        .modelContainer(container)
+        .modelContainer(fixture.container)
     }
 #endif

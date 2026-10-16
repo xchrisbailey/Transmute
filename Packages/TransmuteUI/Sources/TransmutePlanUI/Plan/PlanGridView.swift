@@ -182,14 +182,11 @@ struct PlanGridWeekRow: View {
 }
 
 #Preview {
-    let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
-    let plan = try? container.mainContext.fetch(FetchDescriptor<Plan>()).first
-    let profile = try? container.mainContext.fetch(FetchDescriptor<Profile>()).first
+    let fixture = SampleData.previewFixture()
     return NavigationStack {
-        if let plan, let profile {
-            PlanGridView(plan: plan, profile: profile, service: PreviewIntelligenceService(), device: "Mac")
-        }
+        PlanGridView(
+            plan: fixture.plan, profile: fixture.profile, service: PreviewIntelligenceService(), device: "Mac")
     }
-    .modelContainer(container)
+    .modelContainer(fixture.container)
     .frame(minWidth: 900, minHeight: 600)
 }

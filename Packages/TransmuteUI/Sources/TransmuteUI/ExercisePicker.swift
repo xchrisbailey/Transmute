@@ -142,6 +142,6 @@ public struct ExerciseRow: View {
             ExercisePicker(initialQuery: ExerciseQuery(sports: ["tennis"])) { _ in }
                 .navigationTitle(Text(verbatim: "Swap exercise"))
         }
-        .modelContainer(try! SampleData.previewContainer())  // swiftlint:disable:this force_try
+        .modelContainer(SampleData.previewFixture().container)
     }
 #endif

@@ -325,6 +325,6 @@
 
     #Preview {
         OnboardingFlow { _, _ in }
-            .modelContainer(try! TransmuteStore.makeContainer(.inMemory))  // swiftlint:disable:this force_try
+            .modelContainer(SampleData.emptyPreviewContainer())
     }
 #endif

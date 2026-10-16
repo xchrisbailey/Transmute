@@ -100,13 +100,11 @@
     }
 
     #Preview {
-        let container = try! SampleData.previewContainer()  // swiftlint:disable:this force_try
-        // swiftlint:disable:next force_try
-        let profile = try! container.mainContext.fetch(FetchDescriptor<Profile>()).first!
-        profile.progression.setHeld(true, "back-squat")
+        let fixture = SampleData.previewFixture()
+        fixture.profile.progression.setHeld(true, "back-squat")
         return NavigationStack {
-            ProgressionSettingsView(profile: profile)
+            ProgressionSettingsView(profile: fixture.profile)
         }
-        .modelContainer(container)
+        .modelContainer(fixture.container)
     }
 #endif
