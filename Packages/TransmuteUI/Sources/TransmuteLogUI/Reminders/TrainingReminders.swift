@@ -37,7 +37,6 @@ public final class ReminderTaps: NSObject, UNUserNotificationCenterDelegate {
     }
 }
 
-/// Keeps the pending reminders in step with the plan, the log and the settings (#19).
 struct TrainingReminders: ViewModifier {
     let plan: Plan?
     let onOpen: () -> Void

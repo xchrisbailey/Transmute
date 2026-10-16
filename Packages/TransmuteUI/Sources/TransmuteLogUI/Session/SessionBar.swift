@@ -3,13 +3,11 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// The bar under the thumb: the rest countdown while resting, otherwise one big button that
-/// logs the current set, and Finish once every set is in.
 struct SessionBar: View {
     let workout: Workout
     let current: LoggedSet?
     let exerciseName: String?
-    /// Offers "Start rest" between sets, for when rest doesn't start by itself (#18).
+    /// Offers "Start rest" between sets, for when rest doesn't start by itself.
     var offersRest = false
     let onLog: () -> Void
     let onFinish: () -> Void
@@ -65,7 +63,6 @@ struct SessionBar: View {
         .background(.bar)
     }
 
-    /// "Start rest" with how long it will run, e.g. 1:30.
     private func startRestButton(_ seconds: TimeInterval) -> some View {
         Button {
             WorkoutSession.startRest(seconds, in: workout)
@@ -83,7 +80,6 @@ struct SessionBar: View {
     }
 }
 
-/// "Rest 1:48" in peach with a draining ring, and buttons to add, take away or skip.
 struct RestTimer: View {
     let workout: Workout
     let end: Date
@@ -140,8 +136,6 @@ struct RestTimer: View {
     }
 }
 
-/// A countdown for timed sets and intervals: work, then rest, round after round, with a
-/// buzz at each change. Checks the set off when the last round ends.
 struct TimedSet: View {
     let set: LoggedSet
     let rounds: Int
@@ -207,7 +201,6 @@ struct TimedSet: View {
     }
 }
 
-/// Where an interval timer is after some seconds: which round, work or rest, and time left.
 struct IntervalPhase: Equatable {
     var round: Int
     var isWork: Bool

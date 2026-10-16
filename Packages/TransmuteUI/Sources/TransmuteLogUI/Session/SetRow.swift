@@ -3,7 +3,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// The fields a set table shows, by how the exercise is measured.
 enum SetColumn: CaseIterable {
     case weight, reps, distance, time, rounds
 
@@ -27,7 +26,6 @@ enum SetColumn: CaseIterable {
         }
     }
 
-    /// What the field is called when a large-text row stacks and the header is gone.
     var name: LocalizedStringResource {
         switch self {
         case .weight: LogCopy.weight
@@ -61,7 +59,6 @@ enum SetColumn: CaseIterable {
     }
 }
 
-/// Set · kg/lb · Reps · ✓, over the rows of one exercise.
 struct SetTableHeader: View {
     let tracking: TrackingType
     let units: Units
@@ -83,8 +80,6 @@ struct SetTableHeader: View {
     }
 }
 
-/// One set: its numbers and a check. The current set is outlined in peach and done sets turn
-/// green. Tapping a row opens steppers and fields to change it before checking it off.
 struct SetRow: View {
     @Bindable var set: LoggedSet
     let number: Int
@@ -92,7 +87,6 @@ struct SetRow: View {
     let tracking: TrackingType
     let equipment: Set<Equipment>
     let units: Units
-    /// The bar and plates, for barbell work only.
     let plates: PlateInventory?
     let isCurrent: Bool
     let isEditing: Bool
@@ -103,7 +97,6 @@ struct SetRow: View {
 
     @Environment(\.dynamicTypeSize) private var typeSize
 
-    /// At accessibility sizes the columns can't share a line, so each field gets its own.
     private var stacks: Bool { typeSize.isAccessibilitySize }
 
     var body: some View {
@@ -151,7 +144,6 @@ struct SetRow: View {
         .listRowBackground(background)
     }
 
-    /// What the row shows and Voice Control and VoiceOver read, as one element.
     private var figures: some View {
         VStack(alignment: .leading, spacing: 6) {
             if stacks {
@@ -166,7 +158,6 @@ struct SetRow: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    /// Set · figures · check, lined up under the header.
     private var tabularFigures: some View {
         HStack {
             Text(verbatim: set.isWarmUp ? "W" : "\(number)")
@@ -183,7 +174,6 @@ struct SetRow: View {
         }
     }
 
-    /// The set's name and check, then each field under its own name. There's no header above.
     private var stackedFigures: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -213,7 +203,6 @@ struct SetRow: View {
         return "\(value) \(units.weightSymbol)"
     }
 
-    /// The lasting mark of a record: the toast's medal in gold, and what the record was.
     private var recordLine: some View {
         HStack(alignment: .firstTextBaseline, spacing: 6) {
             Image(systemName: "medal.fill")

@@ -3,8 +3,7 @@ import TransmuteIntelligence
 import TransmutePlanUI
 import TransmuteUI
 
-/// Apple Intelligence (#18): whether it's ready, where plans may be made, and what leaves the
-/// device. There's no switch for AI itself, since plans need it.
+/// There's no switch for AI itself, since plans need it.
 struct IntelligenceSection: View {
     @State private var status: IntelligenceStatus
     @AppStorage(IntelligenceSettings.routeKey) private var route = ModelRoute.onDeviceOnly

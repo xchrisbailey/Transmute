@@ -4,8 +4,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// An exercise in a grid card: name and one-line targets. Click to edit the targets; drag to
-/// reorder or move to another day, or use the menu.
 struct PlanGridExerciseRow: View {
     let planned: PlannedExercise
     let day: PlanDay
@@ -80,7 +78,6 @@ struct PlanGridExerciseRow: View {
         .accessibilityActions { actions }
     }
 
-    /// Everything a drag can do to an exercise, for the context menu and VoiceOver (#22).
     @ViewBuilder private var actions: some View {
         Button {
             showsTargets = true
@@ -123,8 +120,6 @@ struct PlanGridExerciseRow: View {
     }
 }
 
-/// The popover behind an exercise: how many sets, then the same target controls the day
-/// screen uses, applied to every set.
 struct PlanGridTargetsEditor: View {
     let planned: PlannedExercise
     let name: String

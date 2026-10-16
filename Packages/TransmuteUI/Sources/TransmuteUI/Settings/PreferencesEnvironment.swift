@@ -2,7 +2,7 @@ import SwiftUI
 import TransmuteCore
 
 extension EnvironmentValues {
-    /// Whether set rows and plan screens show RPE and %1RM (#18). Defaults to both, as in
+    /// Whether set rows and plan screens show RPE and %1RM. Defaults to both, as in
     /// previews; the apps set it from the profile with `workoutPreferences(of:)`.
     @Entry public var effortDisplay: EffortDisplay = .everything
 }

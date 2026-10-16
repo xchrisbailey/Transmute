@@ -3,7 +3,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// Estimated 1RM over time for one of the plan's key lifts, with records as gold points.
 struct MaxChartCard: View {
     let lifts: [String]
     let workouts: [Workout]
@@ -58,14 +57,12 @@ struct MaxChartCard: View {
     }
 }
 
-/// Weight lifted per week, stacked by kind of training or by muscle.
 struct VolumeChartCard: View {
     let workouts: [Workout]
     let units: Units
 
     @State private var grouping = ProgressStats.VolumeGrouping.category
 
-    /// One bar segment, with its legend name resolved.
     private struct Segment: Identifiable {
         let weekStart: Date
         let group: String
@@ -132,7 +129,6 @@ struct VolumeChartCard: View {
     }
 }
 
-/// Bodyweight entries, with a 7-day average through them.
 struct BodyweightChartCard: View {
     let points: [ProgressStats.BodyweightPoint]
     let units: Units
@@ -166,7 +162,6 @@ struct BodyweightChartCard: View {
     }
 }
 
-/// One conditioning exercise over time: rounds, pace, longest effort or most reps.
 struct ConditioningChartCard: View {
     let series: ProgressStats.ConditioningSeries
 
@@ -201,7 +196,6 @@ struct ConditioningChartCard: View {
     }
 }
 
-/// Sessions planned and done in each week of the plan so far.
 struct AdherenceChartCard: View {
     let weeks: [ProgressStats.WeekAdherence]
 
@@ -231,7 +225,6 @@ struct AdherenceChartCard: View {
 }
 
 extension View {
-    /// Geist Mono on a chart's axis numbers, like every other number in the app.
     func numberAxes() -> some View {
         chartYAxis {
             AxisMarks { _ in

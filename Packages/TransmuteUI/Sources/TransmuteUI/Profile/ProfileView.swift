@@ -3,8 +3,6 @@
     import SwiftUI
     import TransmuteCore
 
-    /// Everything from onboarding, editable later, plus bodyweight history from manual entries
-    /// and Health (#6, #7).
     public struct ProfileView: View {
         @Bindable var profile: Profile
         @Environment(\.modelContext) private var context
@@ -38,7 +36,7 @@
                 bodyweightHistory
             }
             .navigationTitle(Text(ProfileCopy.profile))
-            // Units and kit can change in Settings while this screen is open (#18); saving
+            // Units and kit can change in Settings while this screen is open; saving
             // here mustn't put the old ones back.
             .onChange(of: SettingsOwned(profile)) { _, owned in
                 owned.apply(to: &draft)

@@ -1,7 +1,5 @@
 import Foundation
 
-/// Strings for the parts of Settings that report on the system (#18): Apple Intelligence,
-/// Health and iCloud. All plain.
 enum SettingsStatusCopy {
     static let aiReady = LocalizedStringResource(
         "plain.settings.ai.ready",

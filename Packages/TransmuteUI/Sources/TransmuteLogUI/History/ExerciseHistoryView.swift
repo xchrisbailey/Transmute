@@ -4,8 +4,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// Every logged set for one exercise, newest session first, with the estimated 1RM over
-/// time for lifts that have one (shared with #16).
 struct ExerciseHistoryView: View {
     let exerciseID: String
     let name: String

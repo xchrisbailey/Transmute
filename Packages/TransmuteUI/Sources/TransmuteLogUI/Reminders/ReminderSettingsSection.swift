@@ -2,9 +2,6 @@ import SwiftUI
 import TransmuteCore
 import TransmuteUI
 
-/// The reminder switches, for a settings `Form` (#19): a reminder on training days at a chosen
-/// time, and a nudge after a missed day. Both start off. Turning one on asks for permission,
-/// and when the system says no, the section says so with a way to its settings.
 public struct ReminderSettingsSection: View {
     @State private var settings: ReminderSettings
     @State private var permission: ReminderPermission?

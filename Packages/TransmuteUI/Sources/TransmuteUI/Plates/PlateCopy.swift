@@ -1,8 +1,6 @@
 import Foundation
 import TransmuteCore
 
-/// Strings for the plate sheet and the bar and plates setup (#21). All plain: they're read
-/// mid-set.
 public enum PlateCopy {
     static let plates = LocalizedStringResource(
         "plain.plates.title", defaultValue: "Plates", bundle: .main,
@@ -72,8 +70,6 @@ public enum PlateCopy {
             "plain.plates.heavier", defaultValue: "Heavier: \(weight), \(plates)", bundle: .main,
             comment: "plain. Nearest loadable weight above; arguments are e.g. 102.5 kg and 25 · 15 · 1.25 per side.")
     }
-
-    // MARK: Setup
 
     public static let setup = LocalizedStringResource(
         "plain.plates.setup", defaultValue: "Bar and plates", bundle: .main,

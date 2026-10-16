@@ -1,10 +1,6 @@
 import Foundation
 
-/// Strings for training reminders (#19). All plain, and never about what was missed: the plan
-/// is simply still there (#22).
 enum ReminderCopy {
-    // MARK: Settings
-
     static let title = LocalizedStringResource(
         "plain.reminders.title", defaultValue: "Reminders", bundle: .main,
         comment: "plain. Heading of the reminder settings.")
@@ -44,8 +40,6 @@ enum ReminderCopy {
     static let openSettings = LocalizedStringResource(
         "plain.reminders.openSettings", defaultValue: "Open notification settings", bundle: .main,
         comment: "plain. Button that opens the system's notification settings for Transmute.")
-
-    // MARK: Notifications
 
     static func trainingDayTitle(_ session: String) -> LocalizedStringResource {
         LocalizedStringResource(

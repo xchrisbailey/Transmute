@@ -1,6 +1,5 @@
 import TransmuteCore
 
-/// What a set row reads from its model: whether the set holds a record, and which warm-up it is.
 extension LoggedSet {
     /// The records this set set. They stay when a later set beats them and go when an edit
     /// means the set was never a record, because `RecordBook` deletes their rows then.

@@ -4,8 +4,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// "Rework this day" (#10): a short note in, a reworked day out, shown as a before and after to
-/// use or throw away. Nothing changes until "Use this".
 public struct ReworkDaySheet: View {
     let day: PlanDay
     let plan: Plan
@@ -103,7 +101,6 @@ public struct ReworkDaySheet: View {
         }
     }
 
-    /// Before and after, each line marked kept, added or removed in words and icons (#22).
     private func diff(_ result: TemplateDay) -> some View {
         let before = day.orderedExercises.map(\.exerciseID)
         let after = result.exercises.map(\.exerciseID)

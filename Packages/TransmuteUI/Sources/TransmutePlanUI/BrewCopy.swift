@@ -1,7 +1,5 @@
 import Foundation
 
-/// Strings for brewing and reading a plan (#9, #10). Voice for brewing; plain for the
-/// disclaimer, errors and numbers (#3).
 public enum BrewCopy {
     public static let intro = LocalizedStringResource(
         "voice.brew.intro",

@@ -33,7 +33,6 @@ import Foundation
         }
     }
 #else
-    /// No Live Activities on the Mac.
     @MainActor
     final class SessionActivity {
         func update(title: String, state: SessionActivityAttributes.ContentState) {}

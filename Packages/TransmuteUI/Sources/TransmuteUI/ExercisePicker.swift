@@ -5,7 +5,7 @@ import TransmuteCore
 #if !os(watchOS)
     /// Search the exercise library, including the user's custom exercises, and pick one.
     ///
-    /// Feeds swapping an exercise in a plan (#10). Not on Apple Watch, which never edits plans. Filters start from `initialQuery`, so a caller
+    /// Feeds swapping an exercise in a plan. Not on Apple Watch, which never edits plans. Filters start from `initialQuery`, so a caller
     /// can open it already narrowed, e.g. to tennis work for a speed day.
     public struct ExercisePicker: View {
         let library: ExerciseLibrary
@@ -91,7 +91,6 @@ import TransmuteCore
             !query.categories.isEmpty || !query.equipment.isEmpty || !query.sports.isEmpty
         }
 
-        /// Binds a one-at-a-time menu choice to a set-valued filter.
         private func singleSelection<Value: Hashable>(_ keyPath: WritableKeyPath<ExerciseQuery, Set<Value>>) -> Binding<
             Value?
         > {
@@ -105,7 +104,6 @@ import TransmuteCore
 
 #endif
 
-/// One exercise in a list: name, then category and what it needs.
 public struct ExerciseRow: View {
     let exercise: LibraryExercise
 

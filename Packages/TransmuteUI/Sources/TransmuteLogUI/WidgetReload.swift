@@ -3,7 +3,7 @@ import SwiftUI
 import WidgetKit
 
 extension View {
-    /// Keeps the widgets current (#19). They read the store from disk, so their timelines are
+    /// Keeps the widgets current. They read the store from disk, so their timelines are
     /// reloaded each time it's saved: when a workout starts, a set is logged, a workout
     /// finishes or the plan changes. Leaving the foreground reloads them once more, for
     /// anything that synced in from another device meanwhile.

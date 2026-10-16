@@ -4,9 +4,6 @@ import TransmuteIntelligence
 import TransmutePlanUI
 import TransmuteUI
 
-/// "This week, distilled": a few sentences about the week, written on-device by the AI from
-/// the week's numbers, or from a template when the AI is off. Offers to rework the next
-/// session when lifts stalled.
 struct WeekSummaryCard: View {
     let digest: ProgressStats.WeekDigest
     let plan: Plan?
@@ -72,7 +69,6 @@ struct WeekSummaryCard: View {
             }
         }
         .task(id: input) {
-            // The template shows at once; the AI's version replaces it when it's ready.
             self.summary = WeekSummaryWriter.template(input)
             self.summary = await WeekSummaryWriter(service: service).write(input)
         }

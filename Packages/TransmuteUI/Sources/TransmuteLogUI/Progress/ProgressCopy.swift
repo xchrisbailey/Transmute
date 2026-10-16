@@ -1,7 +1,5 @@
 import Foundation
 
-/// Strings for Progress (#16). Titles and figures stay plain; the weekly summary's title and
-/// the streak use the voice (#3).
 public enum ProgressCopy {
     public static let title = LocalizedStringResource(
         "plain.progress.title", defaultValue: "Progress", bundle: .main,
@@ -10,8 +8,6 @@ public enum ProgressCopy {
     static let empty = LocalizedStringResource(
         "plain.progress.empty", defaultValue: "Log a workout and your progress shows up here.", bundle: .main,
         comment: "plain. Progress has nothing to chart yet.")
-
-    // MARK: Figures
 
     static let thisWeek = LocalizedStringResource(
         "plain.progress.thisWeek", defaultValue: "This week", bundle: .main,
@@ -55,8 +51,6 @@ public enum ProgressCopy {
         "plain.progress.estimatedMaxHelp",
         defaultValue: "The most you could likely lift once, worked out from your sets. Gold points are records.",
         bundle: .main, comment: "plain. Explains estimated 1RM under its chart, for a beginner.")
-
-    // MARK: Charts
 
     static let weeklyVolume = LocalizedStringResource(
         "plain.progress.weeklyVolume", defaultValue: "Weekly volume", bundle: .main,
@@ -114,8 +108,6 @@ public enum ProgressCopy {
         "plain.progress.mostReps", defaultValue: "Most reps in a set", bundle: .main,
         comment: "plain. Conditioning measure.")
 
-    // MARK: Adherence
-
     static let adherence = LocalizedStringResource(
         "plain.progress.adherence", defaultValue: "Planned and done", bundle: .main,
         comment: "plain. Chart title: sessions planned and done per week.")
@@ -138,8 +130,6 @@ public enum ProgressCopy {
         "plain.progress.streakHelp",
         defaultValue: "Weeks in a row with every planned session done. Lighter weeks count.", bundle: .main,
         comment: "plain. Explains the streak.")
-
-    // MARK: Summary
 
     static let reworkNextWeek = LocalizedStringResource(
         "voice.progress.reworkNextWeek", defaultValue: "Rework next week", bundle: .main,

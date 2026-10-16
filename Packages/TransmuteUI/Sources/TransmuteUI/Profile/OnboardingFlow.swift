@@ -4,7 +4,7 @@
     import TransmuteCore
 
     /// First launch: collects what a plan needs in a few short steps, then saves the profile
-    /// and hands off to brewing (#6). Only the body step blocks; the rest can be skipped.
+    /// and hands off to brewing. Only the body step blocks; the rest can be skipped.
     ///
     /// `notice` sits on the welcome step, for anything the person should know first, such as
     /// Apple Intelligence being off.
@@ -49,7 +49,6 @@
             }
         }
 
-        /// The steps this person sees: sport only when it's relevant.
         var steps: [Step] {
             Step.allCases.filter { $0 != .sport || draft.suggestsSport }
         }
@@ -155,7 +154,6 @@
             return steps[max(index - 1, 0)]
         }
 
-        /// Puts the step's defaults back and moves on.
         private func skip() {
             let defaults = ProfileDraft()
             switch step {

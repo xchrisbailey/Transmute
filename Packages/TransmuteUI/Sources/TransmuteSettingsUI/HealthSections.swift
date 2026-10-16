@@ -61,7 +61,7 @@ extension HealthAccessScope {
     }
 }
 
-/// Health access (#18), as far as Health lets an app know it: whether saving each kind of data
+/// Health access, as far as Health lets an app know it: whether saving each kind of data
 /// is allowed, and whether the person has been asked about reading. On the Mac, which has no
 /// Health, it says where the data comes from instead.
 struct HealthSections: View {
@@ -137,7 +137,6 @@ extension CloudSyncStatus {
     }
 }
 
-/// Whether this copy of Transmute syncs with iCloud, and if not, why (#18).
 struct CloudSection: View {
     @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var scenePhase

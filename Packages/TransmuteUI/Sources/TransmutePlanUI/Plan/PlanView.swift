@@ -4,8 +4,6 @@ import TransmuteCore
 import TransmuteIntelligence
 import TransmuteUI
 
-/// The active plan (#10): name, why, phases, then every week with its days. The current week
-/// starts open. Edits happen on each day; rebrew and earlier plans are in the toolbar.
 public struct PlanView: View {
     @Bindable var plan: Plan
     let profile: Profile
@@ -146,7 +144,7 @@ public struct PlanView: View {
     }
 }
 
-/// A small label in a capsule. Always text, so its meaning doesn't rest on colour (#22).
+/// A small label in a capsule. Always text, so its meaning doesn't rest on colour.
 struct Badge: View {
     let text: LocalizedStringResource
     let tint: Color
@@ -161,7 +159,6 @@ struct Badge: View {
     }
 }
 
-/// One day in the week list.
 struct PlanDayRow: View {
     let day: PlanDay
     let date: Date
@@ -199,7 +196,6 @@ struct PlanDayRow: View {
     }
 }
 
-/// Undo and redo for plan edits, backed by the model context's undo manager.
 struct UndoButtons: ToolbarContent {
     @Environment(\.modelContext) private var context
 

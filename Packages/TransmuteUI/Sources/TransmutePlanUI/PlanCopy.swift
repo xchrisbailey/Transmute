@@ -1,7 +1,5 @@
 import Foundation
 
-/// Strings for reading and editing a plan (#10). Plain throughout, except reworking and
-/// rebrewing, which use the voice (#3).
 public enum PlanCopy {
     static let thisWeek = LocalizedStringResource(
         "plain.plan.thisWeek", defaultValue: "This week", bundle: .main,

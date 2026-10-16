@@ -105,7 +105,7 @@
 
     struct EquipmentSection: View {
         @Binding var draft: ProfileDraft
-        /// On the Profile screen, a row to the full bar and plates setup (#21) stands in for the
+        /// On the Profile screen, a row to the full bar and plates setup stands in for the
         /// bar weight; onboarding keeps just the bar weight.
         var linksPlateSetup = false
         @State private var showsEverything = false

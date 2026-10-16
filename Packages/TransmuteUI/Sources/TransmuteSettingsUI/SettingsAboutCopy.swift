@@ -1,7 +1,7 @@
 import Foundation
 
-/// Strings for the About section of Settings (#58). All plain; the `voice.about` line is
-/// `Copy.about(version:)`, and the licence text itself is shown as the file has it.
+/// The `voice.about` line is `Copy.about(version:)`, and the licence text itself is shown as
+/// the file has it.
 enum SettingsAboutCopy {
     static let build = LocalizedStringResource(
         "plain.settings.about.build",

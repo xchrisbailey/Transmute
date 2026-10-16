@@ -4,12 +4,11 @@ import TransmuteCore
 
 @testable import TransmuteUI
 
-/// The "From your plan" sentences built from the engine's reasons.
 struct ProgressionCopyTests {
     static let locale = Locale(identifier: "en_US")
     static let calendar: Calendar = {
         var calendar = Calendar(identifier: .gregorian)
-        calendar.timeZone = TimeZone(identifier: "UTC")!  // swiftlint:disable:this force_unwrapping
+        calendar.timeZone = TimeZone(identifier: "UTC")!
         calendar.locale = locale
         return calendar
     }()

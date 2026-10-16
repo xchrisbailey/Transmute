@@ -35,7 +35,6 @@
         }
     }
 
-    /// Height in centimetres, or in feet and inches.
     struct HeightField: View {
         @Binding var cm: Double?
         let system: UnitSystem
@@ -105,7 +104,6 @@
     }
 
     extension View {
-        /// A numeric keypad on iPhone instead of a fiddly picker (#22).
         func numericEntry() -> some View {
             #if os(iOS)
                 keyboardType(.decimalPad)

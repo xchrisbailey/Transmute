@@ -1,15 +1,9 @@
 import Foundation
 import TransmuteCore
 
-/// What Siri and Shortcuts say for Transmute's App Intents (#19). Plain, short, and written to
-/// be heard: weights are said in full, "80 kilograms". A rest day or a quiet week is stated,
-/// never judged.
-///
 /// Intent and parameter titles have to be literals in the intents themselves; everything
 /// built at run time is here.
 public enum ShortcutCopy {
-    // MARK: What's my workout today?
-
     /// The whole answer, e.g. "Today is Lower A. First up: Bench press, 5 sets of 5 at 80
     /// kilograms. Sessions this week: 1 of 3."
     public static func today(_ glance: TodayGlance) -> String {
@@ -107,8 +101,6 @@ public enum ShortcutCopy {
                 bundle: .main, comment: "plain. Siri, sessions done out of planned, e.g. Sessions this week: 2 of 3."))
     }
 
-    // MARK: The snippet
-
     /// The snippet's heading: the session's name, "Rest day", or "Nothing planned".
     public static func title(_ glance: TodayGlance) -> String {
         switch glance.day {
@@ -147,8 +139,6 @@ public enum ShortcutCopy {
                 "plain.shortcut.today.weekFigure", defaultValue: "\(week.done) of \(week.planned) this week",
                 bundle: .main, comment: "plain. Siri's snippet, sessions done of planned, e.g. 1 of 3 this week."))
     }
-
-    // MARK: Begin today's workout
 
     /// What Begin today's workout does for a glance.
     public enum Begin: Equatable, Sendable {
@@ -194,8 +184,6 @@ public enum ShortcutCopy {
         }
     }
 
-    // MARK: Log bodyweight
-
     /// e.g. "Logged 79.4 kilograms." The weight comes from `BodyweightLog.spoken`.
     public static func logged(_ weight: String, inHealth: Bool) -> LocalizedStringResource {
         if inHealth {
@@ -224,8 +212,6 @@ public enum ShortcutCopy {
     public static let weightFailed = LocalizedStringResource(
         "plain.shortcut.weight.failed", defaultValue: "Couldn't save that. Try again in Transmute.", bundle: .main,
         comment: "plain. Siri, saving a bodyweight failed.")
-
-    // MARK: Workouts and plans in Spotlight
 
     /// Under a workout in Spotlight and Shortcuts: "6 exercises · 8,420 kg". The volume is left
     /// out when nothing was lifted.

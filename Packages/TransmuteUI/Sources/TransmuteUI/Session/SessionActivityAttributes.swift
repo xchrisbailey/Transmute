@@ -2,7 +2,7 @@
     import ActivityKit
     import Foundation
 
-    /// The Live Activity and Dynamic Island for a workout in progress (#11): the current
+    /// The Live Activity and Dynamic Island for a workout in progress: the current
     /// exercise and set, and the rest countdown. Shared by the app, which starts and updates
     /// it, and the widget extension, which draws it.
     public struct SessionActivityAttributes: ActivityAttributes {

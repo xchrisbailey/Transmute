@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// The type scale from the brand book (#3). Geist for words, Geist Mono for numbers.
+/// The type scale from the brand book. Geist for words, Geist Mono for numbers.
 public enum BrandTextStyle: CaseIterable, Sendable {
     /// Geist 28 / 800.
     case largeTitle

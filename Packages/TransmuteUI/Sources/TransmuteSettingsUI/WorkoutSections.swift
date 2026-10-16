@@ -4,8 +4,7 @@ import TransmuteCore
 import TransmutePlanUI
 import TransmuteUI
 
-/// How a workout runs and what its screens show (#18): rest times and alerts, RPE and % of
-/// 1RM, and warm-up sets. Changes save straight away and reach the session on its next set.
+/// Changes save straight away and reach the session on its next set.
 struct WorkoutSections: View {
     @Bindable var profile: Profile
     @Environment(\.modelContext) private var context

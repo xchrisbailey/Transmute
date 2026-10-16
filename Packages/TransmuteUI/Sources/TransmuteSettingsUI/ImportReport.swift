@@ -1,7 +1,7 @@
 import Foundation
 import TransmuteCore
 
-/// What an import did, in plain words for the screen (#18): a heading and one line per thing
+/// What an import did, in plain words for the screen: a heading and one line per thing
 /// worth saying. Counts of zero are left out.
 struct ImportReport: Equatable {
     var succeeded: Bool
@@ -28,7 +28,6 @@ struct ImportReport: Equatable {
             (summary.recordsAdded, SettingsDataCopy.recordsAdded),
         ]
         lines += counts.filter { $0.0 > 0 }.map { $0.1($0.0) }
-        // A CSV names the exercises it had to add; a backup only has a count.
         if !summary.unmatchedExerciseNames.isEmpty {
             lines.append(SettingsDataCopy.unmatchedNames(summary.unmatchedExerciseNames.formatted(.list(type: .and))))
         } else if summary.customExercises.added > 0 {
@@ -67,7 +66,6 @@ struct ImportReport: Equatable {
         }
     }
 
-    /// The whole report as one string, for VoiceOver to announce.
     var spoken: String {
         ([heading] + lines).map { String(localized: $0) }.joined(separator: " ")
     }
