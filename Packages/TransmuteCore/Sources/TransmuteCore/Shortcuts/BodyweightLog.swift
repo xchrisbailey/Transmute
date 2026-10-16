@@ -20,8 +20,7 @@ public enum BodyweightLog {
     {
         let kg = kilograms(weight)
         guard plausibleKg.contains(kg) else { return nil }
-        let profiles = try context.fetch(FetchDescriptor<Profile>(sortBy: [SortDescriptor(\.createdAt)]))
-        guard let profile = profiles.first else { return nil }
+        guard let profile = try Profile.canonical(in: context) else { return nil }
         let entry = BodyweightEntry(date: date, kg: kg)
         profile.bodyweights?.append(entry)
         try context.save()

@@ -122,8 +122,7 @@ extension PlateInventory {
     }
 
     public init(_ preset: Preset, system: UnitSystem) {
-        // Plates as (weight, pairs) in the unit, heaviest first.
-        let plates: [(Double, Int)]
+        let plates: [(weight: Double, pairs: Int)]
         let dumbbells: (step: Double, heaviest: Double)
         let machine: Double
         switch (preset, system) {
@@ -147,7 +146,7 @@ extension PlateInventory {
         let kg = { (value: Double) in system == .metric ? value : value / Units.poundsPerKilogram }
         self.init(
             system: system, bars: Self.defaultBars(system),
-            plates: plates.map { Plate(kg: kg($0.0), pairs: $0.1) },
+            plates: plates.map { Plate(kg: kg($0.weight), pairs: $0.pairs) },
             dumbbellStepKg: kg(dumbbells.step), heaviestDumbbellKg: kg(dumbbells.heaviest),
             machineStepKg: kg(machine))
     }

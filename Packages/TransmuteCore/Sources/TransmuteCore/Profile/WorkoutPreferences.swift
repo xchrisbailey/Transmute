@@ -57,9 +57,7 @@ public struct WorkoutPreferences: Codable, Hashable, Sendable {
 
     /// The stored preferences: the first profile's, or the defaults before there is one.
     public static func stored(in context: ModelContext?) -> WorkoutPreferences {
-        var descriptor = FetchDescriptor<Profile>(sortBy: [SortDescriptor(\.createdAt)])
-        descriptor.fetchLimit = 1
-        return (try? context?.fetch(descriptor))?.first?.preferences ?? WorkoutPreferences()
+        (try? context.flatMap(Profile.canonical(in:)))?.preferences ?? WorkoutPreferences()
     }
 }
 

@@ -75,7 +75,7 @@ struct WorkoutQuery: EntityQuery {
         var descriptor = FetchDescriptor<Workout>(
             predicate: #Predicate { $0.endedAt != nil }, sortBy: [SortDescriptor(\.startedAt, order: .reverse)])
         descriptor.fetchLimit = limit
-        let units = Units(system: try context.fetch(FetchDescriptor<Profile>()).first?.unitSystem)
+        let units = Units(system: try Profile.canonical(in: context)?.unitSystem)
         return try context.fetch(descriptor).map { WorkoutEntity($0, units: units) }
     }
 }
