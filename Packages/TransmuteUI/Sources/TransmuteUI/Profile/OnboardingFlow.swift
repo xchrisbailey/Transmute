@@ -96,7 +96,9 @@
             switch step {
             case .welcome: welcome
             case .ready: ready
-            case .body: Form { BodySection(draft: $draft, units: units, unitSystem: unitSystem) }.scrollContentBackground(.hidden)
+            case .body:
+                Form { BodySection(draft: $draft, units: units, unitSystem: unitSystem) }.scrollContentBackground(
+                    .hidden)
             case .experience: Form { ExperienceSection(draft: $draft, units: units) }.scrollContentBackground(.hidden)
             case .goals: Form { GoalSection(draft: $draft) }.scrollContentBackground(.hidden)
             case .sport: Form { SportSection(draft: $draft) }.scrollContentBackground(.hidden)
