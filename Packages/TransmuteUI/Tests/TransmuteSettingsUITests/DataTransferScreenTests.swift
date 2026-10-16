@@ -3,6 +3,7 @@ import SwiftData
 import Testing
 import TransmuteCore
 import TransmuteIntelligence
+import TransmuteTestSupport
 import TransmuteUI
 
 @testable import TransmuteSettingsUI
@@ -16,8 +17,7 @@ struct DataTransferScreenTests {
     @Test func exportNamesCarryThePersonsDate() throws {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = try #require(TimeZone(identifier: "America/New_York"))
-        // 2026-10-04 02:30 UTC is still the evening of the 3rd in New York.
-        let date = Date(timeIntervalSince1970: 1_791_081_000)
+        let date = utc(2026, 10, 4, hour: 2, minute: 30)
         #expect(ExportKind.workouts.fileName(on: date, calendar: calendar) == "Transmute workouts 2026-10-03.csv")
         #expect(ExportKind.backup.fileName(on: date, calendar: calendar) == "Transmute backup 2026-10-03.json")
         calendar.timeZone = try #require(TimeZone(identifier: "UTC"))

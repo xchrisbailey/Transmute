@@ -27,9 +27,15 @@ let package = Package(
             dependencies: [
                 "TransmuteUI", "TransmutePlanUI", "TransmuteLogUI", "TransmuteCore", "TransmuteIntelligence",
             ]),
-        .testTarget(name: "TransmuteUITests", dependencies: ["TransmuteUI"]),
-        .testTarget(name: "TransmutePlanUITests", dependencies: ["TransmutePlanUI"]),
+        .testTarget(
+            name: "TransmuteUITests",
+            dependencies: ["TransmuteUI", .product(name: "TransmuteTestSupport", package: "TransmuteCore")]),
+        .testTarget(
+            name: "TransmutePlanUITests",
+            dependencies: ["TransmutePlanUI", .product(name: "TransmuteTestSupport", package: "TransmuteCore")]),
         .testTarget(name: "TransmuteLogUITests", dependencies: ["TransmuteLogUI"]),
-        .testTarget(name: "TransmuteSettingsUITests", dependencies: ["TransmuteSettingsUI"]),
+        .testTarget(
+            name: "TransmuteSettingsUITests",
+            dependencies: ["TransmuteSettingsUI", .product(name: "TransmuteTestSupport", package: "TransmuteCore")]),
     ]
 )
