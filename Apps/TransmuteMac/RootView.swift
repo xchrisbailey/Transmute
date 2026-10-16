@@ -87,7 +87,9 @@ struct MacShell: View {
         }
         .sheet(isPresented: $showsRebrew) {
             if let plan {
-                RebrewSheet(plan: plan, profile: profile, service: service, currentWeek: PlanCalendar(plan: plan).clampedWeek(containing: .now))
+                RebrewSheet(
+                    plan: plan, profile: profile, service: service,
+                    currentWeek: PlanCalendar(plan: plan).clampedWeek(containing: .now))
             }
         }
     }

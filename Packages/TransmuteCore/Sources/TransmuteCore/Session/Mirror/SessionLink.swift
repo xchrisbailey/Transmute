@@ -242,7 +242,8 @@ public final class SessionLink {
     private func reconcile(_ ending: Ending) async {
         guard case .healthWorkout(let watchID)? = ending.reply, let context = ending.context else { return }
         let phoneSaved = ending.phoneSaved.flatMap { $0 == watchID ? nil : $0 }
-        let entry = PendingHealthDeletes.Entry(workoutID: ending.workoutID, keep: watchID, remove: phoneSaved)
+        let entry = PendingHealthDeletes.Entry(
+            workoutID: ending.workoutID, watchHealthID: watchID, phoneHealthID: phoneSaved)
         // Written before anything changes, so a kill from here on is finished by the next pass.
         pending.add(entry)
         ending.phoneSaved = nil
@@ -257,7 +258,7 @@ public final class SessionLink {
         }
     }
 
-    /// Makes the workout point at `entry.keep`, then deletes what `entry` says to, the iPhone's own
+    /// Makes the workout point at `entry.watchHealthID`, then deletes what `entry` says to, the iPhone's own
     /// copy first. If a delete fails the entry stays, holding only the ids still to delete.
     ///
     /// A workout that isn't in `context` is gone for one of two reasons. If the person deleted it in
@@ -273,19 +274,22 @@ public final class SessionLink {
         var keepsRemain = true
         if let workout = try? context.fetch(descriptor).first {
             let current = workout.healthKitWorkoutID
-            // With `keep` already dealt with, the iPhone's copy is deletable whatever the workout links to.
-            guard entry.keep == nil || current == nil || current == entry.keep || current == entry.remove else {
+            // With `watchHealthID` already dealt with, the iPhone's copy is deletable whatever the workout links to.
+            guard
+                entry.watchHealthID == nil || current == nil || current == entry.watchHealthID
+                    || current == entry.phoneHealthID
+            else {
                 pending.remove(entry)
                 return
             }
-            if let keep = entry.keep, current != keep {
-                workout.healthKitWorkoutID = keep
+            if let watchHealthID = entry.watchHealthID, current != watchHealthID {
+                workout.healthKitWorkoutID = watchHealthID
                 try? context.save()
             }
-            doomed = entry.remove.map { [$0] } ?? []
+            doomed = entry.phoneHealthID.map { [$0] } ?? []
         } else {
             guard pending.wasDeleted(workoutID) else { return }
-            doomed = [entry.remove, entry.keep].compactMap { $0 }
+            doomed = [entry.phoneHealthID, entry.watchHealthID].compactMap { $0 }
             keepsRemain = false
         }
         var failed = Set<UUID>()
@@ -306,11 +310,12 @@ public final class SessionLink {
             pending.forgetDeleted(workoutID)
             return
         }
-        let keep = entry.keep.flatMap { keepsRemain || failed.contains($0) ? $0 : nil }
+        let watchHealthID = entry.watchHealthID.flatMap { keepsRemain || failed.contains($0) ? $0 : nil }
         pending.replace(
             entry,
             with: PendingHealthDeletes.Entry(
-                workoutID: workoutID, keep: keep, remove: entry.remove.flatMap { failed.contains($0) ? $0 : nil }))
+                workoutID: workoutID, watchHealthID: watchHealthID,
+                phoneHealthID: entry.phoneHealthID.flatMap { failed.contains($0) ? $0 : nil }))
     }
 
     private func post(_ message: SessionMessage) {

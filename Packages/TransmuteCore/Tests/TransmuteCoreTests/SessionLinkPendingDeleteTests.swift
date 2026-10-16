@@ -16,6 +16,26 @@ struct SessionLinkPendingDeleteTests {
         rig = try LinkRig()
     }
 
+    @Test func entriesStoredUnderTheOldKeysStillDecode() throws {
+        let workoutID = UUID()
+        let watchID = UUID()
+        let phonesID = UUID()
+        let both = #"{"workoutID":"\#(workoutID)","keep":"\#(watchID)","remove":"\#(phonesID)"}"#
+        let phoneOnly = #"{"workoutID":"\#(workoutID)","remove":"\#(phonesID)"}"#
+
+        let entries = try JSONDecoder().decode(
+            [PendingHealthDeletes.Entry].self, from: Data("[\(both),\(phoneOnly)]".utf8))
+
+        #expect(
+            entries == [
+                .init(workoutID: workoutID, watchHealthID: watchID, phoneHealthID: phonesID),
+                .init(workoutID: workoutID, watchHealthID: nil, phoneHealthID: phonesID),
+            ])
+        let rewritten = try JSONSerialization.jsonObject(with: JSONEncoder().encode(entries[0]))
+        let keys = try #require(rewritten as? [String: Any]).keys
+        #expect(Set(keys) == ["workoutID", "keep", "remove"])
+    }
+
     struct Left {
         let workout: Workout
         let phonesID: UUID
@@ -103,7 +123,7 @@ struct SessionLinkPendingDeleteTests {
 
         #expect(health.deleteAttemptIDs.dropFirst(before) == [phonesID, watchID])
         #expect(health.workouts == [watchID])
-        #expect(pending.entries == [.init(workoutID: workout.id, keep: watchID, remove: nil)])
+        #expect(pending.entries == [.init(workoutID: workout.id, watchHealthID: watchID, phoneHealthID: nil)])
 
         await relaunch(with: health, in: context)
 
@@ -121,7 +141,7 @@ struct SessionLinkPendingDeleteTests {
         await relaunch(with: health, in: context)
 
         #expect(health.workouts == [phonesID])
-        #expect(pending.entries == [.init(workoutID: workout.id, keep: nil, remove: phonesID)])
+        #expect(pending.entries == [.init(workoutID: workout.id, watchHealthID: nil, phoneHealthID: phonesID)])
         #expect(pending.wasDeleted(workout.id))
     }
 
@@ -153,7 +173,8 @@ struct SessionLinkPendingDeleteTests {
         health.failDeletes(of: [left.phonesID])
         try WorkoutLog.delete(left.workout, in: context, defaults: defaults)
         await relaunch(with: health, in: context)
-        #expect(pending.entries == [.init(workoutID: left.workout.id, keep: nil, remove: left.phonesID)])
+        #expect(
+            pending.entries == [.init(workoutID: left.workout.id, watchHealthID: nil, phoneHealthID: left.phonesID)])
         health.failDeletes(of: [])
 
         try DataTransfer.importBackup(saved, into: context, defaults: defaults)

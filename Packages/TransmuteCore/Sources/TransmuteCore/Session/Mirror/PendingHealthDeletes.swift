@@ -6,11 +6,16 @@ import Foundation
 struct PendingHealthDeletes {
     struct Entry: Codable, Equatable {
         let workoutID: UUID
-        /// The Health workout the Transmute workout ends up linked to. Nil once it's been deleted
-        /// along with a workout the person removed.
-        let keep: UUID?
-        /// The iPhone's own Health workout, which `keep` replaces.
-        let remove: UUID?
+        /// Nil once it's been deleted along with a workout the person removed.
+        let watchHealthID: UUID?
+        let phoneHealthID: UUID?
+
+        /// The names entries were stored under before the fields were renamed.
+        private enum CodingKeys: String, CodingKey {
+            case workoutID
+            case watchHealthID = "keep"
+            case phoneHealthID = "remove"
+        }
     }
 
     let defaults: UserDefaults
@@ -39,7 +44,7 @@ struct PendingHealthDeletes {
     }
 
     func replace(_ entry: Entry, with remaining: Entry) {
-        guard remaining.keep != nil || remaining.remove != nil else { return remove(entry) }
+        guard remaining.watchHealthID != nil || remaining.phoneHealthID != nil else { return remove(entry) }
         entries = entries.map { $0 == entry ? remaining : $0 }
     }
 

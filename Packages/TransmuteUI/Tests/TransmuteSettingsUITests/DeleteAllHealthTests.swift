@@ -37,7 +37,7 @@ struct DeleteAllHealthTests {
         // A Health delete the link left pending, for a workout the person had deleted in History.
         let (phonesID, watchID, workoutID) = (UUID(), UUID(), UUID())
         let pending = PendingHealthDeletes(defaults: defaults)
-        pending.add(.init(workoutID: workoutID, keep: watchID, remove: phonesID))
+        pending.add(.init(workoutID: workoutID, watchHealthID: watchID, phoneHealthID: phonesID))
         pending.markDeleted(workoutID)
         let health = RecordingHealth(holding: [phonesID, watchID])
 

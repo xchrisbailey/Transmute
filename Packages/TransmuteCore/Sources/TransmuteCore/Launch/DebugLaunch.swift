@@ -31,7 +31,8 @@ public enum DebugLaunch {
             of plan: Plan, for profile: Profile, in context: ModelContext, arguments: Set<LaunchArgument>
         ) {
             #if os(iOS) || os(watchOS)
-                guard let day = plan.orderedDays.first(where: { $0.week == PlanCalendar(plan: plan).clampedWeek(containing: .now) }) else { return }
+                let week = PlanCalendar(plan: plan).clampedWeek(containing: .now)
+                guard let day = plan.orderedDays.first(where: { $0.week == week }) else { return }
                 let workout = WorkoutSession.start(day, profile: profile, in: context)
                 #if os(iOS)
                     let logsFirstSet = true
