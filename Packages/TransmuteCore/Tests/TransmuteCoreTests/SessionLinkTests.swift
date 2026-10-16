@@ -13,7 +13,7 @@ final class LoopbackWorkout: LiveWorkout {
     let heartRate: Double? = nil
     let averageHeartRate: Double? = nil
     let activeEnergyKcal: Double? = nil
-    let isMirroring = true
+    var isMirroring = true
     let incoming: AsyncStream<Data>
     private let inbox: AsyncStream<Data>.Continuation
     weak var peer: LoopbackWorkout?
@@ -28,6 +28,52 @@ final class LoopbackWorkout: LiveWorkout {
     func send(_ data: Data) async { peer?.inbox.yield(data) }
     func finish(workoutID: UUID, title: String, at date: Date) async throws -> UUID? { nil }
     func discard() async {}
+}
+
+/// A Health store that keeps the workouts saved to it, so a test can count what's left.
+final class FakeHealth: HealthService, @unchecked Sendable {
+    private let lock = NSLock()
+    private var stored: Set<UUID> = []
+    private var saveCount = 0
+    var saveDelay: Duration = .zero
+
+    var isAvailable: Bool { true }
+    var canSaveBodyweight: Bool { true }
+
+    /// The workouts in Health right now.
+    var workouts: Set<UUID> { lock.withLock { stored } }
+    /// How many times the iPhone saved a workout, deleted or not.
+    var saves: Int { lock.withLock { saveCount } }
+
+    /// A workout the watch recorded, whose id it then sends to the iPhone.
+    func recordOnWatch() -> UUID {
+        let id = UUID()
+        lock.withLock { _ = stored.insert(id) }
+        return id
+    }
+
+    func requestAccess(_ scope: HealthAccessScope) async throws {}
+    func accessStatus() async -> HealthAccessStatus { HealthAccessStatus() }
+    func bodyMetrics() async -> HealthBodyMetrics { HealthBodyMetrics() }
+    func bodyweights(since date: Date) async -> [HealthBodyweight] { [] }
+    func restingHeartRate() async -> Double? { nil }
+    func vo2Max() async -> Double? { nil }
+    func otherWorkouts(in interval: DateInterval) async -> [OtherWorkout] { [] }
+    func saveBodyweight(kg: Double, at date: Date) async throws -> UUID { UUID() }
+
+    func save(_ workout: HealthWorkoutRecord) async throws -> UUID {
+        try await Task.sleep(for: saveDelay)
+        return lock.withLock {
+            let id = UUID()
+            stored.insert(id)
+            saveCount += 1
+            return id
+        }
+    }
+
+    func deleteWorkout(id: UUID) async throws {
+        lock.withLock { _ = stored.remove(id) }
+    }
 }
 
 @MainActor
@@ -159,5 +205,134 @@ struct SessionLinkTests {
         watch.sendHeartRate(132, at: now)
         await settle { phone.remoteHeartRate != nil }
         #expect(phone.remoteHeartRate == 132)
+    }
+
+    // MARK: Health hand-off
+
+    /// A workout the iPhone owns and has finished, as it is when the watch starts to answer.
+    func finishedOnPhone() throws -> Workout {
+        let workout = try session()
+        phone.own(workout, in: context)
+        WorkoutSession.finish(workout, at: now.addingTimeInterval(600))
+        phone.publish()
+        return workout
+    }
+
+    /// Sends the watch's answer once the iPhone has started waiting for it.
+    func watchReplies(_ workout: Workout, with id: UUID?, after delay: Duration = .milliseconds(30)) {
+        let watch = watch
+        Task {
+            try? await Task.sleep(for: delay)
+            watch.ended(workoutID: workout.id, healthWorkoutID: id)
+        }
+    }
+
+    @Test func theWatchsIDArrivingInTimeIsAdoptedAndTheIPhoneSavesNothing() async throws {
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+        let watchID = health.recordOnWatch()
+        watchReplies(workout, with: watchID)
+
+        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(5))
+
+        #expect(health.saves == 0)
+        #expect(health.workouts == [watchID])
+        #expect(workout.healthKitWorkoutID == watchID)
+    }
+
+    @Test func theWatchsIDArrivingBeforeTheWaitBeginsIsAdopted() async throws {
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+        let watchID = health.recordOnWatch()
+        watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
+        await settle { workout.healthKitWorkoutID != nil }
+
+        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(5))
+
+        #expect(health.saves == 0)
+        #expect(health.workouts == [watchID])
+        #expect(workout.healthKitWorkoutID == watchID)
+    }
+
+    @Test func aNilFromTheWatchEndsTheWaitAtOnceAndTheIPhoneSavesItsOwn() async throws {
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+        watchReplies(workout, with: nil, after: .milliseconds(10))
+
+        let started = ContinuousClock.now
+        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(30))
+
+        #expect(ContinuousClock.now - started < .seconds(5))
+        #expect(health.saves == 1)
+        #expect(health.workouts.count == 1)
+        #expect(workout.healthKitWorkoutID.map { health.workouts.contains($0) } == true)
+    }
+
+    @Test func aTimedOutWaitLeavesTheIPhoneToSaveItsOwn() async throws {
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+
+        try await phone.saveToHealth(workout, with: health, waitingForWatch: .milliseconds(50))
+
+        #expect(health.saves == 1)
+        #expect(health.workouts.count == 1)
+        #expect(workout.healthKitWorkoutID.map { health.workouts.contains($0) } == true)
+    }
+
+    @Test func aLateIDReplacesTheIPhonesHealthWorkoutWithTheWatchs() async throws {
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+        try await phone.saveToHealth(workout, with: health, waitingForWatch: .milliseconds(20))
+        let phonesID = try #require(workout.healthKitWorkoutID)
+
+        let watchID = health.recordOnWatch()
+        watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
+        await settle { workout.healthKitWorkoutID == watchID }
+
+        #expect(workout.healthKitWorkoutID == watchID)
+        await settle { health.workouts == [watchID] }
+        #expect(health.workouts == [watchID])
+        #expect(!health.workouts.contains(phonesID))
+    }
+
+    @Test func anIDArrivingWhileTheIPhoneIsSavingLeavesOnlyTheWatchs() async throws {
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+        health.saveDelay = .milliseconds(150)
+        let watchID = health.recordOnWatch()
+        watchReplies(workout, with: watchID, after: .milliseconds(100))
+
+        try await phone.saveToHealth(workout, with: health, waitingForWatch: .milliseconds(20))
+
+        #expect(health.workouts == [watchID])
+        #expect(workout.healthKitWorkoutID == watchID)
+    }
+
+    @Test func aWatchThatNeverRepliesLeavesTheIPhonesWorkoutAlone() async throws {
+        let workout = try finishedOnPhone()
+        ends.phone.isMirroring = false
+        let health = FakeHealth()
+
+        let started = ContinuousClock.now
+        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(30))
+        await settle()
+
+        #expect(ContinuousClock.now - started < .seconds(5))
+        #expect(health.saves == 1)
+        #expect(health.workouts.count == 1)
+        #expect(workout.healthKitWorkoutID.map { health.workouts.contains($0) } == true)
+    }
+
+    @Test func aNilArrivingAfterTheIPhoneSavedChangesNothing() async throws {
+        let workout = try finishedOnPhone()
+        let health = FakeHealth()
+        try await phone.saveToHealth(workout, with: health, waitingForWatch: .milliseconds(20))
+        let phonesID = workout.healthKitWorkoutID
+
+        watch.ended(workoutID: workout.id, healthWorkoutID: nil)
+        await settle()
+
+        #expect(workout.healthKitWorkoutID == phonesID)
+        #expect(health.workouts.count == 1)
     }
 }

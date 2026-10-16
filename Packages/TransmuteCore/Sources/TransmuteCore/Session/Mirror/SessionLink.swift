@@ -29,6 +29,54 @@ public final class SessionLink {
 
     private var owned: Owned?
 
+    /// What the watch said about Health for the workout this device ended last.
+    private enum WatchReply: Equatable {
+        case healthWorkout(UUID)
+        case nothingSaved
+    }
+
+    /// The Health side of the workout this device ended last. It outlives `owned`, so the
+    /// watch's answer can still land after the workout ended.
+    @MainActor
+    private final class Ending {
+        let workoutID: UUID
+        let context: ModelContext?
+        var health: (any HealthService)?
+        var reply: WatchReply?
+        /// The Health workout the iPhone saved itself, until the watch's replaces it.
+        var phoneSaved: UUID?
+        private var waiter: CheckedContinuation<Void, Never>?
+        private var timer: Task<Void, Never>?
+
+        init(workoutID: UUID, context: ModelContext?) {
+            self.workoutID = workoutID
+            self.context = context
+        }
+
+        /// Returns when the watch answers, or after `timeout`.
+        func awaitReply(timeout: Duration) async {
+            guard reply == nil else { return }
+            resumeWaiter()
+            await withCheckedContinuation { continuation in
+                waiter = continuation
+                timer = Task {
+                    try? await Task.sleep(for: timeout)
+                    guard !Task.isCancelled else { return }
+                    resumeWaiter()
+                }
+            }
+        }
+
+        func resumeWaiter() {
+            timer?.cancel()
+            timer = nil
+            waiter?.resume()
+            waiter = nil
+        }
+    }
+
+    private var ending: Ending?
+
     private static let logger = Logger(subsystem: Transmute.bundlePrefix, category: "link")
 
     /// Messages go out one at a time, so a newer snapshot never lands before an older one.
@@ -77,7 +125,10 @@ public final class SessionLink {
     public func publish() {
         guard let owned else { return }
         post(.snapshot(SessionSnapshot(owned.workout, library: owned.library)))
-        if owned.workout.endedAt != nil { self.owned = nil }
+        if owned.workout.endedAt != nil {
+            ending = Ending(workoutID: owned.workout.id, context: owned.context)
+            self.owned = nil
+        }
     }
 
     /// The owned workout was thrown away: lets go of it and tells the other device.
@@ -110,6 +161,39 @@ public final class SessionLink {
         post(.heartRate(bpm: bpm, at: date))
     }
 
+    /// Saves a finished workout to Health, leaving exactly one Health workout linked to it.
+    ///
+    /// While the watch is recording, it saves the workout itself, with heart rate, and sends back
+    /// its Health id. This waits up to `timeout` for that id and adopts it. A `nil` from the watch
+    /// ends the wait at once, and so does the timeout; either way the iPhone saves its own. If
+    /// the watch's id still arrives later, the iPhone's Health workout is deleted and the watch's
+    /// adopted.
+    public func saveToHealth(
+        _ workout: Workout, with health: any HealthService, waitingForWatch timeout: Duration = .seconds(5)
+    ) async throws {
+        guard health.isAvailable, workout.healthKitWorkoutID == nil else { return }
+        let ending = ending(for: workout)
+        ending.health = health
+        if live.isMirroring { await ending.awaitReply(timeout: timeout) }
+        guard workout.healthKitWorkoutID == nil, let record = HealthWorkoutRecord(workout) else { return }
+        try await health.requestAccess(.workouts)
+        let id = try await health.save(record)
+        ending.phoneSaved = id
+        // The watch's id may have landed while this was saving.
+        if workout.healthKitWorkoutID == nil {
+            workout.healthKitWorkoutID = id
+            try? workout.modelContext?.save()
+        }
+        await reconcile(ending)
+    }
+
+    private func ending(for workout: Workout) -> Ending {
+        if let ending, ending.workoutID == workout.id { return ending }
+        let ending = Ending(workoutID: workout.id, context: workout.modelContext)
+        self.ending = ending
+        return ending
+    }
+
     /// The watch saved the workout to Health (or ended it without saving): tells the iPhone, so
     /// it keeps the Health id and doesn't save a second workout.
     public func ended(workoutID: UUID, healthWorkoutID: UUID?) {
@@ -133,33 +217,48 @@ public final class SessionLink {
         case .heartRate(let bpm, _):
             remoteHeartRate = bpm
         case .ended(let workoutID, let healthWorkoutID):
-            ended(workoutID, healthWorkoutID)
+            await ended(workoutID, healthWorkoutID)
         case .requestSnapshot:
             publish()
         }
     }
 
-    private func ended(_ workoutID: UUID, _ healthWorkoutID: UUID?) {
+    private func ended(_ workoutID: UUID, _ healthWorkoutID: UUID?) async {
         if mirrored?.workoutID == workoutID {
             // Finished sessions stay up for their summary; a discarded one just goes.
             if mirrored?.isFinished != true { mirrored = nil }
             return
         }
-        guard let healthWorkoutID else { return }
-        // The watch saved this device's workout to Health. It may have ended already, so look
-        // it up rather than relying on what's owned.
-        guard let context = owned?.context ?? lastContext else { return }
-        let descriptor = FetchDescriptor<Workout>(predicate: #Predicate { $0.id == workoutID })
-        guard let workout = try? context.fetch(descriptor).first, workout.healthKitWorkoutID == nil else { return }
-        workout.healthKitWorkoutID = healthWorkoutID
-        try? context.save()
+        guard let ending, ending.workoutID == workoutID else { return }
+        ending.reply = healthWorkoutID.map(WatchReply.healthWorkout) ?? .nothingSaved
+        ending.resumeWaiter()
+        await reconcile(ending)
     }
 
-    /// The store of the last owned workout, kept so its Health id can arrive after it ends.
-    private var lastContext: ModelContext?
+    /// Links the workout to the watch's Health workout, and deletes the iPhone's own if it saved
+    /// one first.
+    private func reconcile(_ ending: Ending) async {
+        guard case .healthWorkout(let watchID)? = ending.reply, let context = ending.context else { return }
+        let workoutID = ending.workoutID
+        let descriptor = FetchDescriptor<Workout>(predicate: #Predicate { $0.id == workoutID })
+        guard let workout = try? context.fetch(descriptor).first else { return }
+        let current = workout.healthKitWorkoutID
+        guard current == nil || current == ending.phoneSaved || current == watchID else { return }
+        if current != watchID {
+            workout.healthKitWorkoutID = watchID
+            try? context.save()
+        }
+        guard let phoneSaved = ending.phoneSaved, phoneSaved != watchID else { return }
+        ending.phoneSaved = nil
+        do {
+            try await ending.health?.deleteWorkout(id: phoneSaved)
+        } catch {
+            Self.logger.notice(
+                "Couldn't delete the iPhone's Health workout: \(String(describing: error), privacy: .public)")
+        }
+    }
 
     private func post(_ message: SessionMessage) {
-        if let owned { lastContext = owned.context }
         guard let data = try? message.encoded() else { return }
         outbox.yield(data)
     }
