@@ -133,7 +133,8 @@ struct MacShell: View {
                 BrewPlanView(profile: profile, service: service, device: device)
             }
         case .log:
-            LogTableView(profile: profile, plan: plan, searchFocus: $searchIsFocused, consumingOpenRequest: $openRequest)
+            LogTableView(
+                profile: profile, plan: plan, searchFocus: $searchIsFocused, consumingOpenRequest: $openRequest)
         case .progress:
             ProgressPane(plan: plan, profile: profile, service: service)
         }
