@@ -100,9 +100,8 @@ final class WatchSession: Identifiable {
         if outcome == .discarded {
             link.discarded()
         } else {
-            // Reconnects first if the iPhone dropped off; a no-op while it's connected.
             Task {
-                await live.startMirroring()
+                await live.ensureMirroring()
                 link.publish()
             }
         }

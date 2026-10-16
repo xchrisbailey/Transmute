@@ -44,8 +44,8 @@ struct WatchRootView: View {
                 }
             }
         }
-        .onChange(of: mine?.id, initial: true) {
-            if session == nil, let workout = mine {
+        .onChange(of: watchOwnedWorkout?.id, initial: true) {
+            if session == nil, let workout = watchOwnedWorkout {
                 run(workout)
             }
         }
@@ -68,16 +68,14 @@ struct WatchRootView: View {
         // Begin today's workout, from Siri or a shortcut. With a workout already on
         // screen, or nothing to start today, the watch just shows what it has.
         .onChange(of: router.pending, initial: true) {
-            guard router.take() == .beginToday, session == nil, mine == nil, let plan = plans.first else { return }
+            guard router.take() == .beginToday, session == nil, watchOwnedWorkout == nil, let plan = plans.first else { return }
             let today = TodayPlan(plan: plan)
             if let day = today.day, !today.isDone { start(day) }
         }
         .task { await link.run() }
     }
 
-    /// The running workout this watch owns. One the iPhone started is its to run: the watch
-    /// joins it over the link instead of writing to a second copy.
-    private var mine: Workout? {
+    private var watchOwnedWorkout: Workout? {
         running.first { $0.startedOn != .phone }
     }
 
