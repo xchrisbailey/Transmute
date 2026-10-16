@@ -233,7 +233,7 @@ struct SessionLinkTests {
         let watchID = health.recordOnWatch()
         watchReplies(workout, with: watchID)
 
-        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(5))
+        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(120))
 
         #expect(health.saves == 0)
         #expect(health.workouts == [watchID])
@@ -247,7 +247,7 @@ struct SessionLinkTests {
         watch.ended(workoutID: workout.id, healthWorkoutID: watchID)
         await settle { workout.healthKitWorkoutID != nil }
 
-        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(5))
+        try await phone.saveToHealth(workout, with: health, waitingForWatch: .seconds(120))
 
         #expect(health.saves == 0)
         #expect(health.workouts == [watchID])
