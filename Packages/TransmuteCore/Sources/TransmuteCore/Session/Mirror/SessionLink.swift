@@ -29,78 +29,10 @@ public final class SessionLink {
 
     private var owned: Owned?
 
-    /// What the watch said about Health for the workout this device ended last.
-    private enum WatchReply: Equatable {
-        case healthWorkout(UUID)
-        case nothingSaved
-    }
-
-    /// The Health side of the workout this device ended last. It outlives `owned`, so the
-    /// watch's answer can still land after the workout ended.
-    @MainActor
-    private final class Ending {
-        let workoutID: UUID
-        let context: ModelContext?
-        /// Whether the watch was recording this workout when it ended, so it will answer with a
-        /// Health id or a `nil`. This is a fact about the workout, not about the connection now:
-        /// the watch's session may have closed by the time the person taps Save.
-        let expectsWatchReply: Bool
-        var health: (any HealthService)?
-        var reply: WatchReply?
-        /// The Health workout the iPhone saved itself, until the watch's replaces it.
-        var phoneSaved: UUID?
-        /// The save in flight, so a second call joins it instead of starting another.
-        var saving: Task<Void, any Error>?
-        private var waiter: CheckedContinuation<Void, Never>?
-        private var timer: Task<Void, Never>?
-
-        init(workoutID: UUID, context: ModelContext?, expectsWatchReply: Bool) {
-            self.workoutID = workoutID
-            self.context = context
-            self.expectsWatchReply = expectsWatchReply
-        }
-
-        /// Returns when the watch answers, or after `timeout` on `clock`.
-        func awaitReply(timeout: Duration, clock: any Clock<Duration>) async {
-            guard reply == nil else { return }
-            await withCheckedContinuation { continuation in
-                waiter = continuation
-                timer = Task {
-                    try? await clock.sleep(for: timeout)
-                    guard !Task.isCancelled else { return }
-                    resumeWaiter()
-                }
-            }
-        }
-
-        func resumeWaiter() {
-            timer?.cancel()
-            timer = nil
-            waiter?.resume()
-            waiter = nil
-        }
-    }
-
-    /// A Health workout still to remove, kept in `defaults` until Health has done it, so a failed
-    /// delete or a kill between linking and deleting is picked up by a later pass.
-    private struct PendingDelete: Codable, Equatable {
-        let workoutID: UUID
-        /// The Health workout the Transmute workout ends up linked to.
-        let keep: UUID
-        /// The iPhone's own Health workout, which `keep` replaces.
-        let remove: UUID?
-    }
-
     private var ending: Ending?
 
     private let clock: any Clock<Duration>
-    private let defaults: UserDefaults
-    private static let pendingKey = "link.pendingHealthDeletes"
-
-    private var pending: [PendingDelete] {
-        get { defaults.data(forKey: Self.pendingKey).flatMap { try? JSONDecoder().decode([PendingDelete].self, from: $0) } ?? [] }
-        set { defaults.set(try? JSONEncoder().encode(newValue), forKey: Self.pendingKey) }
-    }
+    private let pending: PendingHealthDeletes
 
     private static let logger = Logger(subsystem: Transmute.bundlePrefix, category: "link")
 
@@ -122,7 +54,7 @@ public final class SessionLink {
         self.live = live
         self.device = device
         self.clock = clock
-        self.defaults = defaults
+        self.pending = PendingHealthDeletes(defaults: defaults)
         let (messages, outbox) = AsyncStream.makeStream(of: Outgoing.self)
         self.outbox = outbox
         Task {
@@ -302,9 +234,9 @@ public final class SessionLink {
     private func reconcile(_ ending: Ending) async {
         guard case .healthWorkout(let watchID)? = ending.reply, let context = ending.context else { return }
         let phoneSaved = ending.phoneSaved.flatMap { $0 == watchID ? nil : $0 }
-        let entry = PendingDelete(workoutID: ending.workoutID, keep: watchID, remove: phoneSaved)
+        let entry = PendingHealthDeletes.Entry(workoutID: ending.workoutID, keep: watchID, remove: phoneSaved)
         // Written before anything changes, so a kill from here on is finished by the next pass.
-        if !pending.contains(entry) { pending.append(entry) }
+        pending.add(entry)
         ending.phoneSaved = nil
         await resolve(entry, with: ending.health, in: context)
     }
@@ -312,7 +244,7 @@ public final class SessionLink {
     /// Finishes any Health deletes an earlier pass left undone. Call it at launch, with the
     /// store the workouts live in.
     public func retryPendingDeletes(with health: any HealthService, in context: ModelContext) async {
-        for entry in pending {
+        for entry in pending.entries {
             await resolve(entry, with: health, in: context)
         }
     }
@@ -320,14 +252,16 @@ public final class SessionLink {
     /// Makes the workout point at `entry.keep`, then deletes what `entry` says to. The entry stays
     /// until every delete has gone through. A workout deleted from History in the meantime leaves
     /// nothing for the watch's Health workout to belong to, so that goes too.
-    private func resolve(_ entry: PendingDelete, with health: (any HealthService)?, in context: ModelContext) async {
+    private func resolve(
+        _ entry: PendingHealthDeletes.Entry, with health: (any HealthService)?, in context: ModelContext
+    ) async {
         let workoutID = entry.workoutID
         let descriptor = FetchDescriptor<Workout>(predicate: #Predicate { $0.id == workoutID })
         var doomed = [UUID]()
         if let workout = try? context.fetch(descriptor).first {
             let current = workout.healthKitWorkoutID
             guard current == nil || current == entry.keep || current == entry.remove else {
-                pending.removeAll { $0 == entry }
+                pending.remove(entry)
                 return
             }
             if current != entry.keep {
@@ -350,7 +284,7 @@ public final class SessionLink {
                 }
             }
         }
-        pending.removeAll { $0 == entry }
+        pending.remove(entry)
     }
 
     private func post(_ message: SessionMessage) {
