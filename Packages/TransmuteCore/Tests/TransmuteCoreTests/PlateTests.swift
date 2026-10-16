@@ -172,26 +172,17 @@ struct PlateTests {
         let container = try TransmuteStore.makeTestContainer()
         let profile = Profile()
         container.mainContext.insert(profile)
-        var draft = ProfileDraft(profile, locale: Locale(identifier: "en_US"))
-        draft.plates = PlateInventory(.home, system: .imperial)
-        draft.plates.barKind = .ezCurl
-        draft.plates.plates[0].pairs = 3
-        draft.apply(to: profile)
+        var settings = OnboardingSettings(locale: Locale(identifier: "en_US"))
+        settings.plates = PlateInventory(.home, system: .imperial)
+        settings.plates.barKind = .ezCurl
+        settings.plates.plates[0].pairs = 3
+        settings.apply(to: profile)
         try container.mainContext.save()
 
         let fresh = ModelContext(container)
         let stored = try #require(try fresh.fetch(FetchDescriptor<Profile>()).first)
-        #expect(stored.plates == draft.plates)
-        #expect(stored.barbellKg == draft.plates.barKg)
+        #expect(stored.plates == settings.plates)
+        #expect(stored.barbellKg == settings.plates.barKg)
         #expect(stored.plates.display(kg: stored.barbellKg) == 25)
-        #expect(ProfileDraft(stored).plates == draft.plates)
-    }
-
-    @Test func draftBarbellWeightEditsTheChosenBar() {
-        var draft = ProfileDraft(locale: Locale(identifier: "de_DE"))
-        #expect(draft.barbellKg == 20)
-        draft.barbellKg = 15
-        #expect(draft.plates.bar(.standard).kg == 15)
-        #expect(draft.plates.preset == nil)
     }
 }
