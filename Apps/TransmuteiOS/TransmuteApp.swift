@@ -18,6 +18,7 @@ struct TransmuteApp: App {
         ReminderTaps.shared.listen()
         // Also from launch: an App Intent can save in a process that never opens a window.
         WidgetReload.listen()
+        SpotlightIndex.shared.listen()
         // A Health delete that failed, or was cut short by a kill, is left in the link's pending list.
         Task { [link, health, context = container.mainContext] in
             await link.retryPendingDeletes(with: health, in: context)
@@ -37,7 +38,6 @@ struct TransmuteApp: App {
             RootView()
                 .appearance(appearance)
                 .reloadsWidgetsOnLeavingForeground()
-                .indexesSpotlight()
                 .task { await link.run() }
                 .onChange(of: link.remoteHeartRate) { _, bpm in
                     live.update(heartRate: bpm, averageHeartRate: nil, activeEnergyKcal: nil)

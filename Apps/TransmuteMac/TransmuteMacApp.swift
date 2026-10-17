@@ -14,6 +14,7 @@ struct TransmuteMacApp: App {
 
     init() {
         WidgetReload.listen()
+        SpotlightIndex.shared.listen()
         container.mainContext.undoManager = UndoManager()
         // From launch: a tapped reminder is delivered as the app opens.
         ReminderTaps.shared.listen()
@@ -26,7 +27,6 @@ struct TransmuteMacApp: App {
                 .frame(minWidth: 900, idealWidth: 1180, minHeight: 600, idealHeight: 760)
                 .appearance(appearance)
                 .reloadsWidgetsOnLeavingForeground()
-                .indexesSpotlight()
                 // A widget's link comes to the window that's open rather than a new one.
                 .handlesExternalEvents(preferring: ["*"], allowing: ["*"])
         }
