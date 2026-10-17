@@ -153,7 +153,7 @@ extension PlateInventory {
     /// doesn't hold, or one more pair on its row, up to `mostPairsPerPlate` like the stepper.
     public mutating func addPair(ofKg kg: Double) {
         if let index = plates.firstIndex(where: { display(kg: $0.kg) == display(kg: kg) }) {
-            plates[index].pairs = min(plates[index].pairs + 1, Self.mostPairsPerPlate)
+            if plates[index].pairs < Self.mostPairsPerPlate { plates[index].pairs += 1 }
         } else {
             plates.append(.init(kg: kg, pairs: 1))
             plates.sort { $0.kg > $1.kg }

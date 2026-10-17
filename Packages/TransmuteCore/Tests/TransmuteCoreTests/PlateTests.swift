@@ -20,6 +20,10 @@ struct PlateTests {
         kit.plates[1].pairs = 3
         kit.addPair(ofKg: kit.plates[1].kg)
         #expect(kit.plates[1].pairs == 4)
+
+        kit.plates[2].pairs = PlateInventory.mostPairsPerPlate + 5
+        kit.addPair(ofKg: kit.plates[2].kg)
+        #expect(kit.plates[2].pairs == PlateInventory.mostPairsPerPlate + 5)
     }
 
     @Test func addingAPairOfANewWeightAddsARowInHeaviestFirstOrder() {
