@@ -49,7 +49,9 @@ struct BackupDeeperMembersTests {
         .init(
             name: "a commitment's intensity",
             edit: removing(fromRowsOf: "commitments", in: ["schedule"], "intensity"),
-            check: { $0.schedule.commitments.count == 3 && $0.schedule.commitments.allSatisfy { $0.intensity == .moderate } }),
+            check: {
+                $0.schedule.commitments.count == 3 && $0.schedule.commitments.allSatisfy { $0.intensity == .moderate }
+            }),
         .init(
             name: "a known lift's reps",
             edit: { profile in
@@ -160,7 +162,8 @@ struct BackupDeeperMembersTests {
 
     /// The backup's own data: a key missing from any of these fails the file, and a new member
     /// there needs a `formatVersion` bump.
-    @MainActor @Test(arguments: [
+    @MainActor
+    @Test(arguments: [
         ("plans", "name"), ("plans", "weekCount"), ("workouts", "title"), ("workouts", "startedAt"),
         ("customExercises", "name"), ("records", "kind"),
     ])
