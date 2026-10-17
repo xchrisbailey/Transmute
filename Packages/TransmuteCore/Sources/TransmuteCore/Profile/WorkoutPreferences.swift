@@ -36,8 +36,10 @@ public struct WorkoutPreferences: Codable, Hashable, Sendable {
         self.warmUpSets = warmUpSets
     }
 
-    /// A member missing from the stored value keeps its default, so a backup written before a
-    /// member existed still restores. Encoding is synthesized and writes every member.
+    /// A member missing from a backup keeps its default, so a backup written before the member
+    /// existed still restores. This serves backups only: SwiftData stores the member as a column
+    /// of its own, and a new one needs its own SchemaV2 default. Encoding is synthesized and
+    /// writes every member.
     public init(from decoder: any Decoder) throws {
         let defaults = Self()
         let container = try decoder.container(keyedBy: CodingKeys.self)
