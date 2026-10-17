@@ -97,7 +97,7 @@
             let kg = plate.wrappedValue.kg
             let pairs = plate.wrappedValue.pairs
             let weight = "\(PlateText.weight(inventory.display(kg: kg))) \(units.weightSymbol)"
-            return Stepper(value: plate.pairs, in: 0...20) {
+            return Stepper(value: plate.pairs, in: 0...PlateInventory.mostPairsPerPlate) {
                 HStack {
                     Circle()
                         .fill(PlateStyle.color(kg: kg))

@@ -24,6 +24,8 @@ public struct ImportSummary: Equatable, Sendable {
 
     public var source: Source
     public var profile = ProfileOutcome.absent
+    /// The file's plate kit couldn't be real, so the new profile got the standard kit instead.
+    public var plateKitReplaced = false
     public var bodyweights = Count()
     public var customExercises = Count()
     public var plans = Count()

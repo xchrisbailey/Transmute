@@ -22,10 +22,12 @@ import Foundation
 /// (`PlanDayRef`) and a record's set (`SetRef`).
 ///
 /// These types are the format. Changing a key's name or meaning needs a new `formatVersion`.
-/// Adding a key doesn't: a missing top-level key decodes as `nil` (or empty, for the lists), and
-/// a missing member of `profile.schedule`, `profile.progression` or `profile.preferences` keeps
-/// its default. A file whose plate kit couldn't be real (negative or absurd pairs or weights)
-/// is refused as unreadable.
+/// Adding a key to `Backup` or `ProfileBackup` doesn't: a missing key decodes as `nil` (or empty,
+/// for the lists). The same goes for a member of `profile.schedule`, `profile.progression` or
+/// `profile.preferences`, which keeps its default. Every other nested type (commitments, known
+/// lifts, the plate kit, plans, workouts and the rest) still fails the whole file on a missing
+/// key, so adding a member to one of those needs a new `formatVersion` or a lenient decode.
+/// A plate kit that couldn't be real doesn't fail the file; the restore replaces it.
 struct Backup: Codable, Equatable {
     /// The version this build writes, and the newest it reads.
     static let currentFormatVersion = 1
@@ -133,9 +135,6 @@ extension Backup {
                 throw DataTransferError.newerBackup(formatVersion: version, supported: Backup.currentFormatVersion)
             }
             self = try decoder.decode(Backup.self, from: data)
-            if let reason = profile?.plates?.implausibility {
-                throw DataTransferError.unreadableBackup(detail: "profile.plates: \(reason)")
-            }
         } catch let error as DecodingError {
             throw DataTransferError.unreadableBackup(detail: String(describing: error))
         }

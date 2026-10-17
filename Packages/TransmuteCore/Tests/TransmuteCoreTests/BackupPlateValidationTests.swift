@@ -4,8 +4,10 @@ import Testing
 
 @testable import TransmuteCore
 
-/// A backup is a file anyone can edit. A kit that couldn't be real is refused as unreadable
-/// when the file is read, before anything is stored, instead of trapping later in the plate maths.
+/// A backup is a file anyone can edit, and the setup screen takes any weight above zero. A kit that
+/// couldn't be real never costs the person the rest of the file: the restore swaps it for the
+/// standard kit when it would have applied it, says so, and keeps everything else. Either way the
+/// kit never reaches the plate maths, where it would trap.
 struct BackupPlateValidationTests {
     struct BadKit: Sendable, CustomTestStringConvertible {
         let name: String
@@ -29,6 +31,9 @@ struct BackupPlateValidationTests {
         },
         .init(name: "pairs that overflow when rows of one weight merge") {
             $0["plates"] = rows([(20, Int.max), (20, 1)])
+        },
+        .init(name: "one pair more than the setup screen offers") {
+            $0["plates"] = rows([(20, PlateInventory.mostPairsPerPlate + 1)])
         },
         .init(name: "more pairs than anyone owns") {
             $0["plates"] = rows([(20, 1_000_000)])
@@ -68,20 +73,59 @@ struct BackupPlateValidationTests {
     }
 
     @MainActor @Test(arguments: badKits)
-    func aKitThatCouldNotBeRealIsUnreadableAndStoresNothing(_ kit: BadKit) throws {
+    func aKitThatCouldNotBeRealIsReplacedByTheStandardKitAndTheRestRestores(_ kit: BadKit) throws {
         let data = try fixtureBackup(editingPlates: kit.edit)
         let container = try TransmuteStore.makeTestContainer()
 
-        let error = #expect(throws: DataTransferError.self) {
-            try DataTransfer.importBackup(data, into: container.mainContext)
-        }
+        let summary = try DataTransfer.importBackup(data, into: container.mainContext)
 
-        guard case .unreadableBackup = error else {
-            Issue.record("Expected unreadableBackup, got \(String(describing: error))")
-            return
-        }
-        #expect(try container.mainContext.fetchCount(FetchDescriptor<Profile>()) == 0)
-        #expect(try container.mainContext.fetchCount(FetchDescriptor<Workout>()) == 0)
+        let restored = try #require(try Profile.canonical(in: container.mainContext))
+        #expect(restored.plates == PlateInventory.standard())
+        #expect(summary.profile == .added)
+        #expect(summary.plateKitReplaced)
+        #expect(summary.workouts.added == 10)
+        #expect(try container.mainContext.fetchCount(FetchDescriptor<Workout>()) == 10)
+    }
+
+    @MainActor @Test(arguments: badKits)
+    func aKitThatCouldNotBeRealIsIgnoredWhenTheStoreAlreadyHasAProfile(_ kit: BadKit) throws {
+        let data = try fixtureBackup(editingPlates: kit.edit)
+        let container = try TransmuteStore.makeTestContainer()
+        let existing = Profile()
+        existing.plates = PlateInventory(.home, system: .metric)
+        container.mainContext.insert(existing)
+        try container.mainContext.save()
+
+        let summary = try DataTransfer.importBackup(data, into: container.mainContext)
+
+        #expect(summary.profile == .kept)
+        #expect(!summary.plateKitReplaced)
+        #expect(summary.workouts.added == 10)
+        #expect(try container.mainContext.fetchCount(FetchDescriptor<Workout>()) == 10)
+        #expect(try Profile.canonical(in: container.mainContext)?.plates == PlateInventory(.home, system: .metric))
+    }
+
+    @MainActor @Test func theLimitsOfTheSetupScreenStillRestoreAsWritten() throws {
+        let rows = Self.rows([(20, PlateInventory.mostPairsPerPlate), (10, 0)])
+        let data = try fixtureBackup { $0["plates"] = rows }
+        let container = try TransmuteStore.makeTestContainer()
+
+        let summary = try DataTransfer.importBackup(data, into: container.mainContext)
+
+        #expect(!summary.plateKitReplaced)
+        let restored = try #require(try Profile.canonical(in: container.mainContext))
+        #expect(restored.plates.plates == [.init(kg: 20, pairs: 20), .init(kg: 10, pairs: 0)])
+    }
+
+    @MainActor @Test func aMachineStepTheSetupScreenAcceptsStillRestoresEveryWorkoutIntoAStoreWithAProfile() throws {
+        let data = try fixtureBackup { $0["machineStepKg"] = 150_000.0 }
+        let container = try TransmuteStore.makeTestContainer()
+        container.mainContext.insert(Profile())
+        try container.mainContext.save()
+
+        let summary = try DataTransfer.importBackup(data, into: container.mainContext)
+
+        #expect(summary.workouts.added == 10)
     }
 
     @MainActor @Test func aRowWithNoPairsIsAKitTheAppCanWriteSoItRestoresAsWritten() throws {

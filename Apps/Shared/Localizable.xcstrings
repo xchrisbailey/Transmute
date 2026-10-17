@@ -6601,6 +6601,18 @@
         }
       }
     },
+    "plain.settings.import.plateKitReplaced": {
+      "comment": "plain. Result line: a backup's plate kit was replaced by the standard kit.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The plate kit in this file had weights that can't be right, so the standard kit is set up instead. You can change it in Settings."
+          }
+        }
+      }
+    },
     "plain.settings.import.profileAdded": {
       "comment": "plain. Result line.",
       "extractionState": "manual",

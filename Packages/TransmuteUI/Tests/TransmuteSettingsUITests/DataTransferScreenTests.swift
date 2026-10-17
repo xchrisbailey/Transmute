@@ -78,6 +78,20 @@ struct DataTransferScreenTests {
             ])
     }
 
+    @Test func aBackupReportSaysWhenThePlateKitWasReplaced() {
+        var summary = ImportSummary(source: .backup)
+        summary.profile = .added
+        summary.plateKitReplaced = true
+        summary.workouts = .init(added: 2)
+        #expect(
+            text(ImportReport(summary).lines) == [
+                "From a Transmute backup.", "Your profile was restored.",
+                "The plate kit in this file had weights that can't be right, so the standard kit is set up "
+                    + "instead. You can change it in Settings.",
+                "Workouts added: 2",
+            ])
+    }
+
     @Test func aSpreadsheetReportNamesTheExercisesItAdded() {
         var summary = ImportSummary(source: .strong)
         summary.workouts = .init(added: 2)

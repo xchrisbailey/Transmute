@@ -294,3 +294,13 @@ enum SettingsDataCopy {
         defaultValue: "OK",
         bundle: .main, comment: "plain. Button: dismiss the report after delete-all.")
 }
+
+extension SettingsDataCopy {
+    static let plateKitReplaced = LocalizedStringResource(
+        "plain.settings.import.plateKitReplaced",
+        defaultValue: """
+            The plate kit in this file had weights that can't be right, so the standard kit is set up \
+            instead. You can change it in Settings.
+            """,
+        bundle: .main, comment: "plain. Result line: a backup's plate kit was replaced by the standard kit.")
+}
