@@ -10,6 +10,16 @@ extension DayKind {
         }
     }
 
+    /// The category the day is about, which the shortlist ranks first.
+    var mainCategory: ExerciseCategory {
+        switch self {
+        case .lowerStrength, .upperStrength, .fullBody: .strength
+        case .powerSpeed: .power
+        case .conditioning: .conditioning
+        case .mobility: .mobility
+        }
+    }
+
     var patterns: Set<MovementPattern>? {
         switch self {
         case .lowerStrength: [.squat, .hinge, .lunge, .carry, .core, .antiRotation, .mobility]
@@ -48,10 +58,9 @@ public enum DayShortlist {
         let usable = library.search(query).filter {
             !excluded.contains($0.id) && !LimitationRules.excludes($0, areas: brief.limitationAreas)
         }
-        let main = kind.categories.first { $0 != .mobility && $0 != .strength } ?? .strength
         let ranked = usable.enumerated().sorted { lhs, rhs in
-            RankKey(lhs.element, catalogIndex: lhs.offset, sports: sports, main: main)
-                < RankKey(rhs.element, catalogIndex: rhs.offset, sports: sports, main: main)
+            RankKey(lhs.element, catalogIndex: lhs.offset, sports: sports, main: kind.mainCategory)
+                < RankKey(rhs.element, catalogIndex: rhs.offset, sports: sports, main: kind.mainCategory)
         }
         let mobility = ranked.filter { $0.element.category == .mobility }.prefix(kind == .mobility ? limit : 8)
         let rest = ranked.filter { $0.element.category != .mobility }.prefix(limit - mobility.count)
@@ -81,9 +90,9 @@ public enum DayShortlist {
     static func sportTag(for sport: String) -> String? {
         let lowered = sport.lowercased()
         let tags = [
-            "tennis": ["tennis", "pickleball", "padel", "squash", "badminton"], "running": ["run", "marathon"],
-            "soccer": ["soccer", "football"], "climbing": ["climb", "boulder"],
+            ("tennis", ["tennis", "pickleball", "padel", "squash", "badminton"]), ("running", ["run", "marathon"]),
+            ("soccer", ["soccer", "football"]), ("climbing", ["climb", "boulder"]),
         ]
-        return tags.first { _, words in words.contains { lowered.contains($0) } }?.key
+        return tags.first { _, words in words.contains { lowered.contains($0) } }?.0
     }
 }
