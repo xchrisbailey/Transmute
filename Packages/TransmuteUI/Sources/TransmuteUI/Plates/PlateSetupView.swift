@@ -116,14 +116,7 @@
 
         private func addPlate() {
             guard let kg = newPlate, kg > 0 else { return }
-            if let index = inventory.plates.firstIndex(where: {
-                inventory.display(kg: $0.kg) == inventory.display(kg: kg)
-            }) {
-                inventory.plates[index].pairs += 1
-            } else {
-                inventory.plates.append(.init(kg: kg, pairs: 1))
-                inventory.plates.sort { $0.kg > $1.kg }
-            }
+            inventory.addPair(ofKg: kg)
             newPlate = nil
         }
 

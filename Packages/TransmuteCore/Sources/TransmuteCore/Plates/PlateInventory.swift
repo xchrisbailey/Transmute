@@ -146,38 +146,63 @@ extension PlateInventory {
     /// Most weight a backup's kit may give a bar, plate or step. Far past any gym, far short
     /// of where `Hundredths` stops holding a weight.
     static let heaviestPlausibleKg = 100_000.0
-    /// Most pairs of one plate the setup screen's stepper offers, and the most a backup's kit may
-    /// list before a restore treats it as one nobody owns.
+    /// Most pairs of one plate the setup screen offers, on its stepper and its add button.
     public static let mostPairsPerPlate = 20
 
-    /// Why this kit couldn't be one a person owns, or `nil` if it could. A restore checks a file's
-    /// kit with this before it applies it, since the plate maths traps on a weight `Hundredths`
-    /// can't hold and a huge pair count stalls it. Zero pairs is fine: the setup screen can leave a
-    /// row at none.
-    var implausibility: String? {
-        let weights = bars.map(\.kg) + plates.map(\.kg) + [dumbbellStepKg, heaviestDumbbellKg, machineStepKg]
-        if let kg = weights.first(where: { !($0 >= 0 && $0 <= Self.heaviestPlausibleKg) }) {
-            return "A weight of \(kg) kg isn't one a kit holds."
+    /// Adds one pair of a plate from the setup screen's add button: a new row for a weight the kit
+    /// doesn't hold, or one more pair on its row, up to `mostPairsPerPlate` like the stepper.
+    public mutating func addPair(ofKg kg: Double) {
+        if let index = plates.firstIndex(where: { display(kg: $0.kg) == display(kg: kg) }) {
+            plates[index].pairs = min(plates[index].pairs + 1, Self.mostPairsPerPlate)
+        } else {
+            plates.append(.init(kg: kg, pairs: 1))
+            plates.sort { $0.kg > $1.kg }
         }
-        if let plate = plates.first(where: { !(0...Self.mostPairsPerPlate).contains($0.pairs) }) {
-            return "\(plate.pairs) pairs of \(plate.kg) kg isn't a count a kit holds."
-        }
-        return nil
     }
 
-    /// The kit with plates of the same weight merged into one row, adding their pairs. A hand-edited
-    /// or third-party backup can list a weight twice; the kit holds one row per weight.
-    func mergingSameWeightPlates() -> PlateInventory {
-        var merged = self
-        merged.plates = []
+    /// This kit as a restore may apply it, and whether anything in it couldn't be real. A backup is
+    /// a file anyone can edit, and the plate maths traps on a weight `Hundredths` can't hold, so the
+    /// restore repairs only what can't be real and keeps the rest as written:
+    /// - a plate row whose weight is not a finite number above zero and within
+    ///   `heaviestPlausibleKg` is dropped;
+    /// - a bar weight or a dumbbell or machine step outside `0...heaviestPlausibleKg` goes back to the
+    ///   commercial-gym preset's value for that field, in this kit's unit;
+    /// - a negative pair count becomes zero, and a count over `mostPairsPerPlate` is capped there.
+    ///   Kits past the cap were written before the add button respected it, so capping is not a
+    ///   repair worth reporting;
+    /// - rows of one weight merge, their pairs capped at `mostPairsPerPlate` again.
+    /// Zero pairs is fine: the setup screen can leave a row at none.
+    func repairedForRestore() -> (kit: PlateInventory, repaired: Bool) {
+        let preset = PlateInventory(.commercialGym, system: system)
+        var kit = self
+        var repaired = false
+        func plausible(_ kg: Double) -> Bool { kg >= 0 && kg <= Self.heaviestPlausibleKg }
+        func resetting(_ kg: Double, to presetKg: Double) -> Double {
+            if plausible(kg) { return kg }
+            repaired = true
+            return presetKg
+        }
+        kit.bars = bars.map { bar in
+            Bar(bar.kind, kg: resetting(bar.kg, to: preset.bar(bar.kind).kg))
+        }
+        kit.dumbbellStepKg = resetting(dumbbellStepKg, to: preset.dumbbellStepKg)
+        kit.heaviestDumbbellKg = resetting(heaviestDumbbellKg, to: preset.heaviestDumbbellKg)
+        kit.machineStepKg = resetting(machineStepKg, to: preset.machineStepKg)
+        kit.plates = []
         for plate in plates {
-            if let index = merged.plates.firstIndex(where: { sameWeight($0.kg, plate.kg) }) {
-                merged.plates[index].pairs += plate.pairs
+            guard plate.kg > 0, plausible(plate.kg) else {
+                repaired = true
+                continue
+            }
+            if plate.pairs < 0 { repaired = true }
+            let pairs = min(max(plate.pairs, 0), Self.mostPairsPerPlate)
+            if let index = kit.plates.firstIndex(where: { sameWeight($0.kg, plate.kg) }) {
+                kit.plates[index].pairs = min(kit.plates[index].pairs + pairs, Self.mostPairsPerPlate)
             } else {
-                merged.plates.append(plate)
+                kit.plates.append(.init(kg: plate.kg, pairs: pairs))
             }
         }
-        return merged
+        return (kit, repaired)
     }
 
     private func sameWeight(_ lhs: Double, _ rhs: Double) -> Bool {

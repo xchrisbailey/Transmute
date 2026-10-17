@@ -296,11 +296,10 @@ enum SettingsDataCopy {
 }
 
 extension SettingsDataCopy {
-    static let plateKitReplaced = LocalizedStringResource(
-        "plain.settings.import.plateKitReplaced",
+    static let plateKitRepaired = LocalizedStringResource(
+        "plain.settings.import.plateKitRepaired",
         defaultValue: """
-            The plate kit in this file had weights that can't be right, so the standard kit is set up \
-            instead. You can change it in Settings.
+            Some plate settings in this file couldn't be read and were reset. You can check them in Settings.
             """,
-        bundle: .main, comment: "plain. Result line: a backup's plate kit was replaced by the standard kit.")
+        bundle: .main, comment: "plain. Result line: some of a backup's plate settings were reset or left out.")
 }

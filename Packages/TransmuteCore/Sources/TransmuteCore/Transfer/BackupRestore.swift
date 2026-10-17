@@ -46,14 +46,11 @@ struct BackupRestore {
         } else {
             profile = Profile()
             saved.apply(to: profile)
-            // The setup screen takes any weight above zero, so a kit this file holds can be past
-            // what the plate maths can use. It costs the person the kit, not the file.
-            if profile.plates.implausibility == nil {
-                profile.plates = profile.plates.mergingSameWeightPlates()
-            } else {
-                profile.plates = .standard()
-                summary.plateKitReplaced = true
-            }
+            // A file's kit can hold what the plate maths can't use. Repair those fields and keep
+            // the rest of the kit.
+            let restored = profile.plates.repairedForRestore()
+            profile.plates = restored.kit
+            summary.plateKitRepaired = restored.repaired
             context.insert(profile)
             summary.profile = .added
         }
