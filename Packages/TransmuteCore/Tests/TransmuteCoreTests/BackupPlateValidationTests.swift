@@ -28,6 +28,15 @@ struct BackupPlateValidationTests {
         rows.map { .init(kg: $0.kg, pairs: $0.pairs) }
     }
 
+    /// The expected kit when only the plate rows differ from the fixture's.
+    static func keeping(plates rows: [PlateInventory.Plate]) -> @Sendable (PlateInventory) -> PlateInventory {
+        { kit in
+            var kit = kit
+            kit.plates = rows
+            return kit
+        }
+    }
+
     /// The fixture's kit is in pounds, so the preset values a reset field falls back to are too.
     static let preset = PlateInventory(.commercialGym, system: .imperial)
 
@@ -35,59 +44,75 @@ struct BackupPlateValidationTests {
         .init(
             name: "a negative row among good ones", repaired: true,
             edit: { $0["plates"] = rows([(20, 3), (20, -1), (10, 2)]) },
-            expected: { var kit = $0; kit.plates = plates([(20, 3), (10, 2)]); return kit }),
+            expected: keeping(plates: Self.plates([(20, 3), (10, 2)]))),
         .init(
             name: "a negative row cancelling a good one", repaired: true,
             edit: { $0["plates"] = rows([(20, 1), (20, -1)]) },
-            expected: { var kit = $0; kit.plates = plates([(20, 1)]); return kit }),
+            expected: keeping(plates: Self.plates([(20, 1)]))),
         .init(
             name: "a negative row on its own", repaired: true,
             edit: { $0["plates"] = rows([(15, -4)]) },
-            expected: { var kit = $0; kit.plates = plates([(15, 0)]); return kit }),
+            expected: keeping(plates: Self.plates([(15, 0)]))),
         .init(
             name: "pairs that overflow when rows of one weight merge", repaired: false,
             edit: { $0["plates"] = rows([(20, Int.max), (20, 1)]) },
-            expected: { var kit = $0; kit.plates = plates([(20, PlateInventory.mostPairsPerPlate)]); return kit }),
+            expected: keeping(plates: Self.plates([(20, PlateInventory.mostPairsPerPlate)]))),
         .init(
             name: "one pair more than the setup screen offers", repaired: false,
             edit: { $0["plates"] = rows([(20, PlateInventory.mostPairsPerPlate + 1)]) },
-            expected: { var kit = $0; kit.plates = plates([(20, PlateInventory.mostPairsPerPlate)]); return kit }),
+            expected: keeping(plates: Self.plates([(20, PlateInventory.mostPairsPerPlate)]))),
         .init(
             name: "more pairs than anyone owns", repaired: false,
             edit: { $0["plates"] = rows([(20, 1_000_000)]) },
-            expected: { var kit = $0; kit.plates = plates([(20, PlateInventory.mostPairsPerPlate)]); return kit }),
+            expected: keeping(plates: Self.plates([(20, PlateInventory.mostPairsPerPlate)]))),
         .init(
             name: "a plate weight past what hundredths hold", repaired: true,
             edit: { $0["plates"] = rows([(20, 1), (1e300, 1)]) },
-            expected: { var kit = $0; kit.plates = plates([(20, 1)]); return kit }),
+            expected: keeping(plates: Self.plates([(20, 1)]))),
         .init(
             name: "a plate weight just past what hundredths hold", repaired: true,
             edit: { $0["plates"] = rows([(9.3e16, 1), (9.3e16, 2)]) },
-            expected: { var kit = $0; kit.plates = []; return kit }),
+            expected: keeping(plates: [])),
         .init(
             name: "a negative plate weight", repaired: true,
             edit: { $0["plates"] = rows([(-20, 1)]) },
-            expected: { var kit = $0; kit.plates = []; return kit }),
+            expected: keeping(plates: [])),
         .init(
             name: "a plate weight of zero", repaired: true,
             edit: { $0["plates"] = rows([(0, 3), (10, 1)]) },
-            expected: { var kit = $0; kit.plates = plates([(10, 1)]); return kit }),
+            expected: keeping(plates: Self.plates([(10, 1)]))),
         .init(
             name: "a bar weight past what hundredths hold", repaired: true,
             edit: { $0["bars"] = [["kind": "standard", "kg": 1e300]] },
-            expected: { var kit = $0; kit.bars = [.init(.standard, kg: preset.bar(.standard).kg)]; return kit }),
+            expected: {
+                var kit = $0
+                kit.bars = [.init(.standard, kg: preset.bar(.standard).kg)]
+                return kit
+            }),
         .init(
             name: "a dumbbell step past what hundredths hold", repaired: true,
             edit: { $0["dumbbellStepKg"] = 1e300 },
-            expected: { var kit = $0; kit.dumbbellStepKg = preset.dumbbellStepKg; return kit }),
+            expected: {
+                var kit = $0
+                kit.dumbbellStepKg = preset.dumbbellStepKg
+                return kit
+            }),
         .init(
             name: "a heaviest dumbbell past what hundredths hold", repaired: true,
             edit: { $0["heaviestDumbbellKg"] = 1e300 },
-            expected: { var kit = $0; kit.heaviestDumbbellKg = preset.heaviestDumbbellKg; return kit }),
+            expected: {
+                var kit = $0
+                kit.heaviestDumbbellKg = preset.heaviestDumbbellKg
+                return kit
+            }),
         .init(
             name: "a machine step past what hundredths hold", repaired: true,
             edit: { $0["machineStepKg"] = 1e300 },
-            expected: { var kit = $0; kit.machineStepKg = preset.machineStepKg; return kit }),
+            expected: {
+                var kit = $0
+                kit.machineStepKg = preset.machineStepKg
+                return kit
+            }),
     ]
 
     private func fixtureBackup(editingPlates edit: (inout [String: Any]) -> Void) throws -> Data {
@@ -153,7 +178,8 @@ struct BackupPlateValidationTests {
         #expect(restored.plates.plates == [.init(kg: 20, pairs: 20), .init(kg: 10, pairs: 0)])
     }
 
-    @MainActor @Test func aKitWithMoreThanTheCapOfPairsInARowRestoresWithThatRowAtTheCapAndEverythingElseIntact() throws {
+    @MainActor @Test func aKitWithMoreThanTheCapOfPairsInARowRestoresWithThatRowAtTheCapAndEverythingElseIntact() throws
+    {
         let over = PlateInventory.mostPairsPerPlate + 1
         let rows = Self.rows([(20.41, over), (10, 2)])
         let data = try fixtureBackup { $0["plates"] = rows }
