@@ -23,8 +23,8 @@ public struct PlanAssembler: Sendable {
     }
 
     /// The blueprint's phases fitted to the plan's length. Plans of six weeks or more end with a
-    /// one-week deload if the model didn't include one. A blueprint of only a deload gets a build
-    /// phase ahead of it.
+    /// one-week deload if the model didn't include one. A one-week plan has no deload, and a
+    /// blueprint of only a deload gets a build phase ahead of it.
     public func phases(from blueprint: [PlanBlueprint.Phase]) -> [PlanPhase] {
         let total = max(1, brief.schedule.weeks)
         var drafts = blueprint.filter { !$0.name.trimmingCharacters(in: .whitespaces).isEmpty }
@@ -38,6 +38,8 @@ public struct PlanAssembler: Sendable {
         if main.isEmpty, total > 1 {
             main = [PlanBlueprint.Phase(name: "Build", weeks: total - 1, focus: "Steady progress")]
         }
+        // One week has nothing to recover from, and a deload would claim the same week as the main phase.
+        if total == 1, !main.isEmpty { deload = false }
         let lengths = Self.proportionalLengths(main.map(\.weeks), fitting: total - (deload ? 1 : 0))
         var phases: [PlanPhase] = []
         var week = 1

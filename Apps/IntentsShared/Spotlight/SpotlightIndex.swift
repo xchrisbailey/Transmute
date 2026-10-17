@@ -2,45 +2,43 @@ import AppIntents
 import CoreSpotlight
 import OSLog
 import SwiftData
-import SwiftUI
 import TransmuteCore
 
-extension View {
-    /// Keeps logged workouts and plans in Spotlight. The index is rebuilt once at
-    /// launch, which also clears anything deleted on another device meanwhile; after that
-    /// each save of the store indexes what changed and takes out what was deleted.
-    func indexesSpotlight() -> some View {
-        modifier(SpotlightIndexing())
-    }
-}
-
-private struct SpotlightIndexing: ViewModifier {
-    @Environment(\.modelContext) private var context
-    @State private var saveGeneration = 0
-
-    private var settleDelay: Duration { saveGeneration == 0 ? .zero : .seconds(2) }
-
-    func body(content: Content) -> some View {
-        content
-            .onReceive(NotificationCenter.default.publisher(for: ModelContext.didSave)) { _ in
-                saveGeneration += 1
-            }
-            .task(id: saveGeneration) {
-                guard (try? await Task.sleep(for: settleDelay)) != nil else { return }
-                await SpotlightIndex.shared.update(from: context)
-            }
-    }
-}
-
-/// What Transmute has put in Spotlight this launch, so each update only sends the changes.
+/// Keeps logged workouts and plans in Spotlight, and what Transmute has put there this launch,
+/// so each update only sends the changes. The index is rebuilt once at launch, which also clears
+/// anything deleted on another device meanwhile; after that each save of the store indexes what
+/// changed and takes out what was deleted.
 @MainActor
 final class SpotlightIndex {
     static let shared = SpotlightIndex()
+    static let settleDelay = Duration.seconds(2)
 
     private static let logger = Logger(subsystem: Transmute.bundlePrefix, category: "spotlight")
     /// The text indexed for each workout and plan. `nil` until the first rebuild.
     private var workouts: [UUID: String]?
     private var plans: [UUID: String]?
+    private var observer: NSObjectProtocol?
+    private var pending: Task<Void, Never>?
+
+    /// Starts indexing after each save of the store. Call it once from an `App`'s `init`, so it's
+    /// listening before an App Intent that launched the process in the background saves: no
+    /// view needs to be on screen. A burst of saves, as a workout logs sets, settles into one update.
+    func listen() {
+        guard observer == nil else { return }
+        schedule(after: .zero)
+        let center = NotificationCenter.default
+        observer = center.addObserver(forName: ModelContext.didSave, object: nil, queue: nil) { [weak self] _ in
+            Task { @MainActor in self?.schedule(after: Self.settleDelay) }
+        }
+    }
+
+    private func schedule(after delay: Duration) {
+        pending?.cancel()
+        pending = Task {
+            guard (try? await Task.sleep(for: delay)) != nil else { return }
+            await update(from: TransmuteStore.shared.mainContext)
+        }
+    }
 
     func update(from context: ModelContext) async {
         do {
