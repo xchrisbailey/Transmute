@@ -6601,6 +6601,18 @@
         }
       }
     },
+    "plain.settings.import.plateKitRepaired": {
+      "comment": "plain. Result line: some of a backup's plate settings were reset or left out.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some plate settings in this file couldn't be read and were reset. You can check them in Settings."
+          }
+        }
+      }
+    },
     "plain.settings.import.profileAdded": {
       "comment": "plain. Result line.",
       "extractionState": "manual",

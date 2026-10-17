@@ -21,8 +21,13 @@ import Foundation
 /// the two relationships that cross the tree are written as references: a workout's plan day
 /// (`PlanDayRef`) and a record's set (`SetRef`).
 ///
-/// These types are the format. Changing a key's name or meaning needs a new `formatVersion`;
-/// adding an optional key doesn't, because missing keys decode as `nil`.
+/// These types are the format. Changing a key's name or meaning needs a new `formatVersion`.
+/// Adding a key to `Backup` or `ProfileBackup` doesn't: a missing key decodes as `nil` (or empty,
+/// for the lists). The same goes for a member of `profile.schedule`, `profile.progression` or
+/// `profile.preferences`, which keeps its default. Every other nested type (commitments, known
+/// lifts, the plate kit, plans, workouts and the rest) still fails the whole file on a missing
+/// key, so adding a member to one of those needs a new `formatVersion` or a lenient decode.
+/// A plate kit that couldn't be real doesn't fail the file; the restore replaces it.
 struct Backup: Codable, Equatable {
     /// The version this build writes, and the newest it reads.
     static let currentFormatVersion = 1

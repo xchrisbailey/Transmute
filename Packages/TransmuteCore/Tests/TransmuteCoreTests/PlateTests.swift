@@ -11,6 +11,28 @@ struct PlateTests {
     let homeKg = PlateInventory(.home, system: .metric)
     let lb = Units(system: .imperial)
 
+    @Test func addingAPairStopsAtTheMostTheStepperOffers() {
+        var kit = gymKg
+        kit.plates[0].pairs = PlateInventory.mostPairsPerPlate
+        kit.addPair(ofKg: kit.plates[0].kg)
+        #expect(kit.plates[0].pairs == PlateInventory.mostPairsPerPlate)
+
+        kit.plates[1].pairs = 3
+        kit.addPair(ofKg: kit.plates[1].kg)
+        #expect(kit.plates[1].pairs == 4)
+
+        kit.plates[2].pairs = PlateInventory.mostPairsPerPlate + 5
+        kit.addPair(ofKg: kit.plates[2].kg)
+        #expect(kit.plates[2].pairs == PlateInventory.mostPairsPerPlate + 5)
+    }
+
+    @Test func addingAPairOfANewWeightAddsARowInHeaviestFirstOrder() {
+        var kit = homeKg
+        kit.addPair(ofKg: 7.5)
+        #expect(kit.plates.map(\.kg) == [20, 10, 7.5, 5, 2.5, 1.25])
+        #expect(kit.plates[2].pairs == 1)
+    }
+
     @Test func exactInKilograms() throws {
         let calculator = PlateCalculator(inventory: gymKg)
         let hundred = try #require(calculator.solve(kg: 100).exact)

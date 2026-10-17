@@ -97,7 +97,7 @@
             let kg = plate.wrappedValue.kg
             let pairs = plate.wrappedValue.pairs
             let weight = "\(PlateText.weight(inventory.display(kg: kg))) \(units.weightSymbol)"
-            return Stepper(value: plate.pairs, in: 0...20) {
+            return Stepper(value: plate.pairs, in: 0...PlateInventory.mostPairsPerPlate) {
                 HStack {
                     Circle()
                         .fill(PlateStyle.color(kg: kg))
@@ -116,14 +116,7 @@
 
         private func addPlate() {
             guard let kg = newPlate, kg > 0 else { return }
-            if let index = inventory.plates.firstIndex(where: {
-                inventory.display(kg: $0.kg) == inventory.display(kg: kg)
-            }) {
-                inventory.plates[index].pairs += 1
-            } else {
-                inventory.plates.append(.init(kg: kg, pairs: 1))
-                inventory.plates.sort { $0.kg > $1.kg }
-            }
+            inventory.addPair(ofKg: kg)
             newPlate = nil
         }
 

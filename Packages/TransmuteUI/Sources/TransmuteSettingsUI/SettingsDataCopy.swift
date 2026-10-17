@@ -294,3 +294,12 @@ enum SettingsDataCopy {
         defaultValue: "OK",
         bundle: .main, comment: "plain. Button: dismiss the report after delete-all.")
 }
+
+extension SettingsDataCopy {
+    static let plateKitRepaired = LocalizedStringResource(
+        "plain.settings.import.plateKitRepaired",
+        defaultValue: """
+            Some plate settings in this file couldn't be read and were reset. You can check them in Settings.
+            """,
+        bundle: .main, comment: "plain. Result line: some of a backup's plate settings were reset or left out.")
+}

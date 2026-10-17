@@ -112,14 +112,15 @@ struct PlateStorageTests {
             .init(kg: 20, pairs: 2), .init(kg: 10, pairs: 1), .init(kg: 20, pairs: 1), .init(kg: 20.001, pairs: 3),
             .init(kg: 5, pairs: 1),
         ]
-        let merged = kit.mergingSameWeightPlates()
+        let merged = kit.repairedForRestore().kit
         #expect(merged.plates == [.init(kg: 20, pairs: 6), .init(kg: 10, pairs: 1), .init(kg: 5, pairs: 1)])
         #expect(merged.plates.map(\.id).count == Set(merged.plates.map(\.id)).count)
     }
 
     @Test func aKitWithOneRowPerWeightIsLeftAlone() {
         let kit = PlateInventory(.commercialGym, system: .imperial)
-        #expect(kit.mergingSameWeightPlates() == kit)
+        #expect(kit.repairedForRestore().kit == kit)
+        #expect(!kit.repairedForRestore().repaired)
     }
 
     @MainActor @Test func restoringABackupMergesDuplicatePlateRows() throws {

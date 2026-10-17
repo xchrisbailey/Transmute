@@ -36,6 +36,25 @@ public struct WorkoutPreferences: Codable, Hashable, Sendable {
         self.warmUpSets = warmUpSets
     }
 
+    /// A member missing from a backup keeps its default, so a backup written before the member
+    /// existed still restores. This serves backups only: SwiftData stores the member as a column
+    /// of its own, and a new one needs its own SchemaV2 default. Encoding is synthesized and
+    /// writes every member.
+    public init(from decoder: any Decoder) throws {
+        let defaults = Self()
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        workingRestSeconds =
+            try container.decodeIfPresent(Double.self, forKey: .workingRestSeconds) ?? defaults.workingRestSeconds
+        warmUpRestSeconds =
+            try container.decodeIfPresent(Double.self, forKey: .warmUpRestSeconds) ?? defaults.warmUpRestSeconds
+        restSound = try container.decodeIfPresent(Bool.self, forKey: .restSound) ?? defaults.restSound
+        restHaptics = try container.decodeIfPresent(Bool.self, forKey: .restHaptics) ?? defaults.restHaptics
+        autoStartRest = try container.decodeIfPresent(Bool.self, forKey: .autoStartRest) ?? defaults.autoStartRest
+        showRPE = try container.decodeIfPresent(Bool.self, forKey: .showRPE)
+        showPercentOfMax = try container.decodeIfPresent(Bool.self, forKey: .showPercentOfMax)
+        warmUpSets = try container.decodeIfPresent(Bool.self, forKey: .warmUpSets) ?? defaults.warmUpSets
+    }
+
     /// The rest times offered in Settings, in seconds.
     public static let restChoices: [Double] = [30, 45, 60, 90, 120, 150, 180, 240, 300]
 

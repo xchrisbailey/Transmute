@@ -25,6 +25,21 @@ public struct ProgressionSettings: Codable, Hashable, Sendable {
         self.heldExerciseIDs = heldExerciseIDs
     }
 
+    /// A member missing from a backup keeps its default, so a backup written before the member
+    /// existed still restores. This serves backups only: SwiftData stores the member as a column
+    /// of its own, and a new one needs its own SchemaV2 default. Encoding is synthesized and
+    /// writes every member.
+    public init(from decoder: any Decoder) throws {
+        let defaults = Self()
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        upperBodyKg = try container.decodeIfPresent(Double.self, forKey: .upperBodyKg) ?? defaults.upperBodyKg
+        lowerBodyKg = try container.decodeIfPresent(Double.self, forKey: .lowerBodyKg) ?? defaults.lowerBodyKg
+        upperBodyLb = try container.decodeIfPresent(Double.self, forKey: .upperBodyLb) ?? defaults.upperBodyLb
+        lowerBodyLb = try container.decodeIfPresent(Double.self, forKey: .lowerBodyLb) ?? defaults.lowerBodyLb
+        heldExerciseIDs =
+            try container.decodeIfPresent([String].self, forKey: .heldExerciseIDs) ?? defaults.heldExerciseIDs
+    }
+
     /// The choices offered for an increment, in the system's own unit.
     public static func incrementChoices(for system: UnitSystem) -> [Double] {
         system == .metric ? [0.5, 1, 1.25, 2, 2.5, 5] : [1, 2.5, 5, 10]

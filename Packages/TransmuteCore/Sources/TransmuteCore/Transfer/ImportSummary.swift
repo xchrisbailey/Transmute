@@ -24,6 +24,9 @@ public struct ImportSummary: Equatable, Sendable {
 
     public var source: Source
     public var profile = ProfileOutcome.absent
+    /// Some of the file's plate settings couldn't be real, so the new profile's kit has them reset or
+    /// dropped and keeps the rest.
+    public var plateKitRepaired = false
     public var bodyweights = Count()
     public var customExercises = Count()
     public var plans = Count()

@@ -131,6 +131,21 @@ public struct Schedule: Codable, Hashable, Sendable {
         self.weeks = weeks
         self.commitments = commitments
     }
+
+    /// A member missing from a backup keeps its default, so a backup written before the member
+    /// existed still restores. This serves backups only: SwiftData stores the member as a column
+    /// of its own, and a new one needs its own SchemaV2 default. Encoding is synthesized and
+    /// writes every member.
+    public init(from decoder: any Decoder) throws {
+        let defaults = Self()
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        daysPerWeek = try container.decodeIfPresent(Int.self, forKey: .daysPerWeek) ?? defaults.daysPerWeek
+        preferredWeekdays =
+            try container.decodeIfPresent([Weekday].self, forKey: .preferredWeekdays) ?? defaults.preferredWeekdays
+        sessionMinutes = try container.decodeIfPresent(Int.self, forKey: .sessionMinutes) ?? defaults.sessionMinutes
+        weeks = try container.decodeIfPresent(Int.self, forKey: .weeks) ?? defaults.weeks
+        commitments = try container.decodeIfPresent([Commitment].self, forKey: .commitments) ?? defaults.commitments
+    }
 }
 
 /// A stretch of weeks with one emphasis, e.g. weeks 1–3 "Build".
