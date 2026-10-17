@@ -27,6 +27,8 @@ public struct ImportSummary: Equatable, Sendable {
     /// Some of the file's plate settings couldn't be real, so the new profile's kit has them reset or
     /// dropped and keeps the rest.
     public var plateKitRepaired = false
+    /// The store's profile was customised, so its plate kit was kept over a different one in the file.
+    public var plateKitKept = false
     public var bodyweights = Count()
     public var customExercises = Count()
     public var plans = Count()

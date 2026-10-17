@@ -91,6 +91,18 @@ struct DataTransferScreenTests {
             ])
     }
 
+    @Test func aBackupReportSaysWhenTheDevicesPlateSetupWasKept() {
+        var summary = ImportSummary(source: .backup)
+        summary.profile = .kept
+        summary.plateKitKept = true
+        summary.workouts = .init(added: 2)
+        #expect(
+            text(ImportReport(summary).lines) == [
+                "From a Transmute backup.", "The profile already here was kept as it is.",
+                "Kept this device's plate setup.", "Workouts added: 2",
+            ])
+    }
+
     @Test func aSpreadsheetReportNamesTheExercisesItAdded() {
         var summary = ImportSummary(source: .strong)
         summary.workouts = .init(added: 2)

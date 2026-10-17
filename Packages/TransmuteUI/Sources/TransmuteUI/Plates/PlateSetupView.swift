@@ -63,7 +63,7 @@
                                 .accessibilityLabel(Text(PlateCopy.addPlate))
                         }
                         .buttonStyle(.borderless)
-                        .disabled((newPlate ?? 0) <= 0)
+                        .disabled(!PlateInventory.accepts(kg: newPlate ?? 0))
                     }
                 } header: {
                     Text(PlateCopy.plates)
@@ -115,7 +115,7 @@
         }
 
         private func addPlate() {
-            guard let kg = newPlate, kg > 0 else { return }
+            guard let kg = newPlate, PlateInventory.accepts(kg: kg) else { return }
             inventory.addPair(ofKg: kg)
             newPlate = nil
         }
@@ -151,7 +151,7 @@
             Binding {
                 inventory[keyPath: get]
             } set: { value in
-                if let value, value > 0 { set(&inventory, value) }
+                if let value, PlateInventory.accepts(kg: value) { set(&inventory, value) }
             }
         }
     }

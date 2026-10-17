@@ -19,6 +19,7 @@ struct ImportReport: Equatable {
         case .absent: break
         }
         if summary.plateKitRepaired { lines.append(SettingsDataCopy.plateKitRepaired) }
+        if summary.plateKitKept { lines.append(SettingsDataCopy.plateKitKept) }
         let counts: [(Int, (Int) -> LocalizedStringResource)] = [
             (summary.workouts.added, SettingsDataCopy.workoutsAdded),
             (summary.setsAdded, SettingsDataCopy.setsAdded),

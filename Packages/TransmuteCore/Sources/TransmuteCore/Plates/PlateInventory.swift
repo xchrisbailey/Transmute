@@ -171,20 +171,28 @@ extension PlateInventory {
             machineStepKg: system.kilograms(fromDisplay: machine))
     }
 
-    /// Most weight a backup's kit may give a bar, plate or step. Far past any gym, far short
-    /// of where `Hundredths` stops holding a weight.
-    static let heaviestPlausibleKg = 100_000.0
+    /// Most weight a kit may give a bar, plate or step, on the setup screen and in a restore. Far
+    /// past any gym, far short of where `Hundredths` stops holding a weight.
+    public static let heaviestPlausibleKg = 100_000.0
     /// Most pairs of one plate the setup screen offers, on its stepper and its add button.
     public static let mostPairsPerPlate = 20
-    /// Most plate rows a backup's kit may restore with. A real kit has about ten to fifteen.
+    /// Most plate rows a kit may hold, on the setup screen and in a restore. A real kit has about
+    /// ten to fifteen.
     public static let mostPlateRows = 40
 
+    /// Whether the setup screen takes a bar, plate or step of this weight: above zero and no more
+    /// than `heaviestPlausibleKg`, which is what a restore keeps.
+    public static func accepts(kg: Double) -> Bool {
+        kg > 0 && kg <= heaviestPlausibleKg
+    }
+
     /// Adds one pair of a plate from the setup screen's add button: a new row for a weight the kit
-    /// doesn't hold, or one more pair on its row, up to `mostPairsPerPlate` like the stepper.
+    /// doesn't hold, or one more pair on its row, up to `mostPairsPerPlate` like the stepper. Past
+    /// `mostPlateRows` rows a new weight adds nothing.
     public mutating func addPair(ofKg kg: Double) {
         if let index = plates.firstIndex(where: { display(kg: $0.kg) == display(kg: kg) }) {
             if plates[index].pairs < Self.mostPairsPerPlate { plates[index].pairs += 1 }
-        } else {
+        } else if plates.count < Self.mostPlateRows {
             plates.append(.init(kg: kg, pairs: 1))
             plates.sort { $0.kg > $1.kg }
         }
@@ -202,7 +210,8 @@ extension PlateInventory {
     ///   repair worth reporting;
     /// - rows of one weight merge, their pairs capped at `mostPairsPerPlate` again;
     /// - rows past `mostPlateRows` are dropped, the first ones kept. The plate maths grows steeply
-    ///   with the number of distinct weights, and only an edited file has this many.
+    ///   with the number of distinct weights. The setup screen stops at the cap too, but a kit
+    ///   written before it did, or an edited file, can hold more.
     /// Zero pairs is fine: the setup screen can leave a row at none.
     func repairedForRestore() -> (kit: PlateInventory, repaired: Bool) {
         let preset = PlateInventory(.commercialGym, system: system)

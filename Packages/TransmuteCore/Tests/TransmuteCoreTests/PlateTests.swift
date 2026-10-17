@@ -26,6 +26,44 @@ struct PlateTests {
         #expect(kit.plates[2].pairs == PlateInventory.mostPairsPerPlate + 5)
     }
 
+    @Test func addingAPairOfANewWeightStopsAtTheMostRowsARestoreKeeps() {
+        var kit = gymKg
+        kit.plates = (1...PlateInventory.mostPlateRows).map { .init(kg: Double($0), pairs: 1) }
+
+        kit.addPair(ofKg: 99.5)
+        #expect(kit.plates.count == PlateInventory.mostPlateRows)
+        #expect(!kit.plates.contains { $0.kg == 99.5 })
+
+        kit.addPair(ofKg: 7)
+        #expect(kit.plates.first { $0.kg == 7 }?.pairs == 2)
+
+        kit.plates.removeLast()
+        kit.addPair(ofKg: 99.5)
+        #expect(kit.plates.count == PlateInventory.mostPlateRows)
+        #expect(kit.plates.first == .init(kg: 99.5, pairs: 1))
+    }
+
+    @Test func theSetupScreenAcceptsOnlyWeightsARestoreKeeps() {
+        #expect(PlateInventory.accepts(kg: 0.01))
+        #expect(PlateInventory.accepts(kg: PlateInventory.heaviestPlausibleKg))
+        #expect(!PlateInventory.accepts(kg: 0))
+        #expect(!PlateInventory.accepts(kg: -5))
+        #expect(!PlateInventory.accepts(kg: PlateInventory.heaviestPlausibleKg + 0.01))
+        #expect(!PlateInventory.accepts(kg: .infinity))
+        #expect(!PlateInventory.accepts(kg: .nan))
+
+        var kit = gymKg
+        let heaviest = PlateInventory.heaviestPlausibleKg
+        kit.setBarKg(heaviest)
+        kit.plates = [.init(kg: heaviest, pairs: 1)]
+        kit.dumbbellStepKg = heaviest
+        kit.heaviestDumbbellKg = heaviest
+        kit.machineStepKg = heaviest
+        let restored = kit.repairedForRestore()
+        #expect(restored.kit == kit)
+        #expect(!restored.repaired)
+    }
+
     @Test func addingAPairOfANewWeightAddsARowInHeaviestFirstOrder() {
         var kit = homeKg
         kit.addPair(ofKg: 7.5)

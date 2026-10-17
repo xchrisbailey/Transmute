@@ -302,4 +302,9 @@ extension SettingsDataCopy {
             Some plate settings in this file couldn't be read and were reset. You can check them in Settings.
             """,
         bundle: .main, comment: "plain. Result line: some of a backup's plate settings were reset or left out.")
+
+    static let plateKitKept = LocalizedStringResource(
+        "plain.settings.import.plateKitKept",
+        defaultValue: "Kept this device's plate setup.",
+        bundle: .main, comment: "plain. Result line: the backup's plate setup differs from this device's, which was kept.")
 }

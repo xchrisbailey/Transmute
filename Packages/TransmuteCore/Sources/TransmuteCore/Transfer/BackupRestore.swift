@@ -43,14 +43,18 @@ struct BackupRestore {
         if let existing = try Profile.canonical(in: context) {
             profile = existing
             summary.profile = .kept
+            // A person moving phones gets their kit; a kit someone changed on this device stays.
+            if let kit = saved.plates {
+                if profile.plates == PlateInventory.standard() {
+                    restoreKit(kit, into: profile)
+                } else if kit.repairedForRestore().kit != profile.plates {
+                    summary.plateKitKept = true
+                }
+            }
         } else {
             profile = Profile()
             saved.apply(to: profile)
-            // A file's kit can hold what the plate maths can't use. Repair those fields and keep
-            // the rest of the kit.
-            let restored = profile.plates.repairedForRestore()
-            profile.plates = restored.kit
-            summary.plateKitRepaired = restored.repaired
+            restoreKit(profile.plates, into: profile)
             context.insert(profile)
             summary.profile = .added
         }
@@ -64,6 +68,14 @@ struct BackupRestore {
                 summary.bodyweights.added += 1
             }
         }
+    }
+
+    /// A file's kit can hold what the plate maths can't use. Repair those fields and keep the rest
+    /// of the kit. The profile's bar weight is the profile's own setting and is left as it is.
+    private mutating func restoreKit(_ kit: PlateInventory, into profile: Profile) {
+        let restored = kit.repairedForRestore()
+        profile.plates = restored.kit
+        summary.plateKitRepaired = restored.repaired
     }
 
     private mutating func restoreCustomExercises() throws {

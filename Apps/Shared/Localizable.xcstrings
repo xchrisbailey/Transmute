@@ -6601,6 +6601,18 @@
         }
       }
     },
+    "plain.settings.import.plateKitKept": {
+      "comment": "plain. Result line: the backup's plate setup differs from this device's, which was kept.",
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kept this device's plate setup."
+          }
+        }
+      }
+    },
     "plain.settings.import.plateKitRepaired": {
       "comment": "plain. Result line: some of a backup's plate settings were reset or left out.",
       "extractionState": "manual",
