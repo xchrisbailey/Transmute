@@ -23,11 +23,23 @@ import Foundation
 ///
 /// These types are the format. Changing a key's name or meaning needs a new `formatVersion`.
 /// Adding a key to `Backup` or `ProfileBackup` doesn't: a missing key decodes as `nil` (or empty,
-/// for the lists). The same goes for a member of `profile.schedule`, `profile.progression` or
-/// `profile.preferences`, which keeps its default. Every other nested type (commitments, known
-/// lifts, the plate kit, plans, workouts and the rest) still fails the whole file on a missing
-/// key, so adding a member to one of those needs a new `formatVersion` or a lenient decode.
-/// A plate kit that couldn't be real doesn't fail the file; the restore replaces it.
+/// for the lists).
+///
+/// A missing member keeps a default only in the types listed here:
+/// - `Schedule`, `ProgressionSettings` and `WorkoutPreferences`: every member;
+/// - `Commitment`: `intensity`;
+/// - `KnownLift`: `reps`;
+/// - `PlateInventory`: everything but `system`;
+/// - `PlateInventory.Plate`: `pairs`.
+///
+/// Every other member fails the whole file when it is missing, so a new member of any of these
+/// needs a `formatVersion` bump: the records that are the backup's data (plans, days, exercises,
+/// sets, workouts, records, custom exercises, bodyweights), and the members with no honest default
+/// (a commitment's weekday and label, a known lift's exercise and weight, the kit's `system`, a
+/// bar's kind and weight, a plate's weight). A type joins the list only with a test that removes
+/// each of its members from a fixture backup.
+/// A plate kit that couldn't be real doesn't fail the file; the restore repairs it, dropping rows
+/// past `PlateInventory.mostPlateRows`.
 struct Backup: Codable, Equatable {
     /// The version this build writes, and the newest it reads.
     static let currentFormatVersion = 1

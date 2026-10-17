@@ -77,10 +77,6 @@ struct BackupDeeperMembersTests {
             name: "the kit's machine step", edit: removing("machineStepKg", in: ["plates"]),
             check: { $0.plates.machineStepKg == preset.machineStepKg }),
         .init(
-            name: "a bar's weight",
-            edit: removing(fromRowsOf: "bars", in: ["plates"], "kg"),
-            check: { $0.plates.bars == PlateInventory.defaultBars(.imperial) }),
-        .init(
             name: "a plate row's pairs",
             edit: removing(fromRowsOf: "plates", in: ["plates"], "pairs"),
             check: { profile in
@@ -112,6 +108,8 @@ struct BackupDeeperMembersTests {
             },
             check: { _ in true }),
         .init(name: "the kit's unit", edit: removing("system", in: ["plates"]), check: { _ in true }),
+        .init(
+            name: "a bar's weight", edit: removing(fromRowsOf: "bars", in: ["plates"], "kg"), check: { _ in true }),
         .init(
             name: "a bar's kind", edit: removing(fromRowsOf: "bars", in: ["plates"], "kind"), check: { _ in true }),
         .init(

@@ -87,6 +87,16 @@ public struct KnownLift: Codable, Hashable, Sendable {
         self.reps = reps
     }
 
+    /// Reps missing from a backup count as a single, which `estimatedOneRepMaxKg` takes as is. The
+    /// exercise and the weight have no honest default, so a file without them stays unreadable.
+    /// This serves backups only; encoding is synthesized and writes every member.
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        exerciseID = try container.decode(String.self, forKey: .exerciseID)
+        weightKg = try container.decode(Double.self, forKey: .weightKg)
+        reps = try container.decodeIfPresent(Int.self, forKey: .reps) ?? 1
+    }
+
     /// Estimated one-rep max by the Epley formula; a single is taken as is.
     public var estimatedOneRepMaxKg: Double {
         reps <= 1 ? weightKg : weightKg * (1 + Double(reps) / 30)
@@ -111,6 +121,16 @@ public struct Commitment: Codable, Hashable, Sendable {
         self.weekday = weekday
         self.label = label
         self.intensity = intensity
+    }
+
+    /// An intensity missing from a backup is `.moderate`, like the initializer's. The weekday and
+    /// the label have no honest default, so a file without them stays unreadable. This serves
+    /// backups only; encoding is synthesized and writes every member.
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        weekday = try container.decode(Weekday.self, forKey: .weekday)
+        label = try container.decode(String.self, forKey: .label)
+        intensity = try container.decodeIfPresent(Intensity.self, forKey: .intensity) ?? .moderate
     }
 }
 
