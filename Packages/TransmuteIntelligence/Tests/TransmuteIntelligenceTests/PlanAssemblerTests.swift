@@ -250,7 +250,9 @@ struct PlanAssemblerTests {
         #expect(LimitationRules.areas(mentionedIn: "none").isEmpty)
         #expect(TrainingBrief.kneeInjury.limitationAreas.contains(.knee))
     }
+}
 
+struct DayShortlistTests {
     /// The limit leaves room for a few of the main category's exercises beyond the mobility cap.
     struct MainCategoryDay: Sendable {
         let kind: DayKind
