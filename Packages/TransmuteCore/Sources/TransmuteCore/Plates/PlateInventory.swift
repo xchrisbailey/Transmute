@@ -44,6 +44,15 @@ public struct PlateInventory: Codable, Hashable, Sendable {
             self.kg = kg
             self.pairs = pairs
         }
+
+        /// A row with no count in a backup holds no pairs: the kit doesn't claim plates it can't
+        /// show were owned. The weight has no default. This serves backups only; encoding is
+        /// synthesized and writes every member.
+        public init(from decoder: any Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            kg = try container.decode(Double.self, forKey: .kg)
+            pairs = try container.decodeIfPresent(Int.self, forKey: .pairs) ?? 0
+        }
     }
 
     /// The unit the kit is marked in.
@@ -69,6 +78,25 @@ public struct PlateInventory: Codable, Hashable, Sendable {
         self.dumbbellStepKg = dumbbellStepKg
         self.heaviestDumbbellKg = heaviestDumbbellKg
         self.machineStepKg = machineStepKg
+    }
+
+    /// A member missing from a backup keeps the commercial-gym preset's value in the kit's unit,
+    /// like the restore's repair of a value that can't be real. The unit has no default (it isn't
+    /// the locale's to guess), and neither has a bar's weight: `Bar` can't know the unit it's in,
+    /// and SwiftData decodes `bars` through `Bar` itself, so the lenience can't live out here. This
+    /// serves backups only; encoding is synthesized and writes every member.
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        system = try container.decode(UnitSystem.self, forKey: .system)
+        let defaults = Self(.commercialGym, system: system)
+        bars = try container.decodeIfPresent([Bar].self, forKey: .bars) ?? defaults.bars
+        barKind = try container.decodeIfPresent(BarKind.self, forKey: .barKind) ?? defaults.barKind
+        plates = try container.decodeIfPresent([Plate].self, forKey: .plates) ?? defaults.plates
+        dumbbellStepKg =
+            try container.decodeIfPresent(Double.self, forKey: .dumbbellStepKg) ?? defaults.dumbbellStepKg
+        heaviestDumbbellKg =
+            try container.decodeIfPresent(Double.self, forKey: .heaviestDumbbellKg) ?? defaults.heaviestDumbbellKg
+        machineStepKg = try container.decodeIfPresent(Double.self, forKey: .machineStepKg) ?? defaults.machineStepKg
     }
 
     /// The chosen bar. A kind missing from `bars` falls back to a standard bar in this unit.
@@ -148,6 +176,8 @@ extension PlateInventory {
     static let heaviestPlausibleKg = 100_000.0
     /// Most pairs of one plate the setup screen offers, on its stepper and its add button.
     public static let mostPairsPerPlate = 20
+    /// Most plate rows a backup's kit may restore with. A real kit has about ten to fifteen.
+    public static let mostPlateRows = 40
 
     /// Adds one pair of a plate from the setup screen's add button: a new row for a weight the kit
     /// doesn't hold, or one more pair on its row, up to `mostPairsPerPlate` like the stepper.
@@ -170,7 +200,9 @@ extension PlateInventory {
     /// - a negative pair count becomes zero, and a count over `mostPairsPerPlate` is capped there.
     ///   Kits past the cap were written before the add button respected it, so capping is not a
     ///   repair worth reporting;
-    /// - rows of one weight merge, their pairs capped at `mostPairsPerPlate` again.
+    /// - rows of one weight merge, their pairs capped at `mostPairsPerPlate` again;
+    /// - rows past `mostPlateRows` are dropped, the first ones kept. The plate maths grows steeply
+    ///   with the number of distinct weights, and only an edited file has this many.
     /// Zero pairs is fine: the setup screen can leave a row at none.
     func repairedForRestore() -> (kit: PlateInventory, repaired: Bool) {
         let preset = PlateInventory(.commercialGym, system: system)
@@ -201,6 +233,10 @@ extension PlateInventory {
             } else {
                 kit.plates.append(.init(kg: plate.kg, pairs: pairs))
             }
+        }
+        if kit.plates.count > Self.mostPlateRows {
+            kit.plates.removeLast(kit.plates.count - Self.mostPlateRows)
+            repaired = true
         }
         return (kit, repaired)
     }
