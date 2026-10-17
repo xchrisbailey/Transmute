@@ -1,6 +1,5 @@
 import SwiftData
-
-@testable import TransmuteCore
+import TransmuteCore
 
 extension TransmuteStore {
     /// An in-memory container for one test, with autosave off.
@@ -10,7 +9,7 @@ extension TransmuteStore {
     /// timer that fires while the container is going or gone traps in SwiftData. A test saves
     /// when it means to, so it has no use for the timer.
     @MainActor
-    static func makeTestContainer() throws -> ModelContainer {
+    public static func makeTestContainer() throws -> ModelContainer {
         let container = try makeContainer(.inMemory)
         container.mainContext.autosaveEnabled = false
         return container

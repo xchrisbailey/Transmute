@@ -2,6 +2,7 @@ import Foundation
 import SwiftData
 import Testing
 import TransmuteCore
+import TransmuteTestSupport
 
 @testable import TransmuteIntelligence
 
@@ -49,7 +50,7 @@ struct ReworkTests {
     }
 
     @Test func replacingADayMarksItEdited() throws {
-        let container = try TransmuteStore.makeContainer(.inMemory)
+        let container = try TransmuteStore.makeTestContainer()
         let plan = SampleData.plan(startingOn: .now)
         container.mainContext.insert(plan)
         let day = try #require(plan.orderedDays.first)
@@ -68,7 +69,7 @@ struct ReworkTests {
     }
 
     @Test func rebrewKeepsLoggedAndEditedDays() async throws {
-        let container = try TransmuteStore.makeContainer(.inMemory)
+        let container = try TransmuteStore.makeTestContainer()
         let context = container.mainContext
         let (_, plan) = SampleData.insert(into: context)
         let edited = try #require(plan.orderedDays.first { $0.week == 4 && $0.weekday == 1 })

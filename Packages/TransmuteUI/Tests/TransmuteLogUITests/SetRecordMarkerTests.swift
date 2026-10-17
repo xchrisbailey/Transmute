@@ -2,6 +2,7 @@ import Foundation
 import SwiftData
 import Testing
 import TransmuteCore
+import TransmuteTestSupport
 
 @testable import TransmuteLogUI
 
@@ -13,7 +14,7 @@ struct SetRecordMarkerTests {
     let day = Date(timeIntervalSince1970: 1_790_000_000)
 
     init() throws {
-        container = try TransmuteStore.makeContainer(.inMemory)
+        container = try TransmuteStore.makeTestContainer()
     }
 
     @discardableResult
