@@ -306,5 +306,5 @@ extension SettingsDataCopy {
     static let plateKitKept = LocalizedStringResource(
         "plain.settings.import.plateKitKept",
         defaultValue: "Kept this device's plate setup.",
-        bundle: .main, comment: "plain. Result line: the backup's plate setup differs from this device's, which was kept.")
+        bundle: .main, comment: "plain. Result line: this device's plate setup was kept over the backup's.")
 }

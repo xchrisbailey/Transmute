@@ -6602,7 +6602,7 @@
       }
     },
     "plain.settings.import.plateKitKept": {
-      "comment": "plain. Result line: the backup's plate setup differs from this device's, which was kept.",
+      "comment": "plain. Result line: this device's plate setup was kept over the backup's.",
       "extractionState": "manual",
       "localizations": {
         "en": {

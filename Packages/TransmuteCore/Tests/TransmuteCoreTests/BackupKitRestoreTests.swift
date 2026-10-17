@@ -84,7 +84,8 @@ struct BackupKitRestoreTests {
     }
 
     @MainActor @Test func aKitOfTheOtherUnitIsCustomisedEvenIfItIsAPreset() throws {
-        let other = PlateInventory(.commercialGym, system: PlateInventory.standard().system == .metric ? .imperial : .metric)
+        let otherSystem: UnitSystem = PlateInventory.standard().system == .metric ? .imperial : .metric
+        let other = PlateInventory(.commercialGym, system: otherSystem)
         let container = try store(kit: other)
 
         let summary = try DataTransfer.importBackup(
