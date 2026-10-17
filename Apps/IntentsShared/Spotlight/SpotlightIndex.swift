@@ -26,8 +26,8 @@ final class SpotlightIndex {
     func listen() {
         guard observer == nil else { return }
         schedule(after: .zero)
-        observer = NotificationCenter.default.addObserver(forName: ModelContext.didSave, object: nil, queue: nil) {
-            [weak self] _ in
+        let center = NotificationCenter.default
+        observer = center.addObserver(forName: ModelContext.didSave, object: nil, queue: nil) { [weak self] _ in
             Task { @MainActor in self?.schedule(after: Self.settleDelay) }
         }
     }
