@@ -148,6 +148,8 @@ extension PlateInventory {
     static let heaviestPlausibleKg = 100_000.0
     /// Most pairs of one plate the setup screen offers, on its stepper and its add button.
     public static let mostPairsPerPlate = 20
+    /// Most plate rows a backup's kit may restore with. A real kit has about ten to fifteen.
+    public static let mostPlateRows = 40
 
     /// Adds one pair of a plate from the setup screen's add button: a new row for a weight the kit
     /// doesn't hold, or one more pair on its row, up to `mostPairsPerPlate` like the stepper.
