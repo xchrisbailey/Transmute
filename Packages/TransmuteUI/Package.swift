@@ -33,7 +33,9 @@ let package = Package(
         .testTarget(
             name: "TransmutePlanUITests",
             dependencies: ["TransmutePlanUI", .product(name: "TransmuteTestSupport", package: "TransmuteCore")]),
-        .testTarget(name: "TransmuteLogUITests", dependencies: ["TransmuteLogUI"]),
+        .testTarget(
+            name: "TransmuteLogUITests",
+            dependencies: ["TransmuteLogUI", .product(name: "TransmuteTestSupport", package: "TransmuteCore")]),
         .testTarget(
             name: "TransmuteSettingsUITests",
             dependencies: ["TransmuteSettingsUI", .product(name: "TransmuteTestSupport", package: "TransmuteCore")]),

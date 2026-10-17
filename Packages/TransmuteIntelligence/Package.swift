@@ -12,6 +12,8 @@ let package = Package(
     ],
     targets: [
         .target(name: "TransmuteIntelligence", dependencies: ["TransmuteCore"]),
-        .testTarget(name: "TransmuteIntelligenceTests", dependencies: ["TransmuteIntelligence"]),
+        .testTarget(
+            name: "TransmuteIntelligenceTests",
+            dependencies: ["TransmuteIntelligence", .product(name: "TransmuteTestSupport", package: "TransmuteCore")]),
     ]
 )

@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
+import TransmuteTestSupport
 
 @testable import TransmuteCore
 

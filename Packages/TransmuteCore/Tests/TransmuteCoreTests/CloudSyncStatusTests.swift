@@ -6,6 +6,7 @@ import Testing
 
 struct CloudSyncStatusTests {
     @Test func aLocalStoreIsNotSyncing() async throws {
+        // swiftlint:disable:next use_make_test_container
         let container = try TransmuteStore.makeContainer(.inMemory)
         #expect(await TransmuteStore.cloudSyncStatus(of: container) == .notSyncing)
     }
