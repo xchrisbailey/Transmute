@@ -49,7 +49,7 @@ struct BackupRestore {
             // A file's kit can hold what the plate maths can't use. Repair those fields and keep
             // the rest of the kit.
             let restored = profile.plates.repairedForRestore()
-            profile.setPlates(restored.kit)
+            profile.plates = restored.kit
             summary.plateKitRepaired = restored.repaired
             context.insert(profile)
             summary.profile = .added
