@@ -19,7 +19,7 @@ struct PlannedExerciseView: View {
     }
 
     var body: some View {
-        List {
+        BrandList {
             if let exercise {
                 Section {
                     ForEach(exercise.cues, id: \.self) { cue in
@@ -100,8 +100,6 @@ struct PlannedExerciseView: View {
                 }
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.brand(\.base))
         .navigationTitle(Text(verbatim: exercise?.name ?? planned.exerciseID))
         .toolbar { UndoButtons() }
         .sheet(isPresented: $showsSwap) {

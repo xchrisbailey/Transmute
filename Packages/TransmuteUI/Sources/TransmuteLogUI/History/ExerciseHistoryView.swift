@@ -21,7 +21,7 @@ struct ExerciseHistoryView: View {
             entry.estimatedOneRepMaxKg.map { (date: entry.workout.startedAt, kg: $0) }
         }
         let tracking = ExerciseLibrary.bundled.exercise(id: exerciseID)?.tracking ?? .weightReps
-        List {
+        BrandList {
             if trend.count > 1 {
                 Section {
                     Chart(trend, id: \.date) { point in
@@ -54,8 +54,6 @@ struct ExerciseHistoryView: View {
                 }
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.brand(\.base))
         .navigationTitle(Text(verbatim: name))
     }
 }

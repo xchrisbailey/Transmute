@@ -19,7 +19,7 @@ struct FinishView: View {
     }
 
     var body: some View {
-        List {
+        BrandList {
             Section {
                 Text(headline)
                     .brandFont(.largeTitle)
@@ -60,8 +60,6 @@ struct FinishView: View {
                 EmptyView()
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.brand(\.base))
         .navigationBarBackButtonHidden()
         .safeAreaInset(edge: .bottom) {
             Button {

@@ -13,7 +13,7 @@ struct PlanHistoryView: View {
     @Query(sort: \Plan.createdAt, order: .reverse) private var plans: [Plan]
 
     var body: some View {
-        List {
+        BrandList {
             Section {
                 NavigationLink {
                     BrewPlanView(profile: profile, service: service, device: device)
@@ -53,8 +53,6 @@ struct PlanHistoryView: View {
                 Text(PlanCopy.earlierPlans)
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.brand(\.base))
         .navigationTitle(Text(PlanCopy.plans))
     }
 }

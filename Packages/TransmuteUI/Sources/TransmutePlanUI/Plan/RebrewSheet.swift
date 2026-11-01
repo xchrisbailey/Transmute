@@ -31,7 +31,7 @@ public struct RebrewSheet: View {
 
     public var body: some View {
         NavigationStack {
-            Form {
+            BrandForm {
                 Section {
                     Stepper(value: $fromWeek, in: 1...max(1, plan.weekCount)) {
                         Text(PlanCopy.rebrewFrom(fromWeek))
@@ -69,8 +69,6 @@ public struct RebrewSheet: View {
                     }
                 }
             }
-            .scrollContentBackground(.hidden)
-            .background(Color.brand(\.base))
             .navigationTitle(Text(Copy.rebrew))
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

@@ -26,7 +26,7 @@ public struct MirroredSessionView: View {
 
     public var body: some View {
         NavigationStack {
-            List {
+            BrandList {
                 if let bpm = link.remoteHeartRate, snapshot?.isFinished == false {
                     heartRate(bpm)
                 }
@@ -40,8 +40,6 @@ public struct MirroredSessionView: View {
                     }
                 }
             }
-            .scrollContentBackground(.hidden)
-            .background(Color.brand(\.base))
             .safeAreaInset(edge: .bottom) { bar }
             .navigationTitle(Text(verbatim: snapshot?.title ?? ""))
             #if os(iOS)

@@ -43,7 +43,7 @@ public struct TodayView: View {
     }
 
     public var body: some View {
-        List {
+        BrandList {
             if let link, let mirrored = link.mirrored, !mirrored.isFinished {
                 Section {
                     Button {
@@ -112,8 +112,6 @@ public struct TodayView: View {
                 }
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.brand(\.base))
         .navigationTitle(Text(LogCopy.today))
         .onAppear {
             if !resumedAtLaunch, case .resumable(let workout) = runningState {
@@ -203,7 +201,6 @@ extension TodayView {
             VStack(alignment: .leading, spacing: 6) {
                 Text(BrewCopy.week(today.week))
                     .brandFont(.label)
-                    .textCase(.uppercase)
                     .foregroundStyle(Color.brandText(\.subtext))
                 Text(LogCopy.restDay)
                     .brandFont(.largeTitle)

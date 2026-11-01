@@ -27,7 +27,7 @@ public struct RecordsView: View {
     public var body: some View {
         let bests = RecordBoard.bests(records)
         let exercises = bests.keys.sorted { name(of: $0).localizedStandardCompare(name(of: $1)) == .orderedAscending }
-        List {
+        BrandList {
             if let since, !records.isEmpty {
                 Section {
                     let gold = RecordBoard.gold(records, since: since)
@@ -66,8 +66,6 @@ public struct RecordsView: View {
                 }
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.brand(\.base))
         .navigationTitle(Text(RecordCopy.title))
     }
 }

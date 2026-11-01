@@ -21,7 +21,7 @@ struct PlanDayView: View {
     }
 
     var body: some View {
-        List {
+        BrandList {
             Section {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(verbatim: day.focus)
@@ -107,8 +107,6 @@ struct PlanDayView: View {
                 .listRowBackground(Color.clear)
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.brand(\.base))
         .navigationTitle(Text(verbatim: day.focus))
         #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
