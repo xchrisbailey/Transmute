@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exercise demo · throwaway prototype #111</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#161923;color:#eee9df;font:16px system-ui,sans-serif}button,input,select{font:inherit}button,select{cursor:pointer}button{border:0;border-radius:12px;padding:10px 14px;background:#343847;color:#f5ebd4;min-height:44px}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #efce86;outline-offset:2px}button:disabled{opacity:.55;cursor:default}.gold{background:#edc779;color:#211d19}small,.muted{color:#b7b6bf;font-size:13px;line-height:1.5}h1,h2,h3,p{margin:0}h1{font:32px Georgia,serif}h2{font:26px Georgia,serif}h3{font-size:18px}.workspace{max-width:1020px;margin:30px auto 110px;display:grid;grid-template-columns:390px 1fr;gap:48px;padding:0 18px}.phone{height:760px;position:relative;background:#222530;border:1px solid #535362;border-radius:32px;overflow:hidden;box-shadow:0 20px 70px #0005}.status{padding:12px 22px 5px;display:flex;justify-content:space-between;font-size:12px}.nav{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid #40424d}.nav strong{font-size:16px}.logging{height:536px;overflow:auto;padding:20px 16px;scrollbar-width:thin}.exercise{margin-bottom:28px}.exercise-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}.exercise-head h3{flex:1;font:21px Georgia,serif}.watch{font-size:13px;padding:7px 9px;background:#494132;color:#ffe0a4;white-space:nowrap}.row{display:grid;grid-template-columns:40px 1fr 1fr 30px;text-align:center;padding:13px 10px;background:#2c303b;border-bottom:1px solid #41434e}.row.heading{background:none;color:#b7b6bf;font-size:13px}.row.done{background:#344439}.editor{border:2px solid #e5c17d;border-radius:12px;overflow:hidden}.fields{display:flex;gap:12px;padding:14px;background:#2c303b}.fields label{width:50%;font-size:13px;color:#c8c5c6}input{width:100%;padding:10px;margin-top:6px;border:1px solid #73727b;border-radius:8px;background:#20232d;color:#fff}.rest{padding:12px 16px;border-top:1px solid #57505a;background:#302e35;display:flex;justify-content:space-between;font-size:14px}.session-bottom{padding:12px 16px;background:#262936}.session-bottom button{width:100%;margin-top:8px}.scrim{position:absolute;inset:0;background:#0005;display:flex;align-items:flex-end;padding-top:130px}.scrim[hidden]{display:none}.sheet{background:#292c37;width:100%;max-height:100%;border-radius:24px 24px 0 0;display:flex;flex-direction:column;box-shadow:0 -10px 40px #0005}.handle{height:4px;width:38px;border-radius:9px;background:#777985;margin:9px auto}.sheet-header{display:flex;justify-content:space-between;align-items:center;padding:3px 18px 12px;gap:10px}.sheet-header small{display:block}.sheet-content{padding:0 18px 18px;overflow:auto;min-height:0}.sheet-footer{padding:10px 18px 18px;border-top:1px solid #474750;font-size:12px;color:#c5c1c6}.media{background:linear-gradient(135deg,#454653,#222731);border:1px solid #68636b;border-radius:14px;padding:16px;min-height:192px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;text-align:center}.media.compact{min-height:104px;text-align:left;display:grid;grid-template-columns:1fr auto;align-items:center}.media .placeholder{font:22px Georgia,serif;color:#ddd2b9}.media small{display:block}.player-state{font-size:12px;color:#f5d38f}.progress{height:3px;background:#68636b}.progress span{display:block;height:100%;background:#f5d38f;width:0}.cue-list{padding:0;list-style:none;counter-reset:cue}.cue-list li{counter-increment:cue;padding:12px 0;border-bottom:1px solid #4b4b56;display:flex;gap:12px}.cue-list li:before{content:counter(cue);background:#44434a;color:#f5d38f;border-radius:50%;height:25px;min-width:25px;text-align:center;padding:2px}.cue-list strong{display:block}.cue-list p{font-size:14px;color:#c6c4cd;margin-top:3px}.section-title{margin:18px 0 4px}.cue-focus{padding:24px 0;min-height:183px}.cue-focus h3{font:29px Georgia,serif;margin:8px 0 12px}.cue-focus p{line-height:1.5}.cue-nav,.tabs{display:flex;gap:8px;margin:12px 0}.cue-nav{justify-content:space-between;align-items:center}.tabs button{flex:1}.tabs button[aria-selected=true]{background:#edc779;color:#211d19}.overview{border-left:3px solid #e2bc73;padding-left:12px;margin:4px 0 18px;line-height:1.5}.missing{background:#38333b;border:1px dashed #bc9c88;border-radius:12px;padding:16px;line-height:1.5}.missing strong{display:block;margin-bottom:8px}.review{padding-top:8px}.eyebrow{font-size:12px;letter-spacing:.12em;color:#efce86;margin-bottom:12px}.review p{line-height:1.6;margin:14px 0;color:#cecad2}.review label{display:block;margin:24px 0 8px}select{width:100%;padding:12px;background:#303440;color:#eee;border:1px solid #6c6874;border-radius:10px}.state{background:#222631;border:1px solid #4c4c5b;border-radius:12px;padding:16px;white-space:pre-wrap;font:13px/1.8 ui-monospace,monospace}.switcher{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#f5ead7;color:#171b24;display:flex;align-items:center;gap:12px;border-radius:40px;padding:6px;box-shadow:0 5px 30px #0008;z-index:5;white-space:nowrap;font-size:14px}.switcher button{border-radius:50%;background:#242936;color:#fff}.switcher span{min-width:174px;text-align:center}a{color:#f1cf8a}@media(max-width:750px){.workspace{display:flex;flex-direction:column;gap:24px;margin-top:12px;padding:0 8px}.phone{width:min(100%,390px);align-self:center}.review{max-width:390px;align-self:center}.switcher{bottom:10px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+.media.compact .placeholder{font:16px system-ui,sans-serif}.media.compact small{font-size:11px}.media.compact .player-state,.media.compact .progress{grid-column:1/-1}
+</style>
+<!-- Three sheet hierarchies on one standalone URL; no production route or player integration. -->
+<main class="workspace">
+<section class="phone" aria-label="Mock iPhone workout">
+ <div class="status"><span>9:41</span><span>iPhone · prototype</span></div>
+ <div id="workout">
+  <nav class="nav" aria-label="Mock workout navigation"><span>⌄</span><strong>Lower A</strong><span>Finish</span></nav>
+  <div class="logging" id="logging">
+   <section class="exercise"><div class="exercise-head"><h3>Back squat</h3><button class="watch" id="watch">▷ Watch demo</button><span aria-label="More">⋯</span></div>
+    <div class="row heading"><span>Set</span><span>kg</span><span>Reps</span><span>✓</span></div>
+    <div class="row done"><span>1</span><span>40</span><span>8</span><span>✓</span></div>
+    <div class="editor"><div class="row"><span>2</span><span id="draft-figure">40</span><span id="reps-figure">8</span><span>○</span></div>
+     <div class="fields"><label>Weight (kg)<input id="draft" inputmode="decimal" value="40" aria-label="Draft weight in kilograms"></label><label>Reps<input id="reps" inputmode="numeric" value="8" aria-label="Draft reps"></label></div>
+    </div><div class="row"><span>3</span><span>40</span><span>8</span><span>○</span></div><p class="muted" style="padding:12px">+ Add set</p>
+   </section>
+   <section class="exercise"><div class="exercise-head"><h3>Romanian deadlift</h3><span>⋯</span></div><div class="row heading"><span>Set</span><span>kg</span><span>Reps</span><span>✓</span></div><div class="row"><span>1</span><span>30</span><span>8</span><span>○</span></div><div class="row"><span>2</span><span>30</span><span>8</span><span>○</span></div><p class="muted" style="padding:12px">+ Add set</p></section>
+   <p>+ Add exercise</p><p style="padding-top:20px">Workout notes</p>
+  </div>
+  <div class="rest"><span>Rest <b data-timer></b></span><span>−15 s　+15 s</span></div>
+  <div class="session-bottom"><small>Back squat · Set 2 of 3</small><div class="gold" style="padding:12px;text-align:center;border-radius:10px;margin-top:8px">Log set · mock only</div></div>
+ </div>
+ <div class="scrim" id="scrim" hidden>
+  <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+   <div class="handle"></div>
+   <header class="sheet-header"><div><h2 id="sheet-title">Back squat</h2><small>Rest <b data-timer></b> · keeps running</small></div><button id="close">Done</button></header>
+   <div class="sheet-content" id="content"></div>
+   <footer class="sheet-footer">Illustrative cues · not expert-reviewed.<br>No real video, audio, provider, or licensing selected.</footer>
+  </section>
+ </div>
+</section>
+<aside class="review">
+ <div class="eyebrow">THROWAWAY EXPLORATION · #111 · iPHONE ONLY</div>
+ <h1>Help, without leaving your workout.</h1>
+ <p>Which sheet hierarchy helps a beginner most? A puts the demo first; B gives one cue room to breathe; C separates Demo and Form.</p>
+ <p>Change the draft weight, optionally scroll the workout, then tap <strong>Watch demo</strong>. Play is explicit. Dismiss and check your draft and position. Nothing is saved.</p>
+ <label for="availability">Exploratory content availability</label>
+ <select id="availability"><option value="available">Back squat · demo available (placeholder)</option><option value="unavailable">Back squat · demo unavailable</option></select>
+ <p><small>Missing-video policy is undecided. This example keeps the same exercise and offers illustrative cues; it does not propose a replacement movement.</small></p>
+ <h3 style="margin:24px 0 10px">Live prototype state</h3>
+ <output class="state" id="state" style="display:block"></output>
+ <p><small>Logging scaffold references SessionView, ExerciseHeader, SetRow and LogCopy. The sheet and Watch demo are proposed, not existing app UI. The static logging controls are context, not real actions. HTML cannot validate native SwiftUI behavior.</small></p>
+</aside>
+</main>
+<nav class="switcher" aria-label="Prototype variants"><button id="previous" aria-label="Previous variant">←</button><span id="variant-label"></span><button id="next" aria-label="Next variant">→</button></nav>
+<script>
+const $ = id => document.getElementById(id);
+const variants = ['A','B','C'];
+const names = {A:'Video first',B:'One cue at a time',C:'Demo / Form'};
+let variant = new URLSearchParams(location.search).get('variant');
+if (!variants.includes(variant)) variant = 'A';
+let opened = false, playback = 'stopped', elapsed = 0, step = 0, tab = 'Demo', savedScroll = 0;
+const restEnd = Date.now() + 180000;
+const cues = [['Set up','Find a comfortable stance before starting.'],['Lower','Move through a comfortable range with control.'],['Stand','Return steadily to your starting position.']];
+const available = () => $('availability').value === 'available';
+function restSeconds() { return Math.max(0, Math.ceil((restEnd - Date.now()) / 1000)); }
+function clock(value) { return Math.floor(value / 60) + ':' + String(value % 60).padStart(2,'0'); }
+function state() {
+ document.querySelectorAll('[data-timer]').forEach(el => el.textContent = restSeconds() ? clock(restSeconds()) : "Rest’s up");
+ $('state').textContent = `Variant: ${variant} · ${names[variant]}\nDraft: ${$('draft').value} kg × ${$('reps').value} reps\nLogged: set 1 · 40 kg × 8 (unchanged)\nWorkout scroll: ${Math.round($('logging').scrollTop)} px\nPosition at open: ${savedScroll} px\nRest: ${clock(restSeconds())} · wall-clock countdown\nSheet: ${opened ? 'open' : 'closed'}\nPlayback: SIMULATED ${playback}\nSimulated position: ${elapsed} / 30 s\nAudio: none · no media loaded\nDemo: ${available() ? 'illustrative placeholder' : 'unavailable'}\nCue: ${step + 1} / 3 · Section: ${tab}`;
+ document.querySelectorAll('.player-state').forEach(el => el.textContent = `SIMULATED ${playback.toUpperCase()} · ${elapsed} / 30 s`);
+ document.querySelectorAll('.progress span').forEach(el => el.style.width = `${elapsed / 30 * 100}%`);
+ document.querySelectorAll('[data-play]').forEach(el => el.textContent = playback === 'playing' ? 'Ⅱ Pause simulation' : '▷ Play simulation');
+}
+function media(compact = false) {
+ if (!available()) return '<div class="missing"><strong>No playable demo for Back squat</strong>Exploratory missing-video example. No alternative exercise is substituted. Written cues remain available; final fallback policy awaits human decision.</div>';
+ return `<div class="media ${compact ? 'compact' : ''}"><div><div class="placeholder">Illustrative media placeholder</div><small>Back squat · not an instructional video</small></div><button class="gold" data-play>▷ Play simulation</button><div class="player-state"></div><div class="progress"><span></span></div></div>`;
+}
+function cueList() { return `<ol class="cue-list">${cues.map(c => `<li><div><strong>${c[0]}</strong><p>${c[1]}</p></div></li>`).join('')}</ol>`; }
+function VariantA() { return media() + '<h3 class="section-title">Form at a glance</h3>' + cueList(); }
+function VariantB() { return media(true) + `<div class="cue-focus"><small>ILLUSTRATIVE FORM · ${step + 1} OF 3</small><h3>${cues[step][0]}</h3><p>${cues[step][1]}</p></div><div class="cue-nav"><button data-step="-1" ${step === 0 ? 'disabled' : ''}>← Previous cue</button><span>${step + 1} / 3</span><button data-step="1" ${step === 2 ? 'disabled' : ''}>Next cue →</button></div>`; }
+function VariantC() { return `<div class="overview"><strong>Back squat · quick reference</strong><br><small>Your set stays underneath. Rest keeps counting down.</small></div><div class="tabs" role="tablist" aria-label="Exercise reference">${['Demo','Form'].map(t => `<button role="tab" aria-selected="${tab === t}" data-tab="${t}">${t}${t === 'Form' ? ' · 3 cues' : ''}</button>`).join('')}</div><div role="tabpanel">${tab === 'Demo' ? media() + '<p class="muted" style="margin-top:14px">Brief written cues are in Form. Playback only starts when you tap Play.</p>' : cueList()}</div>`; }
+function render() {
+ $('variant-label').textContent = `${variant} · ${names[variant]}`;
+ if (opened) $('content').innerHTML = ({A:VariantA,B:VariantB,C:VariantC})[variant]();
+ state();
+}
+function changeVariant(delta) {
+ variant = variants[(variants.indexOf(variant) + delta + 3) % 3];
+ const url = new URL(location.href); url.searchParams.set('variant',variant); history.replaceState(null,'',url);
+ playback = 'stopped'; elapsed = 0; render();
+}
+function dismiss() {
+ opened = false; playback = 'stopped'; elapsed = 0; $('scrim').hidden = true; $('workout').inert = false;
+ $('watch').focus({preventScroll:true}); $('logging').scrollTop = savedScroll; state();
+}
+$('watch').onclick = () => { savedScroll = Math.round($('logging').scrollTop); opened = true; playback = 'stopped'; elapsed = 0; $('scrim').hidden = false; $('workout').inert = true; render(); $('close').focus(); };
+$('close').onclick = dismiss;
+$('scrim').onclick = e => { if (e.target === $('scrim')) dismiss(); };
+$('content').onclick = e => {
+ const button = e.target.closest('button'); if (!button) return;
+ if (button.hasAttribute('data-play')) { if (elapsed === 30) elapsed = 0; playback = playback === 'playing' ? 'paused' : 'playing'; state(); }
+ if (button.dataset.step) { step += Number(button.dataset.step); render(); $('content').querySelector(`[data-step="${button.dataset.step}"]:not(:disabled)`)?.focus(); }
+ if (button.dataset.tab) { tab = button.dataset.tab; render(); $('content').querySelector(`[data-tab="${tab}"]`).focus(); }
+};
+$('availability').onchange = () => { playback = 'stopped'; elapsed = 0; render(); };
+$('draft').oninput = () => { $('draft-figure').textContent = $('draft').value || '–'; state(); };
+$('reps').oninput = () => { $('reps-figure').textContent = $('reps').value || '–'; state(); };
+$('logging').onscroll = state;
+$('previous').onclick = () => changeVariant(-1); $('next').onclick = () => changeVariant(1);
+document.addEventListener('keydown', e => {
+ if (e.key === 'Escape' && opened) { dismiss(); return; }
+ if (e.target.closest('input,textarea,select,[contenteditable]')) return;
+ if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); changeVariant(e.key === 'ArrowLeft' ? -1 : 1); }
+ if (e.key === 'Tab' && opened) {
+  const focusable = [...document.querySelector('.sheet').querySelectorAll('button:not(:disabled)')];
+  const first = focusable[0], last = focusable[focusable.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+ }
+});
+window.addEventListener('popstate', () => { const key = new URLSearchParams(location.search).get('variant'); variant = variants.includes(key) ? key : 'A'; playback = 'stopped'; elapsed = 0; render(); });
+setInterval(() => { if (opened && playback === 'playing') { elapsed = Math.min(30,elapsed + 1); if (elapsed === 30) playback = 'ended'; } state(); },1000);
+render();
+</script>
+</html>
