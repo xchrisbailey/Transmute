@@ -28,7 +28,7 @@ struct WorkoutDetailView: View {
     }
 
     var body: some View {
-        List {
+        BrandList {
             Section {
                 TextField(text: $workout.title) {
                     Text(HistoryCopy.editTitle)
@@ -40,7 +40,7 @@ struct WorkoutDetailView: View {
                 Text(planLine)
                     .brandFont(.label)
                     .foregroundStyle(Color.brandText(\.subtext))
-                WorkoutRow(workout: workout, units: units, hasGold: false)
+                WorkoutRow(workout: workout, units: units, hasGold: false, showsTitle: false)
             }
             ForEach(workout.orderedExercises) { exercise in
                 exerciseSection(exercise)
@@ -65,9 +65,10 @@ struct WorkoutDetailView: View {
                 }
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.brand(\.base))
         .navigationTitle(Text(verbatim: workout.title))
+        #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+        #endif
         .sheet(item: $editing) { set in
             LoggedSetEditor(
                 set: set, tracking: library.exercise(id: set.exercise?.exerciseID ?? "")?.tracking ?? .weightReps,

@@ -51,7 +51,7 @@ public struct SessionView: View {
     public var body: some View {
         NavigationStack {
             ScrollViewReader { scroller in
-                List {
+                BrandList {
                     ForEach(workout.orderedExercises) { exercise in
                         exerciseSection(exercise)
                     }
@@ -81,8 +81,6 @@ public struct SessionView: View {
                         }
                     }
                 }
-                .scrollContentBackground(.hidden)
-                .background(Color.brand(\.base))
                 .onChange(of: current?.persistentModelID, initial: true) { _, id in
                     editing = id
                     if let id {

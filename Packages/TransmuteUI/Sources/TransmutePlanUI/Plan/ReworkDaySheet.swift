@@ -34,7 +34,7 @@ public struct ReworkDaySheet: View {
 
     public var body: some View {
         NavigationStack {
-            Form {
+            BrandForm {
                 Section {
                     TextField(text: $note, axis: .vertical) {
                         Text(PlanCopy.reworkPrompt)
@@ -85,8 +85,6 @@ public struct ReworkDaySheet: View {
                     }
                 }
             }
-            .scrollContentBackground(.hidden)
-            .background(Color.brand(\.base))
             .navigationTitle(Text(Copy.reworkDay))
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

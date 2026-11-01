@@ -30,7 +30,7 @@ public struct PlanView: View {
     }
 
     public var body: some View {
-        List {
+        BrandList {
             Section {
                 header
             }
@@ -50,8 +50,6 @@ public struct PlanView: View {
                 }
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.brand(\.base))
         .navigationTitle(Text(BrewCopy.activePlan))
         .toolbar {
             UndoButtons()

@@ -97,14 +97,13 @@
             case .welcome: welcome
             case .ready: ready
             case .body:
-                Form { BodySection(draft: $draft, units: units, unitSystem: unitSystem) }.scrollContentBackground(
-                    .hidden)
-            case .experience: Form { ExperienceSection(draft: $draft, units: units) }.scrollContentBackground(.hidden)
-            case .goals: Form { GoalSection(draft: $draft) }.scrollContentBackground(.hidden)
-            case .sport: Form { SportSection(draft: $draft) }.scrollContentBackground(.hidden)
-            case .schedule: Form { ScheduleSection(draft: $draft) }.scrollContentBackground(.hidden)
-            case .equipment: Form { EquipmentSection(draft: $draft, kit: kit) }.scrollContentBackground(.hidden)
-            case .limitations: Form { LimitationsSection(draft: $draft) }.scrollContentBackground(.hidden)
+                BrandForm { BodySection(draft: $draft, units: units, unitSystem: unitSystem) }
+            case .experience: BrandForm { ExperienceSection(draft: $draft, units: units) }
+            case .goals: BrandForm { GoalSection(draft: $draft) }
+            case .sport: BrandForm { SportSection(draft: $draft) }
+            case .schedule: BrandForm { ScheduleSection(draft: $draft) }
+            case .equipment: BrandForm { EquipmentSection(draft: $draft, kit: kit) }
+            case .limitations: BrandForm { LimitationsSection(draft: $draft) }
             }
         }
 

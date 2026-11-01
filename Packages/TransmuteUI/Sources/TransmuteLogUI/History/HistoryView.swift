@@ -68,7 +68,7 @@ public struct HistoryView: View {
     public var body: some View {
         let weeks = WorkoutLog.weeks(matching)
         let gold = goldWorkouts
-        List {
+        BrandList {
             ForEach(weeks) { week in
                 Section {
                     ForEach(week.workouts) { workout in
@@ -84,8 +84,6 @@ public struct HistoryView: View {
                 }
             }
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.brand(\.base))
         .overlay {
             if weeks.isEmpty {
                 if workouts.contains(where: { $0.endedAt != nil }) {
@@ -167,6 +165,8 @@ struct WorkoutRow: View {
     let workout: Workout
     let units: Units
     let hasGold: Bool
+    /// The detail screen edits the title right above this row, so it leaves it out there.
+    var showsTitle = true
 
     var body: some View {
         let summary = WorkoutSummary(workout)
@@ -175,9 +175,11 @@ struct WorkoutRow: View {
                 Text(workout.startedAt, format: .dateTime.weekday(.wide).day().month())
                     .brandFont(.label)
                     .foregroundStyle(Color.brandText(\.subtext))
-                Text(verbatim: workout.title)
-                    .brandFont(.exerciseTitle)
-                    .foregroundStyle(Color.brand(\.ink))
+                if showsTitle {
+                    Text(verbatim: workout.title)
+                        .brandFont(.exerciseTitle)
+                        .foregroundStyle(Color.brand(\.ink))
+                }
                 Text(verbatim: line(summary))
                     .brandNumberFont(size: 15)
                     .foregroundStyle(Color.brandText(\.subtext))

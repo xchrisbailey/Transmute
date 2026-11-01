@@ -40,8 +40,12 @@ public enum BrandTextStyle: CaseIterable, Sendable {
     }
 
     /// Extra space between lines, so body copy reads at 1.6.
+    ///
+    /// `.lineSpacing` adds to the font's own line height, and Geist Regular's is already 1.3 x
+    /// its size (CoreText: ascent 1.005 + descent 0.295 em, no leading; 19.5pt at 15pt). Only the
+    /// remaining 0.3 x size is added.
     var lineSpacing: CGFloat {
-        self == .body ? size * 0.6 : 0
+        self == .body ? size * 0.3 : 0
     }
 }
 
