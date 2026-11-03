@@ -56,9 +56,35 @@ Turn on the pre-push hook once per clone. It runs only the two lint steps, which
 git config core.hooksPath scripts/hooks
 ```
 
-## Releasing
+## Product page
+
+The dependency-free public site lives in `site/`; it has no build step or external assets.
+
+```bash
+python3 -m http.server 8080 --directory site
+python3 scripts/test-site.py
+```
+
+Open `http://localhost:8080`. The integration check validates local assets, anchors,
+project-relative URLs, metadata and essential semantics. In a browser, also check the
+example set logger with the keyboard, reset/completion states, JavaScript disabled,
+reduced motion and layouts at 1440, 768 and 390px. UI fragments are illustrative,
+not app screenshots; the workout values are examples, not training advice.
+
+`.github/workflows/pages.yml` publishes **only `site/`** on pushes to `main` that
+change the site or workflow, or a manual run. A repository administrator must select
+GitHub Actions as the Pages source in repository settings; the workflow uses the
+`github-pages` environment. No native build runs there. The intended address is
+`https://xchrisbailey.github.io/Transmute/`.
+
+The “Follow development” links intentionally point to the repository while the app
+is in early development. When a real public release exists, replace those links and
+their labels together, update availability copy, and rerun the integrity/browser checks.
+Keep canonical/social metadata in sync if the hosting address changes. Fonts are
+bundled under the SIL OFL (`site/assets/fonts/OFL.txt`); marks come from `Brand/`.
+
+## Native releases
 
 Xcode Cloud archives the iPhone (with the watch app inside) and Mac apps and sends them to TestFlight when a `v*` tag is pushed. The scripts it runs are in `ci_scripts/`. `docs/TESTFLIGHT.md` walks through the one-time Apple Developer, App Store Connect and Xcode Cloud setup.
 
 Brand strings live in `Apps/Shared/Localizable.xcstrings` and are read through `Copy` in TransmuteUI. Each key starts with `voice.` (alchemy verbs) or `plain.` (mid-set, watch, errors, deletes, Health).
-
