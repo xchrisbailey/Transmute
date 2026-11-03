@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Transmute — Native workout planner and logger</title>
+  <meta name="description" content="Make strength a practice. Transmute is a native workout planner and logger for iPhone, Apple Watch and Mac, in early development.">
+  <meta name="theme-color" content="#1e1e2e">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Transmute — Make strength a practice.">
+  <meta property="og:description" content="A native workout planner and logger for iPhone, Apple Watch and Mac. Follow development on GitHub.">
+  <meta property="og:url" content="https://xchrisbailey.github.io/Transmute/">
+  <meta property="og:image" content="https://xchrisbailey.github.io/Transmute/assets/social.png">
+  <meta property="og:image:alt" content="Transmute. Make strength a practice. Native workout planner and logger.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://xchrisbailey.github.io/Transmute/">
+  <link rel="icon" href="assets/mark-mocha.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/Geist-ExtraBold.otf" as="font" type="font/otf" crossorigin>
+  <link rel="stylesheet" href="assets/site.css">
+  <script src="assets/site.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="frame navigation">
+    <a class="brand" href="#main" aria-label="Transmute home"><img src="assets/wordmark-mocha.svg" alt="Transmute" width="202" height="48"></a>
+    <nav aria-label="Main navigation"><a href="#preview">Preview</a><a href="#practice">Practice</a><a href="https://github.com/xchrisbailey/Transmute">GitHub</a></nav>
+  </header>
+  <main id="main">
+    <section class="hero frame" aria-labelledby="hero-title">
+      <h1 id="hero-title">Make strength<br>a <img class="inline-preview" src="assets/hero-set.png" alt="" width="400" height="160"> practice.</h1>
+      <div class="hero-bottom">
+        <p class="support">A native workout planner and logger for iPhone, Apple Watch and Mac.</p>
+        <div class="hero-action"><a class="button" href="https://github.com/xchrisbailey/Transmute">Follow development</a><p>In early development. Follow the build on GitHub.</p></div>
+      </div>
+      <div class="hero-proof" data-ui role="group" aria-label="Illustrative workout preview">
+        <div class="proof-title"><img src="assets/mark-mocha.svg" alt="" width="56" height="56"><span>Full body A<small>Example workout</small></span><span class="proof-detail">Today<br>About 45 min</span></div>
+        <div class="proof-exercise"><strong>Back Squat</strong><span>3 sets × 8 reps</span><b>60 <small>kg</small></b></div>
+        <div class="proof-exercise"><strong>Bench Press</strong><span>3 sets × 8 reps</span><b>40 <small>kg</small></b></div>
+        <div class="proof-exercise"><strong>Romanian Deadlift</strong><span>3 sets × 10 reps</span><b>50 <small>kg</small></b></div>
+      </div>
+      <p class="caption">Illustrative product previews throughout. Example workouts, not training advice.</p>
+    </section>
+    <section class="showcase frame" id="preview" aria-labelledby="preview-title">
+      <div class="showcase-intro"><h2 id="preview-title">Log the work.</h2><p>Try an example workout. Log each set, then reset it. Nothing is saved.</p></div>
+      <div class="logging-preview" data-ui>
+        <div class="logging-workout">
+          <div class="ui-top"><span>Full body A</span><span>Example workout</span></div>
+          <h3>Back Squat</h3>
+          <table><caption class="visually-hidden">Example Back Squat sets</caption><thead><tr><th scope="col">Set</th><th scope="col">kg</th><th scope="col">Reps</th><th scope="col">State</th></tr></thead><tbody>
+            <tr data-set="0"><th scope="row">1</th><td>60</td><td>8</td><td class="set-state">Ready</td></tr>
+            <tr data-set="1"><th scope="row">2</th><td>60</td><td>8</td><td class="set-state">Planned</td></tr>
+            <tr data-set="2"><th scope="row">3</th><td>60</td><td>8</td><td class="set-state">Planned</td></tr>
+          </tbody></table>
+          <p class="next-exercise">Next exercise<br><strong>Bench Press</strong></p>
+        </div>
+        <div class="logging-controls">
+          <p>Current set</p><p class="set-count" id="set-count">1 of 3</p>
+          <div class="set-values"><span>60<small>kg</small></span><span>8<small>reps</small></span></div>
+          <div id="preview-controls" hidden><button class="button" id="log-set" type="button">Log set</button><button class="reset" id="reset-preview" type="button">Reset example</button></div>
+          <p id="log-status" role="status" aria-live="polite" aria-atomic="true">0 of 3 sets logged.</p>
+          <noscript><p>This static example shows three planned sets of 60 kg × 8 reps. Enable JavaScript to try logging and resetting them.</p></noscript>
+        </div>
+      </div>
+    </section>
+    <section class="practice frame" id="practice" aria-labelledby="practice-title">
+      <h2 id="practice-title">A plan to return to.</h2>
+      <div class="practice-rows">
+        <article class="practice-row">
+          <div class="row-copy"><h3>Brew your plan.</h3><p>Apple Intelligence builds a training plan around your goals, schedule and equipment. Review it, edit it, or rework a day.</p><p class="caption">Requires a supported device with Apple Intelligence enabled.</p></div>
+          <figure class="plan-fragment" data-ui><div class="fragment"><div class="ui-top"><strong>Plan</strong><span>Week 1</span></div><div class="plan-day"><span>Monday</span><strong>Full body A</strong><small>About 45 min</small><p>Back Squat<br>Bench Press<br>Romanian Deadlift</p></div><div class="plan-next"><span>Wednesday</span><strong>Full body B</strong></div><div class="plan-next"><span>Friday</span><strong>Full body A</strong></div></div><figcaption>Illustrative Mac plan preview</figcaption></figure>
+        </article>
+        <article class="practice-row">
+          <div class="row-copy"><h3>Know today’s work.</h3><p>Open your planned session with its exercises, sets and targets. Or log a workout off the plan.</p></div>
+          <figure class="today-fragment" data-ui><div class="fragment"><strong class="fragment-title">Today</strong><div class="today-heading"><strong>Full body A</strong><span>About 45 min</span></div><div class="target"><strong>Back Squat</strong><span>3 × 8 · 60 kg</span></div><div class="target"><strong>Bench Press</strong><span>3 × 8 · 40 kg</span></div><div class="target"><strong>Romanian Deadlift</strong><span>3 × 10 · 50 kg</span></div><p class="ui-action">Begin the work</p></div><figcaption>Illustrative iPhone Today preview</figcaption></figure>
+        </article>
+        <article class="practice-row">
+          <div class="row-copy"><h3>Keep the set close.</h3><p>Log weight and reps on Apple Watch, with rest timing and your workout on your wrist.</p></div>
+          <figure class="watch-fragment" data-ui><div class="fragment watch"><strong>Back Squat</strong><p>Set 1 of 3</p><div class="watch-values"><span>60<small>kg</small></span><span>8<small>reps</small></span></div><p class="ui-action">Log set</p></div><figcaption>Illustrative Apple Watch set preview</figcaption></figure>
+        </article>
+        <article class="practice-row">
+          <div class="row-copy"><h3>Keep what you put in.</h3><p>Look back at completed workouts and exercise history before your next session.</p></div>
+          <figure class="history-fragment" data-ui><div class="fragment"><strong class="fragment-title">Back Squat</strong><p>Monday’s workout</p><div class="history-row"><span>Set 1</span><strong>60 kg × 8</strong><span>Logged</span></div><div class="history-row"><span>Set 2</span><strong>60 kg × 8</strong><span>Logged</span></div><div class="history-row"><span>Set 3</span><strong>60 kg × 8</strong><span>Logged</span></div></div><figcaption>Illustrative exercise history preview</figcaption></figure>
+        </article>
+      </div>
+    </section>
+    <section class="close frame" aria-labelledby="close-title"><h2 id="close-title">The next set<br>starts here.</h2><div class="close-bottom"><p>Transmute is in early development. Explore the source, follow changes, or help shape what comes next.</p><a class="button" href="https://github.com/xchrisbailey/Transmute">Follow development</a></div></section>
+  </main>
+  <footer class="frame"><div class="footer-links"><p>By srcery.</p><nav aria-label="Footer"><a href="https://github.com/xchrisbailey/Transmute">Source</a><a href="https://github.com/xchrisbailey/Transmute/issues">Issues</a><a href="assets/fonts/OFL.txt">Font licence</a></nav></div><img class="footer-wordmark" src="assets/wordmark-latte.svg" alt="Transmute" width="1200" height="285"></footer>
+</body>
+</html>

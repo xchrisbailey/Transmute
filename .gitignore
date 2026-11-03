@@ -23,3 +23,6 @@ TestFlight/
 
 # Claude Code agent worktrees
 .claude/worktrees/
+
+# Local design inspection outputs
+.taste-skill/
