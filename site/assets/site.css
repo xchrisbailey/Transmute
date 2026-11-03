@@ -50,6 +50,7 @@ a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: 5px; 
 button { font: inherit; cursor: pointer; }
 a, button { touch-action: manipulation; }
 a:focus-visible, button:focus-visible { outline: 3px solid var(--now); outline-offset: 6px; }
+.close a:focus-visible, footer a:focus-visible { outline-color: var(--deep); }
 a:hover { text-decoration: underline; }
 a:active, button:active { transform: translateY(2px); }
 button:disabled { cursor: default; }
