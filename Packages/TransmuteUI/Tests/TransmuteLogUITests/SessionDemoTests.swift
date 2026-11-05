@@ -50,6 +50,8 @@ struct SessionDemoTests {
         #expect(player.commands.last == "load:TESTONLY001")
         link.complete(false)
         player.send(.failed, attempt: playingAttempt)
+        player.send(newWindow ? .newWindowLink(url) : .mainFrameLink(url), attempt: playingAttempt)
+        #expect(link.urls == [url])
         #expect(demo.phase == .loading, "Retired player and handoff callbacks cannot fail a retry")
         player.send(.ready, attempt: demo.attempt)
         #expect(demo.phase == .ready)

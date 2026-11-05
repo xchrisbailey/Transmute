@@ -11,8 +11,18 @@
         private(set) var webView: WKWebView?
         private var attempt: UUID?
         private var loadTimeout: Task<Void, Never>?
+        private let makeWebView: (WKWebViewConfiguration) -> WKWebView
         private var origin: URL? {
             Bundle.main.bundleIdentifier.flatMap { URL(string: "https://\($0.lowercased())") }
+        }
+
+        init(
+            makeWebView: @escaping (WKWebViewConfiguration) -> WKWebView = {
+                WKWebView(frame: .zero, configuration: $0)
+            }
+        ) {
+            self.makeWebView = makeWebView
+            super.init()
         }
 
         func load(videoID: String, attempt: UUID) {
@@ -28,7 +38,7 @@
             configuration.mediaTypesRequiringUserActionForPlayback = []
             configuration.websiteDataStore = .nonPersistent()
             configuration.userContentController.add(Bridge(owner: self), name: "demo")
-            let webView = WKWebView(frame: .zero, configuration: configuration)
+            let webView = makeWebView(configuration)
             webView.navigationDelegate = self
             webView.uiDelegate = self
             webView.scrollView.isScrollEnabled = false
@@ -111,6 +121,11 @@
             _ webView: WKWebView, decidePolicyFor action: WKNavigationAction,
             decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
         ) {
+            // Detaching delegates does not revoke callbacks already queued by a retired view.
+            guard webView === self.webView, let attempt else {
+                decisionHandler(.cancel)
+                return
+            }
             if action.targetFrame == nil {
                 decisionHandler(.allow)
                 return
@@ -120,7 +135,7 @@
                 return
             }
             if action.navigationType == .linkActivated, let url = action.request.url, url.scheme == "https" {
-                if let attempt { onEvent?(.mainFrameLink(url), attempt) }
+                onEvent?(.mainFrameLink(url), attempt)
                 decisionHandler(.cancel)
             } else {
                 let url = action.request.url
@@ -132,8 +147,9 @@
             _ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration,
             for action: WKNavigationAction, windowFeatures: WKWindowFeatures
         ) -> WKWebView? {
+            guard webView === self.webView, let attempt else { return nil }
             if let url = action.request.url, url.scheme == "https" {
-                if let attempt { onEvent?(.newWindowLink(url), attempt) }
+                onEvent?(.newWindowLink(url), attempt)
             }
             return nil
         }
