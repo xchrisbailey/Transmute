@@ -4,9 +4,11 @@ enum SettingsDataCopy {
     static let privacy = LocalizedStringResource(
         "plain.settings.privacy.statement",
         defaultValue: """
-            Transmute has no analytics, no ads and no code from other companies. Your data stays on your devices and \
-            in your own iCloud. Crash reports reach the developer only through Apple, and only if you've chosen to \
-            share them in the device's Settings.
+            Your workout data stays on your devices and in your own iCloud. Transmute does not send workout history \
+            or Health data to YouTube. Optional exercise demos use YouTube's embedded player, which loads third-party \
+            code and may collect playback-related data, show ads and suggest other videos. Loading a demo is not \
+            tracking-free, even before you press Play. Crash reports reach the developer only through Apple, and \
+            only if you've chosen to share them in the device's Settings.
             """,
         bundle: .main, comment: "plain. The privacy statement.")
 

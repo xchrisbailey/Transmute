@@ -24,6 +24,9 @@ public struct SessionView: View {
     @State var gold: GoldNotice?
     @State var suspicious: LoggedSet?
     @State var activity = SessionActivity()
+    #if os(iOS)
+        @State var demoExercise: LoggedExercise?
+    #endif
 
     public init(workout: Workout, profile: Profile?, onHide: @escaping () -> Void) {
         self.workout = workout
@@ -105,6 +108,11 @@ public struct SessionView: View {
             .sheet(item: $noteFor) { target in
                 NoteEditor(title: target.title, text: noteBinding(target))
             }
+            #if os(iOS)
+                .sheet(item: $demoExercise) { exercise in
+                    ExerciseDemoSheet(workout: workout, exercise: exercise, library: library)
+                }
+            #endif
             .confirmationDialog(
                 Text(LogCopy.finishConfirm), isPresented: $confirmsFinish, titleVisibility: .visible
             ) {

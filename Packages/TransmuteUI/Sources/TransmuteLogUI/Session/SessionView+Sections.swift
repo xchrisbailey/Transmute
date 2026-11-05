@@ -39,12 +39,37 @@ extension SessionView {
                 .buttonStyle(.borderless)
             }
         } header: {
+            exerciseHeader(exercise)
+        }
+    }
+
+    @ViewBuilder private func exerciseHeader(_ exercise: LoggedExercise) -> some View {
+        VStack(alignment: .leading) {
             ExerciseHeader(
                 name: name(of: exercise), substitutedFor: exercise.substitutedFromID.map(name(ofID:)),
                 notes: exercise.notes, isSkipped: exercise.isSkipped
             ) {
                 exerciseMenu(exercise)
             }
+            #if os(iOS)
+                if library.demo(exerciseID: exercise.exerciseID) != nil,
+                    workout.startedOn == nil || workout.startedOn == .phone
+                {
+                    Button {
+                        demoExercise = exercise
+                    } label: {
+                        Label {
+                            Text(DemoCopy.watch)
+                        } icon: {
+                            Image(systemName: "play.rectangle")
+                        }
+                        .labelStyle(.titleAndIcon)
+                    }
+                    .buttonStyle(.borderless)
+                    .frame(minHeight: 44)
+                    .textCase(nil)
+                }
+            #endif
         }
     }
 

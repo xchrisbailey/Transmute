@@ -6,6 +6,37 @@ import Testing
 struct ExerciseLibraryTests {
     let library = ExerciseLibrary.bundled
 
+    @Test func demosRequireAnExactReviewedLibraryAssociation() throws {
+        let pushUp = try #require(library.exercise(id: "push-up"))
+        let fixture = ExerciseDemo(
+            exerciseID: "push-up", equipment: [.bodyweight], videoID: "TESTONLY001",
+            reviewedBy: "Test fixture, not content approval", reviewedOn: "2026-11-04",
+            movementReview: "Test-only movement review", mutedReview: "Test-only muted review",
+            captions: .notNeeded, captionReview: nil)
+        let reviewed = ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [fixture])
+        #expect(reviewed.demo(exerciseID: "push-up") == fixture)
+        #expect(reviewed.demo(exerciseID: "custom-push-up") == nil)
+        #expect(reviewed.demo(exerciseID: "back-squat") == nil)
+        var renamed = pushUp
+        renamed.name = "Floor push-up"
+        #expect(
+            ExerciseLibrary(catalogVersion: 1, exercises: [renamed], demos: [fixture])
+                .demo(exerciseID: "push-up") == fixture)
+        #expect(
+            ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [fixture, fixture])
+                .demo(exerciseID: "push-up") == nil)
+        var invalid = fixture
+        invalid.equipment = [.dumbbell]
+        #expect(ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [invalid]).demos.isEmpty)
+        invalid = fixture
+        invalid.captions = .reviewed
+        #expect(ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [invalid]).demos.isEmpty)
+        invalid = fixture
+        invalid.videoID = "../bad?video"
+        #expect(ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [invalid]).demos.isEmpty)
+        #expect(library.demos.isEmpty, "No human-approved content has been supplied yet")
+    }
+
     @Test func catalogSizeIsInRange() {
         #expect((250...400).contains(library.exercises.count))
         #expect(library.catalogVersion == 1)
