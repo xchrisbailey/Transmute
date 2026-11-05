@@ -15,6 +15,10 @@ enum DemoCopy {
         bundle: .main, comment: "plain. Video failure message.")
     static let retry = LocalizedStringResource(
         "plain.demo.retry", defaultValue: "Retry video", bundle: .main, comment: "plain. Retry failed playback.")
+    static let linkStopped = LocalizedStringResource(
+        "plain.demo.linkStopped",
+        defaultValue: "Video stopped for an external link. Retry video when you want to watch again.",
+        bundle: .main, comment: "plain. Player retired for a link; does not claim opening succeeded.")
     static let cues = LocalizedStringResource(
         "plain.demo.cues", defaultValue: "Setup and movement", bundle: .main,
         comment: "plain. Written guidance heading.")

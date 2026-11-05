@@ -120,8 +120,7 @@
                 return
             }
             if action.navigationType == .linkActivated, let url = action.request.url, url.scheme == "https" {
-                pause()
-                UIApplication.shared.open(url)
+                if let attempt { onEvent?(.mainFrameLink(url), attempt) }
                 decisionHandler(.cancel)
             } else {
                 let url = action.request.url
@@ -134,8 +133,7 @@
             for action: WKNavigationAction, windowFeatures: WKWindowFeatures
         ) -> WKWebView? {
             if let url = action.request.url, url.scheme == "https" {
-                pause()
-                UIApplication.shared.open(url)
+                if let attempt { onEvent?(.newWindowLink(url), attempt) }
             }
             return nil
         }

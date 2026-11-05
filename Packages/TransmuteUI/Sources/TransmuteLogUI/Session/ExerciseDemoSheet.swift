@@ -16,7 +16,10 @@
             self.exercise = exercise
             let player = YouTubeDemoPlayer()
             _player = State(initialValue: player)
-            _demo = State(initialValue: SessionDemo(workout: workout, library: library, player: player))
+            _demo = State(
+                initialValue: SessionDemo(
+                    workout: workout, library: library, player: player,
+                    openLink: { url, completion in UIApplication.shared.open(url, completionHandler: completion) }))
         }
 
         var body: some View {
@@ -90,8 +93,8 @@
             switch demo.phase {
             case .loading:
                 ProgressView { Text(DemoCopy.loading) }
-            case .unavailable:
-                Text(DemoCopy.unavailable)
+            case .unavailable, .stoppedForLink:
+                Text(demo.phase == .unavailable ? DemoCopy.unavailable : DemoCopy.linkStopped)
                 Button {
                     demo.retry()
                 } label: {

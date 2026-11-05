@@ -4,6 +4,8 @@ import TransmuteCore
 
 enum DemoPlayerEvent {
     case ready, playing, paused, failed
+    case mainFrameLink(URL)
+    case newWindowLink(URL)
 }
 
 @MainActor
@@ -19,12 +21,13 @@ protocol DemoPlayer: AnyObject {
 /// Viewing state has no model context, timer, session-link or workout-writing effects.
 @MainActor @Observable
 final class SessionDemo: Identifiable {
-    enum Phase { case loading, ready, playing, paused, unavailable }
+    enum Phase { case loading, ready, playing, paused, unavailable, stoppedForLink }
 
     let id = UUID()
     private let workout: Workout
     private let library: ExerciseLibrary
     let player: any DemoPlayer
+    private let openLink: (URL, @escaping (Bool) -> Void) -> Void
     private(set) var association: ExerciseDemo?
     private(set) var name = ""
     private(set) var cues: [String] = []
@@ -34,10 +37,14 @@ final class SessionDemo: Identifiable {
     private var sceneActive = true
     private var interrupted = false
 
-    init(workout: Workout, library: ExerciseLibrary, player: any DemoPlayer) {
+    init(
+        workout: Workout, library: ExerciseLibrary, player: any DemoPlayer,
+        openLink: @escaping (URL, @escaping (Bool) -> Void) -> Void = { _, completion in completion(false) }
+    ) {
         self.workout = workout
         self.library = library
         self.player = player
+        self.openLink = openLink
         player.onEvent = { [weak self] event, attempt in
             self?.receive(event, attempt: attempt)
         }
@@ -64,7 +71,7 @@ final class SessionDemo: Identifiable {
     }
 
     func retry() {
-        guard isPresented, sceneActive, !interrupted, phase == .unavailable else { return }
+        guard isPresented, sceneActive, !interrupted, phase == .unavailable || phase == .stoppedForLink else { return }
         load()
     }
 
@@ -88,7 +95,7 @@ final class SessionDemo: Identifiable {
     }
 
     private func updateActivity() {
-        guard isPresented else { return }
+        guard isPresented, phase != .unavailable, phase != .stoppedForLink else { return }
         if !sceneActive || interrupted {
             attempt = UUID()
             phase = .paused
@@ -114,6 +121,24 @@ final class SessionDemo: Identifiable {
         case .failed:
             phase = .unavailable
             player.stop()
+        case .mainFrameLink(let url), .newWindowLink(let url):
+            handOff(url)
+        }
+    }
+
+    private func handOff(_ url: URL) {
+        guard url.scheme == "https" else { return }
+        attempt = UUID()
+        let handoffAttempt = attempt
+        phase = .stoppedForLink
+        player.stop()
+        // An accepted handoff need not change scenes, and a rejected one must not
+        // reload media. Both leave recovery under the person's explicit control.
+        openLink(url) { [weak self] opened in
+            guard let self, self.isPresented, self.attempt == handoffAttempt, self.phase == .stoppedForLink else {
+                return
+            }
+            if !opened { self.phase = .unavailable }
         }
     }
 }

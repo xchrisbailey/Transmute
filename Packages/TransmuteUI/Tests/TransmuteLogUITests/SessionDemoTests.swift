@@ -8,6 +8,58 @@ import TransmuteTestSupport
 
 @MainActor
 struct SessionDemoTests {
+    @Test(arguments: [false, true], [false, true])
+    func playerLinkOffersExplicitRetryWithoutAssumingASceneTransition(newWindow: Bool, opened: Bool) throws {
+        let container = try TransmuteStore.makeTestContainer()
+        let context = container.mainContext
+        let pushUp = try #require(ExerciseLibrary.bundled.exercise(id: "push-up"))
+        let fixture = ExerciseDemo(
+            exerciseID: "push-up", equipment: [.bodyweight], videoID: "TESTONLY001",
+            reviewedBy: "Test fixture only", reviewedOn: "2026-11-04",
+            movementReview: "Fixture", mutedReview: "Fixture", captions: .notNeeded, captionReview: nil)
+        let library = ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [fixture])
+        let workout = WorkoutSession.startAdHoc(title: "Link failure", in: context)
+        let exercise = WorkoutSession.add(pushUp, to: workout)
+        try context.save()
+        let before = SessionSnapshot(workout, library: library)
+        let player = DemoPlayerSpy()
+        let link = DemoLinkSpy()
+        let demo = SessionDemo(workout: workout, library: library, player: player, openLink: link.open)
+        #expect(demo.open(exercise))
+        let playingAttempt = demo.attempt
+        player.send(.ready, attempt: playingAttempt)
+        demo.play()
+        player.send(.playing, attempt: playingAttempt)
+        let url = try #require(URL(string: "https://www.youtube.com/watch?v=TESTONLY001"))
+        player.send(newWindow ? .newWindowLink(url) : .mainFrameLink(url), attempt: playingAttempt)
+        #expect(player.commands.last == "stop")
+        #expect(link.urls == [url])
+        #expect(demo.phase == .stoppedForLink)
+        link.complete(opened)
+        let recoveryPhase: SessionDemo.Phase = opened ? .stoppedForLink : .unavailable
+        #expect(demo.phase == recoveryPhase)
+        #expect(demo.isPresented && demo.cues == pushUp.cues)
+        #expect(player.commands == ["load:TESTONLY001", "play", "stop"])
+        player.send(.playing, attempt: playingAttempt)
+        #expect(demo.phase == recoveryPhase)
+        demo.setSceneActive(false)
+        demo.setSceneActive(true)
+        #expect(demo.phase == recoveryPhase && player.commands.last == "stop")
+        demo.retry()
+        #expect(demo.phase == .loading)
+        #expect(player.commands.last == "load:TESTONLY001")
+        link.complete(false)
+        player.send(.failed, attempt: playingAttempt)
+        #expect(demo.phase == .loading, "Retired player and handoff callbacks cannot fail a retry")
+        player.send(.ready, attempt: demo.attempt)
+        #expect(demo.phase == .ready)
+        #expect(player.commands.filter { $0 == "play" }.count == 1)
+        #expect(SessionSnapshot(workout, library: library) == before && !context.hasChanges)
+        demo.dismiss()
+        link.complete(opened)
+        #expect(!demo.isPresented && player.commands.last == "stop")
+    }
+
     @Test func unsupportedExercisesNeverLoadAPlayer() throws {
         let container = try TransmuteStore.makeTestContainer()
         let context = container.mainContext
@@ -103,6 +155,19 @@ struct SessionDemoTests {
         #expect(player.commands.last == "stop")
         #expect(!demo.isPresented)
     }
+}
+
+@MainActor
+private final class DemoLinkSpy {
+    var urls: [URL] = []
+    private var completion: ((Bool) -> Void)?
+
+    func open(_ url: URL, completion: @escaping (Bool) -> Void) {
+        urls.append(url)
+        self.completion = completion
+    }
+
+    func complete(_ opened: Bool) { completion?(opened) }
 }
 
 @MainActor

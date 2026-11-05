@@ -1,6 +1,11 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "plain.demo.linkStopped": {
+      "comment": "plain. Player retired for a link; does not claim opening succeeded.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Video stopped for an external link. Retry video when you want to watch again." } } }
+    },
     "plain.demo.watch": {
       "comment": "plain. Exercise guidance button.",
       "extractionState": "manual",
