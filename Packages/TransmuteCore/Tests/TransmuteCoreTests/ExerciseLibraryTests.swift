@@ -34,7 +34,29 @@ struct ExerciseLibraryTests {
         invalid = fixture
         invalid.videoID = "../bad?video"
         #expect(ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [invalid]).demos.isEmpty)
-        #expect(library.demos.isEmpty, "No human-approved content has been supplied yet")
+    }
+
+    @Test func bundledDemoContainsOnlyTheHumanApprovedFloorPushUp() throws {
+        #expect(library.demos.map(\.exerciseID) == ["push-up"])
+        let demo = try #require(library.demo(exerciseID: "push-up"))
+        let exercise = try #require(library.exercise(id: demo.exerciseID))
+        #expect(demo.videoID == "WDIpL0pjun0")
+        #expect(demo.equipment == [.bodyweight])
+        #expect(exercise.equipment == [[.bodyweight]])
+        #expect(!exercise.cues.isEmpty && !exercise.isCustom)
+        #expect(demo.reviewedBy == "Human maintainer xchrisbailey")
+        #expect(demo.reviewedOn == "2026-11-05")
+        #expect(demo.movementReview.contains("standard floor push-up"))
+        #expect(
+            demo.movementReview.contains("https://github.com/xchrisbailey/Transmute/issues/118#issuecomment-6650523285")
+        )
+        #expect(demo.mutedReview.contains("video only no spoken instruction"))
+        #expect(
+            demo.mutedReview.contains("https://github.com/xchrisbailey/Transmute/issues/118#issuecomment-6650533058"))
+        #expect(demo.captions == .notNeeded && demo.captionReview == nil)
+        #expect(library.demo(exerciseID: "incline-push-up") == nil)
+        #expect(library.demo(exerciseID: "deficit-push-up") == nil)
+        #expect(library.demo(exerciseID: "custom-push-up") == nil)
     }
 
     @Test func catalogSizeIsInRange() {
