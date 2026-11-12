@@ -32,7 +32,7 @@ enum DemoCopy {
     static func noMatch(_ equipment: String) -> LocalizedStringResource {
         LocalizedStringResource(
             "plain.demo.noMatch",
-            defaultValue: "No reviewed demonstration is available for \(equipment). The written cues below still apply.",
+            defaultValue: "No reviewed demo is available for \(equipment). The written cues below still apply.",
             bundle: .main, comment: "plain. No reviewed demo for the chosen equipment; %@ is the equipment.")
     }
 
