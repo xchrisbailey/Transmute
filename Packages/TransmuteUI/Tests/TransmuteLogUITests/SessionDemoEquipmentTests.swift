@@ -68,16 +68,12 @@ struct SessionDemoEquipmentTests {
         #expect(player.commands.isEmpty)
     }
 
-    @Test func viewingAnotherEquipmentStopsThePreviousVideoAndNeverTouchesTheWorkout() throws {
-        let container = try TransmuteStore.makeTestContainer()
-        let context = container.mainContext
-        let now = Date(timeIntervalSince1970: 1_790_000_000)
-        let goblet = try #require(ExerciseLibrary.bundled.exercise(id: "goblet-squat"))
-        let library = ExerciseLibrary(
-            catalogVersion: 1, exercises: [goblet],
-            demos: [synthetic("goblet-squat", [.dumbbell], video: "TESTONLY001")])
+    /// One logged set and an unlogged current set holding entered values, mid-rest.
+    private func runningWorkout(
+        of library: LibraryExercise, at now: Date, in context: ModelContext
+    ) throws -> (Workout, LoggedExercise, LoggedSet, LoggedSet) {
         let workout = WorkoutSession.startAdHoc(title: "Equipment", at: now, in: context)
-        let exercise = WorkoutSession.add(goblet, to: workout, sets: 3)
+        let exercise = WorkoutSession.add(library, to: workout, sets: 3)
         let first = exercise.orderedSets[0]
         first.reps = 8
         first.restSeconds = 60
@@ -86,6 +82,18 @@ struct SessionDemoEquipmentTests {
         current.reps = 7
         current.weightKg = 12.5
         try context.save()
+        return (workout, exercise, first, current)
+    }
+
+    @Test func viewingAnotherEquipmentStopsThePreviousVideoAndNeverTouchesTheWorkout() throws {
+        let container = try TransmuteStore.makeTestContainer()
+        let context = container.mainContext
+        let now = Date(timeIntervalSince1970: 1_790_000_000)
+        let goblet = try #require(ExerciseLibrary.bundled.exercise(id: "goblet-squat"))
+        let library = ExerciseLibrary(
+            catalogVersion: 1, exercises: [goblet],
+            demos: [synthetic("goblet-squat", [.dumbbell], video: "TESTONLY001")])
+        let (workout, exercise, first, current) = try runningWorkout(of: goblet, at: now, in: context)
         let before = SessionSnapshot(workout, library: library)
         let setIDs = exercise.orderedSets.map(\.id)
         let player = DemoPlayerSpy()
