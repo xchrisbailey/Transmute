@@ -109,6 +109,7 @@ struct SessionDemoEquipmentTests {
 
         #expect(demo.open(exercise))
         #expect(demo.choices.map(\.equipment) == [[.dumbbell], [.kettlebell]])
+        #expect(demo.choices.map(DemoCopy.choiceName) == ["Dumbbell", "Kettlebell \u{2014} no demo yet"])
         #expect(demo.selectedEquipment == [.dumbbell] && demo.viewed?.videoID == "TESTONLY001")
         let firstAttempt = demo.attempt
         player.send(.ready, attempt: firstAttempt)

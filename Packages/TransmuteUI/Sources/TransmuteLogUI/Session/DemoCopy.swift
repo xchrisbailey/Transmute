@@ -42,6 +42,18 @@ enum DemoCopy {
             byJoining: equipment.sorted(by: { $0.rawValue < $1.rawValue }).map { String(localized: $0.label) })
     }
 
+    static func unmatchedChoice(_ equipment: String) -> LocalizedStringResource {
+        LocalizedStringResource(
+            "plain.demo.noDemoYet", defaultValue: "\(equipment) \u{2014} no demo yet", bundle: .main,
+            comment: "plain. Picker row for equipment with no reviewed demo; %@ is the equipment.")
+    }
+
+    /// A picker row, saying so when choosing it would show no reviewed demo.
+    static func choiceName(_ choice: DemoChoice) -> String {
+        let name = equipmentName(choice.equipment)
+        return choice.demo == nil ? String(localized: unmatchedChoice(name)) : name
+    }
+
     static let cues = LocalizedStringResource(
         "plain.demo.cues", defaultValue: "Setup and movement", bundle: .main,
         comment: "plain. Written guidance heading.")

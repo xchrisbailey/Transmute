@@ -90,7 +90,7 @@
             if demo.choices.count > 1 {
                 Picker(selection: equipmentSelection) {
                     ForEach(demo.choices, id: \.equipment) { choice in
-                        Text(verbatim: DemoCopy.equipmentName(choice.equipment)).tag(choice.equipment)
+                        Text(verbatim: DemoCopy.choiceName(choice)).tag(choice.equipment)
                     }
                 } label: {
                     Text(DemoCopy.equipment).font(.headline)

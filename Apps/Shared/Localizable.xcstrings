@@ -81,6 +81,11 @@
       "extractionState": "manual",
       "localizations": { "en": { "stringUnit": { "state": "translated", "value": "No reviewed demo is available for %@. The written cues below still apply." } } }
     },
+    "plain.demo.noDemoYet": {
+      "comment": "plain. Picker row for equipment with no reviewed demo; %@ is the equipment.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "%@ \u2014 no demo yet" } } }
+    },
     "plain.activePlan": {
       "comment": "plain. Title of the active plan screen.",
       "extractionState": "manual",
