@@ -14,17 +14,18 @@ struct ExerciseLibraryTests {
             movementReview: "Test-only movement review", mutedReview: "Test-only muted review",
             captions: .notNeeded, captionReview: nil)
         let reviewed = ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [fixture])
-        #expect(reviewed.demo(exerciseID: "push-up") == fixture)
-        #expect(reviewed.demo(exerciseID: "custom-push-up") == nil)
-        #expect(reviewed.demo(exerciseID: "back-squat") == nil)
+        #expect(reviewed.demo(exerciseID: "push-up", equipment: [.bodyweight]) == fixture)
+        #expect(reviewed.demo(exerciseID: "push-up", equipment: [.dumbbell]) == nil)
+        #expect(reviewed.demo(exerciseID: "custom-push-up", equipment: [.bodyweight]) == nil)
+        #expect(reviewed.demo(exerciseID: "back-squat", equipment: [.barbell, .rack]) == nil)
         var renamed = pushUp
         renamed.name = "Floor push-up"
         #expect(
             ExerciseLibrary(catalogVersion: 1, exercises: [renamed], demos: [fixture])
-                .demo(exerciseID: "push-up") == fixture)
+                .demo(exerciseID: "push-up", equipment: [.bodyweight]) == fixture)
         #expect(
             ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [fixture, fixture])
-                .demo(exerciseID: "push-up") == nil)
+                .demo(exerciseID: "push-up", equipment: [.bodyweight]) == nil)
         var invalid = fixture
         invalid.equipment = [.dumbbell]
         #expect(ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [invalid]).demos.isEmpty)
@@ -38,7 +39,7 @@ struct ExerciseLibraryTests {
 
     @Test func bundledDemoContainsOnlyTheHumanApprovedFloorPushUp() throws {
         #expect(library.demos.map(\.exerciseID) == ["push-up"])
-        let demo = try #require(library.demo(exerciseID: "push-up"))
+        let demo = try #require(library.demo(exerciseID: "push-up", equipment: [.bodyweight]))
         let exercise = try #require(library.exercise(id: demo.exerciseID))
         #expect(demo.videoID == "WDIpL0pjun0")
         #expect(demo.equipment == [.bodyweight])
@@ -54,9 +55,71 @@ struct ExerciseLibraryTests {
         #expect(
             demo.mutedReview.contains("https://github.com/xchrisbailey/Transmute/issues/118#issuecomment-6650533058"))
         #expect(demo.captions == .notNeeded && demo.captionReview == nil)
-        #expect(library.demo(exerciseID: "incline-push-up") == nil)
-        #expect(library.demo(exerciseID: "deficit-push-up") == nil)
-        #expect(library.demo(exerciseID: "custom-push-up") == nil)
+        #expect(library.demoChoices(exerciseID: "incline-push-up").isEmpty)
+        #expect(library.demoChoices(exerciseID: "deficit-push-up").isEmpty)
+        #expect(library.demoChoices(exerciseID: "custom-push-up").isEmpty)
+    }
+
+    private func synthetic(_ id: String, _ equipment: Set<Equipment>, video: String) -> ExerciseDemo {
+        ExerciseDemo(
+            exerciseID: id, equipment: equipment, videoID: video,
+            reviewedBy: "Test fixture, not content approval", reviewedOn: "2026-11-12",
+            movementReview: "Test-only movement review", mutedReview: "Test-only muted review",
+            captions: .notNeeded, captionReview: nil)
+    }
+
+    @Test func equipmentChoicesFollowTheCatalogueGroupsAndNeverFallBackToAnotherVariant() throws {
+        let goblet = try #require(library.exercise(id: "goblet-squat"))
+        let press = try #require(library.exercise(id: "dumbbell-bench-press"))
+        let dumbbell = synthetic("goblet-squat", [.dumbbell], video: "TESTONLY001")
+        let kettlebell = synthetic("goblet-squat", [.kettlebell], video: "TESTONLY002")
+        let bench = synthetic("dumbbell-bench-press", [.dumbbell, .bench], video: "TESTONLY003")
+        let reviewed = ExerciseLibrary(
+            catalogVersion: 1, exercises: [goblet, press], demos: [dumbbell, kettlebell, bench])
+        #expect(reviewed.demos.count == 3)
+        #expect(reviewed.demoChoices(exerciseID: "goblet-squat").map(\.equipment) == [[.dumbbell], [.kettlebell]])
+        #expect(reviewed.demoChoices(exerciseID: "goblet-squat").map(\.demo) == [dumbbell, kettlebell])
+        #expect(reviewed.demo(exerciseID: "goblet-squat", equipment: [.dumbbell]) == dumbbell)
+        #expect(reviewed.demo(exerciseID: "goblet-squat", equipment: [.kettlebell]) == kettlebell)
+        // A group is alternatives; an AND group is one required item, never a choice.
+        #expect(reviewed.demoChoices(exerciseID: "dumbbell-bench-press").map(\.equipment) == [[.dumbbell, .bench]])
+        #expect(reviewed.demo(exerciseID: "dumbbell-bench-press", equipment: [.dumbbell]) == nil)
+        #expect(reviewed.demo(exerciseID: "dumbbell-bench-press", equipment: [.bench]) == nil)
+
+        // Only one alternative reviewed: the other stays a visible choice without a demo.
+        let partial = ExerciseLibrary(catalogVersion: 1, exercises: [goblet], demos: [dumbbell])
+        let choices = partial.demoChoices(exerciseID: "goblet-squat")
+        #expect(choices.map(\.equipment) == [[.dumbbell], [.kettlebell]])
+        #expect(choices.map(\.demo) == [dumbbell, nil])
+        #expect(partial.demo(exerciseID: "goblet-squat", equipment: [.kettlebell]) == nil)
+        #expect(partial.demo(exerciseID: "goblet-squat", equipment: [.barbell]) == nil)
+
+        // No reviewed demo for any variant: no choices, no guessed guidance.
+        #expect(ExerciseLibrary(catalogVersion: 1, exercises: [goblet]).demoChoices(exerciseID: "goblet-squat").isEmpty)
+    }
+
+    @Test func ambiguousOrMismatchedAssociationsAreRejected() throws {
+        let goblet = try #require(library.exercise(id: "goblet-squat"))
+        let press = try #require(library.exercise(id: "dumbbell-bench-press"))
+        let dumbbell = synthetic("goblet-squat", [.dumbbell], video: "TESTONLY001")
+        var otherVideo = dumbbell
+        otherVideo.videoID = "TESTONLY002"
+        // Two videos for one exercise and equipment key are ambiguous: neither is shown.
+        let ambiguous = ExerciseLibrary(catalogVersion: 1, exercises: [goblet], demos: [dumbbell, otherVideo])
+        #expect(ambiguous.demos.isEmpty && ambiguous.demoChoices(exerciseID: "goblet-squat").isEmpty)
+        // Both alternatives at once is not a single implement.
+        let both = synthetic("goblet-squat", [.dumbbell, .kettlebell], video: "TESTONLY001")
+        #expect(ExerciseLibrary(catalogVersion: 1, exercises: [goblet], demos: [both]).demos.isEmpty)
+        // An AND group must be named in the demonstrated equipment.
+        let noBench = synthetic("dumbbell-bench-press", [.dumbbell], video: "TESTONLY001")
+        #expect(ExerciseLibrary(catalogVersion: 1, exercises: [press], demos: [noBench]).demos.isEmpty)
+        // A demo cannot be attached to a custom exercise even when the ID is known.
+        let custom = LibraryExercise(
+            id: "custom-goblet", name: "Goblet squat", category: .strength, pattern: .squat,
+            primaryMuscles: [.quads], equipment: [[.dumbbell]], tracking: .weightReps, cues: ["Hold it close."])
+        let attached = synthetic("custom-goblet", [.dumbbell], video: "TESTONLY001")
+        let withCustom = ExerciseLibrary(catalogVersion: 1, exercises: [custom], demos: [attached])
+        #expect(withCustom.demos.isEmpty && withCustom.demoChoices(exerciseID: "custom-goblet").isEmpty)
     }
 
     @Test func catalogSizeIsInRange() {

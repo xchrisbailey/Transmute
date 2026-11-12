@@ -93,10 +93,22 @@ public struct ExerciseLibrary: Sendable {
         return ExerciseLibrary(catalogVersion: catalogVersion, exercises: exercises + fresh, demos: demos)
     }
 
-    /// This first slice exposes only unambiguous single-demo exercises.
-    public func demo(exerciseID: String) -> ExerciseDemo? {
-        let matches = demos.filter { $0.exerciseID == exerciseID }
-        return matches.count == 1 ? matches.first : nil
+    /// The reviewed demonstration for exactly this equipment variant, never a nearby one.
+    public func demo(exerciseID: String, equipment: Set<Equipment>) -> ExerciseDemo? {
+        demos.first { $0.exerciseID == exerciseID && $0.equipment == equipment }
+    }
+
+    /// Every equipment variant of a library exercise that has at least one reviewed demonstration.
+    /// A variant takes one item from each equipment group, so alternatives are choices and required
+    /// groups are not. A variant without a reviewed match stays listed with no demonstration.
+    public func demoChoices(exerciseID: String) -> [DemoChoice] {
+        guard let exercise = exercise(id: exerciseID), !exercise.isCustom,
+            demos.contains(where: { $0.exerciseID == exerciseID })
+        else { return [] }
+        let variants = exercise.equipment.reduce([Set<Equipment>()]) { partial, group in
+            partial.flatMap { variant in group.map { variant.union([$0]) } }
+        }
+        return variants.map { DemoChoice(equipment: $0, demo: demo(exerciseID: exerciseID, equipment: $0)) }
     }
 
     public func exercise(id: String) -> LibraryExercise? {

@@ -18,10 +18,25 @@ protocol DemoPlayer: AnyObject {
     func stop()
 }
 
+/// The demonstration being viewed, and nothing else about the workout. Reporting reads this.
+struct ViewedDemo: Equatable {
+    let exerciseID: String
+    let exerciseName: String
+    let equipment: Set<Equipment>
+    let videoID: String
+}
+
 /// Viewing state has no model context, timer, session-link or workout-writing effects.
 @MainActor @Observable
 final class SessionDemo: Identifiable {
-    enum Phase { case loading, ready, playing, paused, unavailable, stoppedForLink }
+    enum Phase {
+        case loading, ready, playing, paused, unavailable, stoppedForLink
+        /// Nothing to play: written cues only, or an equipment choice with no reviewed match.
+        case noVideo
+    }
+
+    /// What the logging header can offer for an exercise. Nil offers nothing, never invented help.
+    enum Guidance { case demo, cues }
 
     let id = UUID()
     private let workout: Workout
@@ -31,6 +46,9 @@ final class SessionDemo: Identifiable {
     private(set) var association: ExerciseDemo?
     private(set) var name = ""
     private(set) var cues: [String] = []
+    private(set) var choices: [DemoChoice] = []
+    /// The equipment whose demonstration is on view. This is viewing state, never the equipment used.
+    private(set) var selectedEquipment: Set<Equipment>?
     private(set) var phase: Phase = .loading
     private(set) var attempt = UUID()
     private(set) var isPresented = false
@@ -50,19 +68,67 @@ final class SessionDemo: Identifiable {
         }
     }
 
+    static func guidance(for exerciseID: String, library: ExerciseLibrary) -> Guidance? {
+        if !library.demoChoices(exerciseID: exerciseID).isEmpty { return .demo }
+        return suppliedCues(of: exerciseID, library: library).isEmpty ? nil : .cues
+    }
+
+    private static func suppliedCues(of exerciseID: String, library: ExerciseLibrary) -> [String] {
+        (library.exercise(id: exerciseID)?.cues ?? []).filter {
+            !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+    }
+
+    /// The reviewed demonstration on view, or nil while there is none to show.
+    var viewed: ViewedDemo? {
+        guard isPresented, let association else { return nil }
+        return ViewedDemo(
+            exerciseID: association.exerciseID, exerciseName: name, equipment: association.equipment,
+            videoID: association.videoID)
+    }
+
     @discardableResult
     func open(_ exercise: LoggedExercise) -> Bool {
         guard !isPresented, workout.endedAt == nil, workout.startedOn == nil || workout.startedOn == .phone,
             workout.orderedExercises.contains(where: { $0 === exercise }),
-            let association = library.demo(exerciseID: exercise.exerciseID),
-            let content = library.exercise(id: exercise.exerciseID)
+            let content = library.exercise(id: exercise.exerciseID),
+            Self.guidance(for: exercise.exerciseID, library: library) != nil
         else { return false }
-        self.association = association
         name = content.name
-        cues = content.cues
+        cues = Self.suppliedCues(of: exercise.exerciseID, library: library)
+        choices = library.demoChoices(exerciseID: exercise.exerciseID)
         isPresented = true
-        load()
+        if let first = choices.first(where: { $0.demo != nil }) {
+            show(first)
+        } else {
+            phase = .noVideo
+        }
         return true
+    }
+
+    /// Chooses which equipment's demonstration to view. The workout is not consulted or changed.
+    func select(_ equipment: Set<Equipment>) {
+        guard isPresented, selectedEquipment != equipment,
+            let choice = choices.first(where: { $0.equipment == equipment })
+        else { return }
+        show(choice)
+    }
+
+    private func show(_ choice: DemoChoice) {
+        // The previous video, if any, is stopped before anything replaces it.
+        if association != nil { player.stop() }
+        selectedEquipment = choice.equipment
+        association = choice.demo
+        attempt = UUID()
+        guard choice.demo != nil else {
+            phase = .noVideo
+            return
+        }
+        if sceneActive, !interrupted {
+            load()
+        } else {
+            phase = .paused
+        }
     }
 
     func play() {
@@ -91,11 +157,11 @@ final class SessionDemo: Identifiable {
         guard isPresented else { return }
         isPresented = false
         attempt = UUID()
-        player.stop()
+        if association != nil { player.stop() }
     }
 
     private func updateActivity() {
-        guard isPresented, phase != .unavailable, phase != .stoppedForLink else { return }
+        guard isPresented, association != nil, phase != .unavailable, phase != .stoppedForLink else { return }
         if !sceneActive || interrupted {
             attempt = UUID()
             phase = .paused

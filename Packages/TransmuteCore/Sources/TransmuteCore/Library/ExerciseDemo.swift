@@ -53,3 +53,9 @@ public struct ExerciseDemo: Codable, Hashable, Sendable {
             || !(captionReview?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true)
     }
 }
+
+/// One equipment variant a person can view, with its reviewed demonstration when there is one.
+public struct DemoChoice: Hashable, Sendable {
+    public var equipment: Set<Equipment>
+    public var demo: ExerciseDemo?
+}
