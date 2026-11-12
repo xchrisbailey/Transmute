@@ -185,6 +185,16 @@ struct SessionDemoEquipmentTests {
         #expect(demo.phase == .ready)
         #expect(player.commands.filter { $0 == "play" }.count == 1, "Replacement waits for explicit Play")
 
+        // An audio interruption pauses too, and a choice made then waits for its end.
+        demo.setInterrupted(true)
+        demo.select([.dumbbell])
+        #expect(demo.phase == .paused && demo.viewed?.equipment == [.dumbbell] && player.commands.last == "stop")
+        demo.setInterrupted(false)
+        #expect(demo.phase == .loading && player.commands.last == "load:TESTONLY001")
+        demo.select([.kettlebell])
+        player.send(.ready, attempt: demo.attempt)
+        #expect(player.commands.filter { $0 == "play" }.count == 1)
+
         // Leaving the app pauses; returning reloads the chosen variant, never the old one.
         demo.setSceneActive(false)
         demo.select([.dumbbell])

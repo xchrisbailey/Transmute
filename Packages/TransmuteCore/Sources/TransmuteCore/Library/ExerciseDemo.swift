@@ -56,6 +56,6 @@ public struct ExerciseDemo: Codable, Hashable, Sendable {
 
 /// One equipment variant a person can view, with its reviewed demonstration when there is one.
 public struct DemoChoice: Hashable, Sendable {
-    public var equipment: Set<Equipment>
-    public var demo: ExerciseDemo?
+    public let equipment: Set<Equipment>
+    public let demo: ExerciseDemo?
 }

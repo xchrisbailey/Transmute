@@ -53,7 +53,7 @@ extension SessionView {
             }
             #if os(iOS)
                 if let guidance = SessionDemo.guidance(for: exercise.exerciseID, library: library),
-                    workout.startedOn == nil || workout.startedOn == .phone
+                    SessionDemo.canView(workout)
                 {
                     Button {
                         demoExercise = exercise

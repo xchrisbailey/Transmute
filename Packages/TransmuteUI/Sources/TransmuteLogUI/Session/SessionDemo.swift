@@ -68,6 +68,11 @@ final class SessionDemo: Identifiable {
         }
     }
 
+    /// Guidance belongs to the iPhone's own running workout, never one another device owns.
+    static func canView(_ workout: Workout) -> Bool {
+        workout.endedAt == nil && (workout.startedOn == nil || workout.startedOn == .phone)
+    }
+
     static func guidance(for exerciseID: String, library: ExerciseLibrary) -> Guidance? {
         if !library.demoChoices(exerciseID: exerciseID).isEmpty { return .demo }
         return suppliedCues(of: exerciseID, library: library).isEmpty ? nil : .cues
@@ -89,7 +94,7 @@ final class SessionDemo: Identifiable {
 
     @discardableResult
     func open(_ exercise: LoggedExercise) -> Bool {
-        guard !isPresented, workout.endedAt == nil, workout.startedOn == nil || workout.startedOn == .phone,
+        guard !isPresented, Self.canView(workout),
             workout.orderedExercises.contains(where: { $0 === exercise }),
             let content = library.exercise(id: exercise.exerciseID),
             Self.guidance(for: exercise.exerciseID, library: library) != nil
