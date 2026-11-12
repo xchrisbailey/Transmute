@@ -6,6 +6,13 @@ import TransmuteTestSupport
 
 @testable import TransmuteLogUI
 
+private struct RunningWorkout {
+    let workout: Workout
+    let exercise: LoggedExercise
+    let first: LoggedSet
+    let current: LoggedSet
+}
+
 @MainActor
 struct SessionDemoEquipmentTests {
     @Test func unmappedLibraryExercisesKeepTheirCuesWithoutAPlayer() throws {
@@ -71,7 +78,7 @@ struct SessionDemoEquipmentTests {
     /// One logged set and an unlogged current set holding entered values, mid-rest.
     private func runningWorkout(
         of library: LibraryExercise, at now: Date, in context: ModelContext
-    ) throws -> (Workout, LoggedExercise, LoggedSet, LoggedSet) {
+    ) throws -> RunningWorkout {
         let workout = WorkoutSession.startAdHoc(title: "Equipment", at: now, in: context)
         let exercise = WorkoutSession.add(library, to: workout, sets: 3)
         let first = exercise.orderedSets[0]
@@ -82,7 +89,7 @@ struct SessionDemoEquipmentTests {
         current.reps = 7
         current.weightKg = 12.5
         try context.save()
-        return (workout, exercise, first, current)
+        return RunningWorkout(workout: workout, exercise: exercise, first: first, current: current)
     }
 
     @Test func viewingAnotherEquipmentStopsThePreviousVideoAndNeverTouchesTheWorkout() throws {
@@ -93,7 +100,8 @@ struct SessionDemoEquipmentTests {
         let library = ExerciseLibrary(
             catalogVersion: 1, exercises: [goblet],
             demos: [synthetic("goblet-squat", [.dumbbell], video: "TESTONLY001")])
-        let (workout, exercise, first, current) = try runningWorkout(of: goblet, at: now, in: context)
+        let running = try runningWorkout(of: goblet, at: now, in: context)
+        let (workout, exercise, first, current) = (running.workout, running.exercise, running.first, running.current)
         let before = SessionSnapshot(workout, library: library)
         let setIDs = exercise.orderedSets.map(\.id)
         let player = DemoPlayerSpy()
