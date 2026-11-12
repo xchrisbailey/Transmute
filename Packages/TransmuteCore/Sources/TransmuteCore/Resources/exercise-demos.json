@@ -1,0 +1,13 @@
+[
+  {
+    "exerciseID": "push-up",
+    "equipment": ["bodyweight"],
+    "videoID": "WDIpL0pjun0",
+    "reviewedBy": "Human maintainer xchrisbailey",
+    "reviewedOn": "2026-11-05",
+    "movementReview": "Human maintainer approved the NASM standard floor push-up with bodyweight: 'video looks good'. https://github.com/xchrisbailey/Transmute/issues/118#issuecomment-6650523285",
+    "mutedReview": "Human maintainer confirmed 'video only no spoken instruction', approving the visual demonstration without spoken cues. No agent audio review is claimed. https://github.com/xchrisbailey/Transmute/issues/118#issuecomment-6650533058",
+    "captions": "notNeeded",
+    "captionReview": null
+  }
+]

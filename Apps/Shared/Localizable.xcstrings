@@ -1,6 +1,71 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "plain.demo.linkStopped": {
+      "comment": "plain. Player retired for a link; does not claim opening succeeded.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Video stopped for an external link. Retry video when you want to watch again." } } }
+    },
+    "plain.demo.watch": {
+      "comment": "plain. Exercise guidance button.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Watch demo" } } }
+    },
+    "plain.demo.close": {
+      "comment": "plain. Dismiss exercise guidance.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Close demo" } } }
+    },
+    "plain.demo.play": {
+      "comment": "plain. Explicit video playback button.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Play" } } }
+    },
+    "plain.demo.loading": {
+      "comment": "plain. Player loading status.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Loading demo…" } } }
+    },
+    "plain.demo.unavailable": {
+      "comment": "plain. Video failure message.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Video unavailable. You can still use the written cues and keep logging." } } }
+    },
+    "plain.demo.retry": {
+      "comment": "plain. Retry failed playback.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Retry video" } } }
+    },
+    "plain.demo.cues": {
+      "comment": "plain. Written guidance heading.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Setup and movement" } } }
+    },
+    "plain.demo.equipment": {
+      "comment": "plain. Equipment heading.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Demonstrated equipment" } } }
+    },
+    "plain.demo.player": {
+      "comment": "plain. Player accessibility label.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "YouTube demo player" } } }
+    },
+    "plain.demo.disclosure": {
+      "comment": "plain. Third-party playback disclosure; no tracking-free promise.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "YouTube loads when this sheet opens and may collect playback-related data, show ads and suggest other videos. Transmute does not send your workout history or Health data to YouTube. Internet is required for video, not written cues." } } }
+    },
+    "plain.demo.terms": {
+      "comment": "plain. External terms link.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "YouTube Terms of Service" } } }
+    },
+    "plain.demo.privacy": {
+      "comment": "plain. External privacy link.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Google Privacy Policy" } } }
+    },
     "plain.activePlan": {
       "comment": "plain. Title of the active plan screen.",
       "extractionState": "manual",
@@ -6812,7 +6877,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Transmute has no analytics, no ads and no code from other companies. Your data stays on your devices and in your own iCloud. Crash reports reach the developer only through Apple, and only if you've chosen to share them in the device's Settings."
+            "value": "Your workout data stays on your devices and in your own iCloud. Transmute does not send workout history or Health data to YouTube. Optional exercise demos use YouTube's embedded player, which loads third-party code and may collect playback-related data, show ads and suggest other videos. Loading a demo is not tracking-free, even before you press Play. Crash reports reach the developer only through Apple, and only if you've chosen to share them in the device's Settings."
           }
         }
       }

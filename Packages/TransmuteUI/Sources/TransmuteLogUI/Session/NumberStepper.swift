@@ -10,6 +10,8 @@ struct NumberStepper: View {
     var fractionDigits = 1
 
     @Environment(\.dynamicTypeSize) private var typeSize
+    @State private var draft = ""
+    @FocusState private var isFocused: Bool
 
     private var stacks: Bool { typeSize.isAccessibilitySize }
 
@@ -29,6 +31,9 @@ struct NumberStepper: View {
             }
         }
         .accessibilityElement(children: .combine)
+        .onChange(of: value, initial: true) { _, value in
+            if !isFocused { draft = value.map { $0.formatted(numberFormat) } ?? "" }
+        }
         .accessibilityAdjustableAction { direction in
             switch direction {
             case .increment: nudge(by: step)
@@ -46,9 +51,12 @@ struct NumberStepper: View {
 
     @ViewBuilder private var controls: some View {
         button("minus", by: -step)
-        TextField(value: $value, format: .number.precision(.fractionLength(0...fractionDigits))) {
+        // Presenting help can end field focus. Keep unfinished numeric text independently
+        // of the last parseable model value instead of reconstructing it on dismissal.
+        TextField(text: draftBinding) {
             label
         }
+        .focused($isFocused)
         .multilineTextAlignment(.center)
         .brandNumberFont(size: 22, relativeTo: .title2)
         .frame(minWidth: 64, maxWidth: stacks ? .infinity : 96)
@@ -80,6 +88,24 @@ struct NumberStepper: View {
     private func nudge(by delta: Double) {
         let new = (value ?? (delta > 0 ? range.lowerBound : 0)) + (value == nil && delta > 0 ? 0 : delta)
         value = min(max(new, range.lowerBound), range.upperBound)
+        draft = value.map { $0.formatted(numberFormat) } ?? ""
+    }
+
+    private var numberFormat: FloatingPointFormatStyle<Double> {
+        .number.precision(.fractionLength(0...fractionDigits))
+    }
+
+    private var draftBinding: Binding<String> {
+        Binding(
+            get: { draft },
+            set: { text in
+                draft = text
+                if text.isEmpty {
+                    value = nil
+                } else if let number = try? numberFormat.parseStrategy.parse(text), number.isFinite {
+                    value = number
+                }
+            })
     }
 }
 

@@ -41,13 +41,21 @@ public struct ExerciseQuery: Hashable, Sendable {
 public struct ExerciseLibrary: Sendable {
     public let catalogVersion: Int
     public let exercises: [LibraryExercise]
+    public let demos: [ExerciseDemo]
     private let byID: [String: Int]
     /// Folded name and aliases per exercise, in the same order as `exercises`.
     private let searchKeys: [[String]]
 
-    public init(catalogVersion: Int, exercises: [LibraryExercise]) {
+    public init(catalogVersion: Int, exercises: [LibraryExercise], demos: [ExerciseDemo] = []) {
         self.catalogVersion = catalogVersion
         self.exercises = exercises
+        self.demos = demos.filter { demo in
+            guard let exercise = exercises.first(where: { $0.id == demo.exerciseID }), demo.isValid(for: exercise)
+            else {
+                return false
+            }
+            return demos.filter { $0.exerciseID == demo.exerciseID && $0.equipment == demo.equipment }.count == 1
+        }
         self.byID = Dictionary(exercises.enumerated().map { ($1.id, $0) }, uniquingKeysWith: { first, _ in first })
         self.searchKeys = exercises.map { exercise in
             ([exercise.name] + exercise.aliases).map(Self.fold)
@@ -56,7 +64,14 @@ public struct ExerciseLibrary: Sendable {
 
     public static let bundled: ExerciseLibrary = {
         do {
-            return try load(from: Bundle.module.url(forResource: "exercises", withExtension: "json")!)
+            let library = try load(from: Bundle.module.url(forResource: "exercises", withExtension: "json")!)
+            let url = Bundle.module.url(forResource: "exercise-demos", withExtension: "json")!
+            let demos = try JSONDecoder().decode([ExerciseDemo].self, from: Data(contentsOf: url))
+            let reviewed = ExerciseLibrary(
+                catalogVersion: library.catalogVersion, exercises: library.exercises, demos: demos)
+            precondition(
+                reviewed.demos.count == demos.count, "The bundled demo catalog has invalid or ambiguous records")
+            return reviewed
         } catch {
             preconditionFailure("The bundled exercise catalog is unreadable: \(error)")
         }
@@ -75,7 +90,13 @@ public struct ExerciseLibrary: Sendable {
     /// This library with the user's custom exercises added after the catalog.
     public func adding(_ custom: [LibraryExercise]) -> ExerciseLibrary {
         let fresh = custom.filter { byID[$0.id] == nil }
-        return ExerciseLibrary(catalogVersion: catalogVersion, exercises: exercises + fresh)
+        return ExerciseLibrary(catalogVersion: catalogVersion, exercises: exercises + fresh, demos: demos)
+    }
+
+    /// This first slice exposes only unambiguous single-demo exercises.
+    public func demo(exerciseID: String) -> ExerciseDemo? {
+        let matches = demos.filter { $0.exerciseID == exerciseID }
+        return matches.count == 1 ? matches.first : nil
     }
 
     public func exercise(id: String) -> LibraryExercise? {
