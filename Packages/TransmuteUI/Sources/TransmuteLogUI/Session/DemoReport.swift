@@ -11,15 +11,19 @@ struct DemoReport: Equatable {
     let demo: ViewedDemo
     let appVersion: String?
     private(set) var description: String
+    /// True while the last text typed was longer than fits, so the person is told rather than left guessing.
+    private(set) var isDescriptionCut = false
 
     init(demo: ViewedDemo, appVersion: String?, description: String = "") {
         self.demo = demo
         self.appVersion = appVersion
         self.description = Self.clamped(description)
+        isDescriptionCut = self.description != description
     }
 
     mutating func setDescription(_ text: String) {
         description = Self.clamped(text)
+        isDescriptionCut = description != text
     }
 
     private static func clamped(_ text: String) -> String {

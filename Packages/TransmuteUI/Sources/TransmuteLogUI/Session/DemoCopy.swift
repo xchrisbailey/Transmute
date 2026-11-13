@@ -112,7 +112,7 @@ enum DemoCopy {
         "plain.demo.reportCopied", defaultValue: "Report copied. It has not been sent to anyone.", bundle: .main,
         comment: "plain. Status after Copy report; must not claim delivery.")
     static let reportLimit = LocalizedStringResource(
-        "plain.demo.reportLimit", defaultValue: "Keep it short. Longer text is cut off so the GitHub link still works.",
+        "plain.demo.reportLimit", defaultValue: "Your description was shortened so the GitHub link still works.",
         bundle: .main,
-        comment: "plain. Hint under the report description field about its length limit.")
+        comment: "plain. Shown under the report description once typed text was cut to the limit.")
 }

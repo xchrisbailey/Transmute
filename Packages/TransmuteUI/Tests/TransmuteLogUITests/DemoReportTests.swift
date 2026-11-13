@@ -64,7 +64,13 @@ struct DemoReportTests {
         report.setDescription(String(repeating: "\u{1F468}\u{200D}\u{1F469}\u{200D}\u{1F467} ", count: 400))
         #expect(report.description.utf8.count <= DemoReport.maxDescriptionBytes)
         #expect(report.url.absoluteString.utf8.count < 5000)
+        #expect(report.isDescriptionCut, "The person is told when text was dropped")
         report.setDescription("short")
-        #expect(report.description == "short")
+        #expect(report.description == "short" && !report.isDescriptionCut)
+        let exact = String(repeating: "a", count: DemoReport.maxDescriptionBytes)
+        report.setDescription(exact)
+        #expect(report.description == exact && !report.isDescriptionCut, "Text that fits is not reported as cut")
+        report.setDescription(exact + "b")
+        #expect(report.description == exact && report.isDescriptionCut)
     }
 }

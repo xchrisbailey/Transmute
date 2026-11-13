@@ -137,9 +137,9 @@
       "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Report copied. It has not been sent to anyone." } } }
     },
     "plain.demo.reportLimit": {
-      "comment": "plain. Hint under the report description field about its length limit.",
+      "comment": "plain. Shown under the report description once typed text was cut to the limit.",
       "extractionState": "manual",
-      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Keep it short. Longer text is cut off so the GitHub link still works." } } }
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Your description was shortened so the GitHub link still works." } } }
     },
     "plain.activePlan": {
       "comment": "plain. Title of the active plan screen.",
