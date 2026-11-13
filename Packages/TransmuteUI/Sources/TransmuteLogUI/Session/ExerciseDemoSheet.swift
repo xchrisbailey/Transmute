@@ -56,8 +56,8 @@
             .onDisappear { demo.dismiss() }
             .onChange(of: scenePhase) { _, phase in demo.setSceneActive(phase == .active) }
             .onReceive(interruptions, perform: interruption)
-            .onChange(of: demo.reportOutcome) { _, outcome in
-                if let outcome {
+            .onChange(of: demo.reportFeedback) {
+                if let outcome = demo.reportOutcome {
                     AccessibilityNotification.Announcement(String(localized: Self.message(for: outcome))).post()
                 }
             }
@@ -106,6 +106,7 @@
                 .frame(minHeight: 100)
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(.secondary))
                 .accessibilityLabel(Text(DemoCopy.reportDescription))
+            Text(DemoCopy.reportLimit).font(.footnote)
             Text(DemoCopy.reportPreview).font(.headline).accessibilityAddTraits(.isHeader)
             Text(verbatim: report.copyText)
                 .font(.footnote)

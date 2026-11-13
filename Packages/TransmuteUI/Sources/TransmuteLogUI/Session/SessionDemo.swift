@@ -60,6 +60,8 @@ final class SessionDemo: Identifiable {
     /// A report being prepared for the demonstration on view. The person submits it, if at all, in GitHub.
     private(set) var report: DemoReport?
     private(set) var reportOutcome: ReportOutcome?
+    /// Counts every outcome, so a repeated one (a second Copy) still reaches VoiceOver.
+    private(set) var reportFeedback = 0
     private var reportHandoff: UUID?
     private var sceneActive = true
     private var interrupted = false
@@ -198,6 +200,7 @@ final class SessionDemo: Identifiable {
         guard report != nil else { return }
         report?.setDescription(text)
         reportOutcome = nil
+        reportHandoff = nil
     }
 
     /// Hands the prepared report to GitHub for the person to review and submit there.
@@ -208,6 +211,7 @@ final class SessionDemo: Identifiable {
         openLink(report.url) { [weak self] opened in
             guard let self, self.reportHandoff == handoff else { return }
             self.reportOutcome = opened ? .githubOpened : .githubFailed
+            self.reportFeedback += 1
         }
     }
 
@@ -216,6 +220,7 @@ final class SessionDemo: Identifiable {
         reportHandoff = nil
         copy(report.copyText)
         reportOutcome = .copied
+        reportFeedback += 1
     }
 
     /// Returns to the guide. Playback stays stopped until the person asks for it again.

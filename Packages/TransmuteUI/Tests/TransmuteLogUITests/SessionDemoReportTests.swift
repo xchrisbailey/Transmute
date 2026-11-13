@@ -125,6 +125,27 @@ struct SessionDemoReportTests {
         #expect(run.link.urls.count == 2 && run.link.urls[1] == run.demo.report?.url)
     }
 
+    @Test func everyCopyAndFailedOpenGivesFreshFeedbackAndEditsRetireLateResults() throws {
+        let container = try TransmuteStore.makeTestContainer()
+        let run = try fixture(in: container.mainContext)
+        #expect(run.demo.open(run.exercise))
+        run.demo.beginReport()
+        run.demo.copyReport()
+        run.demo.copyReport()
+        #expect(run.demo.reportOutcome == .copied && run.demo.reportFeedback == 2)
+        run.demo.openReport()
+        run.link.complete(false)
+        run.demo.openReport()
+        run.link.complete(false)
+        #expect(run.demo.reportOutcome == .githubFailed && run.demo.reportFeedback == 4)
+
+        // An open that finishes after the text was edited cannot describe the edited text.
+        run.demo.openReport()
+        run.demo.setReportDescription("Edited while GitHub was opening")
+        run.link.complete(true)
+        #expect(run.demo.reportOutcome == nil && run.demo.reportFeedback == 4)
+    }
+
     @Test func cancellingLeavesPlaybackStoppedAndLoggingUntouched() throws {
         let container = try TransmuteStore.makeTestContainer()
         let context = container.mainContext
