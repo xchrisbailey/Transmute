@@ -121,6 +121,39 @@ struct ExerciseDemoLibraryTests {
         #expect(ExerciseLibrary(catalogVersion: 1, exercises: [goblet]).demoChoices(exerciseID: "goblet-squat").isEmpty)
     }
 
+    /// A bundled catalog as the file stores it, so a shipped correction is exactly an edited record.
+    private func shipped(_ records: [(equipment: String, video: String)]) throws -> ExerciseLibrary {
+        let json = records.map {
+            """
+            {"exerciseID": "goblet-squat", "equipment": ["\($0.equipment)"], "videoID": "\($0.video)",
+             "reviewedBy": "Test fixture, not content approval", "reviewedOn": "2026-11-12",
+             "movementReview": "Test-only movement review", "mutedReview": "Test-only muted review",
+             "captions": "notNeeded", "captionReview": null}
+            """
+        }.joined(separator: ",")
+        let demos = try JSONDecoder().decode([ExerciseDemo].self, from: Data("[\(json)]".utf8))
+        let goblet = try #require(library.exercise(id: "goblet-squat"))
+        return ExerciseLibrary(catalogVersion: 1, exercises: [goblet], demos: demos)
+    }
+
+    @Test func anAppUpdateReplacesOrRemovesOneAssociationWithoutTouchingTheExercise() throws {
+        let installed = try shipped([("dumbbell", "TESTONLY001"), ("kettlebell", "TESTONLY002")])
+        let replaced = try shipped([("dumbbell", "TESTONLY001"), ("kettlebell", "TESTONLY003")])
+        let removed = try shipped([("dumbbell", "TESTONLY001")])
+        let id = "goblet-squat"
+        for update in [installed, replaced, removed] {
+            #expect(update.exercise(id: id)?.id == id, "The stable ID never changes")
+            #expect(update.demo(exerciseID: id, equipment: [.dumbbell])?.videoID == "TESTONLY001")
+        }
+        #expect(installed.demo(exerciseID: id, equipment: [.kettlebell])?.videoID == "TESTONLY002")
+        #expect(replaced.demo(exerciseID: id, equipment: [.kettlebell])?.videoID == "TESTONLY003")
+        #expect(removed.demo(exerciseID: id, equipment: [.kettlebell]) == nil)
+        #expect(removed.demoChoices(exerciseID: id).map { $0.demo?.videoID } == ["TESTONLY001", nil])
+        #expect(try shipped([]).demoChoices(exerciseID: id).isEmpty, "Removing the last one leaves written cues")
+        // The shipped content itself is untouched by any of this.
+        #expect(ExerciseLibrary.bundled.demos.count == 4)
+    }
+
     @Test func ambiguousOrMismatchedAssociationsAreRejected() throws {
         let goblet = try #require(library.exercise(id: "goblet-squat"))
         let press = try #require(library.exercise(id: "dumbbell-bench-press"))

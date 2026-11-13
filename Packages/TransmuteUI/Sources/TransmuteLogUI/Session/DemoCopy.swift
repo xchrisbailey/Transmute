@@ -74,4 +74,41 @@ enum DemoCopy {
     static let privacy = LocalizedStringResource(
         "plain.demo.privacy", defaultValue: "Google Privacy Policy", bundle: .main,
         comment: "plain. External privacy link.")
+
+    static let report = LocalizedStringResource(
+        "plain.demo.report", defaultValue: "Report wrong video", bundle: .main,
+        comment: "plain. Button that starts a wrong-demo report, and its screen heading.")
+    static let reportNotice = LocalizedStringResource(
+        "plain.demo.reportNotice",
+        defaultValue:
+            "Reports are public on GitHub, and submitting one needs a GitHub account. Transmute only prepares the report. Nothing is sent until you submit it in GitHub. Do not add personal details to the description.",
+        bundle: .main,
+        comment: "plain. Public-destination, account and privacy notice on the report screen.")
+    static let reportPreview = LocalizedStringResource(
+        "plain.demo.reportPreview", defaultValue: "What the report includes", bundle: .main,
+        comment: "plain. Heading above the read-only report text.")
+    static let reportDescription = LocalizedStringResource(
+        "plain.demo.reportDescription", defaultValue: "Description (optional)", bundle: .main,
+        comment: "plain. Label of the optional report description field.")
+    static let reportOpen = LocalizedStringResource(
+        "plain.demo.reportOpen", defaultValue: "Open GitHub to review and submit", bundle: .main,
+        comment: "plain. Opens the prefilled GitHub issue page for the person to review and submit.")
+    static let reportCopy = LocalizedStringResource(
+        "plain.demo.reportCopy", defaultValue: "Copy report", bundle: .main,
+        comment: "plain. Copies the report text instead of opening GitHub.")
+    static let reportBack = LocalizedStringResource(
+        "plain.demo.reportBack", defaultValue: "Back to demo", bundle: .main,
+        comment: "plain. Leaves the report without sending anything.")
+    static let reportOpened = LocalizedStringResource(
+        "plain.demo.reportOpened",
+        defaultValue: "GitHub opened. Your report is not submitted until you submit it there.", bundle: .main,
+        comment: "plain. Status after GitHub opened; must not claim submission.")
+    static let reportOpenFailed = LocalizedStringResource(
+        "plain.demo.reportOpenFailed",
+        defaultValue: "GitHub could not be opened. Your report is still here, and you can copy it instead.",
+        bundle: .main,
+        comment: "plain. Status when opening GitHub failed.")
+    static let reportCopied = LocalizedStringResource(
+        "plain.demo.reportCopied", defaultValue: "Report copied. It has not been sent to anyone.", bundle: .main,
+        comment: "plain. Status after Copy report; must not claim delivery.")
 }

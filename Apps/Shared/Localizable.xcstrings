@@ -86,6 +86,56 @@
       "extractionState": "manual",
       "localizations": { "en": { "stringUnit": { "state": "translated", "value": "%@ \u2014 no demo yet" } } }
     },
+    "plain.demo.report": {
+      "comment": "plain. Button that starts a wrong-demo report, and its screen heading.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Report wrong video" } } }
+    },
+    "plain.demo.reportNotice": {
+      "comment": "plain. Public-destination, account and privacy notice on the report screen.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Reports are public on GitHub, and submitting one needs a GitHub account. Transmute only prepares the report. Nothing is sent until you submit it in GitHub. Do not add personal details to the description." } } }
+    },
+    "plain.demo.reportPreview": {
+      "comment": "plain. Heading above the read-only report text.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "What the report includes" } } }
+    },
+    "plain.demo.reportDescription": {
+      "comment": "plain. Label of the optional report description field.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Description (optional)" } } }
+    },
+    "plain.demo.reportOpen": {
+      "comment": "plain. Opens the prefilled GitHub issue page for the person to review and submit.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Open GitHub to review and submit" } } }
+    },
+    "plain.demo.reportCopy": {
+      "comment": "plain. Copies the report text instead of opening GitHub.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Copy report" } } }
+    },
+    "plain.demo.reportBack": {
+      "comment": "plain. Leaves the report without sending anything.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Back to demo" } } }
+    },
+    "plain.demo.reportOpened": {
+      "comment": "plain. Status after GitHub opened; must not claim submission.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "GitHub opened. Your report is not submitted until you submit it there." } } }
+    },
+    "plain.demo.reportOpenFailed": {
+      "comment": "plain. Status when opening GitHub failed.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "GitHub could not be opened. Your report is still here, and you can copy it instead." } } }
+    },
+    "plain.demo.reportCopied": {
+      "comment": "plain. Status after Copy report; must not claim delivery.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Report copied. It has not been sent to anyone." } } }
+    },
     "plain.activePlan": {
       "comment": "plain. Title of the active plan screen.",
       "extractionState": "manual",

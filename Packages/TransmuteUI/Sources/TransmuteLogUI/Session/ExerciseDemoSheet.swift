@@ -19,34 +19,18 @@
             _demo = State(
                 initialValue: SessionDemo(
                     workout: workout, library: library, player: player,
-                    openLink: { url, completion in UIApplication.shared.open(url, completionHandler: completion) }))
+                    openLink: { url, completion in UIApplication.shared.open(url, completionHandler: completion) },
+                    copy: { UIPasteboard.general.string = $0 }))
         }
 
         var body: some View {
             NavigationStack {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
-                        if let webView = player.webView {
-                            PlayerSurface(webView: webView)
-                                .id(ObjectIdentifier(webView))
-                                .frame(minWidth: 200, maxWidth: .infinity)
-                                .frame(height: 270)
-                                .accessibilityLabel(Text(DemoCopy.player))
-                        }
-                        playerControls
-                        equipmentSection
-                        Text(DemoCopy.cues).font(.headline).accessibilityAddTraits(.isHeader)
-                        ForEach(Array(demo.cues.enumerated()), id: \.offset) { _, cue in
-                            Text(verbatim: cue).frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        if !demo.choices.isEmpty {
-                            Text(DemoCopy.disclosure).font(.footnote)
-                            Link(destination: URL(string: "https://www.youtube.com/t/terms")!) {
-                                Text(DemoCopy.terms)
-                            }
-                            Link(destination: URL(string: "https://policies.google.com/privacy")!) {
-                                Text(DemoCopy.privacy)
-                            }
+                        if let report = demo.report {
+                            reportContent(report)
+                        } else {
+                            guideContent
                         }
                     }
                     .padding()
@@ -72,6 +56,98 @@
             .onDisappear { demo.dismiss() }
             .onChange(of: scenePhase) { _, phase in demo.setSceneActive(phase == .active) }
             .onReceive(interruptions, perform: interruption)
+            .onChange(of: demo.reportOutcome) { _, outcome in
+                if let outcome {
+                    AccessibilityNotification.Announcement(String(localized: Self.message(for: outcome))).post()
+                }
+            }
+        }
+
+        @ViewBuilder private var guideContent: some View {
+            if let webView = player.webView {
+                PlayerSurface(webView: webView)
+                    .id(ObjectIdentifier(webView))
+                    .frame(minWidth: 200, maxWidth: .infinity)
+                    .frame(height: 270)
+                    .accessibilityLabel(Text(DemoCopy.player))
+            }
+            playerControls
+            equipmentSection
+            Text(DemoCopy.cues).font(.headline).accessibilityAddTraits(.isHeader)
+            ForEach(Array(demo.cues.enumerated()), id: \.offset) { _, cue in
+                Text(verbatim: cue).frame(maxWidth: .infinity, alignment: .leading)
+            }
+            if demo.viewed != nil {
+                Button {
+                    demo.beginReport()
+                } label: {
+                    Text(DemoCopy.report)
+                }
+                .buttonStyle(.bordered)
+                .frame(minHeight: 44)
+            }
+            if !demo.choices.isEmpty {
+                Text(DemoCopy.disclosure).font(.footnote)
+                Link(destination: URL(string: "https://www.youtube.com/t/terms")!) {
+                    Text(DemoCopy.terms)
+                }
+                Link(destination: URL(string: "https://policies.google.com/privacy")!) {
+                    Text(DemoCopy.privacy)
+                }
+            }
+        }
+
+        /// The exact text that GitHub or the clipboard would receive, shown before either happens.
+        @ViewBuilder private func reportContent(_ report: DemoReport) -> some View {
+            Text(DemoCopy.report).font(.title2).accessibilityAddTraits(.isHeader)
+            Text(DemoCopy.reportNotice)
+            Text(DemoCopy.reportDescription).font(.headline)
+            TextEditor(text: reportDescription)
+                .frame(minHeight: 100)
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(.secondary))
+                .accessibilityLabel(Text(DemoCopy.reportDescription))
+            Text(DemoCopy.reportPreview).font(.headline).accessibilityAddTraits(.isHeader)
+            Text(verbatim: report.copyText)
+                .font(.footnote)
+                .textSelection(.enabled)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            if let outcome = demo.reportOutcome {
+                Text(Self.message(for: outcome))
+                    .font(.callout.bold())
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            Button {
+                demo.openReport()
+            } label: {
+                Text(DemoCopy.reportOpen)
+            }
+            .buttonStyle(.borderedProminent)
+            .frame(minHeight: 44)
+            Button {
+                demo.copyReport()
+            } label: {
+                Text(DemoCopy.reportCopy)
+            }
+            .buttonStyle(.bordered)
+            .frame(minHeight: 44)
+            Button {
+                demo.closeReport()
+            } label: {
+                Text(DemoCopy.reportBack)
+            }
+            .frame(minHeight: 44)
+        }
+
+        private static func message(for outcome: SessionDemo.ReportOutcome) -> LocalizedStringResource {
+            switch outcome {
+            case .githubOpened: DemoCopy.reportOpened
+            case .githubFailed: DemoCopy.reportOpenFailed
+            case .copied: DemoCopy.reportCopied
+            }
+        }
+
+        private var reportDescription: Binding<String> {
+            Binding(get: { demo.report?.description ?? "" }, set: { demo.setReportDescription($0) })
         }
 
         private var interruptions: NotificationCenter.Publisher {

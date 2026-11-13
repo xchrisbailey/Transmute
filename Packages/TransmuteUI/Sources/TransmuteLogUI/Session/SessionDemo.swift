@@ -35,6 +35,9 @@ final class SessionDemo: Identifiable {
         case noVideo
     }
 
+    /// What the report screen says happened. Opening GitHub or copying is never "submitted".
+    enum ReportOutcome { case githubOpened, githubFailed, copied }
+
     /// What the logging header can offer for an exercise. Nil offers nothing, never invented help.
     enum Guidance { case demo, cues }
 
@@ -43,6 +46,8 @@ final class SessionDemo: Identifiable {
     private let library: ExerciseLibrary
     let player: any DemoPlayer
     private let openLink: (URL, @escaping (Bool) -> Void) -> Void
+    private let appVersion: String?
+    private let copy: (String) -> Void
     private(set) var association: ExerciseDemo?
     private(set) var name = ""
     private(set) var cues: [String] = []
@@ -52,17 +57,24 @@ final class SessionDemo: Identifiable {
     private(set) var phase: Phase = .loading
     private(set) var attempt = UUID()
     private(set) var isPresented = false
+    /// A report being prepared for the demonstration on view. The person submits it, if at all, in GitHub.
+    private(set) var report: DemoReport?
+    private(set) var reportOutcome: ReportOutcome?
+    private var reportHandoff: UUID?
     private var sceneActive = true
     private var interrupted = false
 
     init(
         workout: Workout, library: ExerciseLibrary, player: any DemoPlayer,
-        openLink: @escaping (URL, @escaping (Bool) -> Void) -> Void = { _, completion in completion(false) }
+        openLink: @escaping (URL, @escaping (Bool) -> Void) -> Void = { _, completion in completion(false) },
+        appVersion: String? = DataTransfer.bundleVersion, copy: @escaping (String) -> Void = { _ in }
     ) {
         self.workout = workout
         self.library = library
         self.player = player
         self.openLink = openLink
+        self.appVersion = appVersion
+        self.copy = copy
         player.onEvent = { [weak self] event, attempt in
             self?.receive(event, attempt: attempt)
         }
@@ -113,7 +125,7 @@ final class SessionDemo: Identifiable {
 
     /// Chooses which equipment's demonstration to view. The workout is not consulted or changed.
     func select(_ equipment: Set<Equipment>) {
-        guard isPresented, selectedEquipment != equipment,
+        guard isPresented, report == nil, selectedEquipment != equipment,
             let choice = choices.first(where: { $0.equipment == equipment })
         else { return }
         show(choice)
@@ -162,11 +174,63 @@ final class SessionDemo: Identifiable {
         guard isPresented else { return }
         isPresented = false
         attempt = UUID()
+        report = nil
+        reportOutcome = nil
+        reportHandoff = nil
         if association != nil { player.stop() }
     }
 
+    /// Starts a report about exactly the demonstration on view, stopping its playback first.
+    func beginReport() {
+        guard report == nil, let viewed else { return }
+        report = DemoReport(demo: viewed, appVersion: appVersion)
+        reportOutcome = nil
+        reportHandoff = nil
+        // Failure and link states keep their own recovery, so closing the report brings Retry back.
+        if phase != .unavailable, phase != .stoppedForLink {
+            attempt = UUID()
+            phase = .paused
+        }
+        player.stop()
+    }
+
+    func setReportDescription(_ text: String) {
+        guard report != nil else { return }
+        report?.setDescription(text)
+        reportOutcome = nil
+    }
+
+    /// Hands the prepared report to GitHub for the person to review and submit there.
+    func openReport() {
+        guard let report else { return }
+        let handoff = UUID()
+        reportHandoff = handoff
+        openLink(report.url) { [weak self] opened in
+            guard let self, self.reportHandoff == handoff else { return }
+            self.reportOutcome = opened ? .githubOpened : .githubFailed
+        }
+    }
+
+    func copyReport() {
+        guard let report else { return }
+        reportHandoff = nil
+        copy(report.copyText)
+        reportOutcome = .copied
+    }
+
+    /// Returns to the guide. Playback stays stopped until the person asks for it again.
+    func closeReport() {
+        guard report != nil else { return }
+        report = nil
+        reportOutcome = nil
+        reportHandoff = nil
+        if isPresented, phase == .paused, sceneActive, !interrupted { load() }
+    }
+
     private func updateActivity() {
-        guard isPresented, association != nil, phase != .unavailable, phase != .stoppedForLink else { return }
+        guard isPresented, report == nil, association != nil, phase != .unavailable, phase != .stoppedForLink else {
+            return
+        }
         if !sceneActive || interrupted {
             attempt = UUID()
             phase = .paused
