@@ -6,59 +6,6 @@ import Testing
 struct ExerciseLibraryTests {
     let library = ExerciseLibrary.bundled
 
-    @Test func demosRequireAnExactReviewedLibraryAssociation() throws {
-        let pushUp = try #require(library.exercise(id: "push-up"))
-        let fixture = ExerciseDemo(
-            exerciseID: "push-up", equipment: [.bodyweight], videoID: "TESTONLY001",
-            reviewedBy: "Test fixture, not content approval", reviewedOn: "2026-11-04",
-            movementReview: "Test-only movement review", mutedReview: "Test-only muted review",
-            captions: .notNeeded, captionReview: nil)
-        let reviewed = ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [fixture])
-        #expect(reviewed.demo(exerciseID: "push-up") == fixture)
-        #expect(reviewed.demo(exerciseID: "custom-push-up") == nil)
-        #expect(reviewed.demo(exerciseID: "back-squat") == nil)
-        var renamed = pushUp
-        renamed.name = "Floor push-up"
-        #expect(
-            ExerciseLibrary(catalogVersion: 1, exercises: [renamed], demos: [fixture])
-                .demo(exerciseID: "push-up") == fixture)
-        #expect(
-            ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [fixture, fixture])
-                .demo(exerciseID: "push-up") == nil)
-        var invalid = fixture
-        invalid.equipment = [.dumbbell]
-        #expect(ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [invalid]).demos.isEmpty)
-        invalid = fixture
-        invalid.captions = .reviewed
-        #expect(ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [invalid]).demos.isEmpty)
-        invalid = fixture
-        invalid.videoID = "../bad?video"
-        #expect(ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [invalid]).demos.isEmpty)
-    }
-
-    @Test func bundledDemoContainsOnlyTheHumanApprovedFloorPushUp() throws {
-        #expect(library.demos.map(\.exerciseID) == ["push-up"])
-        let demo = try #require(library.demo(exerciseID: "push-up"))
-        let exercise = try #require(library.exercise(id: demo.exerciseID))
-        #expect(demo.videoID == "WDIpL0pjun0")
-        #expect(demo.equipment == [.bodyweight])
-        #expect(exercise.equipment == [[.bodyweight]])
-        #expect(!exercise.cues.isEmpty && !exercise.isCustom)
-        #expect(demo.reviewedBy == "Human maintainer xchrisbailey")
-        #expect(demo.reviewedOn == "2026-11-05")
-        #expect(demo.movementReview.contains("standard floor push-up"))
-        #expect(
-            demo.movementReview.contains("https://github.com/xchrisbailey/Transmute/issues/118#issuecomment-6650523285")
-        )
-        #expect(demo.mutedReview.contains("video only no spoken instruction"))
-        #expect(
-            demo.mutedReview.contains("https://github.com/xchrisbailey/Transmute/issues/118#issuecomment-6650533058"))
-        #expect(demo.captions == .notNeeded && demo.captionReview == nil)
-        #expect(library.demo(exerciseID: "incline-push-up") == nil)
-        #expect(library.demo(exerciseID: "deficit-push-up") == nil)
-        #expect(library.demo(exerciseID: "custom-push-up") == nil)
-    }
-
     @Test func catalogSizeIsInRange() {
         #expect((250...400).contains(library.exercises.count))
         #expect(library.catalogVersion == 1)

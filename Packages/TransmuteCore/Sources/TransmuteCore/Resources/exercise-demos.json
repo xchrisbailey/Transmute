@@ -9,5 +9,38 @@
     "mutedReview": "Human maintainer confirmed 'video only no spoken instruction', approving the visual demonstration without spoken cues. No agent audio review is claimed. https://github.com/xchrisbailey/Transmute/issues/118#issuecomment-6650533058",
     "captions": "notNeeded",
     "captionReview": null
+  },
+  {
+    "exerciseID": "goblet-squat",
+    "equipment": ["dumbbell"],
+    "videoID": "3O77G_yiFUw",
+    "reviewedBy": "Human maintainer xchrisbailey",
+    "reviewedOn": "2026-11-13",
+    "movementReview": "Human maintainer approved the dumbbell goblet squat demonstration: 'all three clips are good.' https://github.com/xchrisbailey/Transmute/issues/119#issuecomment-6844696504",
+    "mutedReview": "Human maintainer reviewed the clip; it has spoken instruction, so comprehension relies on the reviewed captions below. No agent audio review is claimed. https://github.com/xchrisbailey/Transmute/issues/119#issuecomment-6844696504",
+    "captions": "reviewed",
+    "captionReview": "Human maintainer reviewed the captions: 'spoken checked and accurate.' https://github.com/xchrisbailey/Transmute/issues/119#issuecomment-6844696504"
+  },
+  {
+    "exerciseID": "goblet-squat",
+    "equipment": ["kettlebell"],
+    "videoID": "MWHIs0zxkCU",
+    "reviewedBy": "Human maintainer xchrisbailey",
+    "reviewedOn": "2026-11-13",
+    "movementReview": "Human maintainer approved the kettlebell goblet squat demonstration: 'all three clips are good.' https://github.com/xchrisbailey/Transmute/issues/119#issuecomment-6844696504",
+    "mutedReview": "Human maintainer reviewed the clip; it has spoken instruction, so comprehension relies on the reviewed captions below. No agent audio review is claimed. https://github.com/xchrisbailey/Transmute/issues/119#issuecomment-6844696504",
+    "captions": "reviewed",
+    "captionReview": "Human maintainer reviewed the captions: 'spoken checked and accurate.' https://github.com/xchrisbailey/Transmute/issues/119#issuecomment-6844696504"
+  },
+  {
+    "exerciseID": "romanian-deadlift",
+    "equipment": ["barbell"],
+    "videoID": "Roe2hOnzXf4",
+    "reviewedBy": "Human maintainer xchrisbailey",
+    "reviewedOn": "2026-11-13",
+    "movementReview": "Human maintainer approved the barbell Romanian deadlift demonstration: 'all three clips are good.' https://github.com/xchrisbailey/Transmute/issues/119#issuecomment-6844696504",
+    "mutedReview": "Human maintainer reviewed the clip; it has spoken instruction, so comprehension relies on the reviewed captions below. No agent audio review is claimed. https://github.com/xchrisbailey/Transmute/issues/119#issuecomment-6844696504",
+    "captions": "reviewed",
+    "captionReview": "Human maintainer reviewed the captions: 'spoken checked and accurate.' https://github.com/xchrisbailey/Transmute/issues/119#issuecomment-6844696504"
   }
 ]

@@ -1,4 +1,6 @@
 import Foundation
+import TransmuteCore
+import TransmuteUI
 
 enum DemoCopy {
     static let watch = LocalizedStringResource(
@@ -19,6 +21,39 @@ enum DemoCopy {
         "plain.demo.linkStopped",
         defaultValue: "Video stopped for an external link. Retry video when you want to watch again.",
         bundle: .main, comment: "plain. Player retired for a link; does not claim opening succeeded.")
+    static let showCues = LocalizedStringResource(
+        "plain.demo.showCues", defaultValue: "Show cues", bundle: .main,
+        comment: "plain. Header button that opens written cues when there is no demo video.")
+    static let equipmentNote = LocalizedStringResource(
+        "plain.demo.equipmentNote",
+        defaultValue: "Choosing equipment only changes which demonstration you watch. It does not change your workout.",
+        bundle: .main, comment: "plain. Reassures that picking demo equipment is viewing only.")
+
+    static func noMatch(_ equipment: String) -> LocalizedStringResource {
+        LocalizedStringResource(
+            "plain.demo.noMatch",
+            defaultValue: "No reviewed demo is available for \(equipment). The written cues below still apply.",
+            bundle: .main, comment: "plain. No reviewed demo for the chosen equipment; %@ is the equipment.")
+    }
+
+    /// Equipment names in a stable order, joined for the current language.
+    static func equipmentName(_ equipment: Set<Equipment>) -> String {
+        ListFormatter.localizedString(
+            byJoining: equipment.sorted(by: { $0.rawValue < $1.rawValue }).map { String(localized: $0.label) })
+    }
+
+    static func unmatchedChoice(_ equipment: String) -> LocalizedStringResource {
+        LocalizedStringResource(
+            "plain.demo.noDemoYet", defaultValue: "\(equipment) \u{2014} no demo yet", bundle: .main,
+            comment: "plain. Picker row for equipment with no reviewed demo; %@ is the equipment.")
+    }
+
+    /// A picker row, saying so when choosing it would show no reviewed demo.
+    static func choiceName(_ choice: DemoChoice) -> String {
+        let name = equipmentName(choice.equipment)
+        return choice.demo == nil ? String(localized: unmatchedChoice(name)) : name
+    }
+
     static let cues = LocalizedStringResource(
         "plain.demo.cues", defaultValue: "Setup and movement", bundle: .main,
         comment: "plain. Written guidance heading.")
@@ -31,7 +66,7 @@ enum DemoCopy {
     static let disclosure = LocalizedStringResource(
         "plain.demo.disclosure",
         defaultValue:
-            "YouTube loads when this sheet opens and may collect playback-related data, show ads and suggest other videos. Transmute does not send your workout history or Health data to YouTube. Internet is required for video, not written cues.",
+            "YouTube loads when a demonstration is shown and may collect playback-related data, show ads and suggest other videos. Transmute does not send your workout history or Health data to YouTube. Internet is required for video, not written cues.",
         bundle: .main, comment: "plain. Third-party playback disclosure; no tracking-free promise.")
     static let terms = LocalizedStringResource(
         "plain.demo.terms", defaultValue: "YouTube Terms of Service", bundle: .main,

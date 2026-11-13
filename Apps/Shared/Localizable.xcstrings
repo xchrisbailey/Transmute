@@ -54,7 +54,7 @@
     "plain.demo.disclosure": {
       "comment": "plain. Third-party playback disclosure; no tracking-free promise.",
       "extractionState": "manual",
-      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "YouTube loads when this sheet opens and may collect playback-related data, show ads and suggest other videos. Transmute does not send your workout history or Health data to YouTube. Internet is required for video, not written cues." } } }
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "YouTube loads when a demonstration is shown and may collect playback-related data, show ads and suggest other videos. Transmute does not send your workout history or Health data to YouTube. Internet is required for video, not written cues." } } }
     },
     "plain.demo.terms": {
       "comment": "plain. External terms link.",
@@ -65,6 +65,26 @@
       "comment": "plain. External privacy link.",
       "extractionState": "manual",
       "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Google Privacy Policy" } } }
+    },
+    "plain.demo.showCues": {
+      "comment": "plain. Header button that opens written cues when there is no demo video.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Show cues" } } }
+    },
+    "plain.demo.equipmentNote": {
+      "comment": "plain. Reassures that picking demo equipment is viewing only.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Choosing equipment only changes which demonstration you watch. It does not change your workout." } } }
+    },
+    "plain.demo.noMatch": {
+      "comment": "plain. No reviewed demo for the chosen equipment; %@ is the equipment.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "No reviewed demo is available for %@. The written cues below still apply." } } }
+    },
+    "plain.demo.noDemoYet": {
+      "comment": "plain. Picker row for equipment with no reviewed demo; %@ is the equipment.",
+      "extractionState": "manual",
+      "localizations": { "en": { "stringUnit": { "state": "translated", "value": "%@ \u2014 no demo yet" } } }
     },
     "plain.activePlan": {
       "comment": "plain. Title of the active plan screen.",

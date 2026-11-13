@@ -62,22 +62,6 @@ struct SessionDemoTests {
         #expect(!demo.isPresented && player.commands.last == "stop")
     }
 
-    @Test func unsupportedExercisesNeverLoadAPlayer() throws {
-        let container = try TransmuteStore.makeTestContainer()
-        let context = container.mainContext
-        let library = ExerciseLibrary.bundled
-        let workout = WorkoutSession.startAdHoc(title: "Unsupported", in: context)
-        let exercise = WorkoutSession.add(try #require(library.exercise(id: "back-squat")), to: workout)
-        let player = DemoPlayerSpy()
-        let demo = SessionDemo(workout: workout, library: library, player: player)
-        #expect(!demo.open(exercise))
-        demo.play()
-        demo.retry()
-        demo.dismiss()
-        #expect(player.commands.isEmpty)
-        #expect(!demo.isPresented)
-    }
-
     @Test func viewingADemoLeavesTheRunningWorkoutAndElapsedRestAlone() throws {
         let container = try TransmuteStore.makeTestContainer()
         let context = container.mainContext
@@ -160,7 +144,7 @@ struct SessionDemoTests {
 }
 
 @MainActor
-private final class DemoLinkSpy {
+final class DemoLinkSpy {
     var urls: [URL] = []
     private var completion: ((Bool) -> Void)?
 
@@ -173,7 +157,7 @@ private final class DemoLinkSpy {
 }
 
 @MainActor
-private final class DemoPlayerSpy: DemoPlayer {
+final class DemoPlayerSpy: DemoPlayer {
     var onEvent: ((DemoPlayerEvent, UUID) -> Void)?
     var commands: [String] = []
 

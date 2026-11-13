@@ -34,23 +34,19 @@
                                 .accessibilityLabel(Text(DemoCopy.player))
                         }
                         playerControls
-                        if let association = demo.association {
-                            Text(DemoCopy.equipment).font(.headline)
-                            let equipment = association.equipment.sorted(by: { $0.rawValue < $1.rawValue })
-                            ForEach(equipment, id: \.self) { equipment in
-                                Text(equipment.label)
-                            }
-                        }
+                        equipmentSection
                         Text(DemoCopy.cues).font(.headline).accessibilityAddTraits(.isHeader)
                         ForEach(Array(demo.cues.enumerated()), id: \.offset) { _, cue in
                             Text(verbatim: cue).frame(maxWidth: .infinity, alignment: .leading)
                         }
-                        Text(DemoCopy.disclosure).font(.footnote)
-                        Link(destination: URL(string: "https://www.youtube.com/t/terms")!) {
-                            Text(DemoCopy.terms)
-                        }
-                        Link(destination: URL(string: "https://policies.google.com/privacy")!) {
-                            Text(DemoCopy.privacy)
+                        if !demo.choices.isEmpty {
+                            Text(DemoCopy.disclosure).font(.footnote)
+                            Link(destination: URL(string: "https://www.youtube.com/t/terms")!) {
+                                Text(DemoCopy.terms)
+                            }
+                            Link(destination: URL(string: "https://policies.google.com/privacy")!) {
+                                Text(DemoCopy.privacy)
+                            }
                         }
                     }
                     .padding()
@@ -89,6 +85,33 @@
             demo.setInterrupted(type == .began)
         }
 
+        /// Viewing-only: choosing equipment here never reaches the workout.
+        @ViewBuilder private var equipmentSection: some View {
+            if demo.choices.count > 1 {
+                Picker(selection: equipmentSelection) {
+                    ForEach(demo.choices, id: \.equipment) { choice in
+                        Text(verbatim: DemoCopy.choiceName(choice)).tag(choice.equipment)
+                    }
+                } label: {
+                    Text(DemoCopy.equipment).font(.headline)
+                }
+                .pickerStyle(.menu)
+                .frame(minHeight: 44)
+                Text(DemoCopy.equipmentNote).font(.footnote)
+            } else if let equipment = demo.selectedEquipment {
+                Text(DemoCopy.equipment).font(.headline)
+                Text(verbatim: DemoCopy.equipmentName(equipment))
+            }
+            if let equipment = demo.selectedEquipment, demo.association == nil {
+                Text(DemoCopy.noMatch(DemoCopy.equipmentName(equipment)))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+
+        private var equipmentSelection: Binding<Set<Equipment>> {
+            Binding(get: { demo.selectedEquipment ?? [] }, set: { demo.select($0) })
+        }
+
         @ViewBuilder private var playerControls: some View {
             switch demo.phase {
             case .loading:
@@ -107,7 +130,7 @@
                     Text(DemoCopy.play)
                 }
                 .disabled(scenePhase != .active || player.webView == nil)
-            case .playing:
+            case .playing, .noVideo:
                 EmptyView()
             }
         }

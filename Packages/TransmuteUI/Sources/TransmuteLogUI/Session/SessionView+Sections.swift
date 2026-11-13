@@ -52,16 +52,16 @@ extension SessionView {
                 exerciseMenu(exercise)
             }
             #if os(iOS)
-                if library.demo(exerciseID: exercise.exerciseID) != nil,
-                    workout.startedOn == nil || workout.startedOn == .phone
+                if let guidance = SessionDemo.guidance(for: exercise.exerciseID, library: library),
+                    SessionDemo.canView(workout)
                 {
                     Button {
                         demoExercise = exercise
                     } label: {
                         Label {
-                            Text(DemoCopy.watch)
+                            Text(guidance == .demo ? DemoCopy.watch : DemoCopy.showCues)
                         } icon: {
-                            Image(systemName: "play.rectangle")
+                            Image(systemName: guidance == .demo ? "play.rectangle" : "text.book.closed")
                         }
                         .labelStyle(.titleAndIcon)
                     }
