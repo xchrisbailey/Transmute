@@ -37,8 +37,12 @@ struct ExerciseLibraryTests {
         #expect(ExerciseLibrary(catalogVersion: 1, exercises: [pushUp], demos: [invalid]).demos.isEmpty)
     }
 
+    private func key(_ demo: ExerciseDemo) -> String {
+        "\(demo.exerciseID)/\(demo.equipment.map(\.rawValue).sorted().joined(separator: "+"))"
+    }
+
     @Test func bundledDemosAreExactlyTheHumanApprovedSet() throws {
-        let keys = library.demos.map { "\($0.exerciseID)/\($0.equipment.map(\.rawValue).sorted().joined(separator: "+"))" }
+        let keys = library.demos.map(key)
         #expect(
             keys.sorted() == [
                 "goblet-squat/dumbbell", "goblet-squat/kettlebell", "push-up/bodyweight",
@@ -49,8 +53,7 @@ struct ExerciseLibraryTests {
             "goblet-squat/kettlebell": "MWHIs0zxkCU", "romanian-deadlift/barbell": "Roe2hOnzXf4",
         ]
         for demo in library.demos {
-            let key = "\(demo.exerciseID)/\(demo.equipment.map(\.rawValue).sorted().joined(separator: "+"))"
-            #expect(demo.videoID == videos[key], "\(key)")
+            #expect(demo.videoID == videos[key(demo)], "\(key(demo))")
             #expect(demo.reviewedBy == "Human maintainer xchrisbailey")
             #expect(demo.movementReview.contains("https://github.com/xchrisbailey/Transmute/issues/11"))
             #expect(demo.mutedReview.contains("https://github.com/xchrisbailey/Transmute/issues/11"))
@@ -59,7 +62,10 @@ struct ExerciseLibraryTests {
         #expect(pushUp.reviewedOn == "2026-11-05" && pushUp.captions == .notNeeded && pushUp.captionReview == nil)
         #expect(pushUp.movementReview.contains("issues/118#issuecomment-6650523285"))
         #expect(pushUp.mutedReview.contains("issues/118#issuecomment-6650533058"))
-        for (id, equipment) in [("goblet-squat", Equipment.dumbbell), ("goblet-squat", .kettlebell), ("romanian-deadlift", .barbell)] {
+        let added: [(String, Equipment)] = [
+            ("goblet-squat", .dumbbell), ("goblet-squat", .kettlebell), ("romanian-deadlift", .barbell),
+        ]
+        for (id, equipment) in added {
             let demo = try #require(library.demo(exerciseID: id, equipment: [equipment]))
             #expect(demo.reviewedOn == "2026-11-13" && demo.captions == .reviewed)
             #expect(demo.movementReview.contains("issues/119#issuecomment-6844696504"))
